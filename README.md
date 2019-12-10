@@ -13,7 +13,7 @@ doi: 10.1107/S2053230X19009853
 
 I created this application to help the members of our laboratory in their crystallization work.
 The software can read tiff or jpeg files.
-Images are accessed via clickig on the corresponding well button or by navigating with keyboard shortcuts.
+Images are accessed via clicking on the corresponding well button or by navigating with keyboard shortcuts.
 Images can be zoomed for thorough inspection and a Timeline of the cooresponding well is displayed if several pictures of the same well taken at different times are available.
 
 Images are scored using the Drop Score section.
