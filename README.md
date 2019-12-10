@@ -47,7 +47,7 @@ To be added
 
 ## Acknowledgements
 
-This project would not have been possible without the previous work of Dakota Handzlik published in
+This project would not have been possible without the previous work of Dakota Handzlik published in:
 Acta Crystallogr F Struct Biol Commun. 2019 Nov 1;75(Pt 11):673-686. doi: 10.1107/S2053230X19014730
 and initially written for Tk (https://github.com/dakota0064/Fluorescent_Robotic_Imager)
 
