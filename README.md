@@ -25,7 +25,7 @@ The results can be displayed on a grid and statistics are also calculated.
 
 ## Screenshots
 
-![Screenshot 1](https://github.com/LP-CDF/AMi_Image_Analysis/screenshot1.png)
+![Screenshot 1](./screenshot1.png)
 ![Screenshot 2](https://github.com/LP-CDF/AMi_Image_Analysis/screenshot2.png)
 
 ## Install
