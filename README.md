@@ -23,6 +23,11 @@ A report of the current image can be saved as a pdf.
 
 The results can be displayed on a grid and statistics are also calculated.
 
+## Screenshots
+
+![Screenshot 1](https://github.com/LP-CDF/AMi_Image_Analysis/screenshot1.png)
+![Screenshot 2](https://github.com/LP-CDF/AMi_Image_Analysis/screenshot2.png)
+
 ## Install
 
     The software was only tested on linux CentOS 7 with PyQt5 (v5.9.2 and v5.12.1) and python3 (v3.6.8 and v3.7.3).
