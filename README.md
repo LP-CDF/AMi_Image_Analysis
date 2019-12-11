@@ -30,8 +30,12 @@ The results can be displayed on a grid and statistics are also calculated.
 
 ## Install
 
-    The software was only tested on linux CentOS 7 (PyQt5 (v5.9.2 and v5.12.1) and python3 (v3.6.8 and v3.7.3)) and on Raspbian 10.
-    Hopefully, it should work on OSX and Windows.
+    The software was tested on:
+    * linux CentOS 7 (PyQt5 (v5.9.2 and v5.12.1) and python3 (v3.6.8 and v3.7.3))
+    * Raspbian 10
+    * macOS HighSierra
+
+    Hopefully, it should work on other MacOS and Windows.
     You will need a screen with minimum resolution of 1920*1080.
 
     Download the latest released version and gunzip it or clone this repository with

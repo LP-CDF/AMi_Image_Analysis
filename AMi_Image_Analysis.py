@@ -13,6 +13,8 @@ import math
 from pathlib import Path
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import QPixmap, QFont, QColor, QKeySequence
+QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True) #enable highdpi scaling
+QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True) #use highdpi icons
 from PyQt5.QtWidgets import (QLabel, QTableWidgetItem, QFileDialog,
     QMessageBox, QGridLayout,QStyleFactory)
 
@@ -44,7 +46,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         super(ViewerModule, self).__init__(parent)
         self.ui=Ui_MainWindow()
         self.setupUi(self)
-        self.setWindowTitle("AMi Image Analysis for LCPB AMi version %s"%__version__)
+        self.setWindowTitle("LCPB AMi Image Analysis version %s"%__version__)
         #Setup a progressBar not placed in Designer
 #        self.progressBar = QProgressBar(self)
         self._nsre = re.compile('([0-9]+)') #used to sort alphanumerics
