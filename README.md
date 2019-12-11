@@ -35,17 +35,17 @@ The results can be displayed on a grid and statistics are also calculated.
     You will need a screen with minimum resolution of 1920*1080.
 
     Download the latest released version and gunzip it or clone this repository with
-    git clone https://github.com/LP-CDF/AMi_Image_Analysis .
+    git clone https://github.com/LP-CDF/AMi_Image_Analysis AMi_Image_Analysis
 
     If on linux or OSX, link the correct Shortcuts_XXX.py version to Shortcuts.py
     If on Windows, copy the correct Shortcuts_XXX.py version to Shortcuts.py
 
     Dependancies:
-    * PyQt5 (v5.9.2 or higher, previous version not tested)
+    * PyQt5 (v5.9.2 or higher)
     * Python Imaging Library (Pillow, v6.2.1 or higher)
     * PyFPDF (v1.7.2 or higher)
 
-known issues: 
+    Known issues: 
     * On Raspbian, you must ensure that package qt5-image-formats-plugins is installed
     * On Raspbian, buttons do not change color when clicked.
 

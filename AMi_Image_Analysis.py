@@ -14,7 +14,7 @@ from pathlib import Path
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import QPixmap, QFont, QColor, QKeySequence
 from PyQt5.QtWidgets import (QLabel, QTableWidgetItem, QFileDialog,
-    QMessageBox, QGridLayout)
+    QMessageBox, QGridLayout,QStyleFactory)
 
 from utils import ensure_directory
 from shutil import copyfile
@@ -23,7 +23,7 @@ from HeatMap import Ui_Dialog
 import Shortcuts
 import StatisticsDialog
 
-__version__ = "2.0.0a"
+__version__ = "1.0.0a"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
 __date__ = "10-12-2019"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
@@ -959,6 +959,7 @@ class HeatMapGrid(QtWidgets.QDialog, Ui_Dialog):
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
+    app.setStyle(QStyleFactory.create('Fusion'))
     MainWindow = ViewerModule()
     sys.exit(app.exec_())
     Citation()
