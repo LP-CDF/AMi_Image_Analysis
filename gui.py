@@ -319,12 +319,15 @@ class Ui_MainWindow(object):
         self.actionShortcuts.setObjectName("actionShortcuts")
         self.actionAbout = QtWidgets.QAction(MainWindow)
         self.actionAbout.setObjectName("actionAbout")
+        self.actionAutomated_Annotation_MARCO = QtWidgets.QAction(MainWindow)
+        self.actionAutomated_Annotation_MARCO.setObjectName("actionAutomated_Annotation_MARCO")
         self.menuFile.addAction(self.openFile)
         self.menuFile.addAction(self.openDir)
         self.menuFile.addAction(self.actionQuit_2)
+        self.menuDisplay_Heat_Map.addAction(self.actionAutomated_Annotation_MARCO)
+        self.menuDisplay_Heat_Map.addAction(self.actionCalculate_Statistics)
         self.menuDisplay_Heat_Map.addAction(self.actionDisplay_Heat_Map)
         self.menuDisplay_Heat_Map.addAction(self.actionExport_to_PDF)
-        self.menuDisplay_Heat_Map.addAction(self.actionCalculate_Statistics)
         self.menuHelp.addAction(self.actionShortcuts)
         self.menuHelp.addAction(self.actionAbout)
         self.menuBar.addAction(self.menuFile.menuAction())
@@ -382,6 +385,7 @@ class Ui_MainWindow(object):
         self.actionCalculate_Statistics.setText(_translate("MainWindow", "Calculate Statistics"))
         self.actionShortcuts.setText(_translate("MainWindow", "Shortcuts"))
         self.actionAbout.setText(_translate("MainWindow", "About"))
+        self.actionAutomated_Annotation_MARCO.setText(_translate("MainWindow", "Automated Annotation (MARCO)"))
 
 
 

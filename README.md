@@ -23,6 +23,10 @@ A report of the current well can be saved as a pdf.
 
 The results can be displayed on a grid and statistics are also calculated.
 
+2019/11/12:
+Automated annotation using TensorFlow (https://www.tensorflow.org/) and MARCO (https://marco.ccr.buffalo.edu/) has been added.
+For now, this requires TensorFlow version previous to v2.
+
 ## Screenshots
 
 ![Screenshot 1](./screenshot1.png)
@@ -48,6 +52,9 @@ The results can be displayed on a grid and statistics are also calculated.
     * PyQt5 (v5.9.2 or higher)
     * Python Imaging Library (Pillow, v6.2.1 or higher)
     * PyFPDF (v1.7.2 or higher)
+    * TensorFlow (v1.1x, not v2, tested with version 1.14)
+    * MARCO tensorflow model (https://storage.googleapis.com/marco-168219-model/savedmodel.zip)
+      One version of this model is included in saved_model/
 
     Known issues: 
     * On Raspbian, you must ensure that package qt5-image-formats-plugins is installed

@@ -25,6 +25,7 @@ from HeatMap import Ui_Dialog
 import Shortcuts
 import StatisticsDialog
 
+
 __version__ = "1.0.0a"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
 __date__ = "10-12-2019"
@@ -141,6 +142,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.openFile.triggered.connect(self.openFileNameDialog)
         self.openDir.triggered.connect(self.openDirDialog)
         
+        self.actionAutomated_Annotation_MARCO.triggered.connect(self.autoAnnotation)
         self.actionDisplay_Heat_Map.triggered.connect(self.show_HeatMap)
         self.actionExport_to_PDF.triggered.connect(self.export_pdf)
         self.actionQuit_2.triggered.connect(self.close)
@@ -252,7 +254,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
 
 
     def openDirDialog(self):
-        Ext=[".tif",".tiff",".TIFF",".jpg", ".jpeg",".JPG",".JPEG"]
+        Ext=[".tif",".tiff",".TIFF",".jpg", ".jpeg",".JPG",".JPEG",".png",".PNG"]
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         directory = str(QFileDialog.getExistingDirectory(self,"Directory containing Images"))
@@ -626,7 +628,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
             with open(path, 'w') as f:
                 for i in Notes: f.write(i)
         except Exception as e:
-            self.dialog_critical(str(e))
+            self.handle_error(str(e))
                
 
     def ReadClassification(self, path, date, well):
@@ -827,7 +829,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         Count_subwell_c={"Clear":0, "Precipitate":0, "Crystal":0, "PhaseSep":0, "Other":0, "Unknown":0}
         Count_nosubwell={"Clear":0, "Precipitate":0, "Crystal":0, "PhaseSep":0, "Other":0, "Unknown":0}
         
-         
+        # print("self.classifications ", self.classifications) 
         for well,classification in self.classifications.items():
 #                print("well= ", well,"classification= ", classification)
             if "a" in well:
@@ -861,17 +863,45 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         print("Stats no subwell in %", _list[3])
         return _list
         
+
+    def autoAnnotation(self):
+        '''Do automated classification using MARCO'''
+        Unsupported_Ext=[".tif",".tiff",".TIFF"]
+        
+        if len(self.files)==0:
+            self.handle_error("No data yet!!!")
+            return
+            
+        ext=os.path.splitext(os.path.basename(self.files[0]))[1]
+        if ext in Unsupported_Ext:
+            self.handle_error("Image type ""%s"" unsupported for automated annotation"
+                         %ext)
+            return
+            
+        #Reset self.classifications NEED TO INFORM USER
+        info = QMessageBox(self)
+        info.setWindowTitle("Warning!")
+        info.setText("This will erase any previous classification and notes")
+        info.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+        retval = info.exec_()
+        
+        if retval == QtWidgets.QMessageBox.Cancel:
+            return
+        
+        from Automated_Marco import predict
+        
+        self.classifications.clear()
+        logdir=Path(self.rootDir).joinpath("Image_Data", self.date)
+        predict(self.files, self.classifications, logdir)
+        
+        for well, classif in self.classifications.items():
+            self.SaveNotes(well)
+
             
     def on_exit(self):
         '''things to do before exiting'''
 #        self.SaveNotes(self.currentWell)
         
-
-# class StatsWindow(QtWidgets.QDialog, Ui_Dialog):
-#     def __init__(self, parent=None):
-#         super(StatsWindow, self).__init__(parent)
-#         ui = Ui_Dialog()
-#         self.setupUi(self)
 
 class HeatMapGrid(QtWidgets.QDialog, Ui_Dialog):
     ''' '''
