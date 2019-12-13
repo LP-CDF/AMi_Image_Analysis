@@ -23,7 +23,6 @@
 import os, sys
 from pathlib import Path
 import tensorflow as tf
-from utils import ensure_directory
 
 """ 
 usage: 
@@ -85,6 +84,6 @@ def predict(file_list, classifications,logDir):
   
     with open(log, 'w') as f:
             f.write("%9s%15s%15s%17s%15s \n"%("WELL", "Pb_CRYSTAL", "Pb_OTHER", "Pb_Precipitate", "Pb_Clear"))
-            for i in logresult: f.write("%9s%15.2f%15.2f%17.2f%15.2f \n"%(i[0],i[1][b"Crystals"]*100,i[1][b"Other"]*100,
-                                                                          i[1][b"Precipitate"]*100,i[1][b"Clear"]*100))
+            for i in logresult: f.write("%9s%15.3f%15.3f%17.3f%15.3f \n"%(i[0],i[1][b"Crystals"],i[1][b"Other"],
+                                                                          i[1][b"Precipitate"],i[1][b"Clear"]))
     del dictionary, MostProbable, logresult       

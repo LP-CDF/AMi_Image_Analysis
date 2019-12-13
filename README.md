@@ -4,9 +4,7 @@ This is a Python 3 / PyQt5 project dedicated to the analysis of the images gener
 The AMi microscope is a low-cost automated microscope.
 
 For more details on this device, please look at:
-"AMi: a GUI-based, open-source system for imaging samples in multi-well plates"
-Andrew Bohm, Acta Crystallogr F Struct Biol Commun. 2019 Aug 1; 75(Pt 8): 531–536.
-doi: 10.1107/S2053230X19009853
+"AMi: a GUI-based, open-source system for imaging samples in multi-well plates" [[1]](#1)
 
 
 ## Features:
@@ -23,14 +21,18 @@ A report of the current well can be saved as a pdf.
 
 The results can be displayed on a grid and statistics are also calculated.
 
-2019/11/12:
+2019/12/12:
 Automated annotation using TensorFlow (https://www.tensorflow.org/) and MARCO (https://marco.ccr.buffalo.edu/) has been added.
 For now, this requires TensorFlow version previous to v2.
+
+2019/12/13:
+Added visualisation of autoMARCO results
 
 ## Screenshots
 
 ![Screenshot 1](./screenshot1.png)
 ![Screenshot 2](./screenshot2.png)
+![Screenshot 3](./screenshot3.png)
 
 ## Install
 
@@ -52,9 +54,12 @@ For now, this requires TensorFlow version previous to v2.
     * PyQt5 (v5.9.2 or higher)
     * Python Imaging Library (Pillow, v6.2.1 or higher)
     * PyFPDF (v1.7.2 or higher)
+
+    Optional dependancies:
     * TensorFlow (v1.1x, not v2, tested with version 1.14)
     * MARCO tensorflow model (https://storage.googleapis.com/marco-168219-model/savedmodel.zip)
       One version of this model is included in saved_model/
+      Methodology details are published in [[2]](#2)
 
     Known issues: 
     * On Raspbian, you must ensure that package qt5-image-formats-plugins is installed
@@ -68,8 +73,26 @@ To be added
 
 ## Acknowledgements
 
-This project would not have been possible without the previous work of Dakota Handzlik published in:
-Acta Crystallogr F Struct Biol Commun. 2019 Nov 1;75(Pt 11):673-686. doi: 10.1107/S2053230X19014730
-and initially written for Tk (https://github.com/dakota0064/Fluorescent_Robotic_Imager)
+This project would not have been possible without the previous work of Dakota Handzlik published in [[3]](#3).
+Corresponding project can be found at:
+https://github.com/dakota0064/Fluorescent_Robotic_Imager
+
+
+## References
+
+<a id="1">[1]</a> 
+"AMi: a GUI-based, open-source system for imaging samples in multi-well plates"
+Andrew Bohm, Acta Crystallogr F Struct Biol Commun. 2019 Aug 1; 75(Pt 8): 531–536.
+doi: 10.1107/S2053230X19009853
+
+<a id="2">[2]</a> 
+"Classification of crystallization outcomes using deep convolutional neural networks."
+Bruno AE et al. PLoS One. 2018 Jun 20;13(6):e0198883.
+doi: 10.1371/journal.pone.0198883.
+
+<a id="3">[3]</a> 
+"Inexpensive robotic system for standard and fluorescent imaging of protein crystals."
+Handzlik D et al. Acta Crystallogr F Struct Biol Commun. 2019 Nov 1;75(Pt 11):673-686.
+doi: 10.1107/S2053230X19014730
 
 

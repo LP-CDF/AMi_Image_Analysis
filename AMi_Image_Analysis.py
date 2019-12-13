@@ -21,14 +21,15 @@ from PyQt5.QtWidgets import (QLabel, QTableWidgetItem, QFileDialog,
 from utils import ensure_directory
 from shutil import copyfile
 import pdf_writer 
-from HeatMap import Ui_Dialog
+import HeatMap
+from  MARCO_Results_Analysis import MARCO_Results
 import Shortcuts
 import StatisticsDialog
 
 
-__version__ = "1.0.0a"
+__version__ = "1.1.0"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "10-12-2019"
+__date__ = "13-12-2019"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -95,6 +96,43 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.heatmap_window.show()
 
 
+    def show_autoMARCO(self, subwell):
+        ''' Create window and map results on a grid'''
+
+        if len(self.classifications)==0:
+            self.handle_error("Please choose a directory containing the images first")
+            return    
+        
+        _file=Path(self.rootDir).joinpath("Image_Data",self.date ,"auto_MARCO.log")
+        
+        if Path(_file).exists():
+            with open(_file, 'r') as f: data=f.readlines()
+        else:
+            self.handle_error("File %s not found"%_file)
+            return
+    
+        autoMARCO_data=[]
+        for line in data:
+            autoMARCO_data.append(line.split())
+        
+        #delete HEADER from list
+        del autoMARCO_data[0]
+        
+        self.MARCO_window = MARCO_Results()
+        self.MARCO_window.subwell=subwell
+        self.MARCO_window.setWindowTitle("autoMARCO results for subwell %s"%subwell)
+        self.MARCO_window.autoMARCO_data=autoMARCO_data
+        
+        #Define  Legend
+        self.MARCO_window.label_Crystal.setStyleSheet("""background-color:rgb(0, 255, 0)""")
+        self.MARCO_window.label_Other.setStyleSheet("""background-color:rgb(255, 0, 255)""")
+        self.MARCO_window.label_Precipitate.setStyleSheet("""background-color:rgb(255, 0, 0)""")
+        self.MARCO_window.label_Clear.setStyleSheet("""background-color:rgb(0, 0, 0); color:rgb(255, 255, 255)""")
+        
+        self.MARCO_window.show()
+        del autoMARCO_data
+        
+
     def show_Statistics(self):
         '''Calculate statistics on the plate'''
         #Check data before going further
@@ -145,6 +183,11 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.actionAutomated_Annotation_MARCO.triggered.connect(self.autoAnnotation)
         self.actionDisplay_Heat_Map.triggered.connect(self.show_HeatMap)
         self.actionExport_to_PDF.triggered.connect(self.export_pdf)
+        self.actionautoMARCO_subwell_a.triggered.connect(lambda: self.show_autoMARCO("a"))
+        self.actionautoMARCO_subwell_b.triggered.connect(lambda: self.show_autoMARCO("b"))
+        self.actionautoMARCO_subwell_c.triggered.connect(lambda: self.show_autoMARCO("c"))
+        self.actionautoMARCO_no_subwell.triggered.connect(lambda: self.show_autoMARCO(""))
+        
         self.actionQuit_2.triggered.connect(self.close)
         
         self.actionCalculate_Statistics.triggered.connect(self.show_Statistics)
@@ -869,7 +912,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         Unsupported_Ext=[".tif",".tiff",".TIFF"]
         
         if len(self.files)==0:
-            self.handle_error("No data yet!!!")
+            self.handle_error("Please choose a directory containing the images first!!!")
             return
             
         ext=os.path.splitext(os.path.basename(self.files[0]))[1]
@@ -888,7 +931,16 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         if retval == QtWidgets.QMessageBox.Cancel:
             return
         
-        from Automated_Marco import predict
+        try:
+            import tensorflow as tf
+            if tf.__version__ > '1.15.0':
+                self.handle_error("TensorFlow version %s not supported"%tf.__version__)
+                return
+            else:
+                from Automated_Marco import predict
+        except:
+            self.handle_error("TensorFlow not found")
+            return
         
         self.classifications.clear()
         logdir=Path(self.rootDir).joinpath("Image_Data", self.date)
@@ -903,13 +955,14 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
 #        self.SaveNotes(self.currentWell)
         
 
-class HeatMapGrid(QtWidgets.QDialog, Ui_Dialog):
+class HeatMapGrid(QtWidgets.QDialog, HeatMap.Ui_Dialog):
     ''' '''
     def __init__(self, parent=None):
         super(HeatMapGrid, self).__init__(parent)
-        ui = Ui_Dialog()
+        ui = HeatMap.Ui_Dialog()
         self.setupUi(self)
 
+  
     def paintEvent(self, e):
         qp = QtGui.QPainter()
         qp.begin(self)
@@ -918,7 +971,7 @@ class HeatMapGrid(QtWidgets.QDialog, Ui_Dialog):
 
 
     def paint_heat_diagram(self, qp):
-        '''adapted from https://github.com/dakota0064/Fluorescent_Robotic_Imager '''
+        ''' adapted from https://github.com/dakota0064/Fluorescent_Robotic_Imager '''
 
         rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
         cols = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
@@ -985,6 +1038,96 @@ class HeatMapGrid(QtWidgets.QDialog, Ui_Dialog):
             else:
                 qp.setFont(QFont("Courier New", 10))
                 qp.drawText(coordinates[0], coordinates[1], coordinates[2], coordinates[3], QtCore.Qt.AlignCenter, wells[coordinates[4]])
+
+
+
+# class MARCO_Results(QtWidgets.QDialog, HeatMap.Ui_Dialog):
+#     ''' autoMARCO_data must be a list containing the data from auto_MARCO.log '''
+#     def __init__(self, parent=None):
+#         super(MARCO_Results, self).__init__(parent)
+#         ui = HeatMap.Ui_Dialog()
+#         self.setupUi(self)
+    
+
+#     def paintEvent(self, e):
+#         qp = QtGui.QPainter()
+#         qp.begin(self)
+#         self.paint_MARCO_Results(qp)
+#         qp.end()
+
+        
+
+#     def paint_MARCO_Results(self, qp):
+#         ''' adapted from https://github.com/dakota0064/Fluorescent_Robotic_Imager '''
+
+#         rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+#         cols = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+#         wells = ['a', 'b', 'c']
+
+#         total_wells = [row + str(col) for row in rows for col in cols]
+
+#         def well_to_coordinates(well):
+#             row = int(ord(well[0])) - 65
+#             column = int(('').join(re.findall(r'\d+',well))) - 1
+
+#             x1 = 80 + (column * 80)
+#             dx = 60
+#             y1 = (80 + row * 80)
+#             dy = 60
+#             return x1, y1, dx, dy
+        
+#         for row in rows:
+#             row_int = int(ord(row)) - 65
+#             y1 = 120 + row_int * 80
+#             qp.setFont(QFont("Courier New", 20))
+#             qp.drawText(40, y1,row)  
+
+#         for col in cols:
+#             col_int = int(col) - 1
+#             x1 = 90 + (col_int * 80)
+#             qp.setFont(QFont("Courier New", 20))
+#             qp.drawText(x1, 40, col)  
+
+#         for well in total_wells:
+#             coordinates = well_to_coordinates(well)
+#             qp.setBrush(QColor(255, 255, 255))
+#             qp.drawRect(coordinates[0], coordinates[1], coordinates[2], coordinates[3])
+        
+        
+#         for line in self.autoMARCO_data:
+#             if self.subwell!="" and self.subwell in line[0][-1]:
+#                 well=line[0]
+#                 coordinates = well_to_coordinates(well)
+#                 #Crystal
+#                 qp.setBrush(QColor(0, 255, 0))
+#                 qp.drawRect(coordinates[0]+4, coordinates[1], 10, coordinates[3]*float(line[1]))
+#                 #Other
+#                 qp.setBrush(QColor(255, 0, 255))
+#                 qp.drawRect(coordinates[0]+18, coordinates[1], 10, coordinates[3]*float(line[2]))
+#                 #Precipitate
+#                 qp.setBrush(QColor(255, 0, 0))
+#                 qp.drawRect(coordinates[0]+32, coordinates[1], 10, coordinates[3]*float(line[3]))
+#                 #Clear
+#                 qp.setBrush(QColor(0, 0, 0))
+#                 qp.drawRect(coordinates[0]+46, coordinates[1], 10, coordinates[3]*float(line[4]))
+#             elif self.subwell=="" and line[0][-1] not in wells:
+#                 well=line[0]
+#                 coordinates = well_to_coordinates(well)
+#                 #Crystal
+#                 qp.setBrush(QColor(0, 255, 0))
+#                 qp.drawRect(coordinates[0]+4, coordinates[1], 10, coordinates[3]*float(line[1]))
+#                 #Other
+#                 qp.setBrush(QColor(255, 0, 255))
+#                 qp.drawRect(coordinates[0]+18, coordinates[1], 10, coordinates[3]*float(line[2]))
+#                 #Precipitate
+#                 qp.setBrush(QColor(255, 0, 0))
+#                 qp.drawRect(coordinates[0]+32, coordinates[1], 10, coordinates[3]*float(line[3]))
+#                 #Clear
+#                 qp.setBrush(QColor(0, 0, 0))
+#                 qp.drawRect(coordinates[0]+46, coordinates[1], 10, coordinates[3]*float(line[4]))              
+#             else:
+#                 continue
+
 
 
             

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'mainwindow.ui'
+# Form implementation generated from reading ui file 'DesignerFiles/mainwindow.ui'
 #
 # Created by: PyQt5 UI code generator 5.12.1
 #
@@ -297,6 +297,8 @@ class Ui_MainWindow(object):
         self.menuFile.setObjectName("menuFile")
         self.menuDisplay_Heat_Map = QtWidgets.QMenu(self.menuBar)
         self.menuDisplay_Heat_Map.setObjectName("menuDisplay_Heat_Map")
+        self.menuShow_autoMARCO_Grid = QtWidgets.QMenu(self.menuDisplay_Heat_Map)
+        self.menuShow_autoMARCO_Grid.setObjectName("menuShow_autoMARCO_Grid")
         self.menuHelp = QtWidgets.QMenu(self.menuBar)
         self.menuHelp.setObjectName("menuHelp")
         MainWindow.setMenuBar(self.menuBar)
@@ -321,13 +323,26 @@ class Ui_MainWindow(object):
         self.actionAbout.setObjectName("actionAbout")
         self.actionAutomated_Annotation_MARCO = QtWidgets.QAction(MainWindow)
         self.actionAutomated_Annotation_MARCO.setObjectName("actionAutomated_Annotation_MARCO")
+        self.actionautoMARCO_subwell_a = QtWidgets.QAction(MainWindow)
+        self.actionautoMARCO_subwell_a.setObjectName("actionautoMARCO_subwell_a")
+        self.actionautoMARCO_subwell_b = QtWidgets.QAction(MainWindow)
+        self.actionautoMARCO_subwell_b.setObjectName("actionautoMARCO_subwell_b")
+        self.actionautoMARCO_subwell_c = QtWidgets.QAction(MainWindow)
+        self.actionautoMARCO_subwell_c.setObjectName("actionautoMARCO_subwell_c")
+        self.actionautoMARCO_no_subwell = QtWidgets.QAction(MainWindow)
+        self.actionautoMARCO_no_subwell.setObjectName("actionautoMARCO_no_subwell")
         self.menuFile.addAction(self.openFile)
         self.menuFile.addAction(self.openDir)
         self.menuFile.addAction(self.actionQuit_2)
+        self.menuShow_autoMARCO_Grid.addAction(self.actionautoMARCO_subwell_a)
+        self.menuShow_autoMARCO_Grid.addAction(self.actionautoMARCO_subwell_b)
+        self.menuShow_autoMARCO_Grid.addAction(self.actionautoMARCO_subwell_c)
+        self.menuShow_autoMARCO_Grid.addAction(self.actionautoMARCO_no_subwell)
         self.menuDisplay_Heat_Map.addAction(self.actionAutomated_Annotation_MARCO)
         self.menuDisplay_Heat_Map.addAction(self.actionCalculate_Statistics)
         self.menuDisplay_Heat_Map.addAction(self.actionDisplay_Heat_Map)
         self.menuDisplay_Heat_Map.addAction(self.actionExport_to_PDF)
+        self.menuDisplay_Heat_Map.addAction(self.menuShow_autoMARCO_Grid.menuAction())
         self.menuHelp.addAction(self.actionShortcuts)
         self.menuHelp.addAction(self.actionAbout)
         self.menuBar.addAction(self.menuFile.menuAction())
@@ -372,6 +387,7 @@ class Ui_MainWindow(object):
         self.label_CurrentWell.setText(_translate("MainWindow", "------"))
         self.menuFile.setTitle(_translate("MainWindow", "File"))
         self.menuDisplay_Heat_Map.setTitle(_translate("MainWindow", "Tools"))
+        self.menuShow_autoMARCO_Grid.setTitle(_translate("MainWindow", "Show autoMARCO Results"))
         self.menuHelp.setTitle(_translate("MainWindow", "Help"))
         self.openFile.setText(_translate("MainWindow", "Open File"))
         self.openFile.setShortcut(_translate("MainWindow", "Ctrl+O"))
@@ -386,6 +402,10 @@ class Ui_MainWindow(object):
         self.actionShortcuts.setText(_translate("MainWindow", "Shortcuts"))
         self.actionAbout.setText(_translate("MainWindow", "About"))
         self.actionAutomated_Annotation_MARCO.setText(_translate("MainWindow", "Automated Annotation (MARCO)"))
+        self.actionautoMARCO_subwell_a.setText(_translate("MainWindow", "autoMARCO subwell a"))
+        self.actionautoMARCO_subwell_b.setText(_translate("MainWindow", "autoMARCO subwell b"))
+        self.actionautoMARCO_subwell_c.setText(_translate("MainWindow", "autoMARCO subwell c"))
+        self.actionautoMARCO_no_subwell.setText(_translate("MainWindow", "autoMARCO no subwell"))
 
 
 
