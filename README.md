@@ -65,6 +65,11 @@ Added visualisation of autoMARCO results
     * On Raspbian, you must ensure that package qt5-image-formats-plugins is installed
     * On Raspbian, buttons do not change color when clicked.
 
+    To start the program type in a terminal:
+    python3 AMi_Image_Analysis.py
+    or
+    ./AMi_Image_Analysis.py (if python3 is in the path)
+
 ## Citation
 
 If you wish to cite this work, you can use the following reference:

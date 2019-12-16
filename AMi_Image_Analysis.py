@@ -21,7 +21,7 @@ from PyQt5.QtWidgets import (QLabel, QTableWidgetItem, QFileDialog,
 from utils import ensure_directory
 from shutil import copyfile
 import pdf_writer 
-import HeatMap
+import HeatMap_Grid
 from  MARCO_Results_Analysis import MARCO_Results
 import Shortcuts
 import StatisticsDialog
@@ -35,11 +35,15 @@ __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 def Citation():
     print('''
-Program inspired from the original program at 
-https://github.com/dakota0064/Fluorescent_Robotic_Imager
-written by Dakota Handzlik
+Program written for in python3/PyQt5 by
+Ludovic Pecqueur
+Laboratoire de Chimie des Processus Biologiques
+Collège de France.
 
-Program written for Qt5 by L.P.
+Please acknowledge the use of this program and give
+the following link:
+https://github.com/LP-CDF/AMi_Image_Analysis  
+  
 licence: %s
 '''%__license__)
 
@@ -303,7 +307,6 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         directory = str(QFileDialog.getExistingDirectory(self,"Directory containing Images"))
         self.Initialise()
         if directory:
-            print(directory)
             self.imageDir=os.path.realpath(directory)
             #Initialise Project Details 
             self.Directory(os.path.realpath(directory))
@@ -365,7 +368,6 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         text=self.Notes_TextEdit.toPlainText()
         values.append(text)
         values.append(pdfpath)
-    #            print(values)
         pdf_writer.create_pdf(values)
         print("Report for well %s saved to %s"%(well, pdfpath))
 
@@ -437,9 +439,6 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
 #            print(position, name)
             try:
                 file = next(self.files_it)
-#                pixmap = QtGui.QPixmap(name)
-#                self.add_pixmap(pixmap.scaled(100, 100, QtCore.Qt.KeepAspectRatio, QtCore.Qt.FastTransformation), position[0],position[1])
-#                self.add_WellLabel(name, position[0],position[1])
                 self.add_button(name, position[0],position[1])
                 self.progressBar.setValue(count+1)
                 count+=1
@@ -505,11 +504,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         idx=self._lay.indexOf(button)
         location = self._lay.getItemPosition(idx)
         self.currentButtonIndex=location
-#        print("location", location, "Type locationx", type(location))
 #        print("Button", button, "at row/col", location[:2])
-#        fileindex=location[0]*MaxCol + location[1]
-#        print("self.files well index ", fileindex)
-#        self.LoadWellImage(self.files[fileindex])
         
         well=button.text()
         self.currentWell=well
@@ -546,9 +541,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         
 
     def LoadWellImage(self,path):
-#        imageLabel = QLabel()
-#        image=QImage(path)
-#        imageLabel.setPixmap(QPixmap.fromImage(image))
+
         QtGui.QPixmapCache.clear()
         label=QLabel(self)
         pixmap=QPixmap(path)
@@ -567,7 +560,6 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def view_current(self):
         '''based on https://vincent-vande-vyvre.developpez.com/tutoriels/pyqt/manipulation-images/'''
-#        self.view = QtWidgets.QGraphicsView(self.scene)
         w_pix, h_pix = self.pixmap.width(), self.pixmap.height()
         self.scene.clear()
         self.scene.setSceneRect(0, 0, w_pix, h_pix)
@@ -620,7 +612,6 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         most_recent = "18000101" #YYYYMMDD
         
         folders=[str(i) for i in Path(path).iterdir() if i.is_dir()]
-#        print("FOLDERS ", folders)
 
         for folder in folders:
             date = folder.split("/")[-1]
@@ -675,7 +666,6 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
                
 
     def ReadClassification(self, path, date, well):
-#        data_file=path+ "/Image_Data/" + date + "/" + well + "/" + "image_data_0.txt"
         data_file=Path(self.rootDir).joinpath("Image_Data", self.date, "%s_data.txt"%well)
         if Path(data_file).exists():
             with open(data_file, "r") as f:
@@ -775,7 +765,6 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         if idx is None: return
         row=idx[0]
         col=idx[1]
-        # item = layout.itemAtPosition(row,col)
         try:
             item = layout.itemAtPosition(row,col)
             widget=item.widget()
@@ -812,7 +801,6 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         # if event.key()==QtCore.Qt.Key_Q:
         shortcut=Shortcuts.Shortcut()
         if event.key()==shortcut.MoveLeft:
-#            print("Left Arrow")
             if currentcol==0:
                 Newlocation=(currentrow-1, NumberOfColumns-1,location[2],location[3])
                 try:
@@ -825,7 +813,6 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.ActivateButton(self._lay, Newlocation)
 
         if event.key()==shortcut.MoveRight:
-#            print("Right Arrow")
             if currentcol==NumberOfColumns-1:
                 Newlocation=(currentrow+1, 0,location[2],location[3])
                 try:
@@ -838,7 +825,6 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.ActivateButton(self._lay, Newlocation)
             
         if event.key()==shortcut.MoveUp:
-#            print("Up Arrow")
             Newlocation=(currentrow-1, currentcol,location[2],location[3])
             try:
                 self.ActivateButton(self._lay, Newlocation)
@@ -846,7 +832,6 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.handle_error("Already at first row")
             
         if event.key()==shortcut.MoveDown:
-#            print("Down Arrow")
             Newlocation=(currentrow+1, currentcol,location[2],location[3])
             try:
                 self.ActivateButton(self._lay, Newlocation)
@@ -871,10 +856,8 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         Count_subwell_b={"Clear":0, "Precipitate":0, "Crystal":0, "PhaseSep":0, "Other":0, "Unknown":0}
         Count_subwell_c={"Clear":0, "Precipitate":0, "Crystal":0, "PhaseSep":0, "Other":0, "Unknown":0}
         Count_nosubwell={"Clear":0, "Precipitate":0, "Crystal":0, "PhaseSep":0, "Other":0, "Unknown":0}
-        
-        # print("self.classifications ", self.classifications) 
+         
         for well,classification in self.classifications.items():
-#                print("well= ", well,"classification= ", classification)
             if "a" in well:
                  Count_subwell_a[classification]+=1
             elif "b" in well:
@@ -900,10 +883,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
                     i[classification]=0
                 except ZeroDivisionError:
                     i[classification]=0
-        print("Stats subwell a in %", _list[0])
-        print("Stats subwell b in %", _list[1])
-        print("Stats subwell c in %", _list[2])
-        print("Stats no subwell in %", _list[3])
+
         return _list
         
 
@@ -955,11 +935,11 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
 #        self.SaveNotes(self.currentWell)
         
 
-class HeatMapGrid(QtWidgets.QDialog, HeatMap.Ui_Dialog):
+class HeatMapGrid(QtWidgets.QDialog, HeatMap_Grid.Ui_Dialog):
     ''' '''
     def __init__(self, parent=None):
         super(HeatMapGrid, self).__init__(parent)
-        ui = HeatMap.Ui_Dialog()
+        ui = HeatMap_Grid.Ui_Dialog()
         self.setupUi(self)
 
   
@@ -995,15 +975,17 @@ class HeatMapGrid(QtWidgets.QDialog, HeatMap.Ui_Dialog):
         
         for row in rows:
             row_int = int(ord(row)) - 65
-            y1 = 120 + row_int * 80
+            y1 = 80 + row_int * 80
             qp.setFont(QFont("Courier New", 20))
-            qp.drawText(40, y1,row)  
+            # qp.drawText(40, y1,row)
+            qp.drawText(20, y1, 60, 60, QtCore.Qt.AlignCenter, row)
 
         for col in cols:
             col_int = int(col) - 1
-            x1 = 80 + (col_int * 80)
+            x1 = 70 + (col_int * 80)
             qp.setFont(QFont("Courier New", 20))
-            qp.drawText(x1, 40, col)  
+            # qp.drawText(x1, 40, col)
+            qp.drawText(x1, 30, 40, 40, QtCore.Qt.AlignCenter, col)
 
         for well in total_wells:
             coordinates = well_to_coordinates(well)
@@ -1038,97 +1020,6 @@ class HeatMapGrid(QtWidgets.QDialog, HeatMap.Ui_Dialog):
             else:
                 qp.setFont(QFont("Courier New", 10))
                 qp.drawText(coordinates[0], coordinates[1], coordinates[2], coordinates[3], QtCore.Qt.AlignCenter, wells[coordinates[4]])
-
-
-
-# class MARCO_Results(QtWidgets.QDialog, HeatMap.Ui_Dialog):
-#     ''' autoMARCO_data must be a list containing the data from auto_MARCO.log '''
-#     def __init__(self, parent=None):
-#         super(MARCO_Results, self).__init__(parent)
-#         ui = HeatMap.Ui_Dialog()
-#         self.setupUi(self)
-    
-
-#     def paintEvent(self, e):
-#         qp = QtGui.QPainter()
-#         qp.begin(self)
-#         self.paint_MARCO_Results(qp)
-#         qp.end()
-
-        
-
-#     def paint_MARCO_Results(self, qp):
-#         ''' adapted from https://github.com/dakota0064/Fluorescent_Robotic_Imager '''
-
-#         rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
-#         cols = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
-#         wells = ['a', 'b', 'c']
-
-#         total_wells = [row + str(col) for row in rows for col in cols]
-
-#         def well_to_coordinates(well):
-#             row = int(ord(well[0])) - 65
-#             column = int(('').join(re.findall(r'\d+',well))) - 1
-
-#             x1 = 80 + (column * 80)
-#             dx = 60
-#             y1 = (80 + row * 80)
-#             dy = 60
-#             return x1, y1, dx, dy
-        
-#         for row in rows:
-#             row_int = int(ord(row)) - 65
-#             y1 = 120 + row_int * 80
-#             qp.setFont(QFont("Courier New", 20))
-#             qp.drawText(40, y1,row)  
-
-#         for col in cols:
-#             col_int = int(col) - 1
-#             x1 = 90 + (col_int * 80)
-#             qp.setFont(QFont("Courier New", 20))
-#             qp.drawText(x1, 40, col)  
-
-#         for well in total_wells:
-#             coordinates = well_to_coordinates(well)
-#             qp.setBrush(QColor(255, 255, 255))
-#             qp.drawRect(coordinates[0], coordinates[1], coordinates[2], coordinates[3])
-        
-        
-#         for line in self.autoMARCO_data:
-#             if self.subwell!="" and self.subwell in line[0][-1]:
-#                 well=line[0]
-#                 coordinates = well_to_coordinates(well)
-#                 #Crystal
-#                 qp.setBrush(QColor(0, 255, 0))
-#                 qp.drawRect(coordinates[0]+4, coordinates[1], 10, coordinates[3]*float(line[1]))
-#                 #Other
-#                 qp.setBrush(QColor(255, 0, 255))
-#                 qp.drawRect(coordinates[0]+18, coordinates[1], 10, coordinates[3]*float(line[2]))
-#                 #Precipitate
-#                 qp.setBrush(QColor(255, 0, 0))
-#                 qp.drawRect(coordinates[0]+32, coordinates[1], 10, coordinates[3]*float(line[3]))
-#                 #Clear
-#                 qp.setBrush(QColor(0, 0, 0))
-#                 qp.drawRect(coordinates[0]+46, coordinates[1], 10, coordinates[3]*float(line[4]))
-#             elif self.subwell=="" and line[0][-1] not in wells:
-#                 well=line[0]
-#                 coordinates = well_to_coordinates(well)
-#                 #Crystal
-#                 qp.setBrush(QColor(0, 255, 0))
-#                 qp.drawRect(coordinates[0]+4, coordinates[1], 10, coordinates[3]*float(line[1]))
-#                 #Other
-#                 qp.setBrush(QColor(255, 0, 255))
-#                 qp.drawRect(coordinates[0]+18, coordinates[1], 10, coordinates[3]*float(line[2]))
-#                 #Precipitate
-#                 qp.setBrush(QColor(255, 0, 0))
-#                 qp.drawRect(coordinates[0]+32, coordinates[1], 10, coordinates[3]*float(line[3]))
-#                 #Clear
-#                 qp.setBrush(QColor(0, 0, 0))
-#                 qp.drawRect(coordinates[0]+46, coordinates[1], 10, coordinates[3]*float(line[4]))              
-#             else:
-#                 continue
-
-
 
             
 if __name__ == "__main__":

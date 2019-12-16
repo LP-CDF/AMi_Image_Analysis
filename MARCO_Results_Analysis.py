@@ -6,8 +6,14 @@ Created on Fri Dec 13 08:31:47 2019
 @author: ludovic
 """
 
+__version__ = "1.1.0"
+__author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
+__date__ = "16-12-2019"
+__license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
+
+
 import re
-from PyQt5 import QtGui, QtWidgets
+from PyQt5 import QtGui, QtWidgets, QtCore
 from PyQt5.QtGui import QFont, QColor
 
 from AutoMARCO_Grid import Ui_Dialog
@@ -49,15 +55,15 @@ class MARCO_Results(QtWidgets.QDialog, Ui_Dialog):
         
         for row in rows:
             row_int = int(ord(row)) - 65
-            y1 = 120 + row_int * 80
+            y1 = 80 + row_int * 80
             qp.setFont(QFont("Courier New", 20))
-            qp.drawText(40, y1,row)  
+            qp.drawText(20, y1, 60, 60, QtCore.Qt.AlignCenter, row)  
 
         for col in cols:
             col_int = int(col) - 1
-            x1 = 90 + (col_int * 80)
+            x1 = 80 + (col_int * 80)
             qp.setFont(QFont("Courier New", 20))
-            qp.drawText(x1, 40, col)  
+            qp.drawText(x1, 20, 60, 60, QtCore.Qt.AlignCenter, col)
 
         for well in total_wells:
             coordinates = well_to_coordinates(well)
