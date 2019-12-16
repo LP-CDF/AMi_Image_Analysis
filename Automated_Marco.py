@@ -38,12 +38,17 @@ def predict(file_list, classifications,logDir):
     model_path = Path(app_path).joinpath("saved_model")
     size = len(file_list)
     
+    #unsupported image type in tensorflow <2.0
+    unsupported=['.tif', '.tiff','.TIF', '.TIFF']
+    
+    #Acceptance probability criterium
     threshold=0.60
     
     def load_images(file_list):
         for i in file_list:
-            file = open(i, "rb")
-            yield {"image_bytes": [file.read()]}, i
+            if os.path.splitext(os.path.basename(i))[1] not in unsupported:
+                file = open(i, "rb")
+                yield {"image_bytes": [file.read()]}, i
 
     iterator = load_images(file_list)
 
