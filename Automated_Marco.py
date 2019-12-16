@@ -37,6 +37,9 @@ def predict(file_list, classifications,logDir):
     # print("app_path ", app_path)
     model_path = Path(app_path).joinpath("saved_model")
     size = len(file_list)
+    
+    threshold=0.60
+    
     def load_images(file_list):
         for i in file_list:
             file = open(i, "rb")
@@ -57,10 +60,6 @@ def predict(file_list, classifications,logDir):
         classes = results['classes'][0]
         dictionary = dict(zip(classes,vals))
         
-        # print("vals ", vals)
-        # print("classes ", classes)
-        # print("dictionary ", dictionary)
-        
         logresult.append((well, dictionary))
         
         #Find the most probable and return a tuple(well,dict)
@@ -77,6 +76,10 @@ def predict(file_list, classifications,logDir):
         elif MostProbable[1] == b"Clear":
             classification = "Clear"
 
+        #Adding a filter
+        if MostProbable[0]<threshold:
+            classification = "Unknown"
+            
         classifications[well]=classification
         # print("classifications[well] ", classifications[well])
         
