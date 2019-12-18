@@ -375,7 +375,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
     def Directory(self, path):
 #        print("ClassPath ", path.split("/"))
         directory = path.split("/")
-        if directory[-1]=="rawimages":
+        if directory[-1]=="rawimages" or directory[-1]=="cropped":
             self.rootDir = "/".join(directory[:-2])
             self.project=directory[-4]
             self.target=directory[-4]

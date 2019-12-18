@@ -28,6 +28,10 @@ For now, this requires TensorFlow version previous to v2.
 2019/12/13:
 Added visualisation of autoMARCO results
 
+2019/12/17:
+Added a tool to automatically crop images using opencv (CV2_cropImage.py).
+Added a tool to check circle detection on a given image
+
 ## Screenshots
 
 ![Screenshot 1](./screenshot1.png)
@@ -60,6 +64,8 @@ Added visualisation of autoMARCO results
     * MARCO tensorflow model (https://storage.googleapis.com/marco-168219-model/savedmodel.zip)
       One version of this model is included in saved_model/
       Methodology details are published in [[2]](#2)
+    * opencv for the automatic cropping tool (tested with opencv 4.0.1 manually compiled on CentOS 7)
+    * NumPy
 
     Known issues: 
     * On Raspbian, you must ensure that package qt5-image-formats-plugins is installed
