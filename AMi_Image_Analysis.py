@@ -765,6 +765,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         if idx is None: return
         row=idx[0]
         col=idx[1]
+        # item = layout.itemAtPosition(row,col)
         try:
             item = layout.itemAtPosition(row,col)
             widget=item.widget()
@@ -798,6 +799,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         currentrow=location[0]; currentcol=location[1]
         self.ChangeButtonColor(self._lay, self.currentButtonIndex, state="checked")
         NumberOfColumns=self._lay.columnCount()
+        NumberOfRows=self._lay.rowCount()
         # if event.key()==QtCore.Qt.Key_Q:
         shortcut=Shortcuts.Shortcut()
         if event.key()==shortcut.MoveLeft:
@@ -822,7 +824,10 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
             else:
                 Newlocation=(currentrow, currentcol+1,location[2],location[3])
 #                print("Newlocation ", Newlocation)
-                self.ActivateButton(self._lay, Newlocation)
+                try:
+                    self.ActivateButton(self._lay, Newlocation)
+                except:
+                    self.handle_error("Already at last well")
             
         if event.key()==shortcut.MoveUp:
             Newlocation=(currentrow-1, currentcol,location[2],location[3])

@@ -11,7 +11,7 @@ Taken from https://www.geeksforgeeks.org/circle-detection-using-opencv-python/
 
 import cv2
 import sys
-import numpy as np 
+import numpy as np
 
 
 
@@ -31,7 +31,7 @@ def DetectCircle(_file):
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) 
       
     # Blur using 3 * 3 kernel. 
-    gray_blurred = cv2.blur(gray, (3, 3)) 
+    gray_blurred = cv2.GaussianBlur(gray, (3, 3),1) 
       
     # Apply Hough transform on the blurred image. 
     detected_circles = cv2.HoughCircles(gray_blurred,  
@@ -45,15 +45,27 @@ def DetectCircle(_file):
         detected_circles = np.uint16(np.around(detected_circles)) 
       
         for pt in detected_circles[0, :]: 
-            a, b, r = pt[0], pt[1], pt[2] 
-      
+            a, b, r = pt[0], pt[1], pt[2]
+            mask=np.zeros((gray.shape[0],gray.shape[1]), np.uint8)
+            
+            #Create mask, extract ROI and calculate mean
+            cv2.circle(mask, (a,b), r+100, (255,255,255), -1)
+            new_img=cv2.bitwise_and(gray, gray, mask=mask)
+            mean=cv2.mean(new_img, mask=mask)[::-1]
+            print("Mean value of circle ", mean)
+            
             # Draw the circumference of the circle. 
-            cv2.circle(img, (a, b), r, (0, 255, 0), 2) 
+            cv2.circle(img, (a, b), r, (0, 255, 0), 2)
       
             # Draw a small circle (of radius 1) to show the center. 
-            cv2.circle(img, (a, b), 1, (0, 0, 255), 3) 
-            cv2.imshow("Detected Circle", img) 
-            cv2.waitKey(0) 
+            cv2.circle(img, (a, b), 1, (0, 0, 255), 3)
+            
+            resized_img = cv2.resize(img, (600,451), interpolation = cv2.INTER_AREA)
+            resized_ROI = cv2.resize(new_img, (600,451), interpolation = cv2.INTER_AREA)
+            
+            cv2.imshow("Detected Circle", resized_img) 
+            cv2.imshow("ROI with radius+100", resized_ROI) 
+            cv2.waitKey(0)
 
 
 if __name__ == "__main__":
@@ -66,7 +78,10 @@ if __name__ == "__main__":
     
     # img = cv2.imread(filename, cv2.IMREAD_COLOR)
     # gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    # gray_blurred = cv2.blur(gray, (3, 3)) 
+    # gray_blurred = cv2.GaussianBlur(gray, (5, 5),1)
+    # # gray_mf=median_filter(gray,1)
+    # # lap=cv2.Laplacian(gray_mf, cv2.CV_64F)
+    # # sharp=gray -0.7*lap
     
     # # Set our filtering parameters 
     # # Initialize parameter setting using cv2.SimpleBlobDetector 
@@ -85,7 +100,7 @@ if __name__ == "__main__":
     # params.minConvexity = 0.2
           
     # # Set inertia filtering parameters 
-    # params.filterByInertia = False
+    # params.filterByInertia = True
     # params.minInertiaRatio = 0.01
     
     
@@ -97,7 +112,7 @@ if __name__ == "__main__":
     
     # # Draw blobs on our image as red circles 
     # blank = np.zeros((1, 1))  
-    # blobs = cv2.drawKeypoints(img, keypoints, blank, (0, 0, 255), 
+    # blobs = cv2.drawKeypoints(gray_blurred, keypoints, blank, (0, 0, 255), 
     #                           cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
     
     # number_of_blobs = len(keypoints) 
