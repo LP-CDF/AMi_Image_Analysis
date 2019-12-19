@@ -10,7 +10,7 @@ For more details on this device, please look at:
 ## Features:
 
 I created this application to help the members of our laboratory in their crystallization work.
-The software can read tiff or jpeg files.
+The software can read tiff, jpeg or png files.
 Images are accessed via clicking on the corresponding well button or by navigating with keyboard shortcuts.
 Images can be zoomed for thorough inspection and a timeline of the corresponding well is displayed if several pictures of the same well taken at different times are available.
 
@@ -29,8 +29,8 @@ For now, this requires TensorFlow version previous to v2.
 Added visualisation of autoMARCO results
 
 2019/12/17:
-Added a tool to automatically crop images using opencv (CV2_cropImage.py). This enhances autoMARCO results.
-Added a tool to check circle detection on a given image.
+Added a tool to automatically crop images using opencv (autocrop.py). This enhances autoMARCO results.
+Added a tool to check circle detection on a given image (Check_Circle_detection.py).
 
 
 ## Screenshots
@@ -65,7 +65,7 @@ Added a tool to check circle detection on a given image.
     * MARCO tensorflow model (https://storage.googleapis.com/marco-168219-model/savedmodel.zip)
       One version of this model is included in saved_model/
       Methodology details are published in [[2]](#2)
-    * opencv for the automatic cropping tool (tested with opencv 4.0.1 manually compiled on CentOS 7)
+    * opencv for the automatic cropping tool (tested with opencv 4.0.1 compiled on CentOS 7)
     * NumPy
 
     Known issues: 

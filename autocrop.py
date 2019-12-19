@@ -5,13 +5,17 @@ Created on Mon Dec 16 14:46:09 2019
 
 @author: ludovic pecqueur
 
-usage 
+usage:
+    Execute this script in the directory containing the images to crop
+    this will create a directory cropped.
+    start the script by typing:
+    python3 autocrop.py
 """
 
 import os
 import re
 from pathlib import Path
-import cv2 
+import cv2
 import numpy as np
 
 
@@ -53,23 +57,23 @@ def find_best_circle(image):
     R = 0
     X = 0
     Y = 0
-    moments=[]
+    euclidians=[]
     
-    #Find circle with max radius closest to center of image, temporary bad solution
+    #Find detected circle with max radius closest to center of image, temporary bad solution
     if circles is not None:
         circles = np.uint16(np.around(circles))
         for pt in circles[0, :]:
             x, y, r = pt[0], pt[1], pt[2]
-            moment=np.sqrt((x - w*0.5)**2+(y - h*0.5)**2)
-            moments.append((moment,r,x,y))
-        for i in moments:
-            if r>R and i[0]==min(moments)[0]:
+            euclidian=np.sqrt((x - w*0.5)**2+(y - h*0.5)**2)
+            euclidians.append((euclidian,r,x,y))
+        for i in euclidians:
+            if r>R and i[0]==min(euclidians)[0]:
                 R = int(i[1])
                 X = int(i[2])
                 Y = int(i[3])
     # print("Rmax, X, Y ", R, X, Y)
-    # print("MOMENTS ", moments, "MIN MOMENTS", min(moments))
-    del moments
+    # print("DISTANCES to image center ", euclidians, "MIN distance to image center", min(euclidians))
+    del euclidians
     return X,Y,R
 
 if __name__ == "__main__":
@@ -110,7 +114,7 @@ if __name__ == "__main__":
             f.write("All Files could be processed.")
     
     print('''
-%s files were not processed.
-Please check log file %s
+%s file(s) were not processed.
+For more information check log file %s
 you can use the tool Check_Circle_detection.py filename to check
 '''%(errors, log))

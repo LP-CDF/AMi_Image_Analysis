@@ -27,9 +27,9 @@ import Shortcuts
 import StatisticsDialog
 
 
-__version__ = "1.1.0"
+__version__ = "1.1.1"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "13-12-2019"
+__date__ = "19-12-2019"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -168,8 +168,58 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
             ui.StatisticsTable.setItem(pos[0],pos[1], QTableWidgetItem(str(value)))
         
         self.StatisticsWindow.show()
+
         
+    def AutoCrop(self):
         
+        if len(self.files)==0:
+            self.handle_error("Please choose a directory containing the images first!!!")
+            return
+        
+        try:
+            import cv2
+            import autocrop
+            if cv2.__version__ < '4.0.1':
+                self.handle_error("openCV version %s not supported"%cv2.__version__)
+                return
+        except:
+            self.handle_error("module cv2 not found")
+            return
+        
+        path=Path(self.imageDir).joinpath("cropped")
+        ensure_directory(str(path)+"/")
+        
+        errors, error_list = 0, []
+        for _file in self.files:
+            img = cv2.imread(_file, cv2.IMREAD_COLOR)
+            well=os.path.splitext(os.path.basename(_file))[0]
+            output=autocrop.crop_ROI(img, self.imageDir, well)
+            if output is False:
+                errors +=1
+                error_list.append(well)
+            del img, output
+
+        log=Path(path).joinpath("autocrop.log")
+        with open(log, 'w') as f:
+            if errors!=0:
+                f.write("File(s) that could not be processed correctly \n")
+                for err in error_list: f.write(err+"\n")
+            else:
+                f.write("All Files could be processed.")                          
+            
+        if errors!=0:
+            self.handle_error('''
+%s file(s) were not processed.
+For more information check log file %s
+you can use the tool Check_Circle_detection.py filename to check
+'''%(errors, log))
+
+        #INFORM USER TO RELOAD images from cropped if needed
+        info = QMessageBox(self)
+        info.setWindowTitle("Information!")
+        info.setText("You will need to reload images from the directory cropped to use the cropped images")
+        info.setStandardButtons(QMessageBox.Ok)
+        retval = info.exec_()
         
     def initUI(self):
 
@@ -184,6 +234,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.openFile.triggered.connect(self.openFileNameDialog)
         self.openDir.triggered.connect(self.openDirDialog)
         
+        self.actionAutoCrop.triggered.connect(self.AutoCrop)
         self.actionAutomated_Annotation_MARCO.triggered.connect(self.autoAnnotation)
         self.actionDisplay_Heat_Map.triggered.connect(self.show_HeatMap)
         self.actionExport_to_PDF.triggered.connect(self.export_pdf)

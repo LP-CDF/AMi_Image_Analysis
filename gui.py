@@ -331,6 +331,8 @@ class Ui_MainWindow(object):
         self.actionautoMARCO_subwell_c.setObjectName("actionautoMARCO_subwell_c")
         self.actionautoMARCO_no_subwell = QtWidgets.QAction(MainWindow)
         self.actionautoMARCO_no_subwell.setObjectName("actionautoMARCO_no_subwell")
+        self.actionAutoCrop = QtWidgets.QAction(MainWindow)
+        self.actionAutoCrop.setObjectName("actionAutoCrop")
         self.menuFile.addAction(self.openFile)
         self.menuFile.addAction(self.openDir)
         self.menuFile.addAction(self.actionQuit_2)
@@ -338,6 +340,7 @@ class Ui_MainWindow(object):
         self.menuShow_autoMARCO_Grid.addAction(self.actionautoMARCO_subwell_b)
         self.menuShow_autoMARCO_Grid.addAction(self.actionautoMARCO_subwell_c)
         self.menuShow_autoMARCO_Grid.addAction(self.actionautoMARCO_no_subwell)
+        self.menuDisplay_Heat_Map.addAction(self.actionAutoCrop)
         self.menuDisplay_Heat_Map.addAction(self.actionAutomated_Annotation_MARCO)
         self.menuDisplay_Heat_Map.addAction(self.actionCalculate_Statistics)
         self.menuDisplay_Heat_Map.addAction(self.actionDisplay_Heat_Map)
@@ -406,6 +409,7 @@ class Ui_MainWindow(object):
         self.actionautoMARCO_subwell_b.setText(_translate("MainWindow", "autoMARCO subwell b"))
         self.actionautoMARCO_subwell_c.setText(_translate("MainWindow", "autoMARCO subwell c"))
         self.actionautoMARCO_no_subwell.setText(_translate("MainWindow", "autoMARCO no subwell"))
+        self.actionAutoCrop.setText(_translate("MainWindow", "AutoCrop"))
 
 
 
