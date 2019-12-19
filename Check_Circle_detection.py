@@ -31,13 +31,16 @@ def DetectCircle(_file):
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) 
       
     # Blur using 3 * 3 kernel. 
-    gray_blurred = cv2.GaussianBlur(gray, (3, 3),1) 
+    gray_blurred = cv2.GaussianBlur(gray, (3, 3),1)
+    w,h = gray.shape[1],gray.shape[0]
       
     # Apply Hough transform on the blurred image. 
     detected_circles = cv2.HoughCircles(gray_blurred,  
-                       cv2.HOUGH_GRADIENT, 1, 100, param1 = 50, 
-                   param2 = 30, minRadius =100, maxRadius = 300) 
-      
+                       cv2.HOUGH_GRADIENT, 1, 100, param1 = 35, 
+                   param2 = 25, minRadius =100, maxRadius = 300) 
+    
+    moments=[]
+    
     # Draw circles that are detected. 
     if detected_circles is not None: 
       
@@ -46,6 +49,9 @@ def DetectCircle(_file):
       
         for pt in detected_circles[0, :]: 
             a, b, r = pt[0], pt[1], pt[2]
+            moment=np.sqrt((a - w*0.5)**2+(b - h*0.5)**2)
+            moments.append((moment, r))
+            
             mask=np.zeros((gray.shape[0],gray.shape[1]), np.uint8)
             
             #Create mask, extract ROI and calculate mean
@@ -66,6 +72,9 @@ def DetectCircle(_file):
             cv2.imshow("Detected Circle", resized_img) 
             cv2.imshow("ROI with radius+100", resized_ROI) 
             cv2.waitKey(0)
+        
+    if len(moments)!=0:
+        print("MOMENTS ", moments, "MIN MOMENTS", min(moments)[0])
 
 
 if __name__ == "__main__":

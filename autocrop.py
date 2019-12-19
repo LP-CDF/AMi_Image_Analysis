@@ -3,7 +3,9 @@
 """
 Created on Mon Dec 16 14:46:09 2019
 
-@author: ludovic
+@author: ludovic pecqueur
+
+usage 
 """
 
 import os
@@ -19,49 +21,55 @@ def natural_sort_key(s):
      return [int(text) if text.isdigit() else text.lower()
              for text in re.split(_nsre, s)] 
 
+
 def crop_ROI(image, output_dir, well):
-    x, y, r = find_largest_circle(image)
-    # print("R, X, Y ", r, x, y)
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    # gray_blurred = cv2.blur(gray, (3, 3))
-    gray_blurred = cv2.GaussianBlur(gray, (3, 3),1) 
-    
-    cropped=image[y-(r+100):y+(r+100), x-(r+100):x+(r+100)]
-    # cv2.imshow("cropped", image)
-    # cv2.waitKey(0)
+    x, y, r = find_best_circle(image)    
+    r=r+100
+    cropped=image[y-r:y+r, x-r:x+r]
+    # print("CROPPED image size well %s "%well, cropped.shape)
     
     path=Path(output_dir).joinpath("cropped",well+".jpg")
-    cv2.imwrite(str(path), cropped)
-    print("well %s saved to %s"%(well, path))
+    
+    #Only save images with bytes otherwise print error message
+    if cropped.shape[0] != 0 and  cropped.shape[1] != 0:
+        cv2.imwrite(str(path), cropped)
+        print("well %s saved to %s"%(well, path))
+    else:
+        # print("CROPPED image for well %s is empty"%well)
+        return False
         
 
-def find_largest_circle(image):
+def find_best_circle(image):
+    '''this is an overkill function title'''
     # image = cv2.resize(image,(599,450), interpolation = cv2.INTER_AREA)
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     # gray_blurred = cv2.blur(gray, (3, 3))
     gray_blurred = cv2.GaussianBlur(gray, (3, 3),1) 
     w,h = gray.shape[1],gray.shape[0]
     circles = cv2.HoughCircles(gray_blurred,  
-                    cv2.HOUGH_GRADIENT, 1, 100, param1 = 50, 
-                param2 = 30, minRadius = 150, maxRadius = 300)
-    # print("circles ", circles)
+                    cv2.HOUGH_GRADIENT, 1, 100, param1 = 35, 
+                param2 = 25, minRadius = 100, maxRadius = 300)
+
     R = 0
     X = 0
     Y = 0
     moments=[]
     
-    #Find circle with max radius closest to center of image, probably bad solution
+    #Find circle with max radius closest to center of image, temporary bad solution
     if circles is not None:
         circles = np.uint16(np.around(circles))
-        for pt in circles[0, :]: 
+        for pt in circles[0, :]:
             x, y, r = pt[0], pt[1], pt[2]
             moment=np.sqrt((x - w*0.5)**2+(y - h*0.5)**2)
-            moments.append(moment)
-            if r>R and moment==min(moments):
-                R = int(r)
-                X = int(x)
-                Y = int(y)
+            moments.append((moment,r,x,y))
+        for i in moments:
+            if r>R and i[0]==min(moments)[0]:
+                R = int(i[1])
+                X = int(i[2])
+                Y = int(i[3])
     # print("Rmax, X, Y ", R, X, Y)
+    # print("MOMENTS ", moments, "MIN MOMENTS", min(moments))
+    del moments
     return X,Y,R
 
 if __name__ == "__main__":
@@ -83,9 +91,26 @@ if __name__ == "__main__":
     
     files.sort(key=natural_sort_key)
     
+    errors, error_list = 0, []
     for _file in files:
         img = cv2.imread(_file, cv2.IMREAD_COLOR)
         well=os.path.splitext(os.path.basename(_file))[0]
-        crop_ROI(img, directory, well)
-        del img
-        
+        output=crop_ROI(img, directory, well)
+        if output is False:
+            errors +=1
+            error_list.append(well)
+        del img, output
+    
+    log=Path(directory).joinpath("cropped","autocrop.log")
+    with open(log, 'w') as f:
+        if errors!=0:
+            f.write("File(s) that could not be processed correctly \n")
+            for err in error_list: f.write(err+"\n")
+        else:
+            f.write("All Files could be processed.")
+    
+    print('''
+%s files were not processed.
+Please check log file %s
+you can use the tool Check_Circle_detection.py filename to check
+'''%(errors, log))

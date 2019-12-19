@@ -29,8 +29,9 @@ For now, this requires TensorFlow version previous to v2.
 Added visualisation of autoMARCO results
 
 2019/12/17:
-Added a tool to automatically crop images using opencv (CV2_cropImage.py).
-Added a tool to check circle detection on a given image
+Added a tool to automatically crop images using opencv (CV2_cropImage.py). This enhances autoMARCO results.
+Added a tool to check circle detection on a given image.
+
 
 ## Screenshots
 

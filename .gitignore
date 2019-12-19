@@ -1,2 +1,6 @@
 DesignerFiles/
 __pycache__/
+Canny_Interactive_Threshold.py
+CannyTrack.py
+Check_Ellipse_detection.py
+Shortcuts.py

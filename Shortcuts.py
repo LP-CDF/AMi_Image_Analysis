@@ -1,1 +1,1 @@
-Shortcuts_QWERTY.py
+Shortcuts_AZERTY.py
