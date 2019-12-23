@@ -27,9 +27,9 @@ import Shortcuts
 import StatisticsDialog
 
 
-__version__ = "1.1.1"
+__version__ = "1.1.2"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "19-12-2019"
+__date__ = "23-12-2019"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -265,6 +265,7 @@ you can use the tool Check_Circle_detection.py filename to check
         self.label_ProjectDetails.setFont(QtGui.QFont("Arial", 12, QtGui.QFont.Black))
         
         self.ImageViewer.setStyleSheet("""background-color:transparent;border: 1px solid black;""")
+        self.labelVisuClassif.setStyleSheet("""background-color:yellow;color:black;""")
  
         #Setup Filtering Options
         self.radioButton_All.toggled.connect(lambda:self.FilterClassification(self._lay,"All"))
@@ -601,6 +602,7 @@ you can use the tool Check_Circle_detection.py filename to check
 
         self.Set_ScoreButtonState(self.Scoring_Layout, self.classifications[well])
         self.Load_Timeline(self.rootDir, self.imageDir, well)
+        self.labelVisuClassif.setText(self.classifications[well])
         
 
     def LoadWellImage(self,path):
