@@ -16,7 +16,7 @@ from PyQt5.QtGui import QPixmap, QFont, QColor, QKeySequence
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True) #enable highdpi scaling
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True) #use highdpi icons
 from PyQt5.QtWidgets import (QLabel, QTableWidgetItem, QFileDialog,
-    QMessageBox, QGridLayout,QStyleFactory)
+    QMessageBox, QGridLayout,QStyleFactory, QProgressDialog)
 
 from utils import ensure_directory
 from shutil import copyfile
@@ -190,7 +190,17 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         ensure_directory(str(path)+"/")
         
         errors, error_list = 0, []
+        
+        count, size=0, len(self.files)
+
+        progress = QProgressDialog("Processing files...", "Abort", 0, size)
+        progress.setWindowTitle("AutoCrop")
+        progress.setMinimumWidth(300)
+        progress.setModal(True)
+
+        
         for _file in self.files:
+            progress.setValue(count+1)
             img = cv2.imread(_file, cv2.IMREAD_COLOR)
             well=os.path.splitext(os.path.basename(_file))[0]
             output=autocrop.crop_ROI(img, self.imageDir, well)
@@ -198,6 +208,8 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
                 errors +=1
                 error_list.append(well)
             del img, output
+            count+=1
+            if progress.wasCanceled(): break
 
         log=Path(path).joinpath("autocrop.log")
         with open(log, 'w') as f:
@@ -217,7 +229,7 @@ you can use the tool Check_Circle_detection.py filename to check
         #INFORM USER TO RELOAD images from cropped if needed
         info = QMessageBox(self)
         info.setWindowTitle("Information!")
-        info.setText("You will need to reload images from the directory cropped to use the cropped images")
+        info.setText("You need to load the images from the directory \"cropped\" to use the cropped images")
         info.setStandardButtons(QMessageBox.Ok)
         retval = info.exec_()
         
@@ -482,9 +494,9 @@ you can use the tool Check_Circle_detection.py filename to check
 
     def on_timeout(self):
         positions=self.GenerateGrid(self.files)
+        vmax=len(self.files)
         self.progressBar.setMinimum(0)
-        self.progressBar.setMaximum(len(self.files))
-        vmin,vmax=0, len(self.files)
+        self.progressBar.setMaximum(vmax)
         count=0
         for position, name in zip(positions, self.files):
 #            print(position, name)
@@ -981,7 +993,7 @@ you can use the tool Check_Circle_detection.py filename to check
         self.classifications.clear()
         logdir=Path(self.rootDir).joinpath("Image_Data", self.date)
         predict(self.files, self.classifications, logdir)
-        
+
         for well, classif in self.classifications.items():
             self.SaveNotes(well)
 

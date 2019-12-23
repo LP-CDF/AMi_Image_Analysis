@@ -23,6 +23,7 @@
 import os, sys
 from pathlib import Path
 import tensorflow as tf
+from PyQt5.QtWidgets import QProgressDialog as QProgressDialog
 
 """ 
 usage: 
@@ -55,7 +56,13 @@ def predict(file_list, classifications,logDir):
     predicter = tf.contrib.predictor.from_saved_model(str(model_path))
 
     logresult=[]
+    progress = QProgressDialog("Processing files...", "Abort", 0, size)
+    progress.setWindowTitle("autoMARCO")
+    progress.setMinimumWidth(300)
+    progress.setModal(True)
+    
     for _ in range(size):
+        progress.setValue(_)
         data, name = next(iterator)
         well=os.path.splitext(os.path.basename(name))[0]
         print("Processing File ", name)
@@ -87,9 +94,12 @@ def predict(file_list, classifications,logDir):
             
         classifications[well]=classification
         # print("classifications[well] ", classifications[well])
+        if progress.wasCanceled(): break
         
     log=Path(logDir).joinpath("auto_MARCO.log")
-  
+    
+    progress.setLabelText("Saving results to files")
+    
     with open(log, 'w') as f:
             f.write("%9s%15s%15s%17s%15s \n"%("WELL", "Pb_CRYSTAL", "Pb_OTHER", "Pb_Precipitate", "Pb_Clear"))
             for i in logresult: f.write("%9s%15.3f%15.3f%17.3f%15.3f \n"%(i[0],i[1][b"Crystals"],i[1][b"Other"],
