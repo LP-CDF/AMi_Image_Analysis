@@ -52,8 +52,9 @@ Added a tool to check circle detection on a given image (Check_Circle_detection.
     Download the latest released version and gunzip it or clone this repository with
     git clone https://github.com/LP-CDF/AMi_Image_Analysis AMi_Image_Analysis
 
-    If on linux or OSX, link the correct Shortcuts_XXX.py version to Shortcuts.py
-    If on Windows, copy the correct Shortcuts_XXX.py version to Shortcuts.py
+    To use the correct shortcuts for your keyboard, update the file preferences.py
+    and comment/uncomment lines 11 or 12 if you use an AZERTY keyboard. If using a QWERTY
+    keyboard, you don't have to do anything.
 
     Dependancies:
     * PyQt5 (v5.9.2 or higher)

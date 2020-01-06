@@ -12,6 +12,7 @@ Taken from https://www.geeksforgeeks.org/circle-detection-using-opencv-python/
 import cv2
 import sys
 import numpy as np
+from preferences import DetectCircle as pref
 
 
 def usage():
@@ -33,8 +34,8 @@ def DetectCircle(_file):
       
     # Apply Hough transform on the blurred image. 
     detected_circles = cv2.HoughCircles(gray_blurred,  
-                       cv2.HOUGH_GRADIENT, 1, 100, param1 = 35, 
-                   param2 = 25, minRadius =100, maxRadius = 300) 
+                       cv2.HOUGH_GRADIENT, 1, pref.minDistance , param1 = pref.param1, 
+                   param2 = pref.param1, minRadius =pref.minRadius, maxRadius = pref.maxRadius) 
     
     euclidians=[]
     

@@ -1,1 +1,0 @@
-Shortcuts_AZERTY.py

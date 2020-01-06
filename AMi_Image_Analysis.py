@@ -23,11 +23,11 @@ from shutil import copyfile
 import pdf_writer 
 import HeatMap_Grid
 from  MARCO_Results_Analysis import MARCO_Results
-import Shortcuts
 import StatisticsDialog
+import preferences as pref
 
 
-__version__ = "1.1.2"
+__version__ = "1.1.3"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
 __date__ = "23-12-2019"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
@@ -305,7 +305,7 @@ you can use the tool Check_Circle_detection.py filename to check
  
     
     def ShowShortcuts(self):
-        shortcut=Shortcuts.Shortcut()
+        shortcut=pref.Shortcut()
         BoxShortCuts=QMessageBox()
         text='''
     Well navigation shortcuts:
@@ -339,9 +339,13 @@ you can use the tool Check_Circle_detection.py filename to check
  Program written For Python 3 and PyQt5
  written by Ludovic Pecqueur
  College de France
+ Paris, France
  Released under licence:
  %s    
-    '''%__license__
+ 
+ GitHub repository:
+ https://github.com/LP-CDF/AMi_Image_Analysis    
+ '''%__license__
         about.information(self,"About", text)    
     
     def openFileNameDialog(self):
@@ -857,7 +861,7 @@ you can use the tool Check_Circle_detection.py filename to check
         
 
     def keyPressEvent(self, event):
-        '''iterate over a grid using the cursor and assign quickly classification'''
+        '''iterate over a grid using shortcuts and assign quickly classification'''
         if self.currentButtonIndex is None:
             return
         location=self.currentButtonIndex
@@ -866,7 +870,7 @@ you can use the tool Check_Circle_detection.py filename to check
         NumberOfColumns=self._lay.columnCount()
         NumberOfRows=self._lay.rowCount()
         # if event.key()==QtCore.Qt.Key_Q:
-        shortcut=Shortcuts.Shortcut()
+        shortcut=pref.Shortcut()
         if event.key()==shortcut.MoveLeft:
             if currentcol==0:
                 Newlocation=(currentrow-1, NumberOfColumns-1,location[2],location[3])

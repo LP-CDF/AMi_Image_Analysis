@@ -17,6 +17,7 @@ import re
 from pathlib import Path
 import cv2
 import numpy as np
+from preferences import DetectCircle as pref
 
 
 _nsre = re.compile('([0-9]+)') #used to sort alphanumerics
@@ -51,8 +52,8 @@ def find_best_circle(image):
     gray_blurred = cv2.GaussianBlur(gray, (3, 3),1) 
     w,h = gray.shape[1],gray.shape[0]
     circles = cv2.HoughCircles(gray_blurred,  
-                    cv2.HOUGH_GRADIENT, 1, 100, param1 = 35, 
-                param2 = 25, minRadius = 100, maxRadius = 300)
+                    cv2.HOUGH_GRADIENT, 1, pref.minDistance, param1 = pref.param1, 
+                param2 = pref.param2, minRadius = pref.minRadius, maxRadius = pref.maxRadius)
 
     R = 0
     X = 0
