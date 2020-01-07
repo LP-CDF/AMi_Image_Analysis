@@ -24,18 +24,19 @@ The results can be displayed on a grid and statistics are also calculated.
 The tree must be organized like:
 
 ```bash
+.
 └── images
     └── sample directory (used as Project Code)
         └── plate directory (used as Plate name)
-            ├── YYYYMMDD_HHMMSS
-                └── stacked images (from directory rawimages)
+            └── YYYYMMDD_HHMMSS
+                ├── stacked images (generated from directory rawimages)
                 └── rawimages
-                    └── files
+                    └── files at different focus height
             ├── YYYYMMDD_HHMMSS
             ├── ...
             └── prep_date.txt
 ```
-AMi controlling software needs a folder named "images"
+AMi controlling software needs a folder named "images".
 The date directory must have the format YYYYMMDD_HHMMSS (eg. 20191211_151023)
 
 
@@ -67,7 +68,7 @@ The color of the field indicating the actual classification changes dynamically.
 
     The software was tested on:
     * linux CentOS 7 (PyQt5 (v5.9.2 and v5.12.1) and python3 (v3.6.8 and v3.7.3))
-    * Raspbian 10
+    * Raspbian 10 (on a Pi 3B+, not recommended)
     * macOS HighSierra
 
     Hopefully, it should work on other MacOS and Windows.
@@ -77,7 +78,7 @@ The color of the field indicating the actual classification changes dynamically.
     git clone https://github.com/LP-CDF/AMi_Image_Analysis AMi_Image_Analysis
 
     To use the correct shortcuts for your keyboard, update the file preferences.py
-    and comment/uncomment lines 11 or 12 if you use an AZERTY keyboard. If using a QWERTY
+    and comment/uncomment lines 18 or 19 if you use an AZERTY keyboard. If using a QWERTY
     keyboard, you don't have to do anything.
 
     Dependancies:

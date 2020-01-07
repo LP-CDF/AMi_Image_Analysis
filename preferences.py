@@ -6,12 +6,20 @@ Created on Mon Jan  6 09:05:49 2020
 @author: ludovic
 
 You can edit this file if you want to modify the shortcuts
+or change the circle detection parameters.
+
+Check_Circle_detection.py, autocrop.py and main program use
+the values stored in this file.
 """
 
 from PyQt5 import QtCore
 
+#Comment/uncomment the two lines below according to your need
 keyboard_layout="qwerty"
 # keyboard_layout="azerty"
+
+#autoMARCO acceptance probability criterium
+autoMARCO_threshold=0.60
 
 class Shortcut():
     '''Shortcuts for the GUI'''
