@@ -98,6 +98,7 @@ The color of the field indicating the actual classification changes dynamically.
     Known issues: 
     * On Raspbian, you must ensure that package qt5-image-formats-plugins is installed
     * On Raspbian, buttons do not change color when clicked.
+    * If your graphics card is CUDA capable but with Cuda capability < 6, you must install tensorflow 1.14.0 not 1.15.0
 
     To start the program type in a terminal:
     python3 AMi_Image_Analysis.py

@@ -3,3 +3,4 @@ numpy==1.17.4
 tensorflow==1.14.0
 Pillow==7.0.0
 PyQt5==5.14.1
+opencv-python==4.0.1
