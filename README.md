@@ -23,13 +23,20 @@ The results can be displayed on a grid and statistics are also calculated.
 
 The tree must be organized like:
 
-**images** directory (AMi needs a folder named "images")
-    **sample directory**  (used as Project Code)
-        **plate directory** (used as Plate name)
-            **date directory**
-                files
-
-the date directory must have the format YYYYMMDD_HHMMSS (eg. 20191211_151023)
+```bash
+└── images
+    └── sample directory (used as Project Code)
+        └── plate directory (used as Plate name)
+            ├── YYYYMMDD_HHMMSS
+                └── stacked images (from directory rawimages)
+                └── rawimages
+                    └── files
+            ├── YYYYMMDD_HHMMSS
+            ├── ...
+            └── prep_date.txt
+```
+AMi controlling software needs a folder named "images"
+The date directory must have the format YYYYMMDD_HHMMSS (eg. 20191211_151023)
 
 
 2019/12/12:
