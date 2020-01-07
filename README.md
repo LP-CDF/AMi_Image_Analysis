@@ -21,9 +21,23 @@ A report of the current well can be saved as a pdf.
 
 The results can be displayed on a grid and statistics are also calculated.
 
+The tree must be organized like:
+
+**images** directory (AMi needs a folder named "images")
+    **sample directory**  (used as Project Code)
+        **plate directory** (used as Plate name)
+            **date directory**
+                files
+
+the date directory must have the format YYYYMMDD_HHMMSS (eg. 20191211_151023)
+
+
 2019/12/12:
 Automated annotation using TensorFlow (https://www.tensorflow.org/) and MARCO (https://marco.ccr.buffalo.edu/) has been added.
 For now, this requires TensorFlow version previous to v2.
+
+Important Note: a threshold is applied to accept or not autoMARCO most probable prediction. If the prediction probability is below
+this threshold (currently 0.6 and can be modified in preferences.py), the drop classification is set to "Unknown". 
 
 2019/12/13:
 Added visualisation of autoMARCO results
@@ -32,6 +46,9 @@ Added visualisation of autoMARCO results
 Added a tool to automatically crop images using opencv (autocrop.py). This enhances autoMARCO results.
 Added a tool to check circle detection on a given image (Check_Circle_detection.py).
 
+2020/01/07:
+Parameters controlling circle detection are set in preferences.py
+The color of the field indicating the actual classification changes dynamically.
 
 ## Screenshots
 

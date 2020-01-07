@@ -24,6 +24,7 @@ import os, sys
 from pathlib import Path
 import tensorflow as tf
 from PyQt5.QtWidgets import QProgressDialog as QProgressDialog
+import preferences as pref
 
 """ 
 usage: 
@@ -41,9 +42,6 @@ def predict(file_list, classifications,logDir):
     
     #unsupported image type in tensorflow <2.0
     unsupported=['.tif', '.tiff','.TIF', '.TIFF']
-    
-    #Acceptance probability criterium
-    threshold=0.60
     
     def load_images(file_list):
         for i in file_list:
@@ -89,7 +87,7 @@ def predict(file_list, classifications,logDir):
             classification = "Clear"
 
         #Adding a filter
-        if MostProbable[0]<threshold:
+        if MostProbable[0]<pref.autoMARCO_threshold:
             classification = "Unknown"
             
         classifications[well]=classification

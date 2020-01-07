@@ -27,10 +27,21 @@ import StatisticsDialog
 import preferences as pref
 
 
-__version__ = "1.1.3"
+__version__ = "1.1.4"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "23-12-2019"
+__date__ = "07-01-2020"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
+
+
+#Dictionnary used to update color of labelVisuClassif
+ClassificationColor={
+    "Clear":{"background":"white", "text":"black"},
+    "Precipitate":{"background":"red", "text":"white"},
+    "Crystal":{"background":"green", "text":"white"},
+    "PhaseSep":{"background":"orange", "text":"black"},
+    "Other":{"background":"magenta", "text":"white"},
+    "Unknown":{"background":"yellow", "text":"black"}
+    }
 
 
 def Citation():
@@ -607,6 +618,10 @@ you can use the tool Check_Circle_detection.py filename to check
         self.Set_ScoreButtonState(self.Scoring_Layout, self.classifications[well])
         self.Load_Timeline(self.rootDir, self.imageDir, well)
         self.labelVisuClassif.setText(self.classifications[well])
+        self.labelVisuClassif.setStyleSheet("""background-color:%s;
+                                            color:%s;"""
+                                            %(ClassificationColor[self.classifications[well]]["background"],
+                                              ClassificationColor[self.classifications[well]]["text"]))
         
 
     def LoadWellImage(self,path):
