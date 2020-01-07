@@ -82,12 +82,12 @@ The color of the field indicating the actual classification changes dynamically.
     and comment/uncomment lines 18 or 19 if you use an AZERTY keyboard. If using a QWERTY
     keyboard, you don't have to do anything.
 
-    Dependancies:
+    Dependencies:
     * PyQt5 (v5.9.2 or higher)
     * Python Imaging Library (Pillow, v6.2.1 or higher)
     * PyFPDF (v1.7.2 or higher)
 
-    Optional dependancies:
+    Optional dependencies:
     * TensorFlow (v1.1x, not v2, tested with version 1.14)
     * MARCO tensorflow model (https://storage.googleapis.com/marco-168219-model/savedmodel.zip)
       One version of this model is included in saved_model/
