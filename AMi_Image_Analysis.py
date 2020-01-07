@@ -140,8 +140,8 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         
         #Define  Legend
         self.MARCO_window.label_Crystal.setStyleSheet("""background-color:rgb(0, 255, 0)""")
-        self.MARCO_window.label_Other.setStyleSheet("""background-color:rgb(255, 0, 255)""")
-        self.MARCO_window.label_Precipitate.setStyleSheet("""background-color:rgb(255, 0, 0)""")
+        self.MARCO_window.label_Other.setStyleSheet("""background-color:rgb(255, 0, 255); color:rgb(255, 255, 255)""")
+        self.MARCO_window.label_Precipitate.setStyleSheet("""background-color:rgb(255, 0, 0); color:rgb(255, 255, 255)""")
         self.MARCO_window.label_Clear.setStyleSheet("""background-color:rgb(0, 0, 0); color:rgb(255, 255, 255)""")
         
         self.MARCO_window.show()

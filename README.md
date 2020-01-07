@@ -38,6 +38,7 @@ The tree must be organized like:
 ```
 AMi controlling software needs a folder named "images".
 The date directory must have the format YYYYMMDD_HHMMSS (eg. 20191211_151023)
+The file "prep_date.txt" only contains the preparation date of the plate. It contains a single line with a date without specific format. It is used for logging purpose only.
 
 
 2019/12/12:
@@ -91,7 +92,7 @@ The color of the field indicating the actual classification changes dynamically.
     * MARCO tensorflow model (https://storage.googleapis.com/marco-168219-model/savedmodel.zip)
       One version of this model is included in saved_model/
       Methodology details are published in [[2]](#2)
-    * opencv for the automatic cropping tool (tested with opencv 4.0.1 compiled on CentOS 7)
+    * openCV for the automatic cropping tool (tested with opencv 4.0.1 compiled on CentOS 7)
     * NumPy
 
     Known issues: 
