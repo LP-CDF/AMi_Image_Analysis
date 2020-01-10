@@ -480,6 +480,8 @@ you can use the tool Check_Circle_detection.py filename to check
                 with open(prep_date_path, 'w') as f:
                     f.write(text)
                 self.prepdate=text
+            else:
+                self.prepdate="None"
 
 
     def buildWellImagePath(self,directory, well, wellimage_list):
