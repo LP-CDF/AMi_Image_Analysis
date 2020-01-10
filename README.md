@@ -72,7 +72,7 @@ The color of the field indicating the actual classification changes dynamically.
     * Raspbian 10 (on a Pi 3B+, not recommended)
     * macOS HighSierra
 
-    Hopefully, it should work on other MacOS and Windows.
+    Hopefully, it should work on other linux distributions, MacOS and Windows.
     You will need a screen with minimum resolution of 1920*1080.
 
     Download the latest released version and gunzip it or clone this repository with
@@ -80,7 +80,7 @@ The color of the field indicating the actual classification changes dynamically.
 
     To use the correct shortcuts for your keyboard, update the file preferences.py
     and comment/uncomment lines 18 or 19 if you use an AZERTY keyboard. If using a QWERTY
-    keyboard, you don't have to do anything.
+    keyboard, you should not have to do anything.
 
     Dependencies:
     * PyQt5 (v5.9.2 or higher)
@@ -123,16 +123,16 @@ https://github.com/dakota0064/Fluorescent_Robotic_Imager
 <a id="1">[1]</a> 
 "AMi: a GUI-based, open-source system for imaging samples in multi-well plates"
 Andrew Bohm, Acta Crystallogr F Struct Biol Commun. 2019 Aug 1; 75(Pt 8): 531–536.
-doi: 10.1107/S2053230X19009853
+[doi: 10.1107/S2053230X19009853](http://dx.doi.org/10.1107/S2053230X19009853)
 
 <a id="2">[2]</a> 
 "Classification of crystallization outcomes using deep convolutional neural networks."
 Bruno AE et al. PLoS One. 2018 Jun 20;13(6):e0198883.
-doi: 10.1371/journal.pone.0198883.
+[doi: 10.1371/journal.pone.0198883]((http://dx.doi.org/10.1371/journal.pone.0198883)
 
 <a id="3">[3]</a> 
 "Inexpensive robotic system for standard and fluorescent imaging of protein crystals."
 Handzlik D et al. Acta Crystallogr F Struct Biol Commun. 2019 Nov 1;75(Pt 11):673-686.
-doi: 10.1107/S2053230X19014730
+[doi: 10.1107/S2053230X19014730](http://dx.doi.org/10.1107/S2053230X19014730)
 
 
