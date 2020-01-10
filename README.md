@@ -128,7 +128,7 @@ Andrew Bohm, Acta Crystallogr F Struct Biol Commun. 2019 Aug 1; 75(Pt 8): 531–
 <a id="2">[2]</a> 
 "Classification of crystallization outcomes using deep convolutional neural networks."
 Bruno AE et al. PLoS One. 2018 Jun 20;13(6):e0198883.
-[doi: 10.1371/journal.pone.0198883]((http://dx.doi.org/10.1371/journal.pone.0198883)
+[doi: 10.1371/journal.pone.0198883](http://dx.doi.org/10.1371/journal.pone.0198883)
 
 <a id="3">[3]</a> 
 "Inexpensive robotic system for standard and fluorescent imaging of protein crystals."

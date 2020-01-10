@@ -16,7 +16,7 @@ from PyQt5.QtGui import QPixmap, QFont, QColor, QKeySequence
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True) #enable highdpi scaling
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True) #use highdpi icons
 from PyQt5.QtWidgets import (QLabel, QTableWidgetItem, QFileDialog,
-    QMessageBox, QGridLayout,QStyleFactory, QProgressDialog)
+    QMessageBox, QGridLayout,QStyleFactory, QProgressDialog, QInputDialog, QLineEdit)
 
 from utils import ensure_directory
 from shutil import copyfile
@@ -358,6 +358,7 @@ you can use the tool Check_Circle_detection.py filename to check
  https://github.com/LP-CDF/AMi_Image_Analysis    
  '''%__license__
         about.information(self,"About", text)    
+
     
     def openFileNameDialog(self):
         options = QFileDialog.Options()
@@ -473,6 +474,12 @@ you can use the tool Check_Circle_detection.py filename to check
             file = open(prep_date_path)
             contents = file.read().strip("\n")
             self.prepdate=contents
+        else:
+            text, okPressed = QInputDialog.getText(self, "File prep_date.txt not found","Preparation date (YYYYMMDD)", QLineEdit.Normal, "")
+            if okPressed and text != '':
+                with open(prep_date_path, 'w') as f:
+                    f.write(text)
+                self.prepdate=text
 
 
     def buildWellImagePath(self,directory, well, wellimage_list):
