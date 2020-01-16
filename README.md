@@ -55,9 +55,14 @@ Added visualisation of autoMARCO results
 Added a tool to automatically crop images using opencv (autocrop.py). This enhances autoMARCO results.
 Added a tool to check circle detection on a given image (Check_Circle_detection.py).
 
-2020/01/07:
+2020/01/10:
 Parameters controlling circle detection are set in preferences.py
 The color of the field indicating the actual classification changes dynamically.
+New release.
+
+2020/01/16:
+Changed startup routine to include python virtual environment initialisation.
+New release.
 
 ## Screenshots
 
@@ -74,13 +79,12 @@ The color of the field indicating the actual classification changes dynamically.
 
     Hopefully, it should work on other linux distributions, MacOS and Windows.
     You will need a screen with minimum resolution of 1920*1080.
+    
+    It is recommended to create a virtual environment for python (see INSTALL.md)
 
     Download the latest released version and gunzip it or clone this repository with
-    git clone https://github.com/LP-CDF/AMi_Image_Analysis AMi_Image_Analysis
-
-    To use the correct shortcuts for your keyboard, update the file preferences.py
-    and comment/uncomment lines 18 or 19 if you use an AZERTY keyboard. If using a QWERTY
-    keyboard, you should not have to do anything.
+    git clone https://github.com/LP-CDF/AMi_Image_Analysis AMi_Image_Analysis.
+    Then follow the instructions in INSTALL.md
 
     Dependencies:
     * PyQt5 (v5.9.2 or higher)
@@ -88,22 +92,19 @@ The color of the field indicating the actual classification changes dynamically.
     * PyFPDF (v1.7.2 or higher)
 
     Optional dependencies:
-    * TensorFlow (v1.1x, not v2, tested with version 1.14)
+    * TensorFlow (v1.14 or 1.15, not v2)
     * MARCO tensorflow model (https://storage.googleapis.com/marco-168219-model/savedmodel.zip)
       One version of this model is included in saved_model/
       Methodology details are published in [[2]](#2)
-    * openCV for the automatic cropping tool (tested with opencv 4.0.1 compiled on CentOS 7)
+    * openCV for the automatic cropping tool (tested with opencv 4.0.1)
     * NumPy
+
+    Note: a pip requirement file is available for easy install of dependencies.
 
     Known issues: 
     * On Raspbian, you must ensure that package qt5-image-formats-plugins is installed
     * On Raspbian, buttons do not change color when clicked.
-    * If your graphics card is CUDA capable but with Cuda capability < 6, you must install tensorflow 1.14.0 not 1.15.0
-
-    To start the program type in a terminal:
-    python3 AMi_Image_Analysis.py
-    or
-    ./AMi_Image_Analysis.py (if python3 is in the path)
+    * If your graphics card is CUDA capable but with Cuda capability < 6, you must install tensorflow 1.14.0
 
 ## Citation
 

@@ -27,9 +27,9 @@ import StatisticsDialog
 import preferences as pref
 
 
-__version__ = "1.1.5"
+__version__ = "1.1.6"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "10-01-2020"
+__date__ = "16-01-2020"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -250,8 +250,8 @@ you can use the tool Check_Circle_detection.py filename to check
         
         #Shortcut definitions
         
-        self.exportPDFshortcut=QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+E"), self)
-        self.exportPDFshortcut.activated.connect(self.export_pdf)
+        # self.exportPDFshortcut=QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+E"), self)
+        # self.exportPDFshortcut.activated.connect(self.export_pdf)
         
         #Setup Menu
         self.openFile.triggered.connect(self.openFileNameDialog)
@@ -347,15 +347,19 @@ you can use the tool Check_Circle_detection.py filename to check
     def ShowAbout(self):
         about=QMessageBox()
         text='''
- Program written For Python 3 and PyQt5
- written by Ludovic Pecqueur
- College de France
- Paris, France
- Released under licence:
- %s    
+Program written For Python 3 and PyQt5
+written by:
+Ludovic Pecqueur
+Chimie des Processus Biologiques
+College de France
+Paris, France
+https://www.college-de-france.fr/site/en-chemistry-of-biological-processes/index.htm
+
+Released under licence:
+%s    
  
- GitHub repository:
- https://github.com/LP-CDF/AMi_Image_Analysis    
+GitHub repository:
+https://github.com/LP-CDF/AMi_Image_Analysis    
  '''%__license__
         about.information(self,"About", text)    
 

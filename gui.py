@@ -356,6 +356,7 @@ class Ui_MainWindow(object):
         self.actionAutoCrop.setObjectName("actionAutoCrop")
         self.menuFile.addAction(self.openFile)
         self.menuFile.addAction(self.openDir)
+        self.menuFile.addAction(self.actionExport_to_PDF)
         self.menuFile.addAction(self.actionQuit_2)
         self.menuShow_autoMARCO_Grid.addAction(self.actionautoMARCO_subwell_a)
         self.menuShow_autoMARCO_Grid.addAction(self.actionautoMARCO_subwell_b)
@@ -365,7 +366,6 @@ class Ui_MainWindow(object):
         self.menuDisplay_Heat_Map.addAction(self.actionAutomated_Annotation_MARCO)
         self.menuDisplay_Heat_Map.addAction(self.actionCalculate_Statistics)
         self.menuDisplay_Heat_Map.addAction(self.actionDisplay_Heat_Map)
-        self.menuDisplay_Heat_Map.addAction(self.actionExport_to_PDF)
         self.menuDisplay_Heat_Map.addAction(self.menuShow_autoMARCO_Grid.menuAction())
         self.menuHelp.addAction(self.actionShortcuts)
         self.menuHelp.addAction(self.actionAbout)
@@ -422,7 +422,9 @@ class Ui_MainWindow(object):
         self.actionQuit_2.setShortcut(_translate("MainWindow", "Ctrl+Q"))
         self.actionDisplay_Heat_Map.setText(_translate("MainWindow", "Display Heat Map"))
         self.actionExport_to_PDF.setText(_translate("MainWindow", "Export to PDF"))
+        self.actionExport_to_PDF.setShortcut(_translate("MainWindow", "Ctrl+E"))
         self.actionCalculate_Statistics.setText(_translate("MainWindow", "Calculate Statistics"))
+        self.actionCalculate_Statistics.setShortcut(_translate("MainWindow", "Shift+S"))
         self.actionShortcuts.setText(_translate("MainWindow", "Shortcuts"))
         self.actionAbout.setText(_translate("MainWindow", "About"))
         self.actionAutomated_Annotation_MARCO.setText(_translate("MainWindow", "Automated Annotation (MARCO)"))
@@ -431,6 +433,7 @@ class Ui_MainWindow(object):
         self.actionautoMARCO_subwell_c.setText(_translate("MainWindow", "autoMARCO subwell c"))
         self.actionautoMARCO_no_subwell.setText(_translate("MainWindow", "autoMARCO no subwell"))
         self.actionAutoCrop.setText(_translate("MainWindow", "AutoCrop"))
+        self.actionAutoCrop.setShortcut(_translate("MainWindow", "Shift+C"))
 
 
 

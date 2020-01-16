@@ -10,6 +10,9 @@ usage:
     this will create a directory cropped.
     start the script by typing:
     python3 autocrop.py
+    
+    Function is now called within GUI.
+    Can still be used as standalone
 """
 
 import os
