@@ -78,7 +78,7 @@ New release.
     * macOS HighSierra
 
     Hopefully, it should work on other linux distributions, MacOS and Windows.
-    You will need a screen with minimum resolution of 1920*1080.
+    You will need a screen with minimum resolution of **1920*1080**.
     
     It is recommended to create a virtual environment for python (see INSTALL.md)
 
@@ -102,8 +102,7 @@ New release.
     Note: a pip requirement file is available for easy install of dependencies.
 
     Known issues: 
-    * On Raspbian, you must ensure that package qt5-image-formats-plugins is installed
-    * On Raspbian, buttons do not change color when clicked.
+    * On Raspbian AutoMARCO does not work due to a problem with tensorflow.
     * If your graphics card is CUDA capable but with Cuda capability < 6, you must install tensorflow 1.14.0
 
 ## Citation
