@@ -16,11 +16,6 @@ python_path=os.path.join(os.path.dirname(sys.executable))
 app_path=os.path.abspath(os.path.dirname(sys.argv[0]))
 file_path=Path(app_path).joinpath("bin", "AMI_Image_Analysis.sh")
 
-
-# print("PYTHON PATH: ", python_path)
-# print("APP PATH : ", app_path)
-# print("FILE PATH : ", file_path)
-
 with open(file_path, 'w') as f:
     f.write('''#!/usr/bin/env bash
 

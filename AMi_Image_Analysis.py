@@ -327,8 +327,8 @@ you can use the tool Check_Circle_detection.py filename to check
     
     Scoring shortcuts:
     Clear= %s
-    Crystal= %s
     Precipitate= %s
+    Crystal= %s
     Phase Separation= %s
     Other= %s
         '''%(QKeySequence(shortcut.MoveUp).toString(),
@@ -336,8 +336,8 @@ you can use the tool Check_Circle_detection.py filename to check
         QKeySequence(shortcut.MoveLeft).toString(),
         QKeySequence(shortcut.MoveRight).toString(),
         QKeySequence(shortcut.Clear).toString(),
-        QKeySequence(shortcut.Crystal).toString(),
         QKeySequence(shortcut.Precipitate).toString(),
+        QKeySequence(shortcut.Crystal).toString(),
         QKeySequence(shortcut.PhaseSep).toString(),
         QKeySequence(shortcut.Other).toString())
         BoxShortCuts.information(self,"Shortcuts", text)

@@ -87,6 +87,7 @@ New release.
     Then follow the instructions in INSTALL.md
 
     Dependencies:
+    * Qt5
     * PyQt5 (v5.9.2 or higher)
     * Python Imaging Library (Pillow, v6.2.1 or higher)
     * PyFPDF (v1.7.2 or higher)
