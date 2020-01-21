@@ -5,7 +5,8 @@ Created on Wed Dec 18 07:21:08 2019
 
 @author: ludovic
 
-Taken from https://www.geeksforgeeks.org/circle-detection-using-opencv-python/
+Taken and adapted from
+https://www.geeksforgeeks.org/circle-detection-using-opencv-python/
 """
 
 

@@ -421,6 +421,7 @@ class Ui_MainWindow(object):
         self.actionQuit_2.setText(_translate("MainWindow", "Quit"))
         self.actionQuit_2.setShortcut(_translate("MainWindow", "Ctrl+Q"))
         self.actionDisplay_Heat_Map.setText(_translate("MainWindow", "Display Heat Map"))
+        self.actionDisplay_Heat_Map.setShortcut(_translate("MainWindow", "Shift+H"))
         self.actionExport_to_PDF.setText(_translate("MainWindow", "Export to PDF"))
         self.actionExport_to_PDF.setShortcut(_translate("MainWindow", "Ctrl+E"))
         self.actionCalculate_Statistics.setText(_translate("MainWindow", "Calculate Statistics"))

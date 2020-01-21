@@ -12,7 +12,7 @@ import re
 import math
 from pathlib import Path
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtGui import QPixmap, QFont, QColor, QKeySequence
+from PyQt5.QtGui import QPixmap, QFont, QColor, QKeySequence, QScreen
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True) #enable highdpi scaling
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True) #use highdpi icons
 from PyQt5.QtWidgets import (QLabel, QTableWidgetItem, QFileDialog,
@@ -27,9 +27,9 @@ import StatisticsDialog
 import preferences as pref
 
 
-__version__ = "1.1.6"
+__version__ = "1.1.7"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "16-01-2020"
+__date__ = "21-01-2020"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -108,6 +108,8 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.heatmap_window = HeatMapGrid()
         self.heatmap_window.well_images=self.well_images
         self.heatmap_window.classifications=self.classifications
+        self.heatmap_window.pushButton_ExportImage.clicked.connect(self.take_screenshot)
+        self.heatmap_window.pushButton_Close.clicked.connect(self.heatmap_window.close)
         self.heatmap_window.show()
 
 
@@ -266,7 +268,7 @@ you can use the tool Check_Circle_detection.py filename to check
         self.actionautoMARCO_subwell_c.triggered.connect(lambda: self.show_autoMARCO("c"))
         self.actionautoMARCO_no_subwell.triggered.connect(lambda: self.show_autoMARCO(""))
         
-        self.actionQuit_2.triggered.connect(self.close)
+        self.actionQuit_2.triggered.connect(self.on_exit)
         
         self.actionCalculate_Statistics.triggered.connect(self.show_Statistics)
         self.actionShortcuts.triggered.connect(self.ShowShortcuts)
@@ -505,6 +507,14 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         em.setWindowTitle("Error!")
         em.setText(error)
         em.show()
+
+
+    def informationDialog(self, message):
+        info = QMessageBox(self)
+        info.setWindowTitle("Information!")
+        info.setText(message)
+        info.setStandardButtons(QMessageBox.Ok)
+        retval = info.exec_()
     
     
     def natural_sort_key(self, s):
@@ -1035,6 +1045,20 @@ https://github.com/LP-CDF/AMi_Image_Analysis
     def on_exit(self):
         '''things to do before exiting'''
 #        self.SaveNotes(self.currentWell)
+        app.closeAllWindows()
+
+    def take_screenshot(self):
+        #If no data prevent crashing
+        if len(self.classifications)==0:
+            self.handle_error("No data yet!!!")
+            return
+        
+        filename=Path(self.rootDir).joinpath("Image_Data", "HeatMap_Grid_%s_%s.jpg"%(self.plate ,self.date))
+        screen=QtWidgets.QApplication.primaryScreen()
+        screenshot = screen.grabWindow(self.heatmap_window.winId())
+        screenshot.save(str(filename), 'jpg')
+        message="File saved to:\n %s"%filename
+        self.informationDialog(message)
         
 
 class HeatMapGrid(QtWidgets.QDialog, HeatMap_Grid.Ui_Dialog):
