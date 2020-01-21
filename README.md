@@ -72,39 +72,39 @@ New release.
 
 ## Install
 
-    The software was tested on:
-    * linux CentOS 7 (PyQt5 (v5.9.2 and v5.12.1) and python3 (v3.6.8 and v3.7.3))
-    * Raspbian 10 (on a Pi 3B+, not recommended)
-    * macOS HighSierra
+The software was tested on:
+* linux CentOS 7 (PyQt5 (v5.9.2 and v5.12.1) and python3 (v3.6.8 and v3.7.3))
+* Raspbian 10 (on a Pi 3B+, not recommended)
+* macOS HighSierra
 
-    Hopefully, it should work on other linux distributions, MacOS and Windows.
-    You will need a screen with minimum resolution of **1920*1080**.
+Hopefully, it should work on other linux distributions, MacOS and Windows.
+You will need a screen with minimum resolution of **1920*1080**.
     
-    It is recommended to create a virtual environment for python (see INSTALL.md)
+It is recommended to create a virtual environment for python (see INSTALL.md)
 
-    Download the latest released version and gunzip it or clone this repository with
-    git clone https://github.com/LP-CDF/AMi_Image_Analysis AMi_Image_Analysis.
-    Then follow the instructions in INSTALL.md
+Download the latest released version and gunzip it or clone this repository with
+git clone https://github.com/LP-CDF/AMi_Image_Analysis AMi_Image_Analysis.
+Then follow the instructions in INSTALL.md
 
-    Dependencies:
-    * Qt5
-    * PyQt5 (v5.9.2 or higher)
-    * Python Imaging Library (Pillow, v6.2.1 or higher)
-    * PyFPDF (v1.7.2 or higher)
+Dependencies:
+* Qt5
+* PyQt5 (v5.9.2 or higher)
+* Python Imaging Library (Pillow, v6.2.1 or higher)
+* PyFPDF (v1.7.2 or higher)
 
-    Optional dependencies:
-    * TensorFlow (v1.14 or 1.15, not v2)
-    * MARCO tensorflow model (https://storage.googleapis.com/marco-168219-model/savedmodel.zip)
-      One version of this model is included in saved_model/
-      Methodology details are published in [[2]](#2)
-    * openCV for the automatic cropping tool (tested with opencv 4.0.1)
-    * NumPy
+Optional dependencies:
+* TensorFlow (v1.14 or 1.15, not v2)
+* MARCO tensorflow model (https://storage.googleapis.com/marco-168219-model/savedmodel.zip)
+One version of this model is included in saved_model/
+Methodology details are published in [[2]](#2)
+* openCV for the automatic cropping tool (tested with opencv 4.0.1)
+* NumPy
 
-    Note: a pip requirement file is available for easy install of dependencies.
+Note: a pip requirement file is available for easy install of dependencies.
 
-    Known issues: 
-    * On Raspbian AutoMARCO does not work due to a problem with tensorflow.
-    * If your graphics card is CUDA capable but with Cuda capability < 6, you must install tensorflow 1.14.0
+Known issues: 
+* On Raspbian AutoMARCO does not work due to a problem with tensorflow.
+* If your graphics card is CUDA capable but with Cuda capability < 6, you must install tensorflow 1.14.0
 
 ## Citation
 

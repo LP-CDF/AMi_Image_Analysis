@@ -45,9 +45,8 @@ Please read this carefully before proceeding.
     ./whereveryouinstalled/bin/AMI_Image_Analysis.sh
     or use your alias.
 
-    To use the correct shortcuts for your keyboard, update the file preferences.py
-    and comment/uncomment lines 18 or 19 if you use an AZERTY keyboard.
-    If using a QWERTY keyboard, you should not have to do anything.
+    If you have an AZERTY keyboard, comment/uncomment lines 18 or 19 in the file preferences.py.
+    If you use a QWERTY keyboard, you should not have to do anything.
 
 ## Raspbian specific installation notes
 
