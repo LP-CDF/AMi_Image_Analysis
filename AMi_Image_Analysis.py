@@ -333,6 +333,12 @@ you can use the tool Check_Circle_detection.py filename to check
     Crystal= %s
     Phase Separation= %s
     Other= %s
+    
+    Note:
+    If a filter is activated (ie Clear, Crystal...)
+    it is recommended to use the arrows to navigate
+    and use the spacebar to display the selected
+    well.
         '''%(QKeySequence(shortcut.MoveUp).toString(),
         QKeySequence(shortcut.MoveDown).toString(),
         QKeySequence(shortcut.MoveLeft).toString(),
