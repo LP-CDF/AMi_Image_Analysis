@@ -64,9 +64,24 @@ sudo apt-get install qt5-default qt5-style-plugins qt5-image-formats-plugins lib
 sudo apt-get install libatlas-base-dev libjasper-dev libqtgui4 libqt4-test -y
 
 Then proceed with the installation procedure described previously.
+If you want to have a working tensorflow installation on Raspbian after issuing the command
+python3 -m pip install -r /whereveryouinstalled/requirements_Raspbian.txt (which does not install tensorflow)
+you will have to do the following steps:
+   * Download a tensorflow wheel for Raspbian at :
+     https://github.com/lhelontra/tensorflow-on-arm/releases/tag/v1.14.0-buster/tensorflow-1.14.0-cpXX-none-linux_armv7l.whl
+     (example: tensorflow-1.14.0-cp37-none-linux_armv7l.whl for python 3.7)
+   * python3 -m pip install /whereyoudownloaded/file/tensorflow-1.14.0-cpXX-none-linux_armv7l.whl
+   * Disable cloud in contrib (otherwise tensorflow breaks) by editing the file 
+     /wherever/you/want/venvs/AMI_IMAGE_ANALYSIS_TENSORFLOW1/lib/python3.7/site-packages/tensorflow/contrib/__init__.py
+     and change line 30
+     **from**
+     if os.name != "nt" and platform.machine() != "s390x":
+     **to**
+     if os.name != "nt" and platform.machine() != "armv7l":
+
+Then autoMARCO should work though slowly at least on a Pi3B+.
 
 # Known issues: 
-    * On Raspbian AutoMARCO does not work due to a problem with tensorflow.
     * If your graphics card is CUDA capable but with Cuda capability < 6, you must install tensorflow 1.14.0
     * If your CPU does not support AVX instruction sets (CPU before SandyBridge), you will need to find a tensorflow with the correct building options
       (have a look [here](https://github.com/yaroslavvb/tensorflow-community-wheels/issues)).

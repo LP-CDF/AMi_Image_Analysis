@@ -12,7 +12,7 @@ import re
 import math
 from pathlib import Path
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtGui import QPixmap, QFont, QColor, QKeySequence, QScreen
+from PyQt5.QtGui import QPixmap, QFont, QColor, QKeySequence
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True) #enable highdpi scaling
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True) #use highdpi icons
 from PyQt5.QtWidgets import (QLabel, QTableWidgetItem, QFileDialog,

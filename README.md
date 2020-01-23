@@ -103,7 +103,7 @@ Methodology details are published in [[2]](#2)
 Note: a pip requirement file is available for easy install of dependencies.
 
 Known issues: 
-* On Raspbian AutoMARCO does not work due to a problem with tensorflow.
+* On Raspbian AutoMARCO does not work with regular PyPi tensorflow package (see INSTALL.md).
 * If your graphics card is CUDA capable but with Cuda capability < 6, you must install tensorflow 1.14.0
 * If your CPU does not support AVX instruction sets (CPU before SandyBridge), you will need to find a tensorflow with the correct building options (have a look [here](https://github.com/yaroslavvb/tensorflow-community-wheels/issues))
 
