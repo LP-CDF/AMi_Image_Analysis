@@ -9,6 +9,7 @@ Created on Wed Nov 27 13:57:18 2019
 from gui import Ui_MainWindow
 import os
 import re
+import csv
 import math
 from pathlib import Path
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -181,8 +182,24 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
             ui.StatisticsTable.setItem(pos[0],pos[1], QTableWidgetItem(str(value)))
         
         self.StatisticsWindow.show()
+        ui.pushButton_Export.clicked.connect(lambda: self.export_statistics(results))
 
+    def export_statistics(self, _list):
+        filename=Path(self.rootDir).joinpath("Image_Data", "Statistics_%s_%s.csv"%(self.plate ,self.date))
         
+        with open(filename, 'w',newline='') as f:
+            fieldnames = ["Classification","Subwell_a","Subwell_b","Subwell_c","No_Subwell"]
+            writer=csv.DictWriter(f, fieldnames, delimiter=',', quoting=csv.QUOTE_ALL, dialect="excel")
+            writer.writeheader()
+            writer.writerow({'Classification':'Clear','Subwell_a':_list[0]['Clear'],'Subwell_b':_list[1]['Clear'],'Subwell_c':_list[2]['Clear'],'No_Subwell':_list[3]['Clear']})
+            writer.writerow({'Classification':'Precipitate','Subwell_a':_list[0]['Precipitate'],'Subwell_b':_list[1]['Precipitate'],'Subwell_c':_list[2]['Precipitate'],'No_Subwell':_list[3]['Precipitate']})
+            writer.writerow({'Classification':'Crystal','Subwell_a':_list[0]['Crystal'],'Subwell_b':_list[1]['Crystal'],'Subwell_c':_list[2]['Crystal'],'No_Subwell':_list[3]['Crystal']})
+            writer.writerow({'Classification':'Phase Separation','Subwell_a':_list[0]['PhaseSep'],'Subwell_b':_list[1]['PhaseSep'],'Subwell_c':_list[2]['PhaseSep'],'No_Subwell':_list[3]['PhaseSep']})
+            writer.writerow({'Classification':'Other','Subwell_a':_list[0]['Other'],'Subwell_b':_list[1]['Other'],'Subwell_c':_list[2]['Other'],'No_Subwell':_list[3]['Other']})
+            writer.writerow({'Classification':'Unsorted','Subwell_a':_list[0]['Unknown'],'Subwell_b':_list[1]['Unknown'],'Subwell_c':_list[2]['Unknown'],'No_Subwell':_list[3]['Unknown']})
+        message="File saved to:\n %s"%filename
+        self.informationDialog(message)
+
     def AutoCrop(self):
         
         if len(self.files)==0:
@@ -1031,7 +1048,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         
         try:
             import tensorflow as tf
-            if tf.__version__ > '1.15.0':
+            if tf.__version__ >= '2.0.0':
                 self.handle_error("TensorFlow version %s not supported"%tf.__version__)
                 return
             else:

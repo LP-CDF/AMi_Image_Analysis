@@ -62,7 +62,12 @@ New release.
 
 2020/01/16:
 Changed startup routine to include python virtual environment initialisation.
-New release.
+Release 1.1.6.
+
+2020/01/23:
+Fixed autoMARCO on Raspbian Buster.
+Fixed bug leading to program crash when stopping autoMARCO and filtering results.
+Release 1.1.8.
 
 ## Screenshots
 
