@@ -92,7 +92,11 @@ def predict(file_list, classifications,logDir):
             
         classifications[well]=classification
         # print("classifications[well] ", classifications[well])
-        if progress.wasCanceled(): break
+        if progress.wasCanceled():
+            #To prevent crash reassign classification to Unknown
+            for _file in file_list:
+                classifications[os.path.splitext(os.path.basename(_file))[0]]="Unknown"
+            break
         
     log=Path(logDir).joinpath("auto_MARCO.log")
     
