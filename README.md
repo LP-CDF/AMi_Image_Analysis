@@ -6,6 +6,7 @@ The AMi microscope is a low-cost automated microscope.
 For more details on this device, please look at:
 "AMi: a GUI-based, open-source system for imaging samples in multi-well plates" [[1]](#1)
 
+This program should work with images taken by other machines given the folder tree is as expected.
 
 ## Features:
 

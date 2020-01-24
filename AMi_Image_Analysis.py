@@ -184,6 +184,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.StatisticsWindow.show()
         ui.pushButton_Export.clicked.connect(lambda: self.export_statistics(results))
 
+
     def export_statistics(self, _list):
         filename=Path(self.rootDir).joinpath("Image_Data", "Statistics_%s_%s.csv"%(self.plate ,self.date))
         
@@ -305,6 +306,9 @@ you can use the tool Check_Circle_detection.py filename to check
         self.radioButton_Precipitate.toggled.connect(lambda:self.FilterClassification(self._lay,"Precipitate"))
         self.radioButton_PhaseSep.toggled.connect(lambda:self.FilterClassification(self._lay,"PhaseSep"))
         self.radioButton_Unsorted.toggled.connect(lambda:self.FilterClassification(self._lay,"Unknown"))
+        
+        #Stylesheet scrollAreaPlate
+        self.scrollAreaPlate.setStyleSheet("""background-color: rgb(220,220,220);""")
         
         
         #Change Some Styles in Scoring Section
@@ -479,6 +483,8 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         values.append(pdfpath)
         pdf_writer.create_pdf(values)
         print("Report for well %s saved to %s"%(well, pdfpath))
+        # message="File saved to:\n %s"%pdfpath
+        # self.informationDialog(message)
 
 
     def Directory(self, path):
@@ -586,6 +592,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
 
     def add_button(self, path, x, y):
             button = QtWidgets.QPushButton()
+            button.setStyleSheet("""background-color: lightgray;""")
             text=self.extract_WellLabel
             button.setText(self.extract_WellLabel(path))
             button.clicked.connect(self.buttonClicked)
