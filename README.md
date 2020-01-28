@@ -46,7 +46,7 @@ The file "prep_date.txt" only contains the preparation date of the plate. It con
 Automated annotation using TensorFlow (https://www.tensorflow.org/) and MARCO (https://marco.ccr.buffalo.edu/) has been added.
 For now, this requires TensorFlow version previous to v2.
 
-Important Note: a threshold is applied to accept or not autoMARCO most probable prediction. If the prediction probability is below
+**Important Note:** a threshold is applied to accept or not autoMARCO most probable prediction. If the prediction probability is below
 this threshold (currently 0.6 and can be modified in preferences.py), the drop classification is set to "Unknown". 
 
 2019/12/13:

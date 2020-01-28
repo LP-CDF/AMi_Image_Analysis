@@ -70,6 +70,7 @@ you will have to do the following steps:
    * Download a tensorflow wheel for Raspbian at :
      https://github.com/lhelontra/tensorflow-on-arm/releases/tag/v1.14.0-buster/tensorflow-1.14.0-cpXX-none-linux_armv7l.whl
      (example: tensorflow-1.14.0-cp37-none-linux_armv7l.whl for python 3.7)
+   * If you use a virtual environment, **ensure it is activated**. (source /wherever/you/want/venvs/AMI_IMAGE_ANALYSIS_TENSORFLOW1/bin/activate)
    * python3 -m pip install /whereyoudownloaded/file/tensorflow-1.14.0-cpXX-none-linux_armv7l.whl
    * Disable cloud in contrib (otherwise tensorflow breaks) by editing the file 
      /wherever/you/want/venvs/AMI_IMAGE_ANALYSIS_TENSORFLOW1/lib/python3.7/site-packages/tensorflow/contrib/__init__.py
