@@ -90,7 +90,7 @@ It is recommended to create a virtual environment for python (see INSTALL.md)
 
 Download the latest released version and gunzip it or clone this repository with
 git clone https://github.com/LP-CDF/AMi_Image_Analysis AMi_Image_Analysis.
-Then follow the instructions in INSTALL.md
+Then follow the instructions in INSTALL.txt
 
 Dependencies:
 * Qt5
