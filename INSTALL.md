@@ -73,7 +73,7 @@ you will have to do the following steps:
    * If you use a virtual environment, **ensure it is activated**. (source /wherever/you/want/venvs/AMI_IMAGE_ANALYSIS_TENSORFLOW1/bin/activate)
    * python3 -m pip install /whereyoudownloaded/file/tensorflow-1.14.0-cpXX-none-linux_armv7l.whl
    * Disable cloud in contrib (otherwise tensorflow breaks) by editing the file 
-     /wherever/you/want/venvs/AMI_IMAGE_ANALYSIS_TENSORFLOW1/lib/python3.7/site-packages/tensorflow/contrib/__init__.py
+     /wherever/you/want/venvs/AMI_IMAGE_ANALYSIS_TENSORFLOW1/lib/python3.7/site-packages/tensorflow/contrib/\__init\__.py
      and change line 30
      **from**
      if os.name != "nt" and platform.machine() != "s390x":
