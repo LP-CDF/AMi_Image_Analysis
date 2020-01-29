@@ -20,7 +20,7 @@ Please read this carefully before proceeding.
     * PyFPDF (v1.7.2 or higher)
 
     Optional dependencies:
-    * TensorFlow (v1.1x, not v2, tested with version 1.14)
+    * TensorFlow (v1.1x, not v2)
     * MARCO tensorflow model (https://storage.googleapis.com/marco-168219-model/savedmodel.zip)
       One version of this model is included in saved_model/
       Methodology details are published in [[2]](#2)
@@ -68,10 +68,10 @@ If you want to have a working tensorflow installation on Raspbian after issuing 
 python3 -m pip install -r /whereveryouinstalled/requirements_Raspbian.txt (which does not install tensorflow)
 you will have to do the following steps:
    * Download a tensorflow wheel for Raspbian at :
-     https://github.com/lhelontra/tensorflow-on-arm/releases/tag/v1.14.0-buster/tensorflow-1.14.0-cpXX-none-linux_armv7l.whl
+     https://github.com/lhelontra/tensorflow-on-arm/releases/tag/v1.14.0-buster/tensorflow-1.1X.0-cpXX-none-linux_armv7l.whl
      (example: tensorflow-1.14.0-cp37-none-linux_armv7l.whl for python 3.7)
    * If you use a virtual environment, **ensure it is activated**. (source /wherever/you/want/venvs/AMI_IMAGE_ANALYSIS_TENSORFLOW1/bin/activate)
-   * python3 -m pip install /whereyoudownloaded/file/tensorflow-1.14.0-cpXX-none-linux_armv7l.whl
+   * python3 -m pip install /whereyoudownloaded/file/tensorflow-1.1X.0-cpXX-none-linux_armv7l.whl
    * Disable cloud in contrib (otherwise tensorflow breaks) by editing the file 
      /wherever/you/want/venvs/AMI_IMAGE_ANALYSIS_TENSORFLOW1/lib/python3.7/site-packages/tensorflow/contrib/__init__.py
      and change line 30
@@ -83,7 +83,6 @@ you will have to do the following steps:
 Then autoMARCO should work though slowly at least on a Pi3B+.
 
 # Known issues: 
-    * If your graphics card is CUDA capable but with Cuda capability < 6, you must install tensorflow 1.14.0
     * If your CPU does not support AVX instruction sets (CPU before SandyBridge), you will need to find a tensorflow with the correct building options
       (have a look [here](https://github.com/yaroslavvb/tensorflow-community-wheels/issues)).
       Uninstall tensorflow and reinstall with python3 -m pip install pathToWheel.whl

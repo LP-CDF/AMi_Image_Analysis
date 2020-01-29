@@ -28,9 +28,9 @@ import StatisticsDialog
 import preferences as pref
 
 
-__version__ = "1.1.8"
+__version__ = "1.1.9"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "21-01-2020"
+__date__ = "29-01-2020"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 

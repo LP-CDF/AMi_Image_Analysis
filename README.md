@@ -70,6 +70,9 @@ Fixed autoMARCO on Raspbian Buster.
 Fixed bug leading to program crash when stopping autoMARCO and filtering results.
 Release 1.1.8.
 
+2020/01/29:
+Updated tensorflow to 1.15.2 in requirements.txt
+
 ## Screenshots
 
 ![Screenshot 1](./screenshot1.png)
@@ -109,8 +112,7 @@ Methodology details are published in [[2]](#2)
 Note: a pip requirement file is available for easy install of dependencies.
 
 Known issues: 
-* On Raspbian AutoMARCO does not work with regular PyPi tensorflow package (see INSTALL.md).
-* If your graphics card is CUDA capable but with Cuda capability < 6, you must install tensorflow 1.14.0
+* On Raspbian AutoMARCO does not work with regular PyPi tensorflow package (see INSTALL.txt).
 * If your CPU does not support AVX instruction sets (CPU before SandyBridge), you will need to find a tensorflow with the correct building options (have a look [here](https://github.com/yaroslavvb/tensorflow-community-wheels/issues))
 
 ## Citation
