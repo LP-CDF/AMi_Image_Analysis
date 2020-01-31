@@ -120,5 +120,6 @@ if __name__ == "__main__":
     print('''
 %s file(s) were not processed.
 For more information check log file %s
-you can use the tool Check_Circle_detection.py filename to check
+
+You can use the tool Check_Circle_detection.py filename to check
 '''%(errors, log))

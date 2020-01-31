@@ -28,9 +28,9 @@ import StatisticsDialog
 import preferences as pref
 
 
-__version__ = "1.1.9"
+__version__ = "1.1.10"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "29-01-2020"
+__date__ = "31-01-2020"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -100,6 +100,9 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.view.setDragMode(QtWidgets.QGraphicsView.ScrollHandDrag)
         self.view.wheelEvent = self.wheel_event
         self.ImageViewer.setWidget(self.view)
+        
+        #To see all autoMARCO results windows create a dict subwell:object
+        self.MARCO_window={}
                 
         self.initUI()
 
@@ -130,24 +133,25 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
             return
     
         autoMARCO_data=[]
+        
         for line in data:
             autoMARCO_data.append(line.split())
         
         #delete HEADER from list
         del autoMARCO_data[0]
         
-        self.MARCO_window = MARCO_Results()
-        self.MARCO_window.subwell=subwell
-        self.MARCO_window.setWindowTitle("autoMARCO results for subwell %s"%subwell)
-        self.MARCO_window.autoMARCO_data=autoMARCO_data
+        self.MARCO_window[subwell] = MARCO_Results()
+        self.MARCO_window[subwell].subwell=subwell
+        self.MARCO_window[subwell].setWindowTitle("autoMARCO results for subwell %s"%subwell)
+        self.MARCO_window[subwell].autoMARCO_data=autoMARCO_data
         
         #Define  Legend
-        self.MARCO_window.label_Crystal.setStyleSheet("""background-color:rgb(0, 255, 0)""")
-        self.MARCO_window.label_Other.setStyleSheet("""background-color:rgb(255, 0, 255); color:rgb(255, 255, 255)""")
-        self.MARCO_window.label_Precipitate.setStyleSheet("""background-color:rgb(255, 0, 0); color:rgb(255, 255, 255)""")
-        self.MARCO_window.label_Clear.setStyleSheet("""background-color:rgb(0, 0, 0); color:rgb(255, 255, 255)""")
+        self.MARCO_window[subwell].label_Crystal.setStyleSheet("""background-color:rgb(0, 255, 0)""")
+        self.MARCO_window[subwell].label_Other.setStyleSheet("""background-color:rgb(255, 0, 255); color:rgb(255, 255, 255)""")
+        self.MARCO_window[subwell].label_Precipitate.setStyleSheet("""background-color:rgb(255, 0, 0); color:rgb(255, 255, 255)""")
+        self.MARCO_window[subwell].label_Clear.setStyleSheet("""background-color:rgb(0, 0, 0); color:rgb(255, 255, 255)""")
         
-        self.MARCO_window.show()
+        self.MARCO_window[subwell].show()
         del autoMARCO_data
         
 
