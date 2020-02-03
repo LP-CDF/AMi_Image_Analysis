@@ -629,10 +629,10 @@ https://github.com/LP-CDF/AMi_Image_Analysis
     def add_Label_Timeline(self, layout, text, x, y):
         '''text must be a string containing the directory path'''
         label = QtWidgets.QLabel()
-        tag=os.path.basename(text).split('_')[0]
+        tag=os.path.basename(text)#.split('_')[0]
         label.setText(tag)
         label.setFont(QtGui.QFont("Helvetica", 12, QtGui.QFont.Black))
-        label.setStyleSheet("""
+        label.setStyleSheet("""s
         background-color: white;
         color: black;
         padding: 5px 2px 0px 2px;
@@ -906,18 +906,22 @@ https://github.com/LP-CDF/AMi_Image_Analysis
                 button.setIcon(icon)
                 button.setIconSize(QtCore.QSize(300, 230))
                 tag=os.path.basename(date)#.split('_')[0]
-                button.setText(tag)
-                print("NAME: ",name)
-                print("DATE: ",date)
+                # button.setText(tag)
                 button.clicked.connect(lambda: self.Open_Timeline(well))
                 self._timlay.addWidget(button, 0, other_dates.index(date))
+                self.add_Label_Timeline(self._timlay, tag, 1,other_dates.index(date))
         self.label_CurrentWell.setText(well)
 
 
     def Open_Timeline(self, well):
         '''open image from timeline and display in main window'''
         button = self.sender()   
-        date=button.text()
+        idx=self._timlay.indexOf(button)
+        location = self._timlay.getItemPosition(idx)
+        row, col = location[0], location[1]
+        item=self._timlay.itemAtPosition(row+1,col)
+        widget=item.widget()
+        date=widget.text()
         path=Path(self.buildWellImagePath(self.imageDir, well, self.well_images))
         parts=list(path.parts)
         imagedir=self.imageDir.split("/")
@@ -926,9 +930,11 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         else:
             parts[-2]=date
         path=str(Path(*parts))
-        # print("OLD Open_Timeline_Path :", path)
-        # print("NEW Open_Timeline_Path :", _path)
         self.open_image(path)
+        
+        #Don't know if it is useful in case of long term use
+        del imagedir, widget, date, path, parts, row, col, item, idx, location
+
 
     def ActivateButton(self,layout, idx):
         '''Activate a button in a QgridLayout,
