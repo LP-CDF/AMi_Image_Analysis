@@ -28,7 +28,7 @@ import StatisticsDialog
 import preferences as pref
 
 
-__version__ = "1.1.10"
+__version__ = "1.2.0"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
 __date__ = "31-01-2020"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
@@ -405,9 +405,12 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             print(fileName)
         if fileName:
             self.open_image(fileName)
+            #Next line to activate zoom capability
+            self.previousWell=self.extract_WellLabel(fileName)
+
 
     def Initialise(self):
-        '''reset file list when changing folder and reset layout grid'''
+        '''reset file list and more when changing folder and reset layout grid'''
         self.classifications.clear()
         self.previousWell = None
         self.currentWell = None
@@ -415,6 +418,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         self.files.clear()
         self.well_images.clear()
         self.ClearLayout(self._lay)
+        self.MARCO_window.clear()
 
 
     def openDirDialog(self):
@@ -894,11 +898,37 @@ https://github.com/LP-CDF/AMi_Image_Analysis
                 path=Path(date)
             name=self.buildWellImagePath(str(path), well, self.well_images)
             if Path(name).exists():
-                pixmap = QtGui.QPixmap(name)
-                self.add_Timeline_pixmap(self._timlay, pixmap.scaled(300, 230, QtCore.Qt.KeepAspectRatio, QtCore.Qt.FastTransformation), 0, other_dates.index(date))
-                self.add_Label_Timeline(self._timlay, date, 0,other_dates.index(date))
+                # pixmap = QtGui.QPixmap(name)
+                # self.add_Timeline_pixmap(self._timlay, pixmap.scaled(300, 230, QtCore.Qt.KeepAspectRatio, QtCore.Qt.FastTransformation), 0, other_dates.index(date))
+                # self.add_Label_Timeline(self._timlay, date, 0,other_dates.index(date))
+                button = QtWidgets.QPushButton()
+                icon=QtGui.QIcon(name)
+                button.setIcon(icon)
+                button.setIconSize(QtCore.QSize(300, 230))
+                tag=os.path.basename(date)#.split('_')[0]
+                button.setText(tag)
+                print("NAME: ",name)
+                print("DATE: ",date)
+                button.clicked.connect(lambda: self.Open_Timeline(well))
+                self._timlay.addWidget(button, 0, other_dates.index(date))
         self.label_CurrentWell.setText(well)
 
+
+    def Open_Timeline(self, well):
+        '''open image from timeline and display in main window'''
+        button = self.sender()   
+        date=button.text()
+        path=Path(self.buildWellImagePath(self.imageDir, well, self.well_images))
+        parts=list(path.parts)
+        imagedir=self.imageDir.split("/")
+        if imagedir[-1]=="rawimages" or imagedir[-1]=="cropped":
+            parts[-3]=date
+        else:
+            parts[-2]=date
+        path=str(Path(*parts))
+        # print("OLD Open_Timeline_Path :", path)
+        # print("NEW Open_Timeline_Path :", _path)
+        self.open_image(path)
 
     def ActivateButton(self,layout, idx):
         '''Activate a button in a QgridLayout,
