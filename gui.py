@@ -358,6 +358,8 @@ class Ui_MainWindow(object):
         self.actionautoMARCO_no_subwell.setObjectName("actionautoMARCO_no_subwell")
         self.actionAutoCrop = QtWidgets.QAction(MainWindow)
         self.actionAutoCrop.setObjectName("actionAutoCrop")
+        self.actionAutoMerge = QtWidgets.QAction(MainWindow)
+        self.actionAutoMerge.setObjectName("actionAutoMerge")
         self.menuFile.addAction(self.openFile)
         self.menuFile.addAction(self.openDir)
         self.menuFile.addAction(self.actionExport_to_PDF)
@@ -367,6 +369,7 @@ class Ui_MainWindow(object):
         self.menuShow_autoMARCO_Grid.addAction(self.actionautoMARCO_subwell_c)
         self.menuShow_autoMARCO_Grid.addAction(self.actionautoMARCO_no_subwell)
         self.menuDisplay_Heat_Map.addAction(self.actionAutoCrop)
+        self.menuDisplay_Heat_Map.addAction(self.actionAutoMerge)
         self.menuDisplay_Heat_Map.addAction(self.actionAutomated_Annotation_MARCO)
         self.menuDisplay_Heat_Map.addAction(self.actionCalculate_Statistics)
         self.menuDisplay_Heat_Map.addAction(self.actionDisplay_Heat_Map)
@@ -439,6 +442,8 @@ class Ui_MainWindow(object):
         self.actionautoMARCO_no_subwell.setText(_translate("MainWindow", "autoMARCO no subwell"))
         self.actionAutoCrop.setText(_translate("MainWindow", "AutoCrop"))
         self.actionAutoCrop.setShortcut(_translate("MainWindow", "Shift+C"))
+        self.actionAutoMerge.setText(_translate("MainWindow", "AutoMerge"))
+        self.actionAutoMerge.setShortcut(_translate("MainWindow", "Ctrl+M"))
 
 
 

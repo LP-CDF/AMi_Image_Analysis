@@ -36,7 +36,7 @@ def DetectCircle(_file):
     # Apply Hough transform on the blurred image. 
     detected_circles = cv2.HoughCircles(gray_blurred,  
                        cv2.HOUGH_GRADIENT, 1, pref.minDistance , param1 = pref.param1, 
-                   param2 = pref.param1, minRadius =pref.minRadius, maxRadius = pref.maxRadius) 
+                   param2 = pref.param2, minRadius =pref.minRadius, maxRadius = pref.maxRadius) 
     
     euclidians=[]
     

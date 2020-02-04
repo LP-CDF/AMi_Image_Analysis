@@ -39,7 +39,7 @@ The tree must be organized like:
 ```
 AMi controlling software needs a folder named "images".
 The date directory must have the format YYYYMMDD_HHMMSS (eg. 20191211_151023)
-The file "prep_date.txt" only contains the preparation date of the plate. It contains a single line with a date without specific format. It is used for logging purpose only.
+The file "prep_date.txt" contains the preparation date of the plate. It contains a single line with a date with format YYYYMMDD and is created within the program. It is used for logging purpose only and is not mandatory.
 
 
 2019/12/12:
@@ -73,6 +73,13 @@ Release 1.1.8.
 2020/01/29:
 Updated tensorflow to 1.15.2 in requirements.txt
 
+2020/02/03
+Images in Timeline can be clicked to load corresponding image in main viewing frame for closer inspection.
+autoMARCO windows can all be displayed at the same time (previously only a single window could be loaded)
+
+2020/03/03
+Merging Z-stacks can be done within AMI_Image_Analysis or command line using the script Merge_Zstack.py. It is done in python and is much faster than using Hugin.
+
 ## Screenshots
 
 ![Screenshot 1](./screenshot1.png)
@@ -89,7 +96,7 @@ The software was tested on:
 Hopefully, it should work on other linux distributions, MacOS and Windows.
 You will need a screen with minimum resolution of **1920*1080**.
     
-It is recommended to create a virtual environment for python (see INSTALL.md)
+It is recommended to create a virtual environment for python (see INSTALL.txt)
 
 Download the latest released version and gunzip it or clone this repository with
 git clone https://github.com/LP-CDF/AMi_Image_Analysis AMi_Image_Analysis.
@@ -109,7 +116,7 @@ Methodology details are published in [[2]](#2)
 * openCV for the automatic cropping tool (tested with opencv 4.0.1)
 * NumPy
 
-Note: a pip requirement file is available for easy install of dependencies.
+Note: a pip requirement file is available for easy install of python dependencies.
 
 Known issues: 
 * On Raspbian AutoMARCO does not work with regular PyPi tensorflow package (see INSTALL.txt).
@@ -126,6 +133,8 @@ To be added
 This project would not have been possible without the previous work of Dakota Handzlik published in [[3]](#3).
 Corresponding project can be found at:
 https://github.com/dakota0064/Fluorescent_Robotic_Imager
+
+All the Python, Qt communities for sharing experience.
 
 
 ## References

@@ -3,7 +3,6 @@
 """
 Created on Mon Jan 20 09:57:50 2020
 
-@author: ludovic
 """
 
 import os, sys

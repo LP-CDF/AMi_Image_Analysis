@@ -12,6 +12,7 @@ import re
 import csv
 import math
 from pathlib import Path
+import multiprocessing, time
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import QPixmap, QFont, QColor, QKeySequence
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True) #enable highdpi scaling
@@ -25,12 +26,13 @@ import pdf_writer
 import HeatMap_Grid
 from  MARCO_Results_Analysis import MARCO_Results
 import StatisticsDialog
+import Merge_Zstack
 import preferences as pref
 
 
-__version__ = "1.2.0"
+__version__ = "1.2.1"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "31-01-2020"
+__date__ = "03-03-2020"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -47,7 +49,7 @@ ClassificationColor={
 
 def Citation():
     print('''
-Program written for in python3/PyQt5 by
+Program written for python3/PyQt5 by
 Ludovic Pecqueur
 Laboratoire de Chimie des Processus Biologiques
 Collège de France.
@@ -106,6 +108,80 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
                 
         self.initUI()
 
+    def initUI(self):
+
+        self.MaxCol=6
+        
+        #Shortcut definitions
+        
+        # self.exportPDFshortcut=QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+E"), self)
+        # self.exportPDFshortcut.activated.connect(self.export_pdf)
+        
+        #Setup Menu
+        self.openFile.triggered.connect(self.openFileNameDialog)
+        self.openDir.triggered.connect(self.openDirDialog)
+        
+        self.actionAutoCrop.triggered.connect(self.AutoCrop)
+        self.actionAutoMerge.triggered.connect(self.AutoMerge)
+        self.actionAutomated_Annotation_MARCO.triggered.connect(self.autoAnnotation)
+        self.actionDisplay_Heat_Map.triggered.connect(self.show_HeatMap)
+        self.actionExport_to_PDF.triggered.connect(self.export_pdf)
+        self.actionautoMARCO_subwell_a.triggered.connect(lambda: self.show_autoMARCO("a"))
+        self.actionautoMARCO_subwell_b.triggered.connect(lambda: self.show_autoMARCO("b"))
+        self.actionautoMARCO_subwell_c.triggered.connect(lambda: self.show_autoMARCO("c"))
+        self.actionautoMARCO_no_subwell.triggered.connect(lambda: self.show_autoMARCO(""))
+        
+        self.actionQuit_2.triggered.connect(self.on_exit)
+        
+        self.actionCalculate_Statistics.triggered.connect(self.show_Statistics)
+        self.actionShortcuts.triggered.connect(self.ShowShortcuts)
+        self.actionAbout.triggered.connect(self.ShowAbout)
+        
+        
+        self.label_ProjectDetails.setFont(QtGui.QFont("Arial", 12, QtGui.QFont.Black))
+        
+        self.ImageViewer.setStyleSheet("""background-color:transparent;border: 1px solid black;""")
+        self.labelVisuClassif.setStyleSheet("""background-color:yellow;color:black;""")
+ 
+        #Setup Filtering Options
+        self.radioButton_All.toggled.connect(lambda:self.FilterClassification(self._lay,"All"))
+        self.radioButton_Crystal.toggled.connect(lambda:self.FilterClassification(self._lay,"Crystal"))
+        self.radioButton_Clear.toggled.connect(lambda:self.FilterClassification(self._lay,"Clear"))
+        self.radioButton_Other.toggled.connect(lambda:self.FilterClassification(self._lay,"Other"))
+        self.radioButton_Precipitate.toggled.connect(lambda:self.FilterClassification(self._lay,"Precipitate"))
+        self.radioButton_PhaseSep.toggled.connect(lambda:self.FilterClassification(self._lay,"PhaseSep"))
+        self.radioButton_Unsorted.toggled.connect(lambda:self.FilterClassification(self._lay,"Unknown"))
+        
+        #Stylesheet scrollAreaPlate
+        self.scrollAreaPlate.setStyleSheet("""background-color: rgb(220,220,220);""")
+        
+        
+        #Change Some Styles in Scoring Section
+        self.label_2.setFont(QtGui.QFont("Arial", 12, QtGui.QFont.Black))
+        self.label_4.setFont(QtGui.QFont("Arial", 12, QtGui.QFont.Black))
+        self.label_Timeline.setFont(QtGui.QFont("Arial", 12, QtGui.QFont.Black))
+        self.label_CurrentWell.setFont(QtGui.QFont("Arial", 12, QtGui.QFont.Black))
+        self.label_CurrentWell.setStyleSheet("""color: blue;""")
+
+        self.radioButton_ScoreClear.setStyleSheet("""color: black;""")
+        self.radioButton_ScorePrecipitate.setStyleSheet("""color: red;""")
+        self.radioButton_ScoreCrystal.setStyleSheet("""color: green;""")                                            
+        self.radioButton_ScorePhaseSep.setStyleSheet("""color: orange;""")
+        self.radioButton_ScoreOther.setStyleSheet("""color: magenta;""")
+
+        #Listen Scoring RadioButtons
+        self.radioButton_ScoreClear.toggled.connect(lambda:self.ScoreDrop(self.radioButton_ScoreClear, self.currentWell))
+        self.radioButton_ScorePrecipitate.toggled.connect(lambda:self.ScoreDrop(self.radioButton_ScorePrecipitate, self.currentWell))
+        self.radioButton_ScoreCrystal.toggled.connect(lambda:self.ScoreDrop(self.radioButton_ScoreCrystal, self.currentWell))
+        self.radioButton_ScorePhaseSep.toggled.connect(lambda:self.ScoreDrop(self.radioButton_ScorePhaseSep, self.currentWell))
+        self.radioButton_ScoreOther.toggled.connect(lambda:self.ScoreDrop(self.radioButton_ScoreOther, self.currentWell))
+
+        #Listen Display Heat Map and export to pdf buttons
+        self.pushButton_DisplayHeatMap.clicked.connect(self.show_HeatMap)
+        self.pushButton_ExportToPDF.clicked.connect(self.export_pdf)
+        
+        self.show()
+
 
     def show_HeatMap(self):
         ''' Create window and map results on a grid'''
@@ -145,7 +221,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.MARCO_window[subwell].setWindowTitle("autoMARCO results for subwell %s"%subwell)
         self.MARCO_window[subwell].autoMARCO_data=autoMARCO_data
         
-        #Define  Legend
+        #Define Legend
         self.MARCO_window[subwell].label_Crystal.setStyleSheet("""background-color:rgb(0, 255, 0)""")
         self.MARCO_window[subwell].label_Other.setStyleSheet("""background-color:rgb(255, 0, 255); color:rgb(255, 255, 255)""")
         self.MARCO_window[subwell].label_Precipitate.setStyleSheet("""background-color:rgb(255, 0, 0); color:rgb(255, 255, 255)""")
@@ -205,6 +281,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         message="File saved to:\n %s"%filename
         self.informationDialog(message)
 
+
     def AutoCrop(self):
         
         if len(self.files)==0:
@@ -258,89 +335,71 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
             self.handle_error('''
 %s file(s) were not processed.
 For more information check log file %s
+
 you can use the tool Check_Circle_detection.py filename to check
 '''%(errors, log))
 
         #INFORM USER TO RELOAD images from cropped if needed
-        info = QMessageBox(self)
-        info.setWindowTitle("Information!")
-        info.setText("You need to load the images from the directory \"cropped\" to use the cropped images")
-        info.setStandardButtons(QMessageBox.Ok)
-        retval = info.exec_()
-        
-    def initUI(self):
+        self.informationDialog("You need to load the images from the directory \"cropped\" to use the cropped images")
+        # info = QMessageBox(self)
+        # info.setWindowTitle("Information!")
+        # info.setText("You need to load the images from the directory \"cropped\" to use the cropped images")
+        # info.setStandardButtons(QMessageBox.Ok)
+        # retval = info.exec_()
 
-        self.MaxCol=6
-        
-        #Shortcut definitions
-        
-        # self.exportPDFshortcut=QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+E"), self)
-        # self.exportPDFshortcut.activated.connect(self.export_pdf)
-        
-        #Setup Menu
-        self.openFile.triggered.connect(self.openFileNameDialog)
-        self.openDir.triggered.connect(self.openDirDialog)
-        
-        self.actionAutoCrop.triggered.connect(self.AutoCrop)
-        self.actionAutomated_Annotation_MARCO.triggered.connect(self.autoAnnotation)
-        self.actionDisplay_Heat_Map.triggered.connect(self.show_HeatMap)
-        self.actionExport_to_PDF.triggered.connect(self.export_pdf)
-        self.actionautoMARCO_subwell_a.triggered.connect(lambda: self.show_autoMARCO("a"))
-        self.actionautoMARCO_subwell_b.triggered.connect(lambda: self.show_autoMARCO("b"))
-        self.actionautoMARCO_subwell_c.triggered.connect(lambda: self.show_autoMARCO("c"))
-        self.actionautoMARCO_no_subwell.triggered.connect(lambda: self.show_autoMARCO(""))
-        
-        self.actionQuit_2.triggered.connect(self.on_exit)
-        
-        self.actionCalculate_Statistics.triggered.connect(self.show_Statistics)
-        self.actionShortcuts.triggered.connect(self.ShowShortcuts)
-        self.actionAbout.triggered.connect(self.ShowAbout)
-        
-        
-        self.label_ProjectDetails.setFont(QtGui.QFont("Arial", 12, QtGui.QFont.Black))
-        
-        self.ImageViewer.setStyleSheet("""background-color:transparent;border: 1px solid black;""")
-        self.labelVisuClassif.setStyleSheet("""background-color:yellow;color:black;""")
- 
-        #Setup Filtering Options
-        self.radioButton_All.toggled.connect(lambda:self.FilterClassification(self._lay,"All"))
-        self.radioButton_Crystal.toggled.connect(lambda:self.FilterClassification(self._lay,"Crystal"))
-        self.radioButton_Clear.toggled.connect(lambda:self.FilterClassification(self._lay,"Clear"))
-        self.radioButton_Other.toggled.connect(lambda:self.FilterClassification(self._lay,"Other"))
-        self.radioButton_Precipitate.toggled.connect(lambda:self.FilterClassification(self._lay,"Precipitate"))
-        self.radioButton_PhaseSep.toggled.connect(lambda:self.FilterClassification(self._lay,"PhaseSep"))
-        self.radioButton_Unsorted.toggled.connect(lambda:self.FilterClassification(self._lay,"Unknown"))
-        
-        #Stylesheet scrollAreaPlate
-        self.scrollAreaPlate.setStyleSheet("""background-color: rgb(220,220,220);""")
-        
-        
-        #Change Some Styles in Scoring Section
-        self.label_2.setFont(QtGui.QFont("Arial", 12, QtGui.QFont.Black))
-        self.label_4.setFont(QtGui.QFont("Arial", 12, QtGui.QFont.Black))
-        self.label_Timeline.setFont(QtGui.QFont("Arial", 12, QtGui.QFont.Black))
-        self.label_CurrentWell.setFont(QtGui.QFont("Arial", 12, QtGui.QFont.Black))
-        self.label_CurrentWell.setStyleSheet("""color: blue;""")
 
-        self.radioButton_ScoreClear.setStyleSheet("""color: black;""")
-        self.radioButton_ScorePrecipitate.setStyleSheet("""color: red;""")
-        self.radioButton_ScoreCrystal.setStyleSheet("""color: green;""")                                            
-        self.radioButton_ScorePhaseSep.setStyleSheet("""color: orange;""")
-        self.radioButton_ScoreOther.setStyleSheet("""color: magenta;""")
-
-        #Listen Scoring RadioButtons
-        self.radioButton_ScoreClear.toggled.connect(lambda:self.ScoreDrop(self.radioButton_ScoreClear, self.currentWell))
-        self.radioButton_ScorePrecipitate.toggled.connect(lambda:self.ScoreDrop(self.radioButton_ScorePrecipitate, self.currentWell))
-        self.radioButton_ScoreCrystal.toggled.connect(lambda:self.ScoreDrop(self.radioButton_ScoreCrystal, self.currentWell))
-        self.radioButton_ScorePhaseSep.toggled.connect(lambda:self.ScoreDrop(self.radioButton_ScorePhaseSep, self.currentWell))
-        self.radioButton_ScoreOther.toggled.connect(lambda:self.ScoreDrop(self.radioButton_ScoreOther, self.currentWell))
-
-        #Listen Display Heat Map and export to pdf buttons
-        self.pushButton_DisplayHeatMap.clicked.connect(self.show_HeatMap)
-        self.pushButton_ExportToPDF.clicked.connect(self.export_pdf)
+    def AutoMerge(self):
+        # if len(self.files)==0:
+        self.informationDialog('''
+Please open the directory 'rawimages' !!!
+The GUI will not be responsive during processing.''')
+        self.openDirDialog()
+        if len(self.files)==0:
+            return
         
-        self.show()
- 
+        nproc=multiprocessing.cpu_count()
+        # nproc=4
+
+        # rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+        cols = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+        wells = ['a', 'b', 'c']
+    
+        A_wells = ["A" + str(col) + str(well) for col in cols for well in wells]
+        B_wells = ["B" + str(col) + str(well) for col in cols for well in wells]
+        C_wells = ["C" + str(col) + str(well) for col in cols for well in wells]
+        D_wells = ["D" + str(col) + str(well) for col in cols for well in wells]
+        E_wells = ["E" + str(col) + str(well) for col in cols for well in wells]
+        F_wells = ["F" + str(col) + str(well) for col in cols for well in wells]
+        G_wells = ["G" + str(col) + str(well) for col in cols for well in wells]
+        H_wells = ["H" + str(col) + str(well) for col in cols for well in wells]
+        
+        total_wells=[A_wells,B_wells,C_wells,D_wells,E_wells,F_wells,G_wells,H_wells]    
+        path=str(Path(self.imageDir).parent)
+        
+        args=[]
+        for _list in total_wells:
+            arg=_list, self.well_images, self.imageDir, path
+            args.append(arg)
+    
+        njobs=len(args)
+        if njobs > nproc: number_processes=nproc-1
+        else: number_processes=njobs
+        print("Number of CORES = ", nproc, "Number of processes= ", number_processes)
+        time_start=time.perf_counter()
+        pool = multiprocessing.Pool(number_processes)
+        results=[pool.apply_async(Merge_Zstack.MERGE_Zstack, arg) for arg in args]
+        pool.close(); pool.join()
+        time_end=time.perf_counter()        
+        # print(f"\nOperation performed in {time_end - time_start:0.2f} seconds")
+            
+        self.informationDialog(f'''
+Operation performed in {time_end - time_start:0.2f} seconds.
+
+Please load the merged images located in: \n {path}''')
+        #Clean up
+        for i in total_wells: del i
+        del results, total_wells
+
     
     def ShowShortcuts(self):
         shortcut=pref.Shortcut()
@@ -455,6 +514,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
 #            QtGui.QPixmapCache.clear()
         else:
             self.handle_error("No Image File Found in directory")
+            return
 
         for i in self.well_images:
             well=os.path.splitext(i)[0]
@@ -471,10 +531,10 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         imgDir=self.imageDir
         img_list=self.well_images
         values = []
-        name = ""
+        # name = ""
         well=self.currentWell
 
-        values.append(name)
+        values.append(well)
 
         imgpath=self.buildWellImagePath(imgDir, well, img_list)
     #        path = directory + "/" + well
@@ -486,13 +546,12 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         values.append(self.target)
         values.append(self.plate)
         values.append(self.date)
+        values.append(self.prepdate)
+        values.append(pdfpath)
         text=self.Notes_TextEdit.toPlainText()
         values.append(text)
-        values.append(pdfpath)
         pdf_writer.create_pdf(values)
         print("Report for well %s saved to %s"%(well, pdfpath))
-        # message="File saved to:\n %s"%pdfpath
-        # self.informationDialog(message)
 
 
     def Directory(self, path):
@@ -626,6 +685,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         """)
             self._lay.addWidget(label, x, y, alignment=QtCore.Qt.AlignBottom | QtCore.Qt.AlignCenter)
 
+
     def add_Label_Timeline(self, layout, text, x, y):
         '''text must be a string containing the directory path'''
         label = QtWidgets.QLabel()
@@ -638,6 +698,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         padding: 5px 2px 0px 2px;
     """)
         layout.addWidget(label, x, y, alignment=QtCore.Qt.AlignBottom | QtCore.Qt.AlignCenter)
+
 
     def buttonClicked(self):
         button = self.sender()            
@@ -685,14 +746,15 @@ https://github.com/LP-CDF/AMi_Image_Analysis
                                               ClassificationColor[self.classifications[well]]["text"]))
         
 
-    def LoadWellImage(self,path):
+    # def LoadWellImage(self,path):
+    #     ''' '''
+    #     QtGui.QPixmapCache.clear()
+    #     label=QLabel(self)
+    #     pixmap=QPixmap(path)
+    #     #resize pixmap to size of the QscrollArea Temporary?
+    #     label.setPixmap(pixmap.scaled(860, 630, QtCore.Qt.KeepAspectRatio, QtCore.Qt.FastTransformation))
+    #     self.ImageViewer.setWidget(label)
 
-        QtGui.QPixmapCache.clear()
-        label=QLabel(self)
-        pixmap=QPixmap(path)
-        #resize pixmap to size of the QscrollArea Temporary?
-        label.setPixmap(pixmap.scaled(860, 630, QtCore.Qt.KeepAspectRatio, QtCore.Qt.FastTransformation))
-        self.ImageViewer.setWidget(label)
 
     def open_image(self, path):
         '''based on https://vincent-vande-vyvre.developpez.com/tutoriels/pyqt/manipulation-images/'''
@@ -702,6 +764,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
                                     QtCore.Qt.KeepAspectRatio, 
                                     QtCore.Qt.SmoothTransformation))
         self.view_current()
+
 
     def view_current(self):
         '''based on https://vincent-vande-vyvre.developpez.com/tutoriels/pyqt/manipulation-images/'''
@@ -746,6 +809,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         elif int(most_recent[6:8]) < int(date[6:8]):
             return date
         return most_recent
+
 
     def check_previous_notes(self, path, current_date):
         path=path + "/Image_Data/"
@@ -976,8 +1040,8 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         currentrow=location[0]; currentcol=location[1]
         self.ChangeButtonColor(self._lay, self.currentButtonIndex, state="checked")
         NumberOfColumns=self._lay.columnCount()
-        NumberOfRows=self._lay.rowCount()
-        # if event.key()==QtCore.Qt.Key_Q:
+        # NumberOfRows=self._lay.rowCount()
+
         shortcut=pref.Shortcut()
         if event.key()==shortcut.MoveLeft:
             if currentcol==0:
@@ -1116,6 +1180,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         '''things to do before exiting'''
 #        self.SaveNotes(self.currentWell)
         app.closeAllWindows()
+
 
     def take_screenshot(self):
         #If no data prevent crashing
