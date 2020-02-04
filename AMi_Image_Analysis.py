@@ -47,7 +47,7 @@ ClassificationColor={
 
 def Citation():
     print('''
-Program written for in python3/PyQt5 by
+Program written for python3/PyQt5 by
 Ludovic Pecqueur
 Laboratoire de Chimie des Processus Biologiques
 Collège de France.
@@ -688,14 +688,14 @@ https://github.com/LP-CDF/AMi_Image_Analysis
                                               ClassificationColor[self.classifications[well]]["text"]))
         
 
-    def LoadWellImage(self,path):
-
-        QtGui.QPixmapCache.clear()
-        label=QLabel(self)
-        pixmap=QPixmap(path)
-        #resize pixmap to size of the QscrollArea Temporary?
-        label.setPixmap(pixmap.scaled(860, 630, QtCore.Qt.KeepAspectRatio, QtCore.Qt.FastTransformation))
-        self.ImageViewer.setWidget(label)
+    # def LoadWellImage(self,path):
+    #     ''' '''
+    #     QtGui.QPixmapCache.clear()
+    #     label=QLabel(self)
+    #     pixmap=QPixmap(path)
+    #     #resize pixmap to size of the QscrollArea Temporary?
+    #     label.setPixmap(pixmap.scaled(860, 630, QtCore.Qt.KeepAspectRatio, QtCore.Qt.FastTransformation))
+    #     self.ImageViewer.setWidget(label)
 
     def open_image(self, path):
         '''based on https://vincent-vande-vyvre.developpez.com/tutoriels/pyqt/manipulation-images/'''

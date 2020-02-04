@@ -11,6 +11,8 @@ and adapted for TIFF handling by L.P.
 2019
 '''
 
+__date__ = "04-02-2020"
+
 class PDF(fpdf.FPDF):
 
     def header(self):

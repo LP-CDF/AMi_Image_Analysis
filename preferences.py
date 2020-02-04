@@ -16,7 +16,7 @@ from PyQt5 import QtCore
 
 #Comment/uncomment the two lines below according to your need
 keyboard_layout="qwerty"
-#keyboard_layout="azerty"
+# keyboard_layout="azerty"
 
 #autoMARCO acceptance probability criterium
 autoMARCO_threshold=0.60
@@ -58,8 +58,8 @@ class Shortcut():
 class DetectCircle():
     '''parameters for circle detection used in autocrop.py
        and Check_Circle_detection.py'''
-    param1=35
+    param1=60
     param2=25
-    minDistance=120
-    minRadius=100
-    maxRadius=300
+    minDistance=800
+    minRadius=250
+    maxRadius=400
