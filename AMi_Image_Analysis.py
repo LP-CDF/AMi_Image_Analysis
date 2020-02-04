@@ -471,10 +471,10 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         imgDir=self.imageDir
         img_list=self.well_images
         values = []
-        name = ""
+        # name = ""
         well=self.currentWell
 
-        values.append(name)
+        values.append(well)
 
         imgpath=self.buildWellImagePath(imgDir, well, img_list)
     #        path = directory + "/" + well
@@ -486,13 +486,16 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         values.append(self.target)
         values.append(self.plate)
         values.append(self.date)
+        values.append(self.prepdate)
+        values.append(pdfpath)
         text=self.Notes_TextEdit.toPlainText()
         values.append(text)
-        values.append(pdfpath)
         pdf_writer.create_pdf(values)
         print("Report for well %s saved to %s"%(well, pdfpath))
         # message="File saved to:\n %s"%pdfpath
         # self.informationDialog(message)
+        # print("VALUES :\n", values)
+        # print("LEN VALUES :", len(values))
 
 
     def Directory(self, path):

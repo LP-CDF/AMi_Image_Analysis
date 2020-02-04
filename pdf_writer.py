@@ -54,15 +54,21 @@ class PDF(fpdf.FPDF):
 def create_pdf(_list):
     unsupported=[".tif",".tiff",".TIFF", ".TIF"]
     TIFFFILE=False
-    name = _list[0]
+    well = _list[0]
     well_image = _list[1]
     project_name = _list[2]
     target_name = _list[3]
     plate_name = _list[4]
     date = _list[5]
+    if _list[6]=="None":
+        prepdate="Not available"
+    else:
+        prepdate=_list[6]
+        prepdate="%s-%s-%s"%(prepdate[0:4], prepdate[4:6], prepdate[6:])
+
     outputpath=_list[7]
 
-    notes = _list[6]
+    notes = _list[8]
 #    print("TIF EXT ", os.path.splitext(os.path.basename(well_image))[1])
 #    print("IMAGE PATH", well_image)
 #    print("OUTPUT JPEG ", os.path.dirname(well_image)+"/"+os.path.splitext(os.path.basename(well_image))[0]+".jpeg")
@@ -78,7 +84,7 @@ def create_pdf(_list):
     pdf.add_page()
     pdf.set_font("Arial", size=14)
 
-    pdf.cell(0, 15, "Prepared by: " + name, align="C", ln=1)
+    pdf.cell(0, 15, "Well: " + well, align="C", ln=1)
 
     pdf.image(well_image, 30, 55, w=153, h=115)
 
@@ -106,15 +112,15 @@ def create_pdf(_list):
     pdf.cell(50, 18, "Date of image: ", align="R", ln=0)
 
     pdf.set_font("Arial", size=14)
-    pdf.cell(0, 18, date, align="L", ln=1)
+    pdf.cell(0, 18, "%s-%s-%s (Preparation date: %s)"%(date[0:4], date[4:6], date[6:], prepdate), align="L", ln=1)
 
     pdf.ln(10)
 
     pdf.set_font("Arial", size=14, style="B")
     pdf.cell(50, 0, "Notes: ", align="R", ln=0)
 
-    pdf.set_font("Arial", size=14)
-    pdf.cell(0, 0, notes, align="L", ln=1)
+    pdf.set_font("Arial", size=12)
+    pdf.multi_cell(120, 8, notes, 'J')
 
     pdf.output(outputpath)
     

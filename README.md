@@ -39,7 +39,7 @@ The tree must be organized like:
 ```
 AMi controlling software needs a folder named "images".
 The date directory must have the format YYYYMMDD_HHMMSS (eg. 20191211_151023)
-The file "prep_date.txt" only contains the preparation date of the plate. It contains a single line with a date without specific format. It is used for logging purpose only.
+The file "prep_date.txt" contains the preparation date of the plate. It contains a single line with a date with format YYYYMMDD and is created within the program. It is used for logging purpose only and is not mandatory.
 
 
 2019/12/12:
@@ -72,6 +72,10 @@ Release 1.1.8.
 
 2020/01/29:
 Updated tensorflow to 1.15.2 in requirements.txt
+
+2020/02/03
+Images in Timeline can be clicked to load corresponding image in main viewing frame for closer comparison.
+autoMARCO windows can all be displayed at the same time (previously only a single window could be loaded)
 
 ## Screenshots
 
