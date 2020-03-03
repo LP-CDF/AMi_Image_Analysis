@@ -9,4 +9,4 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 parentdir="$(dirname "$DIR")"
 python3 $parentdir/AMi_Image_Analysis.py
 
-deactivate
+#deactivate
