@@ -5,3 +5,9 @@ CannyTrack.py
 Check_Ellipse_detection.py
 Compile_opencv_centos7.txt
 preferences.py
+Automated_Marco_dev_TF2.py
+Create_VirtualEnv.txt
+test_TF2_python3.py
+requirements_tf2.txt
+bin/AMI_Image_Analysis.sh
+Release_infoForGit.txt
