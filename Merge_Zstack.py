@@ -273,16 +273,23 @@ def MERGE_Zstack(well_list, file_list, imageDir, outputpath):
         images=[]
         SUBWELL=True
         
-        if file_list[0].split('_')[0][-1] in ['a', 'b', 'c']: SUBWELL==True
-        else: SUBWELL==False
-        # print("TYPE of DATA with SUBWELLS: %s"%SUBWELL)
+        if file_list[0].split('_')[0][-1] in ['a', 'b', 'c']: SUBWELL=True
+        else: SUBWELL=False
+        print("TYPE of DATA with SUBWELLS: %s"%SUBWELL)
         
         #Alter list to remove subwell (NOT TESTED)
+        filtered=[]
         if SUBWELL==False:
-            for i in  range(len(well_list)):well_list[i]=well_list[i][:-1]
-        
+            for i in  range(len(well_list)):
+                if well_list[i][:-1] not in filtered:
+                    filtered.append(well_list[i][:-1])
+            well_list=filtered
+        # print("well_list ", well_list)
+        # print("filtered  ", filtered)
+
         for well in well_list:
-            imagesToStack= [_file for _file in file_list if well in _file]
+            # print("well ", well)
+            imagesToStack= [_file for _file in file_list if well==_file.split('_')[0]]
             # print('imagesToStack',imagesToStack)
             if len(imagesToStack)!=0:
                 for _file in imagesToStack:
