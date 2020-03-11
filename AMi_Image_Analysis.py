@@ -382,7 +382,8 @@ The GUI will not be responsive during processing.''')
             args.append(arg)
     
         njobs=len(args)
-        if njobs > nproc: number_processes=nproc-1
+        if njobs > nproc and nproc !=1 : number_processes=nproc-1
+        elif nproc==1: number_processes=1
         else: number_processes=njobs
         print("Number of CORES = ", nproc, "Number of processes= ", number_processes)
         time_start=time.perf_counter()
