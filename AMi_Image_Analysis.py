@@ -30,9 +30,9 @@ import Merge_Zstack
 import preferences as pref
 
 
-__version__ = "1.2.1"
+__version__ = "1.2.2"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "03-03-2020"
+__date__ = "18-05-2020"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -93,6 +93,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.previousWell = None
         self.currentWell = None
         self.currentButtonIndex= None
+        self.VisiblesIdx = []
 
         #If using the QGraphics view, use open_image
         #If not comment the next five lines and use
@@ -475,6 +476,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         self.previousWell = None
         self.currentWell = None
         self.currentButtonIndex= None
+        self.idx= None
         self.files.clear()
         self.well_images.clear()
         self.ClearLayout(self._lay)
@@ -521,6 +523,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             well=os.path.splitext(i)[0]
             self.ReadClassification(self.rootDir, self.date, well)
 
+        self.radioButton_All.setChecked(True)
 
     def export_pdf(self):
         '''export to PDF a report for current well'''
@@ -644,6 +647,8 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             except StopIteration:
                 self._timer.stop()
                 self.progressBar.setValue(vmax)
+        #line below to initialise self.VisiblesIdx
+        self.FilterClassification(self._lay,"All")
 
 
     def add_pixmap(self, layout, pixmap, x, y):
@@ -703,10 +708,10 @@ https://github.com/LP-CDF/AMi_Image_Analysis
 
     def buttonClicked(self):
         button = self.sender()            
-        idx=self._lay.indexOf(button)
-        location = self._lay.getItemPosition(idx)
+        self.idx=self._lay.indexOf(button)
+        location = self._lay.getItemPosition(self.idx) #getItemPosition(int index, int *row, int *column, int *rowSpan, int *columnSpan)
         self.currentButtonIndex=location
-#        print("Button", button, "at row/col", location[:2])
+        # print("Button", button, "at row/col", location[:2])
         
         well=button.text()
         self.currentWell=well
@@ -892,18 +897,22 @@ https://github.com/LP-CDF/AMi_Image_Analysis
 
 
     def FilterClassification(self, layout, classification):
+        self.VisiblesIdx.clear() #Clear before modification
         for widget_item in self.layout_widgets(layout):
             widget = widget_item.widget()
             if self.classifications[widget.text()]==classification:
 #                widget.setEnabled(True)
                 widget.setVisible(True)
+                self.VisiblesIdx.append(layout.indexOf(widget))
             elif classification=="All":
 #                widget.setEnabled(True)
                 widget.setVisible(True)
+                self.VisiblesIdx.append(layout.indexOf(widget))
             else:
 #                widget.setEnabled(False)
                 widget.setVisible(False)
 #            print("well ",widget.text(), "dico Classif ", self.classifications[widget.text()])
+        # print("Visibles", self.VisiblesIdx)
 
 
     def layout_widgets(self,layout):
@@ -1044,33 +1053,52 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         # NumberOfRows=self._lay.rowCount()
 
         shortcut=pref.Shortcut()
-        if event.key()==shortcut.MoveLeft:
-            if currentcol==0:
-                Newlocation=(currentrow-1, NumberOfColumns-1,location[2],location[3])
-                try:
-                    self.ActivateButton(self._lay, Newlocation)
-                except:
-                    self.handle_error("Already at first well")
-            else:
-                Newlocation=(currentrow, currentcol-1,location[2],location[3])
-#                print("Newlocation ", Newlocation)
-                self.ActivateButton(self._lay, Newlocation)
+#         if event.key()==shortcut.MoveLeft:
+#             if currentcol==0:
+#                 Newlocation=(currentrow-1, NumberOfColumns-1,location[2],location[3])
+#                 try:
+#                     self.ActivateButton(self._lay, Newlocation)
+#                 except:
+#                     self.handle_error("Already at first well")
+#             else:
+#                 Newlocation=(currentrow, currentcol-1,location[2],location[3])
+# #                print("Newlocation ", Newlocation)
+#                 self.ActivateButton(self._lay, Newlocation)
 
+#         if event.key()==shortcut.MoveRight:
+#             if currentcol==NumberOfColumns-1:
+#                 Newlocation=(currentrow+1, 0,location[2],location[3])
+#                 try:
+#                     self.ActivateButton(self._lay, Newlocation)
+#                 except:
+#                     self.handle_error("Already at last well")
+#             else:
+#                 Newlocation=(currentrow, currentcol+1,location[2],location[3])
+# #                print("Newlocation ", Newlocation)
+#                 try:
+#                     self.ActivateButton(self._lay, Newlocation)
+#                 except:
+#                     self.handle_error("Already at last well")
+
+        if event.key()==shortcut.MoveLeft:
+            try:
+                NewlocationIdx = list(filter(lambda i: i < self.idx, reversed(self.VisiblesIdx)))[0]
+                Newlocation=self._lay.getItemPosition(NewlocationIdx)
+                self.ActivateButton(self._lay, Newlocation)
+            except:
+                self.handle_error("Already at first well")
+
+ 
         if event.key()==shortcut.MoveRight:
-            if currentcol==NumberOfColumns-1:
-                Newlocation=(currentrow+1, 0,location[2],location[3])
-                try:
-                    self.ActivateButton(self._lay, Newlocation)
-                except:
-                    self.handle_error("Already at last well")
-            else:
-                Newlocation=(currentrow, currentcol+1,location[2],location[3])
-#                print("Newlocation ", Newlocation)
-                try:
-                    self.ActivateButton(self._lay, Newlocation)
-                except:
-                    self.handle_error("Already at last well")
-            
+            # print("self.idx :", self.idx)
+            try:
+                NewlocationIdx = list(filter(lambda i: i > self.idx, self.VisiblesIdx))[0]
+                Newlocation=self._lay.getItemPosition(NewlocationIdx)
+                self.ActivateButton(self._lay, Newlocation)
+            except:
+                self.handle_error("Already at last well")           
+ 
+    
         if event.key()==shortcut.MoveUp:
             Newlocation=(currentrow-1, currentcol,location[2],location[3])
             try:
