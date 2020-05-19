@@ -522,8 +522,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         for i in self.well_images:
             well=os.path.splitext(i)[0]
             self.ReadClassification(self.rootDir, self.date, well)
-
-        self.radioButton_All.setChecked(True)
+            
 
     def export_pdf(self):
         '''export to PDF a report for current well'''
@@ -649,6 +648,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
                 self.progressBar.setValue(vmax)
         #line below to initialise self.VisiblesIdx
         self.FilterClassification(self._lay,"All")
+        self.radioButton_All.setChecked(True)
 
 
     def add_pixmap(self, layout, pixmap, x, y):

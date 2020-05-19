@@ -5,7 +5,7 @@ Please read this carefully before proceeding.
     The software was tested on:
     * linux CentOS 7 (PyQt5 (v5.9.2 and v5.12.1) and python3 (v3.6.8 and v3.7.3))
     * Raspbian 10 (on a Pi 3B+, not recommended)
-    * macOS HighSierra
+    * macOS HighSierra and Catalina
 
     Hopefully, it will run on other linux distributions, MacOS and Windows with minor installation tweaks.
     You will need a screen with minimum resolution of 1920*1080.
@@ -35,13 +35,14 @@ Please read this carefully before proceeding.
     * curl https://bootstrap.pypa.io/get-pip.py | python
     * deactivate
     * source /wherever/you/want/venvs/AMI_IMAGE_ANALYSIS_TENSORFLOW1/bin/activate
-    * python3 -m pip install -r /whereveryouinstalled/requirements.txt (or requirements_Raspbian.txt)
+    * python3 -m pip install -r /whereveryouinstalled/requirements.txt (or requirements_Raspbian.txt or requirements_OSX.txt)
     * If you use a virtual environment, make sure it is activated before using the script Setup_bin_VENV.py. This script will overwrite the file in 
       /whereveryouinstalled/bin/AMI_Image_Analysis.sh so that virtenv points to your virtual environment.
       If you don't use a virtual environment, **do not use** the script Setup_bin_VENV.py.
 
-    Make the file /whereveryouinstalled/bin/AMI_Image_Analysis.sh executable, it is recommended to create an alias then 
-    To start the program type in a bash terminal: 
+    Check the file /whereveryouinstalled/bin/AMI_Image_Analysis.sh is executable.
+    It is recommended to create an alias (e.g. for bash you can add in your .bashrc alias  AMI_Image_Analysis='/whereveryouinstalled/bin/AMI_Image_Analysis.sh')
+    then to start the program type in a bash terminal either type:
     ./whereveryouinstalled/bin/AMI_Image_Analysis.sh
     or use your alias.
 

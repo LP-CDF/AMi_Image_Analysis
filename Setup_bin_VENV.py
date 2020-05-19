@@ -9,7 +9,7 @@ import os, sys
 from pathlib import Path
 import stat
 
-activate_venv={'linux': 'activate', 'win32': 'activate.bat'}[sys.platform]
+activate_venv={'linux': 'activate', 'darwin': 'activate', 'win32': 'activate.bat'}[sys.platform]
 python_path=os.path.join(os.path.dirname(sys.executable))
 
 app_path=os.path.abspath(os.path.dirname(sys.argv[0]))
