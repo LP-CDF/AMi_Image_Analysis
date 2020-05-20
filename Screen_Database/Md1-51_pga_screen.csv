@@ -1,0 +1,97 @@
+Well #,Conc1,Units1,Salt 1,Conc2,Units2,Salt 2,Conc3,Units3,Buffer3,pH,Conc4,Units4,Precipitant4,Conc5,Units5,Precipitant5
+A1,0.3,M,Potassium bromide,,,,0.1,M,Sodium acetate,5,8,% w/v,"γ-PGA (Na+ form, LM)",,,
+A2,0.2,M,Magnesium chloride,,,,0.1,M,Sodium acetate,5,8,% w/v,"γ-PGA (Na+ form, LM)",,,
+A3,0.3,M,Sodium malonate dibasic monohydrate,,,,0.1,M,Sodium acetate,5,8,% w/v,"γ-PGA (Na+ form, LM)",,,
+A4,0.6,M,Sodium formate,,,,0.1,M,Sodium acetate,5,8,% w/v,"γ-PGA (Na+ form, LM)",,,
+A5,1,M,Ammonium formate,,,,0.1,M,Sodium acetate,5,8,% w/v,"γ-PGA (Na+ form, LM)",,,
+A6,0.2,M,Potassium thiocyanate,,,,0.1,M,Sodium acetate,5,8,% w/v,"γ-PGA (Na+ form, LM)",,,
+A7,0.2,M,L-Proline,,,,0.1,M,Sodium acetate,5,8,% w/v,"γ-PGA (Na+ form, LM)",,,
+A8,0.2,M,L-Arginine,,,,0.1,M,Sodium acetate,5,8,% w/v,"γ-PGA (Na+ form, LM)",,,
+A9,,,,,,,0.1,M,Sodium acetate,5,5,% w/v,"γ-PGA (Na+ form, LM)",30,% v/v,PEG 400
+A10,,,,,,,0.1,M,Sodium acetate,5,5,% w/v,"γ-PGA (Na+ form, LM)",30,% v/v,PEG 500 MME
+A11,,,,,,,0.1,M,Sodium acetate,5,5,% w/v,"γ-PGA (Na+ form, LM)",30,% v/v,MPD
+A12,,,,,,,0.1,M,Sodium acetate,5,5,% w/v,"γ-PGA (Na+ form, LM)",20,% w/v,PEG 2000 MME
+B1,,,,,,,0.1,M,Sodium acetate,5,5,% w/v,"γ-PGA (Na+ form, LM)",20,% w/v,PEG 3350
+B2,,,,,,,0.1,M,Sodium acetate,5,5,% w/v,"γ-PGA (Na+ form, LM)",15,% w/v,PEG 4000
+B3,,,,,,,0.1,M,Sodium acetate,5,5,% w/v,"γ-PGA (Na+ form, LM)",12,% w/v,PEG 8000
+B4,,,,,,,0.1,M,Sodium acetate,5,5,% w/v,"γ-PGA (Na+ form, LM)",8,% w/v,PEG 20000
+B5,0.2,M,Potassium bromide,0.2,M,Potassium thiocyanate,0.1,M,Sodium acetate,5,3,% w/v,"γ-PGA (Na+ form, LM)",30,% v/v,PEG 400
+B6,0.2,M,Potassium bromide,0.2,M,Potassium thiocyanate,0.1,M,Sodium acetate,5,3,% w/v,"γ-PGA (Na+ form, LM)",20,% v/v,PEG 500 MME
+B7,0.2,M,Potassium bromide,0.2,M,Potassium thiocyanate,0.1,M,Sodium acetate,5,3,% w/v,"γ-PGA (Na+ form, LM)",20,% v/v,MPD
+B8,0.2,M,Potassium bromide,0.2,M,Potassium thiocyanate,0.1,M,Sodium acetate,5,3,% w/v,"γ-PGA (Na+ form, LM)",10,% w/v,PEG 2000 MME
+B9,0.2,M,Potassium bromide,0.2,M,Potassium thiocyanate,0.1,M,Sodium acetate,5,3,% w/v,"γ-PGA (Na+ form, LM)",5,% w/v,PEG 3350
+B10,0.2,M,Potassium bromide,0.2,M,Potassium thiocyanate,0.1,M,Sodium acetate,5,3,% w/v,"γ-PGA (Na+ form, LM)",5,% w/v,PEG 4000
+B11,0.2,M,Potassium bromide,0.2,M,Potassium thiocyanate,0.1,M,Sodium acetate,5,3,% w/v,"γ-PGA (Na+ form, LM)",5,% w/v,PEG 8000
+B12,0.2,M,Potassium bromide,0.2,M,Potassium thiocyanate,0.1,M,Sodium acetate,5,3,% w/v,"γ-PGA (Na+ form, LM)",3,% w/v,PEG 20000
+C1,0.1,M,Ammonium sulfate,0.3,M,Sodium formate,0.1,M,Sodium acetate,5,3,% w/v,"γ-PGA (Na+ form, LM)",30,% v/v,PEG 400
+C2,0.1,M,Ammonium sulfate,0.3,M,Sodium formate,0.1,M,Sodium acetate,5,3,% w/v,"γ-PGA (Na+ form, LM)",20,% v/v,PEG 500 MME
+C3,0.1,M,Ammonium sulfate,0.3,M,Sodium formate,0.1,M,Sodium acetate,5,3,% w/v,"γ-PGA (Na+ form, LM)",20,% v/v,MPD
+C4,0.1,M,Ammonium sulfate,0.3,M,Sodium formate,0.1,M,Sodium acetate,5,3,% w/v,"γ-PGA (Na+ form, LM)",10,% w/v,PEG 2000 MME
+C5,0.1,M,Ammonium sulfate,0.3,M,Sodium formate,0.1,M,Sodium acetate,5,3,% w/v,"γ-PGA (Na+ form, LM)",5,% w/v,PEG 3350
+C6,0.1,M,Ammonium sulfate,0.3,M,Sodium formate,0.1,M,Sodium acetate,5,3,% w/v,"γ-PGA (Na+ form, LM)",5,% w/v,PEG 4000
+C7,0.1,M,Ammonium sulfate,0.3,M,Sodium formate,0.1,M,Sodium acetate,5,3,% w/v,"γ-PGA (Na+ form, LM)",5,% w/v,PEG 8000
+C8,0.1,M,Ammonium sulfate,0.3,M,Sodium formate,0.1,M,Sodium acetate,5,3,% w/v,"γ-PGA (Na+ form, LM)",3,% w/v,PEG 20000
+C9,0.3,M,Potassium Bromide,,,,0.1,M,Sodium cacodylate,6.5,8,% w/v,"γ-PGA (Na+ form, LM)",,,
+C10,0.2,M,Magnesium chloride,,,,0.1,M,Sodium cacodylate,6.5,8,% w/v,"γ-PGA (Na+ form, LM)",,,
+C11,0.3,M,Sodium malonate dibasic monohydrate,,,,0.1,M,Sodium cacodylate,6.5,8,% w/v,"γ-PGA (Na+ form, LM)",,,
+C12,0.6,M,Sodium formate,,,,0.1,M,Sodium cacodylate,6.5,8,% w/v,"γ-PGA (Na+ form, LM)",,,
+D1,1,M,Ammonium formate,,,,0.1,M,Sodium cacodylate,6.5,8,% w/v,"γ-PGA (Na+ form, LM)",,,
+D2,0.2,M,Potassium thiocyanate,,,,0.1,M,Sodium cacodylate,6.5,8,% w/v,"γ-PGA (Na+ form, LM)",,,
+D3,0.2,M,L-Proline,,,,0.1,M,Sodium cacodylate,6.5,8,% w/v,"γ-PGA (Na+ form, LM)",,,
+D4,0.2,M,L-Arginine,,,,0.1,M,Sodium cacodylate,6.5,8,% w/v,"γ-PGA (Na+ form, LM)",,,
+D5,,,,,,,0.1,M,Sodium cacodylate,6.5,5,% w/v,"γ-PGA (Na+ form, LM)",30,% v/v,PEG 400
+D6,,,,,,,0.1,M,Sodium cacodylate,6.5,5,% w/v,"γ-PGA (Na+ form, LM)",30,% v/v,PEG 500 MME
+D7,,,,,,,0.1,M,Sodium cacodylate,6.5,5,% w/v,"γ-PGA (Na+ form, LM)",30,% v/v,MPD
+D8,,,,,,,0.1,M,Sodium cacodylate,6.5,5,% w/v,"γ-PGA (Na+ form, LM)",20,% w/v,PEG 2000 MME
+D9,,,,,,,0.1,M,Sodium cacodylate,6.5,5,% w/v,"γ-PGA (Na+ form, LM)",20,% w/v,PEG 3350
+D10,,,,,,,0.1,M,Sodium cacodylate,6.5,5,% w/v,"γ-PGA (Na+ form, LM)",15,% w/v,PEG 4000
+D11,,,,,,,0.1,M,Sodium cacodylate,6.5,5,% w/v,"γ-PGA (Na+ form, LM)",12,% w/v,PEG 8000
+D12,,,,,,,0.1,M,Sodium cacodylate,6.5,5,% w/v,"γ-PGA (Na+ form, LM)",8,% w/v,PEG 20000
+E1,0.2,M,Potassium bromide,0.2,M,Potassium thiocyanate,0.1,M,Sodium cacodylate,6.5,3,% w/v,"γ-PGA (Na+ form, LM)",30,% v/v,PEG 400
+E2,0.2,M,Potassium bromide,0.2,M,Potassium thiocyanate,0.1,M,Sodium cacodylate,6.5,3,% w/v,"γ-PGA (Na+ form, LM)",20,% v/v,PEG 500 MME
+E3,0.2,M,Potassium bromide,0.2,M,Potassium thiocyanate,0.1,M,Sodium cacodylate,6.5,3,% w/v,"γ-PGA (Na+ form, LM)",20,% v/v,MPD
+E4,0.2,M,Potassium bromide,0.2,M,Potassium thiocyanate,0.1,M,Sodium cacodylate,6.5,3,% w/v,"γ-PGA (Na+ form, LM)",10,% w/v,PEG 2000 MME
+E5,0.2,M,Potassium bromide,0.2,M,Potassium thiocyanate,0.1,M,Sodium cacodylate,6.5,3,% w/v,"γ-PGA (Na+ form, LM)",5,% w/v,PEG 3350
+E6,0.2,M,Potassium bromide,0.2,M,Potassium thiocyanate,0.1,M,Sodium cacodylate,6.5,3,% w/v,"γ-PGA (Na+ form, LM)",5,% w/v,PEG 4000
+E7,0.2,M,Potassium bromide,0.2,M,Potassium thiocyanate,0.1,M,Sodium cacodylate,6.5,3,% w/v,"γ-PGA (Na+ form, LM)",5,% w/v,PEG 8000
+E8,0.2,M,Potassium bromide,0.2,M,Potassium thiocyanate,0.1,M,Sodium cacodylate,6.5,3,% w/v,"γ-PGA (Na+ form, LM)",3,% w/v,PEG 20000
+E9,0.1,M,Ammonium sulfate,0.3,M,Sodium formate,0.1,M,Sodium cacodylate,6.5,3,% w/v,"γ-PGA (Na+ form, LM)",30,% v/v,PEG 400
+E10,0.1,M,Ammonium sulfate,0.3,M,Sodium formate,0.1,M,Sodium cacodylate,6.5,3,% w/v,"γ-PGA (Na+ form, LM)",20,% v/v,PEG 500 MME
+E11,0.1,M,Ammonium sulfate,0.3,M,Sodium formate,0.1,M,Sodium cacodylate,6.5,3,% w/v,"γ-PGA (Na+ form, LM)",20,% v/v,MPD
+E12,0.1,M,Ammonium sulfate,0.3,M,Sodium formate,0.1,M,Sodium cacodylate,6.5,3,% w/v,"γ-PGA (Na+ form, LM)",10,% w/v,PEG 2000 MME
+F1,0.1,M,Ammonium sulfate,0.3,M,Sodium formate,0.1,M,Sodium cacodylate,6.5,3,% w/v,"γ-PGA (Na+ form, LM)",5,% w/v,PEG 3350
+F2,0.1,M,Ammonium sulfate,0.3,M,Sodium formate,0.1,M,Sodium cacodylate,6.5,3,% w/v,"γ-PGA (Na+ form, LM)",5,% w/v,PEG 4000
+F3,0.1,M,Ammonium sulfate,0.3,M,Sodium formate,0.1,M,Sodium cacodylate,6.5,3,% w/v,"γ-PGA (Na+ form, LM)",5,% w/v,PEG 8000
+F4,0.1,M,Ammonium sulfate,0.3,M,Sodium formate,0.1,M,Sodium cacodylate,6.5,3,% w/v,"γ-PGA (Na+ form, LM)",3,% w/v,PEG 20000
+F5,0.3,M,Potassium bromide,,,,0.1,M,Tris,7.8,8,% w/v,"γ-PGA (Na+ form, LM)",,,
+F6,0.2,M,Magnesium chloride,,,,0.1,M,Tris,7.8,8,% w/v,"γ-PGA (Na+ form, LM)",,,
+F7,0.3,M,Sodium malonate dibasic monohydrate,,,,0.1,M,Tris,7.8,8,% w/v,"γ-PGA (Na+ form, LM)",,,
+F8,0.6,M,Sodium formate,,,,0.1,M,Tris,7.8,8,% w/v,"γ-PGA (Na+ form, LM)",,,
+F9,1,M,Ammonium formate,,,,0.1,M,Tris,7.8,8,% w/v,"γ-PGA (Na+ form, LM)",,,
+F10,0.2,M,Potassium thiocyanate,,,,0.1,M,Tris,7.8,8,% w/v,"γ-PGA (Na+ form, LM)",,,
+F11,0.2,M,L-Proline,,,,0.1,M,Tris,7.8,8,% w/v,"γ-PGA (Na+ form, LM)",,,
+F12,0.2,M,L-Arginine,,,,0.1,M,Tris,7.8,8,% w/v,"γ-PGA (Na+ form, LM)",,,
+G1,,,,,,,0.1,M,Tris,7.8,5,% w/v,"γ-PGA (Na+ form, LM)",30,% v/v,PEG 400
+G2,,,,,,,0.1,M,Tris,7.8,5,% w/v,"γ-PGA (Na+ form, LM)",30,% v/v,PEG 500 MME
+G3,,,,,,,0.1,M,Tris,7.8,5,% w/v,"γ-PGA (Na+ form, LM)",30,% v/v,MPD
+G4,,,,,,,0.1,M,Tris,7.8,5,% w/v,"γ-PGA (Na+ form, LM)",20,% w/v,PEG 2000 MME
+G5,,,,,,,0.1,M,Tris,7.8,5,% w/v,"γ-PGA (Na+ form, LM)",20,% w/v,PEG 3350
+G6,,,,,,,0.1,M,Tris,7.8,5,% w/v,"γ-PGA (Na+ form, LM)",15,% w/v,PEG 4000
+G7,,,,,,,0.1,M,Tris,7.8,5,% w/v,"γ-PGA (Na+ form, LM)",12,% w/v,PEG 8000
+G8,,,,,,,0.1,M,Tris,7.8,5,% w/v,"γ-PGA (Na+ form, LM)",8,% w/v,PEG 20000
+G9,0.2,M,Potassium bromide,0.2,M,Potassium thiocyanate,0.1,M,Tris,7.8,3,% w/v,"γ-PGA (Na+ form, LM)",30,% v/v,PEG 400
+G10,0.2,M,Potassium bromide,0.2,M,Potassium thiocyanate,0.1,M,Tris,7.8,3,% w/v,"γ-PGA (Na+ form, LM)",20,% v/v,PEG 500 MME
+G11,0.2,M,Potassium bromide,0.2,M,Potassium thiocyanate,0.1,M,Tris,7.8,3,% w/v,"γ-PGA (Na+ form, LM)",20,% v/v,MPD
+G12,0.2,M,Potassium bromide,0.2,M,Potassium thiocyanate,0.1,M,Tris,7.8,3,% w/v,"γ-PGA (Na+ form, LM)",10,% w/v,PEG 2000 MME
+H1,0.2,M,Potassium bromide,0.2,M,Potassium thiocyanate,0.1,M,Tris,7.8,3,% w/v,"γ-PGA (Na+ form, LM)",5,% w/v,PEG 3350
+H2,0.2,M,Potassium bromide,0.2,M,Potassium thiocyanate,0.1,M,Tris,7.8,3,% w/v,"γ-PGA (Na+ form, LM)",5,% w/v,PEG 4000
+H3,0.2,M,Potassium bromide,0.2,M,Potassium thiocyanate,0.1,M,Tris,7.8,3,% w/v,"γ-PGA (Na+ form, LM)",5,% w/v,PEG 8000
+H4,0.2,M,Potassium bromide,0.2,M,Potassium thiocyanate,0.1,M,Tris,7.8,3,% w/v,"γ-PGA (Na+ form, LM)",3,% w/v,PEG 20000
+H5,0.1,M,Ammonium sulfate,0.3,M,Sodium formate,0.1,M,Tris,7.8,3,% w/v,"γ-PGA (Na+ form, LM)",30,% v/v,PEG 400
+H6,0.1,M,Ammonium sulfate,0.3,M,Sodium formate,0.1,M,Tris,7.8,3,% w/v,"γ-PGA (Na+ form, LM)",20,% v/v,PEG 500 MME
+H7,0.1,M,Ammonium sulfate,0.3,M,Sodium formate,0.1,M,Tris,7.8,3,% w/v,"γ-PGA (Na+ form, LM)",20,% v/v,MPD
+H8,0.1,M,Ammonium sulfate,0.3,M,Sodium formate,0.1,M,Tris,7.8,3,% w/v,"γ-PGA (Na+ form, LM)",10,% w/v,PEG 2000 MME
+H9,0.1,M,Ammonium sulfate,0.3,M,Sodium formate,0.1,M,Tris,7.8,3,% w/v,"γ-PGA (Na+ form, LM)",5,% w/v,PEG 3350
+H10,0.1,M,Ammonium sulfate,0.3,M,Sodium formate,0.1,M,Tris,7.8,3,% w/v,"γ-PGA (Na+ form, LM)",5,% w/v,PEG 4000
+H11,0.1,M,Ammonium sulfate,0.3,M,Sodium formate,0.1,M,Tris,7.8,3,% w/v,"γ-PGA (Na+ form, LM)",5,% w/v,PEG 8000
+H12,0.1,M,Ammonium sulfate,0.3,M,Sodium formate,0.1,M,Tris,7.8,3,% w/v,"γ-PGA (Na+ form, LM)",3,% w/v,PEG 20000

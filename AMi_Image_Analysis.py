@@ -7,7 +7,7 @@ Created on Wed Nov 27 13:57:18 2019
 """
 
 from gui import Ui_MainWindow
-import os
+import os, sys
 import re
 import csv
 import math
@@ -27,6 +27,7 @@ import HeatMap_Grid
 from  MARCO_Results_Analysis import MARCO_Results
 import StatisticsDialog
 import Merge_Zstack
+import ReadScreen
 import preferences as pref
 
 
@@ -64,6 +65,8 @@ licence: %s
 class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
         super(ViewerModule, self).__init__(parent)
+        self.app_path=os.path.abspath(os.path.dirname(sys.argv[0]))
+        # print("self.app_path ", self.app_path)
         self.ui=Ui_MainWindow()
         self.setupUi(self)
         self.setWindowTitle("LCPB AMi Image Analysis version %s"%__version__)
@@ -132,6 +135,22 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.actionautoMARCO_subwell_c.triggered.connect(lambda: self.show_autoMARCO("c"))
         self.actionautoMARCO_no_subwell.triggered.connect(lambda: self.show_autoMARCO(""))
         
+        
+        #Crystallization Screens
+        self.actionMD_PGA.triggered.connect(lambda: self.show_CrystScreen("MD-PGA"))
+        self.actionNextal_MbClassII_Suite.triggered.connect(lambda: self.show_CrystScreen("Nextal-MBClassII"))
+        self.actionNextal_Classics_Suite.triggered.connect(lambda: self.show_CrystScreen("Nextal-Classics-Suite"))
+        self.actionNextal_ClassicsII_Suite.triggered.connect(lambda: self.show_CrystScreen("Nextal-ClassicsII-Suite"))
+        self.actionNextal_PEGII_Suite.triggered.connect(lambda: self.show_CrystScreen("NeXtal-PEGs-II-Suite"))
+        self.actionNeXtal_Protein_Complex_Suite.triggered.connect(lambda: self.show_CrystScreen("NeXtal-Protein-Complex-Suite"))
+        self.actionNeXtal_Nucleix_Suite.triggered.connect(lambda: self.show_CrystScreen("NeXtal-Nucleix-Suite"))
+        self.actionJena_JCSG_Plus_Plus.triggered.connect(lambda: self.show_CrystScreen("Jena-JCSG-Plus-Plus"))
+        self.actionJBScreen_Classic_HTS_I.triggered.connect(lambda: self.show_CrystScreen("JBScreen_Classic_HTS_I"))
+        self.actionJBScreen_Classic_HTS_II.triggered.connect(lambda: self.show_CrystScreen("JBScreen_Classic_HTS_II"))
+        self.actionPi_PEG_HTS.triggered.connect(lambda: self.show_CrystScreen("Pi-PEG_HTS"))
+        
+        
+        
         self.actionQuit_2.triggered.connect(self.on_exit)
         
         self.actionCalculate_Statistics.triggered.connect(self.show_Statistics)
@@ -192,6 +211,15 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.heatmap_window.pushButton_ExportImage.clicked.connect(self.take_screenshot)
         self.heatmap_window.pushButton_Close.clicked.connect(self.heatmap_window.close)
         self.heatmap_window.show()
+
+
+    def show_CrystScreen(self, Screen):
+        self.ScreenTable=ReadScreen.MyTable(10, 10)
+        self.ScreenTable.setWindowTitle("%s"%Screen)
+        self.ScreenTable.open_sheet(Screen)
+        # self.ScreenTable.setColumnWidth(0, 100)
+        self.ScreenTable.resize(1000, 500)
+        self.ScreenTable.show()
 
 
     def show_autoMARCO(self, subwell):

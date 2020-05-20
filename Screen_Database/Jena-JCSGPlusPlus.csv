@@ -1,0 +1,99 @@
+CS-206L,Precipitant 1,Precipitant 2,Buffer,Additive 1,Additive 2,Additive 3,Additive 4
+A1,50.00 % v/v Polyethylene glycol 400,None,100 mM Sodium acetate; pH 4.5,200 mM Lithium sulfate,None,None,None
+A2,"20.00 % w/v Polyethylene glycol 3,000",None,100 mM tri-Sodium citrate; pH 5.5,None,None,None,None
+A3,"20.00 % w/v Polyethylene glycol 3,350",None,None,200 mM di-Ammonium hydrogen citrate; pH 5.0,None,None,None
+A4,"30.00 % v/v 2-Methyl-2,4-pentanediol",None,100 mM Sodium acetate; pH 4.6,20.00 mM Calcium chloride,None,None,None
+A5,"20.00 % w/v Polyethylene glycol 3,350",None,None,200 mM Magnesium formate; pH 5.9,None,None,None
+A6,"20.00 % w/v Polyethylene glycol 1,000",None,100 mM Potassium phosphate citrate; pH 4.2,200 mM Lithium sulfate,None,None,None
+A7,"20.00 % w/v Polyethylene glycol 8,000",None,100 mM CHES; pH 9.5,None,None,None,None
+A8,"20.00 % w/v Polyethylene glycol 3,350",None,None,200 mM Ammonium formate; pH 6.6,None,None,None
+A9,"20.00 % w/v Polyethylene glycol 3,350",None,None,200 mM Ammonium chloride; pH 6.3,None,None,None
+A10,"20.00 % w/v Polyethylene glycol 3,350",None,None,200 mM Potassium formate; pH 7.3,None,None,None
+A11,"50.00 % v/v 2-Methyl-2,4-pentanediol",None,100 mM TRIS; pH 8.5,200 mM Ammonium di-hydrogen phosphate,None,None,None
+A12,"20.00 % w/v Polyethylene glycol 3,350",None,None,200 mM Potassium nitrate; pH 6.9,None,None,None
+B1,None,None,100 mM tri-Sodium citrate; pH 4.0,800 mM Ammonium sulfate,None,None,None
+B2,"20.00 % w/v Polyethylene glycol 3,350",None,None,200 mM Sodium thiocyanate; pH 6.9,None,None,None
+B3,"20.00 % w/v Polyethylene glycol 6,000",None,100 mM BICINE; pH 9.0,None,None,None,None
+B4,"10.00 % w/v Polyethylene glycol 8,000",8.00 % v/v Ethylene glycol,100 mM HEPES; pH 7.5,None,None,None,None
+B5,"40.00 % v/v 2-Methyl-2,4-pentanediol","5.00 % w/v Polyethylene glycol 8,000",100 mM MES; pH 6.5,None,None,None,None
+B6,30.00 % v/v Ethanol,"5.00 % w/v Polyethylene glycol 1,000",100 mM Potassium phosphate citrate; pH 4.2,None,None,None,None
+B7,"8.00 % w/v Polyethylene glycol 4,000",None,100 mM Sodium acetate; pH 4.6,None,None,None,None
+B8,"10.00 % w/v Polyethylene glycol 8,000",None,100 mM TRIS; pH 7.0,200 mM Magnesium chloride,None,None,None
+B9,"20.00 % w/v Polyethylene glycol 6,000",None,100 mM tri-Sodium citrate; pH 5.0,None,None,None,None
+B10,50.00 % v/v Polyethylene glycol 200,None,100 mM MES; pH 6.5,200 mM Magnesium chloride,None,None,None
+B11,None,None,None,1.6 M tri-Sodium citrate,None,None,None
+B12,"20.00 % w/v Polyethylene glycol 3,350",None,None,200 mM tri-Potassium citrate; pH 8.3,None,None,None
+C1,"20.00 % w/v Polyethylene glycol 8,000",None,100 mM Potassium phosphate citrate; pH 4.2,200 mM Sodium chloride,None,None,None
+C2,"20.00 % w/v Polyethylene glycol 6,000",None,100 mM tri-Sodium citrate; pH 4.0,1.00 M Lithium chloride,None,None,None
+C3,"20.00 % w/v Polyethylene glycol 3,350",None,None,200 mM Ammonium nitrate; pH 6.3,None,None,None
+C4,"10.00 % w/v Polyethylene glycol 6,000",None,100 mM HEPES; pH 7.0,None,None,None,None
+C5,800 mM Sodium di-hydrogen phosphate,800 mM Potassium di-hydrogen phosphate,100 mM HEPES; pH 7.5,None,None,None,None
+C6,40.00 % v/v Polyethylene glycol 300,None,100 mM Potassium phosphate citrate; pH 4.2,None,None,None,None
+C7,"10.00 % w/v Polyethylene glycol 3,000",None,100 mM Sodium acetate; pH 4.5,200 mM Zinc acetate,None,None,None
+C8,20.00 % v/v Ethanol,None,100 mM TRIS; pH 8.5,None,None,None,None
+C9,"25.00 % v/v 1,2-Propanediol",10.00 % v/v Glycerol,100 mM Sodium Potassium phosphate; pH 6.2,None,None,None,None
+C10,"10.00 % w/v Polyethylene glycol 20,000","2.00 % v/v 1,4-Dioxane",100 mM BICINE; pH 9.0,None,None,None,None
+C11,None,None,100 mM Sodium acetate; pH 4.6,2.00 M Ammonium sulfate,None,None,None
+C12,"10.00 % w/v Polyethylene glycol 1,000","10.00 % w/v Polyethylene glycol 8,000",None,None,None,None,None
+D1,"24.00 % w/v Polyethylene glycol 1,500",20.00 % v/v Glycerol,None,None,None,None,None
+D2,30.00 % v/v Polyethylene glycol 400,None,100 mM HEPES; pH 7.5,200 mM Magnesium chloride,None,None,None
+D3,50.00 % v/v Polyethylene glycol 200,None,100 mM Sodium Potassium phosphate; pH 6.2,200 mM Sodium chloride,None,None,None
+D4,"30.00 % w/v Polyethylene glycol 8,000",None,100 mM Sodium acetate; pH 4.5,200 mM Lithium sulfate,None,None,None
+D5,"70.00 % v/v 2-Methyl-2,4-pentanediol",None,100 mM HEPES; pH 7.5,None,None,None,None
+D6,"20.00 % w/v Polyethylene glycol 8,000",None,100 mM TRIS; pH 8.5,200 mM Magnesium chloride,None,None,None
+D7,40.00 % v/v Polyethylene glycol 400,None,100 mM TRIS; pH 8.5,200 mM Lithium sulfate,None,None,None
+D8,"40.00 % v/v 2-Methyl-2,4-pentanediol",None,100 mM TRIS; pH 8.0,None,None,None,None
+D9,"25.5 % w/v Polyethylene glycol 4,000",15.00 % v/v Glycerol,None,170 mM Ammonium sulfate,None,None,None
+D10,40.00 % v/v Polyethylene glycol 300,None,100 mM MES; pH 6.5,200 mM Calcium acetate,None,None,None
+D11,14.00 % v/v 2-Propanol,30.00 % v/v Glycerol,70.00 mM Sodium acetate; pH 4.6,140 mM Calcium chloride,None,None,None
+D12,"16.00 % w/v Polyethylene glycol 8,000",20.00 % v/v Glycerol,None,40.00 mM Potassium di-hydrogen phosphate,None,None,None
+E1,None,None,100 mM MES; pH 6.5,1.00 M tri-Sodium citrate,None,None,None
+E2,2.00 M Ammonium sulfate,None,100 mM MES; pH 6.5,200 mM Sodium chloride,None,None,None
+E3,10.00 % v/v 2-Propanol,None,100 mM HEPES; pH 7.5,200 mM Sodium chloride,None,None,None
+E4,1.26 M Ammonium sulfate,None,100 mM TRIS; pH 8.5,200 mM Lithium sulfate,None,None,None
+E5,"40.00 % v/v 2-Methyl-2,4-pentanediol",None,100 mM CAPS; pH 10.5,None,None,None,None
+E6,"20.00 % w/v Polyethylene glycol 3,000",None,100 mM Imidazole; pH 8.0,200 mM Zinc acetate,None,None,None
+E7,10.00 % v/v 2-Propanol,None,100 mM MES; pH 6.5,200 mM Zinc acetate,None,None,None
+E8,None,None,100 mM Sodium acetate; pH 4.5,1.00 M di-Ammonium hydrogen phosphate,None,None,None
+E9,None,None,100 mM MES; pH 6.5,1.6 M Magnesium sulfate,None,None,None
+E10,"10.00 % w/v Polyethylene glycol 6,000",None,100 mM BICINE; pH 9.0,None,None,None,None
+E11,"14.4 % w/v Polyethylene glycol 8,000",20.00 % v/v Glycerol,80.00 mM MES; pH 6.5,160 mM Calcium acetate,None,None,None
+E12,"10.00 % w/v Polyethylene glycol 8,000",None,100 mM Imidazole; pH 8.0,None,None,None,None
+F1,30.00 % v/v Jeffamine® M-600,None,100 mM MES; pH 6.5,50.00 mM Cesium chloride,None,None,None
+F2,None,None,100 mM tri-Sodium citrate; pH 5.0,3.15 M Ammonium sulfate,None,None,None
+F3,"20.00 % v/v 2-Methyl-2,4-pentanediol",None,100 mM TRIS; pH 8.0,None,None,None,None
+F4,20.00 % v/v Jeffamine® M-600,None,100 mM HEPES; pH 7.5,None,None,None,None
+F5,50.00 % v/v Ethylene glycol,None,100 mM TRIS; pH 8.5,200 mM Magnesium chloride,None,None,None
+F6,"10.00 % v/v 2-Methyl-2,4-pentanediol",None,100 mM BICINE; pH 9.0,None,None,None,None
+F7,None,None,None,800 mM di-Sodium succinate; pH 7.0,None,None,None
+F8,None,None,None,2.1 M di-Sodium DL-malate; pH 7.0,None,None,None
+F9,None,None,None,2.4 M di-Sodium malonate; pH 7.0,None,None,None
+F10,0.5 % w/v Jeffamine® ED-2001; pH 7.0,None,100 mM HEPES; pH 7.0,1.1 M di-Sodium malonate; pH 7.0,None,None,None
+F11,"1.00 % w/v Polyethylene glycol monomethyl ether 2,000",None,100 mM HEPES; pH 7.0,1.00 M di-Sodium succinate; pH 7.0,None,None,None
+F12,30.00 % v/v Jeffamine® M-600; pH 7.0,None,100 mM HEPES; pH 7.0,None,None,None,None
+G1,30.00 % w/v Jeffamine® ED-2001; pH 7.0,None,100 mM HEPES; pH 7.0,None,None,None,None
+G2,"22.00 % w/v Poly(acrylic acid sodium salt) 5,100",None,100 mM HEPES; pH 7.5,20.00 mM Magnesium chloride,None,None,None
+G3,20.00 % w/v Polyvinylpyrrolidone K15,None,100 mM TRIS; pH 8.5,100 mM Cobalt (II) chloride,None,None,None
+G4,"20.00 % v/v Polyethylene glycol monomethyl ether 2,000",None,100 mM TRIS; pH 8.5,200 mM Trimethylamine N-oxide,None,None,None
+G5,"12.00 % w/v Polyethylene glycol 3,350",None,100 mM HEPES; pH 7.5,5.00 mM Cobalt (II) chloride,5.00 mM Cadmium chloride,5.00 mM Nickel (II) chloride,5.00 mM Magnesium chloride
+G6,"20.00 % w/v Polyethylene glycol 3,350",None,None,200 mM di-Sodium malonate; pH 7.0,None,None,None
+G7,"15.00 % w/v Polyethylene glycol 3,350",None,None,100 mM di-Sodium succinate; pH 7.0,None,None,None
+G8,"20.00 % w/v Polyethylene glycol 3,350",None,None,150 mM di-Sodium DL-malate; pH 7.0,None,None,None
+G9,"30.00 % w/v Polyethylene glycol monomethyl ether 2,000",None,None,100 mM Potassium thiocyanate,None,None,None
+G10,"30.00 % w/v Polyethylene glycol monomethyl ether 2,000",None,None,150 mM Potassium bromide,None,None,None
+G11,None,None,100 mM BIS-TRIS; pH 5.5,2.00 M Ammonium sulfate,None,None,None
+G12,None,None,100 mM BIS-TRIS; pH 5.5,3.00 M Sodium chloride,None,None,None
+H1,None,None,100 mM BIS-TRIS; pH 5.5,300 mM Magnesium formate,None,None,None
+H2,"1.00 % w/v Polyethylene glycol 3,350",None,100 mM BIS-TRIS; pH 5.5,1.00 M Ammonium sulfate,None,None,None
+H3,"25.00 % w/v Polyethylene glycol 3,350",None,100 mM BIS-TRIS; pH 5.5,None,None,None,None
+H4,"45.00 % v/v 2-Methyl-2,4-pentanediol",None,100 mM BIS-TRIS; pH 5.5,200 mM Calcium chloride,None,None,None
+H5,"45.00 % v/v 2-Methyl-2,4-pentanediol",None,100 mM BIS-TRIS; pH 5.5,200 mM Ammonium acetate,None,None,None
+H6,"17.00 % w/v Polyethylene glycol 10,000",None,100 mM BIS-TRIS; pH 5.5,100 mM Ammonium acetate,None,None,None
+H7,"25.00 % w/v Polyethylene glycol 3,350",None,100 mM BIS-TRIS; pH 5.5,200 mM Ammonium sulfate,None,None,None
+H8,"25.00 % w/v Polyethylene glycol 3,350",None,100 mM BIS-TRIS; pH 5.5,200 mM Sodium chloride,None,None,None
+H9,"25.00 % w/v Polyethylene glycol 3,350",None,100 mM BIS-TRIS; pH 5.5,200 mM Lithium sulfate,None,None,None
+H10,"25.00 % w/v Polyethylene glycol 3,350",None,100 mM BIS-TRIS; pH 5.5,200 mM Ammonium acetate,None,None,None
+H11,"25.00 % w/v Polyethylene glycol 3,350",None,100 mM BIS-TRIS; pH 5.5,200 mM Magnesium chloride,None,None,None
+H12,"45.00 % v/v 2-Methyl-2,4-pentanediol",None,100 mM HEPES; pH 7.5,200 mM Ammonium acetate,None,None,None
+ ,,,,,,,
+Version,0002,,,,,,

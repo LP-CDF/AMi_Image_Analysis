@@ -1,0 +1,97 @@
+Number,Well,Salt 1,Salt 2,Buffer ,Precipitant ,final pH
+1,A1,0.1 M Lithium sulfate ,,0.1 M Sodium acetate pH 4.6 ,1.0 M Ammonium phosphate ,"4,6"
+2,A2, , ,0.1 M tri-Sodium citrate pH 5.6 ,1.0 M Ammonium phosphate ,"5,6"
+3,H, , ,0.1 M TRIS pH 8.5 ,2.0 M Ammonium phosphate ,"8,5"
+4,A4, , ,0.1 M Sodium acetate pH 4.6 ,2.0 M Ammonium sulfate ,
+5,A5, , ,0.1 M ADA pH 6.5 ,1.0 M Ammonium sulfate ,
+6,A6, , ,,2.0 M Ammonium sulfate ,
+7,A7, , ,0.1 M TRIS pH 8.5 ,2.0 M Ammonium sulfate ,
+8,A8, ,,0.1 M tri-Sodium citrate pH 5.5,2.5 M Ammonium sulfate ,
+9,A9, ,,0.1 M MES pH 6.5,2.5 M Ammonium sulfate ,
+10,A10, ,,0.1 M HEPES sodium salt pH 7.5,2.5 M Ammonium sulfate ,
+11,A11,2.0 M Ammonium sulfate ,,0.1 M HEPES sodium salt pH 7.5 ,2 %(v/v) PEG 400,
+12,A12,1.0 M di-Ammonium phosphate/Ammonium dihydrogen phosphate, ,,,"6,5"
+13,B1,0.5 M di-Sodium phosphate ,0.1 M Ammonium sulfate , ,0.5 M di-Potassium phosphate,"7,5"
+14,B2, ,,0.1 M TRIS pH 8.5,1.5 M Lithium sulfate,
+15,B3, , ,0.1 M HEPES sodium salt pH 7.5 ,1.5 M Lithium sulfate ,
+16,B4, , ,0.1 M Sodium acetate pH 4.6 ,1.0 M Magnesium sulfate ,"4,6"
+17,B5, , ,0.1 M tri-Sodium citrate pH 5.6 ,1.0 M Magnesium sulfate ,"5,6"
+18,B6,0.1 M Lithium sulfate , ,0.1 M ADA pH 6.5 ,1.0 M Magnesium sulfate,"6,5"
+19,B7,0.1 M Sodium chloride ,,0.1 M tri-Sodium citrate pH 5.5,30 %(v/v) PEG 400,
+20,B8,,,0.1 M MES pH 6.5,30 %(v/v) PEG 400,
+21,B9,0.1 M Sodium chloride ,,0.1 M MES pH 6.5,30 %(v/v) PEG 400,
+22,B10,,,0.1 M MOPS pH 7.0,30 %(v/v) PEG 400,
+23,B11,0.1 M Sodium chloride ,,0.1 M MOPS pH 7.0,30 %(v/v) PEG 400,
+24,B12,,,0.1 M HEPES sodium salt pH 7.5,30 %(v/v) PEG 400,
+25,C1,0.1 M Sodium chloride ,,0.1 M HEPES sodium salt pH 7.5,30 %(v/v) PEG 400,
+26,C2,0.1 M Sodium chloride ,,0.1 M TRIS pH 8.5,30 %(v/v) PEG 400,
+27,C3,0.1 M Lithium sulfate,0.1 M Sodium chloride ,0.1 M tri-Sodium citrate pH 3.5,30 %(v/v) PEG 400,
+28,C4,0.1 M Lithium sulfate,0.1 M Sodium chloride ,0.1 M tri-Sodium citrate pH 5.5,30 %(v/v) PEG 400,
+29,C5,0.1 M Lithium sulfate,0.1 M Sodium chloride ,0.1 M MES pH 6.5,30 %(v/v) PEG 400,
+30,C6,0.1 M Lithium sulfate,0.1 M Sodium chloride ,0.1 M HEPES sodium salt pH 7.5,30 %(v/v) PEG 400,
+31,C7,0.1 M Lithium sulfate,0.1 M Sodium chloride ,0.1 M TRIS pH 8.5,30 %(v/v) PEG 400,
+32,C8,0.1 M Lithium sulfate,0.1 M Sodium chloride ,0.1 M CAPSO pH 9.5,30 %(v/v) PEG 400,
+33,C9,0.1 M Magnesium chloride,0.1 M Sodium chloride ,0.1 M Sodium acetate pH 4.5,30 %(v/v) PEG 400,
+34,C10,0.1 M Magnesium chloride,0.1 M Sodium chloride ,0.1 M tri-Sodium citrate pH 5.5,30 %(v/v) PEG 400,
+35,C11,0.1 M Magnesium chloride,0.1 M Sodium chloride ,0.1 M MES pH 6.5,30 %(v/v) PEG 400,
+36,C12,0.1 M Magnesium chloride,0.1 M Sodium chloride ,0.1 M HEPES sodium salt pH 7.5,30 %(v/v) PEG 400,
+37,D1,0.1 M Magnesium chloride,0.1 M Sodium chloride ,0.1 M TRIS pH 8.5,30 %(v/v) PEG 400,
+38,D2,0.1 M Magnesium chloride,0.1 M Sodium chloride ,0.1 M CAPSO pH 9.5,30 %(v/v) PEG 400,
+39,D3,0.1 M Magnesium chloride , ,0.1 M Sodium acetate pH 4.6 ,30 %(v/v) PEG 400 ,
+40,D4,0.1 M Sodium chloride , ,0.1 M tri-Sodium citrate pH 5.6 ,30 %(v/v) PEG 400 ,"5,6"
+41,D5,0.1 M Lithium sulfate , ,0.1 M tri-Sodium citrate pH 5.6 ,30 %(v/v) PEG 400 ,"5,6"
+42,D6,0.3 M Lithium sulfate , ,0.1 M ADA pH 6.5 ,30 %(v/v) PEG 400 ,"6,5"
+43,D7,0.1 M Magnesium chloride , ,0.1 M HEPES sodium salt pH 7.5 ,30 %(v/v) PEG 400 ,
+44,D8,0.1 M Ammonium sulfate , ,0.1 M HEPES sodium salt pH 7.5 ,30 %(v/v) PEG 400 ,
+45,D9,0.2 M tri-Sodium citrate , ,0.1 M TRIS pH 8.5 ,30 %(v/v) PEG 400 ,"8,5"
+46,D10,0.1 M Sodium chloride ,,0.1 M tri-Sodium citrate pH 5.5,12 %(w/v) PEG 4000,
+47,D11,,,0.1 M MES pH 6.5,12 %(w/v) PEG 4000,
+48,D12,0.1 M Sodium chloride ,,0.1 M MES pH 6.5,12 %(w/v) PEG 4000,
+49,E1,,,0.1 M MOPS pH 7.0,12 %(w/v) PEG 4000,
+50,E2,0.1 M Sodium chloride ,,0.1 M MOPS pH 7.0,12 %(w/v) PEG 4000,
+51,E3,,,0.1 M HEPES sodium salt pH 7.5,12 %(w/v) PEG 4000,
+52,E4,0.1 M Sodium chloride ,,0.1 M HEPES sodium salt pH 7.5,12 %(w/v) PEG 4000,
+53,E5,0.1 M Sodium chloride ,,0.1 M TRIS pH 8.5,12 %(w/v) PEG 4000,
+54,E6,0.1 M Lithium sulfate,0.1 M Sodium chloride ,0.1 M Sodium acetate pH 4.5,12 %(w/v) PEG 4000,
+55,E7,0.1 M Lithium sulfate,0.1 M Sodium chloride ,0.1 M tri-Sodium citrate pH 5.5,12 %(w/v) PEG 4000,
+56,E8,0.1 M Lithium sulfate,0.1 M Sodium chloride ,0.1 M MES pH 6.5,12 %(w/v) PEG 4000,
+57,E9,0.1 M Lithium sulfate,0.1 M Sodium chloride ,0.1 M HEPES sodium salt pH 7.5,12 %(w/v) PEG 4000,
+58,E10,0.1 M Lithium sulfate,0.1 M Sodium chloride ,0.1 M TRIS pH 8.5,12 %(w/v) PEG 4000,
+59,E11,0.1 M Lithium sulfate,0.1 M Sodium chloride ,0.1 M CAPSO pH 9.5,12 %(w/v) PEG 4000,
+60,E12,0.1 M Magnesium chloride,0.1 M Sodium chloride ,0.1 M tri-Sodium citrate pH 3.5,12 %(w/v) PEG 4000,
+61,F1,0.1 M Magnesium chloride,0.1 M Sodium chloride ,0.1 M tri-Sodium citrate pH 5.5,12 %(w/v) PEG 4000,
+62,F2,0.1 M Magnesium chloride,0.1 M Sodium chloride ,0.1 M MES pH 6.5,12 %(w/v) PEG 4000,
+63,F3,0.1 M Magnesium chloride,0.1 M Sodium chloride ,0.1 M HEPES sodium salt pH 7.5,12 %(w/v) PEG 4000,
+64,F4,0.1 M Magnesium chloride,0.1 M Sodium chloride ,0.1 M TRIS pH 8.5,12 %(w/v) PEG 4000,
+65,F5,0.1 M Magnesium chloride,0.1 M Sodium chloride ,0.1 M CAPSO pH 9.5,12 %(w/v) PEG 4000,
+66,F6,0.1 M Zinc acetate , ,0.1 M Sodium acetate pH 4.6 ,12 %(w/v) PEG 4000 ,"4,6"
+67,F7,0.2 M Ammonium sulfate , ,0.1 M Sodium acetate pH 4.6 ,12 %(w/v) PEG 4000 ,
+68,F8, , ,0.1 M Sodium acetate pH 4.6 ,12 %(w/v) PEG 4000 ,
+69,F9,0.1 M Lithium sulfate, ,0.1 M tri-Sodium citrate pH 5.6 ,12 %(w/v) PEG 4000 ,"5,6"
+70,F10,0.1 M Sodium chloride , ,0.1 M tri-Sodium citrate pH 5.6 ,12 %(w/v) PEG 4000 ,"5,6"
+71,F11,0.1 M Lithium sulfate, ,0.1 M ADA pH 6.5 ,12 %(w/v) PEG 4000 ,
+72,F12,0.1 M Sodium chloride , ,0.1 M HEPES sodium salt pH 7.5 ,12 %(w/v) PEG 4000 ,
+73,G1,0.1 M Ammonium sulfate , ,0.1 M HEPES sodium salt pH 7.5 ,12 %(w/v) PEG 4000 ,
+74,G2,0.2 M Magnesium chloride , ,0.1 M TRIS pH 8.5 ,12 %(w/v) PEG 4000 ,
+75,G3,0.2 M Lithium sulfate, ,0.1 M TRIS pH 8.5 ,12 %(w/v) PEG 4000 ,
+76,G4,0.2 M Ammonium sulfate , , ,12 %(w/v) PEG 4000 ,
+77,G5,0.1 M Sodium chloride , ,0.1 M Sodium acetate pH 4.6 ,12 %(w/v) PEG 6000 ,
+78,G6,0.1 M Magnesium chloride , ,0.1 M Sodium acetate pH 4.6 ,12 %(w/v) PEG 6000 ,
+79,G7,0.1 M Magnesium chloride , ,0.1 M ADA pH 6.5 ,12 %(w/v) PEG 6000 ,"6,5"
+80,G8,0.1 M di-Ammonium phosphate , ,0.1 M TRIS pH 8.5 ,12 %(w/v) PEG 6000 ,
+81,G9,1.0 M Lithium sulfate, , ,2 %(w/v) PEG 8000 ,
+82,G10,0.2 M Sodium acetate, ,0.1 M MES pH 6.5 ,10 %(w/v) PEG 8000 ,
+83,G11,0.2 M Zinc acetate , ,0.1 M Imidazole pH 6.5 ,10 %(w/v) PEG 8000 ,
+84,G12,0.2 M Calcium acetate , ,0.1 M MES pH 6.5 ,10 %(w/v) PEG 8000 ,
+85,H1, , ,0.1 M TRIS pH 8.5 ,10 %(w/v) PEG 8000 ,
+86,H2,0.2 M Ammonium sulfate ,, ,10 %(w/v) PEG 8000 ,
+87,H3,0.5 M Lithium sulfate ,, ,10 %(w/v) PEG 8000 ,
+88,H4, ,,0.1 M HEPES sodium salt pH 7.5,1.5 M Potassium phosphate,
+89,H5, ,,0.1 M TRIS pH 8.5,1.5 M Potassium phosphate,
+90,H6, ,,0.1 M HEPES sodium salt pH 7.5 ,1.0 M Potassium/Sodium tartrate ,
+91,H7, ,,0.1 M MES pH 6.5 ,1.4 M Sodium acetate ,
+92,H8, ,,0.1 M HEPES sodium salt pH 7.5 ,1.4 M tri-Sodium citrate ,"7,5"
+93,H9, ,, ,2.0 M Sodium formate ,"4,6"
+94,H10, ,, ,4.0 M Sodium formate ,
+95,H11, ,,0.1 M tri-Sodium citrate pH 5.5,1.5 M Sodium phosphate,
+96,H12,,,0.1 M MES pH 6.5,1.5 M Sodium phosphate,
