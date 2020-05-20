@@ -12,7 +12,8 @@ from pathlib import Path
 
 from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
 
-ScreenFile={'MD-PGA':'Md1-51_pga_screen.csv', 
+ScreenFile={'MD-PGA':'Md1-51_pga_screen.csv',
+            'MD_PACT_Premier':'Md1-36_PACT_Premier_HT.csv',
             'Nextal-MBClassII': 'NeXtal-MbClass-II-Suite.csv',
             'Nextal-Classics-Suite': 'NeXtal-Classics-Suite.csv',
             'Nextal-ClassicsII-Suite': 'NeXtal-ClassicsII-Suite.csv',
@@ -25,8 +26,7 @@ ScreenFile={'MD-PGA':'Md1-51_pga_screen.csv',
             'JBScreen_Classic_HTS_II':'JBScreen_Classic_HTS_II.csv',
             'Pi-PEG_HTS':'Jena-Pi-PEG_Screen_HTS.csv',
             'HR-PEGRx_HT_screen':'HR-PEGRx_HT_screen.csv',
-            'HR-SaltRx_HT_screen':'HR-SaltRx_HT_screen.csv',
-            'MD_PACT_Premier':'Md1-36_PACT_Premier_HT.csv'}
+            'HR-SaltRx_HT_screen':'HR-SaltRx_HT_screen.csv'}
 
 class MyTable(QTableWidget):
     def __init__(self, r, c):

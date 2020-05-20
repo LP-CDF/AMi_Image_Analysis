@@ -95,7 +95,7 @@ Added Screens Tables to quickly check crystallization conditions. Crystallizatio
 The software was tested on:
 * linux CentOS 7 (PyQt5 (v5.9.2 and v5.12.1) and python3 (v3.6.8 and v3.7.3))
 * Raspbian 10 (on a Pi 3B+, not recommended)
-* macOS HighSierra
+* macOS HighSierra and Catalina
 
 Hopefully, it should work on other linux distributions, MacOS and Windows.
 You will need a screen with minimum resolution of **1920*1080**.
