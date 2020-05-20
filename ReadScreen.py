@@ -19,10 +19,14 @@ ScreenFile={'MD-PGA':'Md1-51_pga_screen.csv',
             'NeXtal-PEGs-II-Suite':'NeXtal-PEGs-II-Suite.csv',
             'NeXtal-Protein-Complex-Suite':'NeXtal-Protein-Complex-Suite.csv',
             'NeXtal-Nucleix-Suite':'NeXtal-Nucleix-Suite.csv',
+            'NeXtal-JCSG-Plus-Suite':'NeXtal-JCSG-Plus-Suite.csv',
             'Jena-JCSG-Plus-Plus':'Jena-JCSGPlusPlus.csv',
             'JBScreen_Classic_HTS_I':'JBScreen_Classic_HTS_I.csv',
             'JBScreen_Classic_HTS_II':'JBScreen_Classic_HTS_II.csv',
-            'Pi-PEG_HTS':'Jena-Pi-PEG_Screen_HTS.csv'}
+            'Pi-PEG_HTS':'Jena-Pi-PEG_Screen_HTS.csv',
+            'HR-PEGRx_HT_screen':'HR-PEGRx_HT_screen.csv',
+            'HR-SaltRx_HT_screen':'HR-SaltRx_HT_screen.csv',
+            'MD_PACT_Premier':'Md1-36_PACT_Premier_HT.csv'}
 
 class MyTable(QTableWidget):
     def __init__(self, r, c):

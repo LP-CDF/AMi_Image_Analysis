@@ -33,7 +33,7 @@ import preferences as pref
 
 __version__ = "1.2.2"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "18-05-2020"
+__date__ = "20-05-2020"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -65,7 +65,7 @@ licence: %s
 class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
         super(ViewerModule, self).__init__(parent)
-        self.app_path=os.path.abspath(os.path.dirname(sys.argv[0]))
+        # self.app_path=os.path.abspath(os.path.dirname(sys.argv[0]))
         # print("self.app_path ", self.app_path)
         self.ui=Ui_MainWindow()
         self.setupUi(self)
@@ -148,8 +148,10 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.actionJBScreen_Classic_HTS_I.triggered.connect(lambda: self.show_CrystScreen("JBScreen_Classic_HTS_I"))
         self.actionJBScreen_Classic_HTS_II.triggered.connect(lambda: self.show_CrystScreen("JBScreen_Classic_HTS_II"))
         self.actionPi_PEG_HTS.triggered.connect(lambda: self.show_CrystScreen("Pi-PEG_HTS"))
-        
-        
+        self.actionPeg_Rx1Rx2.triggered.connect(lambda: self.show_CrystScreen("HR-PEGRx_HT_screen"))
+        self.actionSaltRx.triggered.connect(lambda: self.show_CrystScreen("HR-SaltRx_HT_screen"))
+        self.actionMD_PACT_Premier.triggered.connect(lambda: self.show_CrystScreen("MD_PACT_Premier"))
+        self.actionNextal_JCSG_Plus.triggered.connect(lambda: self.show_CrystScreen("NeXtal-JCSG-Plus-Suite"))
         
         self.actionQuit_2.triggered.connect(self.on_exit)
         

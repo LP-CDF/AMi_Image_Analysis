@@ -1,0 +1,99 @@
+,,[Additive/Salt,,Additive/Salt/,,[Additive/Salt,,Additive/Salt/,[Additive/Salt,,Additive/Salt/,,,,,,,,,,,,
+Reagent,Well,Volatile Organic/,Conc.,Volatile Organic/,pH,Volatile Organic/,Conc.,Volatile Organic/,Volatile Organic/,Conc.,Volatile Organic/,[Buffer],[Buffer],Buffer,pH,[Polymer],[Polymer],Polymer,pH,Average,Average,Average,
+#,#,Polyol] #1,units,Polyol #1,,Polyol] #2,units,Polyol #2,Polyol] #3,units,Polyol #3,,units,,,,units,,,pH,Ref. Index,Conductivity,
+1,A1,,,,,,,,,,,0.1,M,Citric acid ,3.5,34,% v/v,Polyethylene glycol 200,,4.5,1.38335,2075,µS/cm
+2,A2,,,,,,,,,,,0.1,M,Sodium citrate tribasic dihydrate ,5.5,38,% v/v,Polyethylene glycol 200,,6.7,1.39194,4.1,mS/cm
+3,A3,,,,,,,,,,,0.1,M,HEPES ,7.5,42,% v/v,Polyethylene glycol 200,,7.5,1.39566,617.5,µS/cm
+4,A4,,,,,,,,,,,0.1,M,Sodium acetate trihydrate ,4.5,30,% v/v,Polyethylene glycol 300,,5.3,1.37789,3.6,mS/cm
+5,A5,,,,,,,,,,,0.1,M,BIS-TRIS ,6.5,25,% v/v,Polyethylene glycol 300,,6.5,1.37292,2338.5,µS/cm
+6,A6,,,,,,,,,,,0.1,M,BICINE ,8.5,20,% v/v,Polyethylene glycol 300,,8.6,1.36853,2020,µS/cm
+7,A7,,,,,,,,,,,0.1,M,Sodium acetate trihydrate ,"4,0",15,% v/v,Polyethylene glycol 400,,4.5,1.35636,6.3,mS/cm
+8,A8,,,,,,,,,,,0.1,M,MES monohydrate ,"6,0",22,% v/v,Polyethylene glycol 400,,"6,0",1.36771,1186.5,µS/cm
+9,A9,,,,,,,,,,,0.1,M,Tris ,"8,0",30,% v/v,Polyethylene glycol 400,,8.1,1.37973,2100,µS/cm
+10,A10,,,,,,,,,,,0.1,M,Sodium citrate tribasic dihydrate ,"5,0",30,% v/v,Polyethylene glycol monomethyl ether 550,,"6,0",1.38038,5.9,mS/cm
+11,A11,,,,,,,,,,,0.1,M,Imidazole ,"7,0",25,% v/v,Polyethylene glycol monomethyl ether 550,,6.8,1.37045,"3,0",mS/cm
+12,A12,,,,,,,,,,,0.1,M,BIS-TRIS propane ,"9,0",20,% v/v,Polyethylene glycol monomethyl ether 550,,"9,0",1.36682,2531,µS/cm
+13,B1,,,,,,,,,,,0.1,M,Sodium acetate trihydrate ,"4,0",10,% v/v,Jeffamine® M-600®,7,4.1,1.34953,15.7,mS/cm
+14,B2,,,,,,,,,,,0.1,M,MES monohydrate ,"6,0",20,% v/v,Jeffamine® M-600®,7,5.7,1.36663,13.1,mS/cm
+15,B3,,,,,,,,,,,0.1,M,Tris ,"8,0",30,% v/v,Jeffamine® M-600®,7,7.6,1.38133,14.2,mS/cm
+16,B4,,,,,,,,,,,0.1,M,Citric acid ,3.5,14,% w/v,Polyethylene glycol 1.000,,4.1,1.35495,4.3,mS/cm
+17,B5,,,,,,,,,,,0.1,M,Sodium citrate tribasic dihydrate ,5.5,22,% w/v,Polyethylene glycol 1.000,,6.2,1.37232,8.4,mS/cm
+18,B6,,,,,,,,,,,0.1,M,HEPES ,7.5,30,% w/v,Polyethylene glycol 1.000,,7.6,1.37774,875.5,µS/cm
+19,B7,,,,,,,,,,,0.1,M,Sodium acetate trihydrate ,4.5,30,% w/v,Polyethylene glycol 1.500,,5.2,1.37516,3.6,mS/cm
+20,B8,,,,,,,,,,,0.1,M,BIS-TRIS ,6.5,20,% w/v,Polyethylene glycol 1.500,,6.5,1.36388,2795,µS/cm
+21,B9,,,,,,,,,,,0.1,M,BICINE ,8.5,15,% w/v,Polyethylene glycol 1.500,,8.6,1.35615,2323,µS/cm
+22,B10,,,,,,,,,,,0.1,M,Sodium acetate trihydrate ,"4,0",10,% w/v,Polyethylene glycol monomethyl ether 2.000,,4.4,1.348,7.5,mS/cm
+23,B11,,,,,,,,,,,0.1,M,MES monohydrate ,"6,0",20,% w/v,Polyethylene glycol monomethyl ether 2.000,,"6,0",1.36315,1244.5,µS/cm
+24,B12,,,,,,,,,,,0.1,M,Tris ,"8,0",30,% w/v,Polyethylene glycol monomethyl ether 2.000,,8.1,1.3763,2174.5,µS/cm
+25,C1,,,,,,,,,,,0.1,M,Sodium citrate tribasic dihydrate ,"5,0",30,% v/v,Jeffamine® ED-2001,7,5.7,1.38156,12.8,mS/cm
+26,C2,,,,,,,,,,,0.1,M,Imidazole ,"7,0",20,% v/v,Jeffamine® ED-2001,7,6.7,1.36386,10.1,mS/cm
+27,C3,,,,,,,,,,,0.1,M,BIS-TRIS propane ,"9,0",10,% v/v,Jeffamine® ED-2001,7,8.7,1.35273,7.8,mS/cm
+28,C4,,,,,,,,,,,0.1,M,Citric acid ,3.5,25,% w/v,Polyethylene glycol 3.350,,4.3,1.37024,2813.5,µS/cm
+29,C5,,,,,,,,,,,0.1,M,Sodium citrate tribasic dihydrate ,5.5,18,% w/v,Polyethylene glycol 3.350,,6.2,1.36226,9.6,mS/cm
+30,C6,,,,,,,,,,,0.1,M,HEPES ,7.5,12,% w/v,Polyethylene glycol 3.350,,7.4,1.35318,1644,µS/cm
+31,C7,,,,,,,,,,,0.1,M,Sodium acetate trihydrate ,"4,0",10,% w/v,Polyethylene glycol 4.000,,4.3,1.34804,7.5,mS/cm
+32,C8,,,,,,,,,,,0.1,M,MES monohydrate ,"6,0",14,% w/v,Polyethylene glycol 4.000,,"6,0",1.35506,1495,µS/cm
+33,C9,,,,,,,,,,,0.1,M,Tris ,"8,0",28,% w/v,Polyethylene glycol 4.000,,8.1,1.37382,2311,µS/cm
+34,C10,,,,,,,,,,,0.1,M,Sodium acetate trihydrate ,4.5,30,% w/v,Polyethylene glycol monomethyl ether 5.000,,5.2,1.37556,3.5,mS/cm
+35,C11,,,,,,,,,,,0.1,M,BIS-TRIS ,6.5,20,% w/v,Polyethylene glycol monomethyl ether 5.000,,6.5,1.36396,2729.5,µS/cm
+36,C12,,,,,,,,,,,0.1,M,BICINE ,8.5,8,% w/v,Polyethylene glycol monomethyl ether 5.000,,8.6,1.34673,2743,µS/cm
+37,D1,,,,,,,,,,,0.1,M,Sodium citrate tribasic dihydrate ,"5,0",10,% w/v,Polyethylene glycol 6.000,,5.6,1.35194,14.1,mS/cm
+38,D2,,,,,,,,,,,0.1,M,Imidazole ,"7,0",20,% w/v,Polyethylene glycol 6.000,,6.9,1.36219,3.6,mS/cm
+39,D3,,,,,,,,,,,0.1,M,BIS-TRIS propane ,"9,0",30,% w/v,Polyethylene glycol 6.000,,9.1,1.38015,1780.5,µS/cm
+40,D4,,,,,,,,,,,0.1,M,Citric acid ,3.5,28,% w/v,Polyethylene glycol 8.000,,4.4,1.37573,2342,µS/cm
+41,D5,,,,,,,,,,,0.1,M,Sodium citrate tribasic dihydrate ,5.5,16,% w/v,Polyethylene glycol 8.000,,6.1,1.35955,10.4,mS/cm
+42,D6,,,,,,,,,,,0.1,M,HEPES ,7.5,4,% w/v,Polyethylene glycol 8.000,,7.4,1.34247,2082.5,µS/cm
+43,D7,,,,,,,,,,,0.1,M,Sodium acetate trihydrate ,4.5,10,% w/v,Polyethylene glycol 10.000,,4.7,1.34804,6.9,mS/cm
+44,D8,,,,,,,,,,,0.1,M,BIS-TRIS ,6.5,16,% w/v,Polyethylene glycol 10.000,,6.5,1.35871,3.2,mS/cm
+45,D9,,,,,,,,,,,0.1,M,BICINE ,8.5,20,% w/v,Polyethylene glycol 10.000,,8.7,1.36346,1860,µS/cm
+46,D10,,,,,,,,,,,0.1,M,Sodium citrate tribasic dihydrate ,"5,0",18,% w/v,Polyethylene glycol 20.000,,5.7,1.36254,10.4,mS/cm
+47,D11,,,,,,,,,,,0.1,M,Imidazole ,"7,0",12,% w/v,Polyethylene glycol 20.000,,6.9,1.35112,4.6,mS/cm
+48,D12,,,,,,,,,,,0.1,M,BIS-TRIS propane ,"9,0",8,% w/v,Polyethylene glycol 20.000,,"9,0",1.34909,3.8,mS/cm
+49,E1,0.8,M,Lithium sulfate monohydrate,,,,,,,,0.1,M,Sodium acetate trihydrate ,"4,0",4,% v/v,Polyethylene glycol 200,,3.9,1.35396,59.1,mS/cm
+50,E2,0.2,M,Lithium sulfate monohydrate,,,,,,,,0.1,M,Sodium citrate tribasic dihydrate ,"5,0",26,% v/v,Polyethylene glycol 200,,5.5,1.37724,14.3,mS/cm
+51,E3,0.05,M,Calcium chloride dihydrate,,,,,,,,0.1,M,MES monohydrate ,"6,0",45,% v/v,Polyethylene glycol 200,,"6,0",1.40008,2255,µS/cm
+52,E4,28,% v/v,2-Propanol,,,,,,,,0.1,M,BIS-TRIS ,6.5,3,% v/v,Polyethylene glycol 200,,6.3,1.36062,1992.5,µS/cm
+53,E5,20,% v/v,Tacsimate ,"7,0",,,,,,,0.1,M,HEPES ,7.5,2,% v/v,Polyethylene glycol 200,,7.5,1.35601,"59,0",mS/cm
+54,E6,10,% v/v,2-Propanol,,,,,,,,0.1,M,Sodium citrate tribasic dihydrate ,"5,0",26,% v/v,Polyethylene glycol 400,,6.1,1.38341,4.8,mS/cm
+55,E7,0.2,M,Ammonium acetate,,,,,,,,0.1,M,Sodium citrate tribasic dihydrate ,5.5,24,% v/v,Polyethylene glycol 400,,6.4,1.37472,12.8,mS/cm
+56,E8,0.2,M,Ammonium sulfate,,,,,,,,0.1,M,BIS-TRIS ,6.5,18,% v/v,Polyethylene glycol 400,,6.6,1.36717,"20,0",mS/cm
+57,E9,,,,,,,,,,,0.1,M,HEPES ,7.5,40,% v/v,Polyethylene glycol 400,,7.6,1.39659,572.5,mS/cm
+58,E10,6,% v/v,2-Propanol,,,,,,,,0.1,M,Sodium acetate trihydrate ,4.5,26,% v/v,Polyethylene glycol monomethyl ether 550,,5.3,1.3762,3.2,mS/cm
+59,E11,1.8,M,Ammonium sulfate,,,,,,,,0.1,M,BIS-TRIS ,6.5,2,% v/v,Polyethylene glycol monomethyl ether 550,,"7,0",1.37249,190.2,mS/cm
+60,E12,0.15,M,DL-Malic acid ,"7,0",,,,,,,0.1,M,Imidazole ,"7,0",22,% v/v,Polyethylene glycol monomethyl ether 550,,"7,0",1.37037,11.2,mS/cm
+61,F1,0.1,M,Succinic acid ,"7,0",,,,,,,0.1,M,BICINE ,8.5,30,% v/v,Polyethylene glycol monomethyl ether 550,,8.4,1.38192,5.3,mS/cm
+62,F2,0.1,M,Lithium sulfate monohydrate,,,,,,,,0.1,M,Sodium citrate tribasic dihydrate ,5.5,20,% w/v,Polyethylene glycol 1.000,,"6,0",1.36638,13.8,mS/cm
+63,F3,0.1,M,Sodium malonate ,"8,0",,,,,,,0.1,M,Tris ,"8,0",30,% w/v,Polyethylene glycol 1.000,,8.2,1.37848,6.7,mS/cm
+64,F4,4,% v/v,(+/-)-2-Methyl-2.4-pentanediol,,,,,,,,0.1,M,Citric acid ,3.5,20,% w/v,Polyethylene glycol 1.500,,4.2,1.36882,"3,0",mS/cm
+65,F5,0.2,M,L-Proline,,,,,,,,0.1,M,HEPES ,7.5,24,% w/v,Polyethylene glycol 1.500,,7.5,1.37377,1041.5,µS/cm
+66,F6,10,% v/v,2-Propanol,,,,,,,,0.1,M,BICINE ,8.5,30,% w/v,Polyethylene glycol 1.500,,8.8,1.38421,899.5,µS/cm
+67,F7,0.1,M,Sodium chloride,,,,,,,,0.1,M,BIS-TRIS propane ,"9,0",25,% w/v,Polyethylene glycol 1.500,,9.1,1.37387,6.6,mS/cm
+68,F8,0.02,M,Nickel(II) chloride hexahydrate,,0.02,M,Magnesium chloride hexahydrate,0.02,M,Cadmium chloride hydrate,0.1,M,Sodium acetate trihydrate ,4.5,24,% w/v     ,Polyethylene glycol monomethyl ether 2.000,,4.9,1.36905,7.9,mS/cm
+69,F9,20,% v/v,2-Propanol,,,,,,,,0.1,M,MES monohydrate ,"6,0",20,% w/v,Polyethylene glycol monomethyl ether 2.000,,6.1,1.37708,678.5,µS/cm
+70,F10,0.2,M,Ammonium citrate tribasic ,"7,0",,,,,,,0.1,M,Imidazole ,"7,0",20,% w/v,Polyethylene glycol monomethyl ether 2.000,,7.1,1.37093,22.2,mS/cm
+71,F11,"4,0",M,Potassium formate,,,,,,,,0.1,M,BIS-TRIS propane ,"9,0",2,% w/v,Polyethylene glycol monomethyl ether 2.000,,9.7,1.37,219.3,mS/cm
+72,F12,50,% v/v,Tacsimate ,"4,0",,,,,,,0.1,M,Sodium acetate trihydrate ,4.5,1,% w/v,Polyethylene glycol 3.350,,4.1,1.36375,70.3,mS/cm
+73,G1,0.10,% w/v,n-Octyl-β-D-glucoside,,,,,,,,0.1,M,Sodium citrate tribasic dihydrate ,5.5,22,% w/v,Polyethylene glycol 3.350,,6.2,1.36764,8.1,mS/cm
+74,G2,2,% v/v,Tacsimate ,"7,0",5,% v/v,2-Propanol,,,,0.1,M,Imidazole ,"7,0",8,% w/v     ,Polyethylene glycol 3.350,,7.1,1.34895,10.4,mS/cm
+75,G3,2,% v/v,1.4-Dioxane,,,,,,,,0.1,M,Tris ,"8,0",15,% w/v,Polyethylene glycol 3.350,,"8,0",1.39484,3.5,mS/cm
+76,G4,18,% v/v,2-Propanol,,,,,,,,0.1,M,Sodium citrate tribasic dihydrate ,5.5,20,% w/v,Polyethylene glycol 4.000,,6.5,1.3777,4.1,mS/cm
+77,G5,6,% v/v,Tacsimate ,"6,0",,,,,,,0.1,M,MES monohydrate ,"6,0",25,% w/v,Polyethylene glycol 4.000,,6.2,1.3751,10.8,mS/cm
+78,G6,0.2,M,Magnesium formate dihydrate,,,,,,,,0.1,M,Sodium acetate trihydrate ,"4,0",18,% w/v,Polyethylene glycol monomethyl ether 5.000,,4.8,1.36312,"16,0",mS/cm
+79,G7,2,% v/v,Polyethylene glycol 400,,,,,,,,0.1,M,Imidazole ,"7,0",24,% w/v,Polyethylene glycol monomethyl ether 5.000,,6.9,1.37061,"3,0",mS/cm
+80,G8,0.2,M,Sodium formate,,,,,,,,0.1,M,BICINE ,8.5,20,% w/v,Polyethylene glycol monomethyl ether 5.000,,8.5,1.36456,10.1,mS/cm
+81,G9,4,% v/v,2-Propanol,,,,,,,,0.1,M,BIS-TRIS propane ,"9,0",20,% w/v,Polyethylene glycol monomethyl ether 5.000,,9.1,1.36864,2255,µS/cm
+82,G10,6,% v/v,Ethylene glycol,,,,,,,,0.1,M,Citric acid ,3.5,10,% w/v,Polyethylene glycol 6.000,,"4,0",1.3561,4.2,mS/cm
+83,G11,0.15,M,Lithium sulfate monohydrate,,,,,,,,0.1,M,Citric acid ,3.5,18,% w/v,Polyethylene glycol 6.000,,3.8,1.36349,12.3,mS/cm
+84,G12,10,% v/v,2-Propanol,,,,,,,,0.1,M,Sodium acetate trihydrate ,"4,0",22,% w/v,Polyethylene glycol 6.000,,4.8,1.37185,3.7,mS/cm
+85,H1,0.2,M,Sodium chloride,,,,,,,,0.1,M,Sodium acetate trihydrate ,"4,0",22,% w/v,Polyethylene glycol 8.000,,4.5,1.36671,"15,0",mS/cm
+86,H2,20,% v/v,2-Propanol,,,,,,,,0.1,M,Tris ,"8,0",5,% w/v,Polyethylene glycol 8.000,,"8,0",1.35655,2546,µS/cm
+87,H3,10,% v/v,Polyethylene glycol 200,,,,,,,,0.1,M,BIS-TRIS propane ,"9,0",18,% w/v,Polyethylene glycol 8.000,,9.1,1.37702,1982,µS/cm
+88,H4,15,% v/v,2-Propanol,,,,,,,,0.1,M,Sodium citrate tribasic dihydrate ,"5,0",10,% w/v,Polyethylene glycol 10.000,,5.8,1.36175,"8,0",mS/cm
+89,H5,0.4,M,Sodium malonate ,"6,0",,,,,,,0.1,M,MES monohydrate ,"6,0",0.5,% w/v,Polyethylene glycol 10.000,,"6,0",1.3462,42.4,mS/cm
+90,H6,0.2,M,Potassium sodium tartrate tetrahydrate,,,,,,,,0.1,M,BIS-TRIS ,6.5,10,% w/v,Polyethylene glycol 10.000,,6.7,1.35649,"22,0",mS/cm
+91,H7,5,% v/v,(+/-)-2-Methyl-2.4-pentanediol,,,,,,,,0.1,M,HEPES ,7.5,10,% w/v,Polyethylene glycol 10.000,,7.4,1.35714,1479,µS/cm
+92,H8,0.2,M,Ammonium acetate,,,,,,,,0.1,M,Tris ,"8,0",16,% w/v,Polyethylene glycol 10.000,,"8,0",1.35967,13.1,mS/cm
+93,H9,5,% v/v,2-Propanol,,,,,,,,0.1,M,Citric acid ,3.5,6,% w/v,Polyethylene glycol 20.000,,"4,0",1.34768,4.7,mS/cm
+94,H10,"1,0",M,Sodium malonate ,"5,0",,,,,,,0.1,M,Sodium acetate trihydrate ,4.5,2,% w/v,Polyethylene glycol 20.000,,"5,0",1.35702,65.6,mS/cm
+95,H11,0.2,M,Magnesium chloride hexahydrate,,,,,,,,0.1,M,Sodium citrate tribasic dihydrate ,"5,0",10,% w/v,Polyethylene glycol 20.000,,4.2,1.35532,30.7,mS/cm
+96,H12,3,% w/v,Dextran sulfate sodium salt,,,,,,,,0.1,M,BICINE ,8.5,15,% w/v,Polyethylene glycol 20.000,,8.2,1.35963,5.9,mS/cm

@@ -1,0 +1,97 @@
+Well #,Conc1,Units1,Salt 1,Conc2,Units2,Buffer2,pH,Conc3,Units3,Precipitant3
+A1,,,,0.1,M,SPG,4,25,% w/v,PEG 1500
+A2,,,,0.1,M,SPG,5,25,% w/v,PEG 1500
+A3,,,,0.1,M,SPG,6,25,% w/v,PEG 1500
+A4,,,,0.1,M,SPG,7,25,% w/v,PEG 1500
+A5,,,,0.1,M,SPG,8,25,% w/v,PEG 1500
+A6,,,,0.1,M,SPG,9,25,% w/v,PEG 1500
+A7,0.2,M,Sodium chloride,0.1,M,Sodium acetate,5,20,% w/v,PEG 6000
+A8,0.2,M,Ammonium chloride,0.1,M,Sodium acetate,5,20,% w/v,PEG 6000
+A9,0.2,M,Lithium chloride,0.1,M,Sodium acetate,5,20,% w/v,PEG 6000
+A10,0.2,M,Magnesium chloride hexahydrate,0.1,M,Sodium acetate,5,20,% w/v,PEG 6000
+A11,0.2,M,Calcium chloride dihydrate,0.1,M,Sodium acetate,5,20,% w/v,PEG 6000
+A12,0.01,M,Zinc chloride,0.1,M,Sodium acetate,5,20,% w/v,PEG 6000
+B1,,,,0.1,M,MIB,4,25,% w/v,PEG 1500
+B2,,,,0.1,M,MIB,5,25,% w/v,PEG 1500
+B3,,,,0.1,M,MIB,6,25,% w/v,PEG 1500
+B4,,,,0.1,M,MIB,7,25,% w/v,PEG 1500
+B5,,,,0.1,M,MIB,8,25,% w/v,PEG 1500
+B6,,,,0.1,M,MIB,9,25,% w/v,PEG 1500
+B7,0.2,M,Sodium chloride,0.1,M,MES,6,20,% w/v,PEG 6000
+B8,0.2,M,Ammonium chloride,0.1,M,MES,6,20,% w/v,PEG 6000
+B9,0.2,M,Lithium chloride,0.1,M,MES,6,20,% w/v,PEG 6000
+B10,0.2,M,Magnesium chloride hexahydrate,0.1,M,MES,6,20,% w/v,PEG 6000
+B11,0.2,M,Calcium chloride dihydrate,0.1,M,MES,6,20,% w/v,PEG 6000
+B12,0.01,M,Zinc chloride,0.1,M,MES,6,20,% w/v,PEG 6000
+C1,,,,0.1,M,PCTP,4,25,% w/v,PEG 1500
+C2,,,,0.1,M,PCTP,5,25,% w/v,PEG 1500
+C3,,,,0.1,M,PCTP,6,25,% w/v,PEG 1500
+C4,,,,0.1,M,PCTP,7,25,% w/v,PEG 1500
+C5,,,,0.1,M,PCTP,8,25,% w/v,PEG 1500
+C6,,,,0.1,M,PCTP,9,25,% w/v,PEG 1500
+C7,0.2,M,Sodium chloride,0.1,M,HEPES,7,20,% w/v,PEG 6000
+C8,0.2,M,Ammonium chloride,0.1,M,HEPES,7,20,% w/v,PEG 6000
+C9,0.2,M,Lithium chloride,0.1,M,HEPES,7,20,% w/v,PEG 6000
+C10,0.2,M,Magnesium chloride hexahydrate,0.1,M,HEPES,7,20,% w/v,PEG 6000
+C11,0.2,M,Calcium chloride hexahydrate,0.1,M,HEPES,7,20,% w/v,PEG 6000
+C12,0.01,M,Zinc chloride,0.1,M,HEPES,7,20,% w/v,PEG 6000
+D1,,,,0.1,M,MMT,4,25,% w/v,PEG 1500
+D2,,,,0.1,M,MMT,5,25,% w/v,PEG 1500
+D3,,,,0.1,M,MMT,6,25,% w/v,PEG 1500
+D4,,,,0.1,M,MMT,7,25,% w/v,PEG 1500
+D5,,,,0.1,M,MMT,8,25,% w/v,PEG 1500
+D6,,,,0.1,M,MMT,9,25,% w/v,PEG 1500
+D7,0.2,M,Sodium chloride,0.1,M,Tris,8,20,% w/v,PEG 6000
+D8,0.2,M,Ammonium chloride,0.1,M,Tris,8,20,% w/v,PEG 6000
+D9,0.2,M,Lithium chloride,0.1,M,Tris,8,20,% w/v,PEG 6000
+D10,0.2,M,Magnesium chloride hexahydrate,0.1,M,Tris,8,20,% w/v,PEG 6000
+D11,0.2,M,Calcium chloride dihydrate,0.1,M,Tris,8,20,% w/v,PEG 6000
+D12,"0,002",M,Zinc chloride,0.1,M,Tris,8,20,% w/v,PEG 6000
+E1,0.2,M,Sodium fluoride,,,,,20,% w/v,PEG 3350
+E2,0.2,M,Sodium bromide,,,,,20,% w/v,PEG 3350
+E3,0.2,M,Sodium iodide,,,,,20,% w/v,PEG 3350
+E4,0.2,M,Potassium thiocyanate,,,,,20,% w/v,PEG 3350
+E5,0.2,M,Sodium nitrate,,,,,20,% w/v,PEG 3350
+E6,0.2,M,Sodium formate,,,,,20,% w/v,PEG 3350
+E7,0.2,M,Sodium acetate trihydrate,,,,,20,% w/v,PEG 3350
+E8,0.2,M,Sodium sulfate,,,,,20,% w/v,PEG 3350
+E9,0.2,M,Potassium sodium tartrate tetrahydrate,,,,,20,% w/v,PEG 3350
+E10,0.02,M,Sodium/potassium phosphate,,,,,20,% w/v,PEG 3350
+E11,0.2,M,Sodium citrate tribasic dihydrate,,,,,20,% w/v,PEG 3350
+E12,0.2,M,Sodium malonate dibasic monohydrate,,,,,20,% w/v,PEG 3350
+F1,0.2,M,Sodium fluoride,0.1,M,Bis-Tris propane,6.5,20,% w/v,PEG 3350
+F2,0.2,M,Sodium bromide,0.1,M,Bis-Tris propane,6.5,20,% w/v,PEG 3350
+F3,0.2,M,Sodium iodide,0.1,M,Bis-Tris propane,6.5,20,% w/v,PEG 3350
+F4,0.2,M,Potassium thiocyanate,0.1,M,Bis-Tris propane,6.5,20,% w/v,PEG 3350
+F5,0.2,M,Sodium nitrate,0.1,M,Bis-Tris propane,6.5,20,% w/v,PEG 3350
+F6,0.2,M,Sodium formate,0.1,M,Bis-Tris propane,6.5,20,% w/v,PEG 3350
+F7,0.2,M,Sodium acetate trihydrate,0.1,M,Bis-Tris propane,6.5,20,% w/v,PEG 3350
+F8,0.2,M,Sodium sulfate,0.1,M,Bis-Tris propane,6.5,20,% w/v,PEG 3350
+F9,0.2,M,Potassium sodium tartrate tetrahydrate,0.1,M,Bis-Tris propane,6.5,20,% w/v,PEG 3350
+F10,0.02,M,Sodium/potassium phosphate,0.1,M,Bis-Tris propane,6.5,20,% w/v,PEG 3350
+F11,0.2,M,Sodium citrate tribasic dihydrate,0.1,M,Bis-Tris propane,6.5,20,% w/v,PEG 3350
+F12,0.2,M,Sodium malonate dibasic monohydrate,0.1,M,Bis-Tris propane,6.5,20,% w/v,PEG 3350
+G1,0.2,M,Sodium fluoride,0.1,M,Bis-Tris propane,7.5,20,% w/v,PEG 3350
+G2,0.2,M,Sodium bromide,0.1,M,Bis-Tris propane,7.5,20,% w/v,PEG 3350
+G3,0.2,M,Sodium iodide,0.1,M,Bis-Tris propane,7.5,20,% w/v,PEG 3350
+G4,0.2,M,Potassium thiocyanate,0.1,M,Bis-Tris propane,7.5,20,% w/v,PEG 3350
+G5,0.2,M,Sodium nitrate,0.1,M,Bis-Tris propane,7.5,20,% w/v,PEG 3350
+G6,0.2,M,Sodium formate,0.1,M,Bis-Tris propane,7.5,20,% w/v,PEG 3350
+G7,0.2,M,Sodium acetate trihydrate,0.1,M,Bis-Tris propane,7.5,20,% w/v,PEG 3350
+G8,0.2,M,Sodium sulfate,0.1,M,Bis-Tris propane,7.5,20,% w/v,PEG 3350
+G9,0.2,M,Potassium sodium tartrate tetrahydrate,0.1,M,Bis-Tris propane,7.5,20,% w/v,PEG 3350
+G10,0.02,M,Sodium/potassium phosphate,0.1,M,Bis-Tris propane,7.5,20,% w/v,PEG 3350
+G11,0.2,M,Sodium citrate tribasic dihydrate,0.1,M,Bis-Tris propane,7.5,20,% w/v,PEG 3350
+G12,0.2,M,Sodium malonate dibasic monohydrate,0.1,M,Bis-Tris propane,7.5,20,% w/v,PEG 3350
+H1,0.2,M,Sodium fluoride,0.1,M,Bis-Tris propane,8.5,20,% w/v,PEG 3350
+H2,0.2,M,Sodium bromide,0.1,M,Bis-Tris propane,8.5,20,% w/v,PEG 3350
+H3,0.2,M,Sodium iodide,0.1,M,Bis-Tris propane,8.5,20,% w/v,PEG 3350
+H4,0.2,M,Potassium thiocyanate,0.1,M,Bis-Tris propane,8.5,20,% w/v,PEG 3350
+H5,0.2,M,Sodium nitrate,0.1,M,Bis-Tris propane,8.5,20,% w/v,PEG 3350
+H6,0.2,M,Sodium formate,0.1,M,Bis-Tris propane,8.5,20,% w/v,PEG 3350
+H7,0.2,M,Sodium acetate trihydrate,0.1,M,Bis-Tris propane,8.5,20,% w/v,PEG 3350
+H8,0.2,M,Sodium sulfate,0.1,M,Bis-Tris propane,8.5,20,% w/v,PEG 3350
+H9,0.2,M,Potassium sodium tartrate tetrahydrate,0.1,M,Bis-Tris propane,8.5,20,% w/v,PEG 3350
+H10,0.02,M,Sodium/potassium phosphate,0.1,M,Bis-Tris propane,8.5,20,% w/v,PEG 3350
+H11,0.2,M,Sodium citrate tribasic dihydrate,0.1,M,Bis-Tris propane,8.5,20,% w/v,PEG 3350
+H12,0.2,M,Sodium malonate dibasic monohydrate,0.1,M,Bis-Tris propane,8.5,20,% w/v,PEG 3350
