@@ -33,7 +33,7 @@ import preferences as pref
 
 __version__ = "1.2.2"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "20-05-2020"
+__date__ = "22-05-2020"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -389,7 +389,9 @@ The GUI will not be responsive during processing.''')
             return
         
         nproc=multiprocessing.cpu_count()
-        # nproc=4
+        #To Fix multiprocessing issue with OSX Catalina
+        if sys.platform=='darwin'and multiprocessing.get_start_method()!='forkserver':
+            multiprocessing.set_start_method('forkserver')
 
         # rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
         cols = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
@@ -450,11 +452,6 @@ Please load the merged images located in: \n {path}''')
     Phase Separation= %s
     Other= %s
     
-    Note:
-    If a filter is activated (ie Clear, Crystal...)
-    it is recommended to use the arrows to navigate
-    and use the spacebar to display the selected
-    well.
         '''%(QKeySequence(shortcut.MoveUp).toString(),
         QKeySequence(shortcut.MoveDown).toString(),
         QKeySequence(shortcut.MoveLeft).toString(),

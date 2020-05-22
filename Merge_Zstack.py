@@ -310,6 +310,9 @@ if __name__ == '__main__':
         sys.exit()
     
     nproc=multiprocessing.cpu_count()
+    #To Fix multiprocessing issue with OSX Catalina
+    if sys.platform=='darwin'and multiprocessing.get_start_method()!='forkserver':
+        multiprocessing.set_start_method('forkserver')
     
     Ext=[".tif",".tiff",".TIFF",".jpg", ".jpeg",".JPG",".JPEG",".png",".PNG"]
 
