@@ -11,6 +11,8 @@ Please read this carefully before proceeding.
     You will need a screen with minimum resolution of 1920*1080.
 
     Download the latest released version and gunzip it or clone this repository with
+    wget https://github.com/LP-CDF/AMi_Image_Analysis/archive/vX.X.X.tar.gz .
+    or
     git clone https://github.com/LP-CDF/AMi_Image_Analysis AMi_Image_Analysis
 
     Dependencies:

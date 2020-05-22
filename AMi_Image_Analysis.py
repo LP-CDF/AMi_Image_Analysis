@@ -218,10 +218,13 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
     def show_CrystScreen(self, Screen):
         self.ScreenTable=ReadScreen.MyTable(10, 10)
         self.ScreenTable.setWindowTitle("%s"%Screen)
-        self.ScreenTable.open_sheet(Screen)
+        data=self.ScreenTable.open_sheet(Screen)
         # self.ScreenTable.setColumnWidth(0, 100)
         self.ScreenTable.resize(1000, 500)
-        self.ScreenTable.show()
+        if data is not False:
+            self.ScreenTable.show()
+        else:
+            self.handle_error("WARNING: File %s not found in database"%ReadScreen.ScreenFile[Screen])
 
 
     def show_autoMARCO(self, subwell):
