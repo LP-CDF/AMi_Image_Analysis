@@ -33,7 +33,7 @@ import preferences as pref
 
 __version__ = "1.2.2"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "22-05-2020"
+__date__ = "25-05-2020"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -82,6 +82,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.scrollArea_Timeline.setWidget(timeline_widget)
         self._timlay = QGridLayout(timeline_widget)
         
+        self.os=sys.platform
         self.files = []
         self.well_images = []
         self.directory = str
@@ -393,8 +394,8 @@ The GUI will not be responsive during processing.''')
         
         nproc=multiprocessing.cpu_count()
         #To Fix multiprocessing issue with OSX Catalina
-        if sys.platform=='darwin'and multiprocessing.get_start_method()!='forkserver':
-            multiprocessing.set_start_method('forkserver')
+        if self.os=='darwin'and multiprocessing.get_start_method()!='forkserver':
+            multiprocessing.set_start_method('forkserver', force=True)
 
         # rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
         cols = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
@@ -676,9 +677,13 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             except StopIteration:
                 self._timer.stop()
                 self.progressBar.setValue(vmax)
-        #line below to initialise self.VisiblesIdx
-        self.FilterClassification(self._lay,"All")
-        self.radioButton_All.setChecked(True)
+        
+        #line below to reset Filter to All or reset self.VisiblesIdx (due to issue with OSX)
+        if self.os=='darwin':
+            self.SetAllVisible()
+        else:
+            self.radioButton_All.setChecked(True)
+            # self.SetAllVisible()
 
 
     def add_pixmap(self, layout, pixmap, x, y):
@@ -926,20 +931,41 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         self.classifications[well]=classification
 
 
+    def SetAllVisible(self):
+        '''Specific to OSX due to crash when opening new dir
+        (error in self.radioButton_All.setChecked(True) more
+         specifically in function FilterClassification)'''
+        radiobuttonlist=[self.verticalLayout,self.verticalLayout_2,self.verticalLayout_3]
+        self.VisiblesIdx.clear()
+        for widget_item in self.layout_widgets(self._lay):
+            widget = widget_item.widget()
+            self.VisiblesIdx.append(self._lay.indexOf(widget))
+        
+        for layout in radiobuttonlist:
+            for widget_item in self.layout_widgets(layout):
+                widget = widget_item.widget()
+                if widget.isChecked() is True:
+                    widget.setAutoExclusive(False)
+                    widget.setChecked(False)
+                widget.setAutoExclusive(True)
+        
+        if self.radioButton_Unsorted.isChecked() is True:
+            self.radioButton_Unsorted.setAutoExclusive(False)
+            self.radioButton_Unsorted.setChecked(False)
+            self.radioButton_Unsorted.setAutoExclusive(True)
+
+
     def FilterClassification(self, layout, classification):
         self.VisiblesIdx.clear() #Clear before modification
         for widget_item in self.layout_widgets(layout):
             widget = widget_item.widget()
             if self.classifications[widget.text()]==classification:
-#                widget.setEnabled(True)
                 widget.setVisible(True)
                 self.VisiblesIdx.append(layout.indexOf(widget))
             elif classification=="All":
-#                widget.setEnabled(True)
                 widget.setVisible(True)
                 self.VisiblesIdx.append(layout.indexOf(widget))
             else:
-#                widget.setEnabled(False)
                 widget.setVisible(False)
 #            print("well ",widget.text(), "dico Classif ", self.classifications[widget.text()])
         # print("Visibles", self.VisiblesIdx)
@@ -1153,6 +1179,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             self.radioButton_ScorePhaseSep.setChecked(True)
         elif event.key()==shortcut.Other:
             self.radioButton_ScoreOther.setChecked(True)
+
 
     def Calculate_Statistics(self):
         '''Calculate statistics for plate'''
