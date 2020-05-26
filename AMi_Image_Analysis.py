@@ -7,7 +7,7 @@ Created on Wed Nov 27 13:57:18 2019
 """
 
 from gui import Ui_MainWindow
-import os, sys
+import os, sys, platform
 import re
 import csv
 import math
@@ -678,12 +678,11 @@ https://github.com/LP-CDF/AMi_Image_Analysis
                 self._timer.stop()
                 self.progressBar.setValue(vmax)
         
-        #line below to reset Filter to All or reset self.VisiblesIdx (due to issue with OSX)
-        if self.os=='darwin':
+        #line below to reset Filter to All or reset self.VisiblesIdx (due to issue with OSX Catalina)
+        if self.os=='darwin' and platform.release()>"17.7.0":
             self.SetAllVisible()
         else:
             self.radioButton_All.setChecked(True)
-            # self.SetAllVisible()
 
 
     def add_pixmap(self, layout, pixmap, x, y):
@@ -932,7 +931,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
 
 
     def SetAllVisible(self):
-        '''Specific to OSX due to crash when opening new dir
+        '''Specific to OSX Catalina due to crash when opening new dir
         (error in self.radioButton_All.setChecked(True) more
          specifically in function FilterClassification)'''
         radiobuttonlist=[self.verticalLayout,self.verticalLayout_2,self.verticalLayout_3]
@@ -941,18 +940,18 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             widget = widget_item.widget()
             self.VisiblesIdx.append(self._lay.indexOf(widget))
         
-        for layout in radiobuttonlist:
-            for widget_item in self.layout_widgets(layout):
-                widget = widget_item.widget()
-                if widget.isChecked() is True:
-                    widget.setAutoExclusive(False)
-                    widget.setChecked(False)
-                widget.setAutoExclusive(True)
-        
-        if self.radioButton_Unsorted.isChecked() is True:
-            self.radioButton_Unsorted.setAutoExclusive(False)
-            self.radioButton_Unsorted.setChecked(False)
-            self.radioButton_Unsorted.setAutoExclusive(True)
+        # for layout in radiobuttonlist:
+        #     for widget_item in self.layout_widgets(layout):
+        #         widget = widget_item.widget()
+        #         if widget.isChecked() is True:
+        #             widget.setAutoExclusive(False)
+        #             widget.setChecked(False)
+        #         widget.setAutoExclusive(True)        
+        # if self.radioButton_Unsorted.isChecked() is True:
+        #     self.radioButton_Unsorted.setAutoExclusive(False)
+        #     self.radioButton_Unsorted.setChecked(False)
+        #     self.radioButton_Unsorted.setAutoExclusive(True)
+        # self.radioButton_All.setChecked(True)
 
 
     def FilterClassification(self, layout, classification):
@@ -1370,7 +1369,6 @@ class HeatMapGrid(QtWidgets.QDialog, HeatMap_Grid.Ui_Dialog):
 
             
 if __name__ == "__main__":
-    import sys
     app = QtWidgets.QApplication(sys.argv)
     app.setStyle(QStyleFactory.create('Fusion'))
     MainWindow = ViewerModule()
