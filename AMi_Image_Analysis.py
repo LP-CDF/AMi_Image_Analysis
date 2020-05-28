@@ -148,6 +148,10 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.actionJena_JCSG_Plus_Plus.triggered.connect(lambda: self.show_CrystScreen("Jena-JCSG-Plus-Plus"))
         self.actionJBScreen_Classic_HTS_I.triggered.connect(lambda: self.show_CrystScreen("JBScreen_Classic_HTS_I"))
         self.actionJBScreen_Classic_HTS_II.triggered.connect(lambda: self.show_CrystScreen("JBScreen_Classic_HTS_II"))
+        self.actionJBScreen_Classic_1_4.triggered.connect(lambda: self.show_CrystScreen("JBScreen_Classic_1-4"))
+        self.actionJBScreen_Classic_5_8.triggered.connect(lambda: self.show_CrystScreen("JBScreen_Classic_5-8"))
+        
+        
         self.actionPi_PEG_HTS.triggered.connect(lambda: self.show_CrystScreen("Pi-PEG_HTS"))
         self.actionPeg_Rx1Rx2.triggered.connect(lambda: self.show_CrystScreen("HR-PEGRx_HT_screen"))
         self.actionSaltRx.triggered.connect(lambda: self.show_CrystScreen("HR-SaltRx_HT_screen"))
@@ -934,12 +938,12 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         '''Specific to OSX Catalina due to crash when opening new dir
         (error in self.radioButton_All.setChecked(True) more
          specifically in function FilterClassification)'''
-        radiobuttonlist=[self.verticalLayout,self.verticalLayout_2,self.verticalLayout_3]
         self.VisiblesIdx.clear()
         for widget_item in self.layout_widgets(self._lay):
             widget = widget_item.widget()
             self.VisiblesIdx.append(self._lay.indexOf(widget))
-        
+
+        # radiobuttonlist=[self.verticalLayout,self.verticalLayout_2,self.verticalLayout_3]        
         # for layout in radiobuttonlist:
         #     for widget_item in self.layout_widgets(layout):
         #         widget = widget_item.widget()

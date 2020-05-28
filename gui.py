@@ -402,6 +402,10 @@ class Ui_MainWindow(object):
         self.actionMD_PACT_Premier.setObjectName("actionMD_PACT_Premier")
         self.actionNextal_JCSG_Plus = QtWidgets.QAction(MainWindow)
         self.actionNextal_JCSG_Plus.setObjectName("actionNextal_JCSG_Plus")
+        self.actionJBScreen_Classic_1_4 = QtWidgets.QAction(MainWindow)
+        self.actionJBScreen_Classic_1_4.setObjectName("actionJBScreen_Classic_1_4")
+        self.actionJBScreen_Classic_5_8 = QtWidgets.QAction(MainWindow)
+        self.actionJBScreen_Classic_5_8.setObjectName("actionJBScreen_Classic_5_8")
         self.menuFile.addAction(self.openFile)
         self.menuFile.addAction(self.openDir)
         self.menuFile.addAction(self.actionExport_to_PDF)
@@ -427,6 +431,8 @@ class Ui_MainWindow(object):
         self.menuNextal.addAction(self.actionNeXtal_Nucleix_Suite)
         self.menuNextal.addAction(self.actionNextal_PEGII_Suite)
         self.menuNextal.addAction(self.actionNeXtal_Protein_Complex_Suite)
+        self.menuJena_Bioscience.addAction(self.actionJBScreen_Classic_1_4)
+        self.menuJena_Bioscience.addAction(self.actionJBScreen_Classic_5_8)
         self.menuJena_Bioscience.addAction(self.actionJBScreen_Classic_HTS_I)
         self.menuJena_Bioscience.addAction(self.actionJBScreen_Classic_HTS_II)
         self.menuJena_Bioscience.addAction(self.actionJena_JCSG_Plus_Plus)
@@ -529,6 +535,8 @@ class Ui_MainWindow(object):
         self.actionSaltRx.setText(_translate("MainWindow", "SaltRx"))
         self.actionMD_PACT_Premier.setText(_translate("MainWindow", "MD PACT Premier"))
         self.actionNextal_JCSG_Plus.setText(_translate("MainWindow", "Nextal JCSG Plus"))
+        self.actionJBScreen_Classic_1_4.setText(_translate("MainWindow", "JBScreen Classic 1-4"))
+        self.actionJBScreen_Classic_5_8.setText(_translate("MainWindow", "JBScreen Classic 5-8"))
 
 
 

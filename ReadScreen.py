@@ -24,6 +24,8 @@ ScreenFile={'MD-PGA':'Md1-51_pga_screen.csv',
             'Jena-JCSG-Plus-Plus':'Jena-JCSGPlusPlus.csv',
             'JBScreen_Classic_HTS_I':'JBScreen_Classic_HTS_I.csv',
             'JBScreen_Classic_HTS_II':'JBScreen_Classic_HTS_II.csv',
+            'JBScreen_Classic_1-4':'JBScreen_Classic_1-4.csv',
+            'JBScreen_Classic_5-8':'JBScreen_Classic_5-8.csv',
             'Pi-PEG_HTS':'Jena-Pi-PEG_Screen_HTS.csv',
             'HR-PEGRx_HT_screen':'HR-PEGRx_HT_screen.csv',
             'HR-SaltRx_HT_screen':'HR-SaltRx_HT_screen.csv'}
