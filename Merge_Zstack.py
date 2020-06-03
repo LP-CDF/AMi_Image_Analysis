@@ -244,7 +244,9 @@ def align(images, iterations = 1, epsilon = 1e-10):
     def _get_homography(image_1, image_2):
         warp_matrix = np.eye(3, 3, dtype=np.float32)
         criteria = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, iterations, epsilon)
-        _, homography = cv2.findTransformECC(image_1, image_2, warp_matrix, cv2.MOTION_HOMOGRAPHY, criteria)
+        _, homography = cv2.findTransformECC(image_1, image_2, warp_matrix, cv2.MOTION_HOMOGRAPHY, criteria) #OK with openCV 4.0.1
+        # Needed Changes for openCV 4.2 below
+        # _, homography = cv2.findTransformECC(image_1, image_2, warp_matrix, cv2.MOTION_HOMOGRAPHY, criteria, None,5)
         return homography
 
     def _warp(image, shape, homography):
@@ -310,9 +312,10 @@ if __name__ == '__main__':
         sys.exit()
     
     nproc=multiprocessing.cpu_count()
+    # nproc=1
     #To Fix multiprocessing issue with OSX Catalina
     if sys.platform=='darwin'and multiprocessing.get_start_method()!='forkserver':
-        multiprocessing.set_start_method('forkserver')
+        multiprocessing.set_start_method('forkserver', force=True)
     
     Ext=[".tif",".tiff",".TIFF",".jpg", ".jpeg",".JPG",".JPEG",".png",".PNG"]
 
@@ -342,7 +345,7 @@ if __name__ == '__main__':
     args=[]
     for i in total_wells:
         arg=i, order, directory, outputpath
-        args.append(arg)   
+        args.append(arg)
         
     njobs=len(args)
     if njobs > nproc and nproc !=1 : number_processes=nproc-1
@@ -353,6 +356,7 @@ if __name__ == '__main__':
     pool = multiprocessing.Pool(number_processes)
     results=[pool.apply_async(MERGE_Zstack, arg) for arg in args]
     pool.close(); pool.join()
+    # MERGE_Zstack(A_wells, order, directory, outputpath)
     time_end=time.perf_counter()
     
     print(f"\nOperation performed in {time_end - time_start:0.2f} seconds")

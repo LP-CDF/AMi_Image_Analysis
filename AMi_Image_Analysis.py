@@ -29,6 +29,7 @@ import StatisticsDialog
 import Merge_Zstack
 import ReadScreen
 import preferences as pref
+import cv2
 
 
 __version__ = "1.2.2"
@@ -432,7 +433,7 @@ The GUI will not be responsive during processing.''')
         results=[pool.apply_async(Merge_Zstack.MERGE_Zstack, arg) for arg in args]
         pool.close(); pool.join()
         time_end=time.perf_counter()        
-        # print(f"\nOperation performed in {time_end - time_start:0.2f} seconds")
+
             
         self.informationDialog(f'''
 Operation performed in {time_end - time_start:0.2f} seconds.
@@ -686,6 +687,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         if self.os=='darwin' and platform.release()>"17.7.0":
             self.SetAllVisible()
         else:
+            self.SetAllVisible()
             self.radioButton_All.setChecked(True)
 
 
