@@ -31,3 +31,15 @@ deactivate'''%(python_path, activate_venv))
 
 st = os.stat(file_path)
 os.chmod(file_path, st.st_mode |  stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
+
+#Change shebang Merge_Zstack.py
+file_path=Path(app_path).joinpath("Merge_Zstack.py")
+with open(file_path, 'r') as f:
+    lines=f.readlines()
+lines[0]="#!"+ python_path+'/python \n'
+
+with open(file_path, 'w') as f:    
+    for l in lines: f.write(l)
+
+st = os.stat(file_path)
+os.chmod(file_path, st.st_mode |  stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
