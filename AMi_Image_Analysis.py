@@ -17,7 +17,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import QPixmap, QFont, QColor, QKeySequence
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True) #enable highdpi scaling
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True) #use highdpi icons
-from PyQt5.QtWidgets import (QLabel, QTableWidgetItem, QFileDialog,
+from PyQt5.QtWidgets import (QLabel, QTableWidgetItem, QFileDialog, QSplashScreen,
     QMessageBox, QGridLayout,QStyleFactory, QProgressDialog, QInputDialog, QLineEdit)
 
 from utils import ensure_directory
@@ -29,12 +29,11 @@ import StatisticsDialog
 import Merge_Zstack
 import ReadScreen
 import preferences as pref
-import cv2
 
 
 __version__ = "1.2.2"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "25-05-2020"
+__date__ = "16-06-2020"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -66,8 +65,9 @@ licence: %s
 class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
         super(ViewerModule, self).__init__(parent)
-        # self.app_path=os.path.abspath(os.path.dirname(sys.argv[0]))
+        self.app_path=os.path.abspath(os.path.dirname(sys.argv[0]))
         # print("self.app_path ", self.app_path)
+        self.SplashScreen(2500)
         self.ui=Ui_MainWindow()
         self.setupUi(self)
         self.setWindowTitle("LCPB AMi Image Analysis version %s"%__version__)
@@ -113,6 +113,14 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.MARCO_window={}
                 
         self.initUI()
+
+    def SplashScreen(self, ms):
+        '''ms is the time in ms to show splash screen'''
+        _image=Path(self.app_path).joinpath("SplashScreen.png")
+        self.splash=QSplashScreen(QPixmap(str(_image)))
+        self.splash.show()
+        QtCore.QTimer.singleShot(ms, self.splash.close)
+        
 
     def initUI(self):
 
@@ -476,9 +484,10 @@ Please load the merged images located in: \n {path}''')
 
     def ShowAbout(self):
         about=QMessageBox()
-        text='''
+        text=f'''
+AMi Image Analysis version {__version__}
 Program written For Python 3 and PyQt5
-written by:
+by:
 Ludovic Pecqueur
 Chimie des Processus Biologiques
 College de France
