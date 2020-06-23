@@ -43,3 +43,19 @@ with open(file_path, 'w') as f:
 
 st = os.stat(file_path)
 os.chmod(file_path, st.st_mode |  stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
+
+if sys.platform=='linux':
+    file_path=Path(app_path).joinpath("AMi_IA.desktop")
+    lines=f'''[Desktop Entry]
+Name=AMi_Image_Analysis
+Comment=Run AMI_Image_Analysis
+Exec={Path(app_path).joinpath("bin", "AMI_Image_Analysis.sh")}
+Icon={Path(app_path).joinpath("AMi_IA.png")}
+Terminal=true
+Type=Application'''
+    with open(file_path, 'w') as f:
+        for l in lines: f.write(l)
+    print(f'''
+If you want you can put an icon on your desktop by issuing the following command
+cp {file_path} {os.path.expanduser("~/Desktop")}/.
+''')

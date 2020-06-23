@@ -90,3 +90,4 @@ Then autoMARCO should work though slowly at least on a Pi3B+.
       (have a look [here](https://github.com/yaroslavvb/tensorflow-community-wheels/issues)).
       Uninstall tensorflow and reinstall with python3 -m pip install pathToWheel.whl
       Or build yourself from source.
+    * For OSX, when exporting Heatmap grid to jpeg, a screenshot of the entire screen is taken instead of the specific window.
