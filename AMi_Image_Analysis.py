@@ -15,12 +15,9 @@ from pathlib import Path
 import multiprocessing, time
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import QPixmap, QFont, QColor, QKeySequence
-QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True) #enable highdpi scaling
-QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True) #use highdpi icons
 from PyQt5.QtWidgets import (QLabel, QTableWidgetItem, QFileDialog, QSplashScreen,
     QMessageBox, QGridLayout,QStyleFactory, QProgressDialog, QInputDialog, QLineEdit)
-
-from utils import ensure_directory
+from utils import ensure_directory, initProject
 from shutil import copyfile
 import pdf_writer 
 import HeatMap_Grid
@@ -30,10 +27,13 @@ import Merge_Zstack
 import ReadScreen
 import preferences as pref
 
+QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True) #enable highdpi scaling
+QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True) #use highdpi icons
+QtWidgets.QApplication.setAttribute(QtCore.Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
 
-__version__ = "1.2.2"
+__version__ = "1.2.3"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "16-06-2020"
+__date__ = "24-06-2020"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -159,8 +159,6 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.actionJBScreen_Classic_HTS_II.triggered.connect(lambda: self.show_CrystScreen("JBScreen_Classic_HTS_II"))
         self.actionJBScreen_Classic_1_4.triggered.connect(lambda: self.show_CrystScreen("JBScreen_Classic_1-4"))
         self.actionJBScreen_Classic_5_8.triggered.connect(lambda: self.show_CrystScreen("JBScreen_Classic_5-8"))
-        
-        
         self.actionPi_PEG_HTS.triggered.connect(lambda: self.show_CrystScreen("Pi-PEG_HTS"))
         self.actionPeg_Rx1Rx2.triggered.connect(lambda: self.show_CrystScreen("HR-PEGRx_HT_screen"))
         self.actionSaltRx.triggered.connect(lambda: self.show_CrystScreen("HR-SaltRx_HT_screen"))
@@ -515,9 +513,36 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             self.previousWell=self.extract_WellLabel(fileName)
 
 
-    def Initialise(self):
+    def Initialise(self, directory):
+        '''directory is pathlib.Path object'''
+        PATHS=initProject(directory)
+        self.rootDir=PATHS.rootDir
+        self.project=PATHS.project
+        self.date=PATHS.date
+        self.target=PATHS.target
+        self.plate=PATHS.plate
+        self.prep_date_path=PATHS.prep_date_path
+        self.imageDir=str(Path.resolve(directory))
+
+        if self.rootDir is not None:
+            if Path(self.prep_date_path).exists():
+                file = open(self.prep_date_path)
+                contents = file.read().strip("\n")
+                self.prepdate=contents
+            else:
+                text, okPressed = QInputDialog.getText(self, "File prep_date.txt not found","Preparation date (YYYYMMDD)", QLineEdit.Normal, "")
+                if okPressed and text != '':
+                    with open(self.prep_date_path, 'w') as f:
+                        f.write(text)
+                    self.prepdate=text
+                else:
+                    self.prepdate="None"         
+
+
+    def Reset(self):
         '''reset file list and more when changing folder and reset layout grid'''
         self.classifications.clear()
+        self.rootDir = None
         self.previousWell = None
         self.currentWell = None
         self.currentButtonIndex= None
@@ -533,11 +558,12 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         directory = str(QFileDialog.getExistingDirectory(self,"Directory containing Images"))
-        self.Initialise()
-        if directory:
-            self.imageDir=os.path.realpath(directory)
-            #Initialise Project Details 
-            self.Directory(os.path.realpath(directory))
+        if directory !='': directory=Path(directory)
+        self.Reset()
+
+        #Initialise Project Details
+        if directory:    
+            self.Initialise(directory)
             print("Plate root directory : ", self.rootDir)
             self.ProjectCode.setText(self.project)
             self.PrepDate.setText(str(self.prepdate))
@@ -602,36 +628,35 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         print("Report for well %s saved to %s"%(well, pdfpath))
 
 
-    def Directory(self, path):
-#        print("ClassPath ", path.split("/"))
-        directory = path.split("/")
-        if directory[-1]=="rawimages" or directory[-1]=="cropped":
-            self.rootDir = "/".join(directory[:-2])
-            self.project=directory[-4]
-            self.target=directory[-4]
-            self.plate=directory[-3]
-            self.date=directory[-2].split("_")[0]
-            prep_date_path = "/".join(directory[:-2]) + "/"+ "prep_date.txt"
-        else:
-            self.rootDir = "/".join(directory[:-1])
-            self.project=str(directory[-3])
-            self.target=directory[-3]
-            self.plate=directory[-2]
-            self.date=directory[-1].split("_")[0]
-            prep_date_path = "/".join(directory[:-1]) + "/"+ "prep_date.txt"
+    # def Directory(self, path):
+    #     directory = path.split("/")
+    #     if directory[-1]=="rawimages" or directory[-1]=="cropped":
+    #         self.rootDir = "/".join(directory[:-2])
+    #         self.project=directory[-4]
+    #         self.target=directory[-4]
+    #         self.plate=directory[-3]
+    #         self.date=directory[-2].split("_")[0]
+    #         prep_date_path = "/".join(directory[:-2]) + "/"+ "prep_date.txt"
+    #     else:
+    #         self.rootDir = "/".join(directory[:-1])
+    #         self.project=str(directory[-3])
+    #         self.target=directory[-3]
+    #         self.plate=directory[-2]
+    #         self.date=directory[-1].split("_")[0]
+    #         prep_date_path = "/".join(directory[:-1]) + "/"+ "prep_date.txt"
         
-        if Path(prep_date_path).exists():
-            file = open(prep_date_path)
-            contents = file.read().strip("\n")
-            self.prepdate=contents
-        else:
-            text, okPressed = QInputDialog.getText(self, "File prep_date.txt not found","Preparation date (YYYYMMDD)", QLineEdit.Normal, "")
-            if okPressed and text != '':
-                with open(prep_date_path, 'w') as f:
-                    f.write(text)
-                self.prepdate=text
-            else:
-                self.prepdate="None"
+    #     if Path(prep_date_path).exists():
+    #         file = open(prep_date_path)
+    #         contents = file.read().strip("\n")
+    #         self.prepdate=contents
+    #     else:
+    #         text, okPressed = QInputDialog.getText(self, "File prep_date.txt not found","Preparation date (YYYYMMDD)", QLineEdit.Normal, "")
+    #         if okPressed and text != '':
+    #             with open(prep_date_path, 'w') as f:
+    #                 f.write(text)
+    #             self.prepdate=text
+    #         else:
+    #             self.prepdate="None"
 
 
     def buildWellImagePath(self,directory, well, wellimage_list):
@@ -867,11 +892,11 @@ https://github.com/LP-CDF/AMi_Image_Analysis
 
 
     def check_previous_notes(self, path, current_date):
-        path=path + "/Image_Data/"
+        path=path.joinpath("Image_Data")
         ensure_directory(path)
-        if not Path(path + current_date).exists():
+        if not Path(path.joinpath(current_date)).exists():
             print("> No previous notes found in directory:")
-            print("> " + path)
+            print("> " + str(path))
    
         most_recent = "18000101" #YYYYMMDD
         
@@ -882,13 +907,16 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             if date == current_date:
                 return
             most_recent = self.compare_most_recent(most_recent, date)
-        newPath = path + current_date + "/"
+        newPath = path.joinpath(current_date)
 
         if len(os.listdir(path)) !=0:
-            path = path + most_recent + "/"
+            path=path.joinpath(most_recent)
             ensure_directory(newPath)
-            for file in os.listdir(path):
-                copyfile(path + file , newPath + file)
+            if not newPath.exists():
+                newPath.mkdir()
+
+            for file in path.iterdir():
+                copyfile(str(file), str(newPath.joinpath(file.name)))
             print("> Copied previous notes from: " + most_recent)
             print("> ")
         else:
@@ -1123,32 +1151,6 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         # NumberOfRows=self._lay.rowCount()
 
         shortcut=pref.Shortcut()
-#         if event.key()==shortcut.MoveLeft:
-#             if currentcol==0:
-#                 Newlocation=(currentrow-1, NumberOfColumns-1,location[2],location[3])
-#                 try:
-#                     self.ActivateButton(self._lay, Newlocation)
-#                 except:
-#                     self.handle_error("Already at first well")
-#             else:
-#                 Newlocation=(currentrow, currentcol-1,location[2],location[3])
-# #                print("Newlocation ", Newlocation)
-#                 self.ActivateButton(self._lay, Newlocation)
-
-#         if event.key()==shortcut.MoveRight:
-#             if currentcol==NumberOfColumns-1:
-#                 Newlocation=(currentrow+1, 0,location[2],location[3])
-#                 try:
-#                     self.ActivateButton(self._lay, Newlocation)
-#                 except:
-#                     self.handle_error("Already at last well")
-#             else:
-#                 Newlocation=(currentrow, currentcol+1,location[2],location[3])
-# #                print("Newlocation ", Newlocation)
-#                 try:
-#                     self.ActivateButton(self._lay, Newlocation)
-#                 except:
-#                     self.handle_error("Already at last well")
 
         if event.key()==shortcut.MoveLeft:
             try:
