@@ -1,0 +1,97 @@
+Well #,Conc.,Units,Salt1,Conc.,Units,Salt2,Conc.,Units,Buffer,pH,Conc.,Units,Precipitant,Conc.,Units,Precipitant2
+A1,,,,,,,0.1,M,Sodium acetate,"4,5",30,% v/v,PEG Smear Low,,,
+A2,,,,,,,0.1,M,Phosphate/Citrate,"5,5",30,% v/v,PEG Smear Low,,,
+A3,,,,,,,0.1,M,MES,"6,5",30,% v/v,PEG Smear Low,,,
+A4,,,,,,,0.1,M,Sodium acetate,"4,5",25,% v/v,PEG Smear Medium,,,
+A5,,,,,,,0.1,M,Phosphate/Citrate,"5,5",25,% v/v,PEG Smear Medium,,,
+A6,,,,,,,0.1,M,MES,"6,5",25,% v/v,PEG Smear Medium,,,
+A7,,,,,,,0.1,M,Sodium acetate,"4,5",20,% v/v,PEG Smear High,,,
+A8,,,,,,,0.1,M,Phosphate/Citrate,"5,5",20,% v/v,PEG Smear High,,,
+A9,,,,,,,0.1,M,MES,"6,5",20,% v/v,PEG Smear High,,,
+A10,,,,,,,0.1,M,Sodium acetate,"4,5",22,% v/v,PEG Smear Broad,,,
+A11,,,,,,,0.1,M,Phosphate/Citrate,"5,5",22,% v/v,PEG Smear Broad,,,
+A12,,,,,,,0.1,M,MES,"6,5",22,% v/v,PEG Smear Broad,,,
+B1,,,,,,,0.1,M,HEPES,"7,5",30,% v/v,PEG Smear Low,,,
+B2,,,,,,,0.1,M,Tris,"8,5",30,% v/v,PEG Smear Low,,,
+B3,,,,,,,0.1,M,BICINE,"9,3",30,% v/v,PEG Smear Low,,,
+B4,,,,,,,0.1,M,HEPES,"7,5",25,% v/v,PEG Smear Medium,,,
+B5,,,,,,,0.1,M,Tris,"8,5",25,% v/v,PEG Smear Medium,,,
+B6,,,,,,,0.1,M,BICINE,"9,3",25,% v/v,PEG Smear Medium,,,
+B7,,,,,,,0.1,M,HEPES,"7,5",20,% v/v,PEG Smear High,,,
+B8,,,,,,,0.1,M,Tris,"8,5",20,% v/v,PEG Smear High,,,
+B9,,,,,,,0.1,M,BICINE,"9,3",20,% v/v,PEG Smear High,,,
+B10,,,,,,,0.1,M,HEPES,"7,5",22,% v/v,PEG Smear Broad,,,
+B11,,,,,,,0.1,M,Tris,"8,5",22,% v/v,PEG Smear Broad,,,
+B12,,,,,,,0.1,M,BICINE,"9,3",22,% v/v,PEG Smear Broad,,,
+C1,,,,,,,,,,,35,% v/v,PEG Smear Low,,,
+C2,0.2,M,Ammonium acetate,,,,0.1,M,Sodium acetate,"4,6",28,% v/v,PEG Smear Low,5,% v/v,Ethylene glycol
+C3,0.15,M,Sodium chloride,,,,,,,,28,% v/v,PEG Smear Medium,,,
+C4,0.2,M,Ammonium sulfate,,,,0.1,M,Sodium cacodylate,"5,5",25,% v/v,PEG Smear Medium,,,
+C5,0.1,M,Sodium/potassium phosphate pH 5.5,0.1,M,Rubidium chloride,0.1,M,Sodium citrate,"5,5",25,% v/v,PEG Smear Medium,,,
+C6,0.2,M,Potassium chloride,,,,,,,,"22,5",% v/v,PEG Smear High,,,
+C7,0.15,M,Ammonium acetate,,,,0.1,M,Sodium citrate,"5,0",15,% v/v,PEG Smear High,,,
+C8,0.05,M,L-Arginine,0.05,M,L-Glutamic acid monosodium salt hydrate,,,,,28,% v/v,PEG Smear Broad,5,% v/v,Glycerol
+C9,0.15,M,Magnesium acetate tetrahydrate,,,,0.1,M,Sodium citrate,"5,6",20,% v/v,PEG Smear Broad,,,
+C10,0.2,M,Ammonium sulfate,,,,0.1,M,Sodium acetate,"4,6",25,% v/v,PEG Smear Broad,,,
+C11,0.2,M,Potassium sodium tartrate tetrahydrate,,,,0.1,M,MES,"6,0",25,% v/v,PEG Smear Low,,,
+C12,0.1,M,Calcium chloride dihydrate,0.1,M,Magnesium chloride hexahydrate,0.1,M,PIPES,"7,0","22,5",% v/v,PEG Smear Medium,,,
+D1,0.2,M,Ammonium nitrate,,,,0.1,M,Sodium cacodylate,"5,3","22,5",% v/v,PEG Smear Low,,,
+D2,,,,,,,0.1,M,MES,"6,5","22,5",% v/v,PEG Smear Low,10,% v/v,2-Propanol
+D3,0.15,M,Ammonium nitrate,,,,0.1,M,MES,"6,0",20,% v/v,PEG Smear Medium,5,% v/v,Ethylene glycol
+D4,0.2,M,Sodium formate,,,,0.1,M,Sodium phosphate,"6,2",20,% v/v,PEG Smear Medium,10,% v/v,Glycerol
+D5,0.2,M,Lithium sulfate,,,,0.1,M,ADA,"6,5",30,% v/v,PEG Smear Medium,,,
+D6,0.1,M,Potassium thiocyanate,0.1,M,Sodium bromide,0.1,M,MES,"6,5",12,% v/v,PEG Smear High,,,
+D7,0.2,M,Ammonium sulfate,,,,0.1,M,ADA,"6,5",18,% v/v,PEG Smear High,,,
+D8,0.15,M,Calcium chloride dihydrate,,,,0.1,M,MES,"6,2",15,% v/v,PEG Smear Broad,5,% v/v,Glycerol
+D9,5,% v/v,T-mate pH 7.0,,,,0.1,M,Sodium cacodylate,"5,3",15,% v/v,PEG Smear Broad,10,% v/v,Ethylene glycol
+D10,0.2,M,Sodium chloride,,,,0.1,M,Sodium phosphate,"6,2",28,% v/v,PEG Smear Broad,,,
+D11,0.1,M,Ammonium sulfate,0.05,M,Magnesium sulfate heptahydrate,0.1,M,Sodium citrate,"5,5","22,5",% v/v,PEG Smear Medium,,,
+D12,0.01,M,Cobalt(II) chloride hexahydrate,0.2,M,Magnesium chloride hexahydrate,0.1,M,Bis-Tris propane,"8,0","22,5",% v/v,PEG Smear Medium,2,% v/v,Glycerol
+E1,0.08,M,Magnesium acetate tetrahydrate,0.02,M,Magnesium chloride hexahydrate,0.1,M,MES,"6,5",25,% v/v,PEG Smear Low,,,
+E2,0.1,M,Potassium chloride,,,,0.1,M,HEPES,"7,5",16,% v/v,PEG Smear Low,5,% v/v,Ethylene glycol
+E3,0.1,M,Zinc acetate dihydrate,0.1,M,Zinc chloride,0.1,M,Bis-Tris ,"7,5",20,% v/v,PEG Smear Medium,,,
+E4,0.1,M,Magnesium chloride hexahydrate,0.1,M,Potassium chloride,0.1,M,PIPES,"7,0",20,% v/v,PEG Smear Medium,,,
+E5,0.05,M,Magnesium sulfate heptahydrate,,,,0.1,M,HEPES,"7,5",28,% v/v,PEG Smear Medium,,,
+E6,0.1,M,Sodium/potassium phosphate pH 7.5,,,,0.1,M,HEPES,"7,5",15,% v/v,PEG Smear High,10,% v/v,Ethylene glycol
+E7,0.1,M,Magnesium formate dihydrate,0.1,M,Rubidium chloride,0.1,M,PIPES,"7,0",25,% v/v,PEG Smear High,,,
+E8,0.2,M,Lithium sulfate,,,,0.1,M,HEPES,"7,2",25,% v/v,PEG Smear Broad,,,
+E9,0.2,M,Ammonium nitrate,,,,0.1,M,HEPES,"7,5",20,% v/v,PEG Smear Broad,,,
+E10,0.1,M,Magnesium chloride hexahydrate,0.1,M,Rubidium chloride,0.1,M,HEPES,"7,5",30,% v/v,PEG Smear Broad,,,
+E11,0.05,M,Magnesium chloride hexahydrate,0.05,M,Sodium citrate tribasic dihydrate,0.1,M,Bis-Tris propane,"7,8","22,5",% v/v,PEG Smear High,,,
+E12,7,% v/v,T-mate pH 7.0,,,,0.1,M,BICINE,"9,0","22,5",% v/v,PEG Smear High,10,% v/v,Ethylene glycol
+F1,0.15,M,Sodium citrate tribasic dihydrate,,,,0.1,M,HEPES,"7,8",25,% v/v,PEG Smear Low,,,
+F2,0.2,M,Sodium chloride,,,,0.1,M,Tris,"8,5",28,% v/v,PEG Smear Low,5,% v/v,Glycerol
+F3,0.075,M,Sodium acetate trihydrate,0.15,M,Sodium chloride,0.1,M,Tris,"8,0",15,% v/v,PEG Smear Medium,,,
+F4,0.1,M,Sodium chloride,0.1,M,Sodium formate,0.1,M,Bis-Tris propane,"8,5",25,% v/v,PEG Smear Medium,,,
+F5,0.2,M,Ammonium sulfate,0.05,M,Magnesium sulfate heptahydrate,0.1,M,BICINE,"9,0",20,% v/v,PEG Smear Medium,,,
+F6,0.2,M,Ammonium nitrate,,,,0.1,M,Bis-Tris propane,"8,5",18,% v/v,PEG Smear High,,,
+F7,0.2,M,Magnesium chloride hexahydrate,,,,0.1,M,Tris,"8,0",25,% v/v,PEG Smear High,10,% v/v,Glycerol
+F8,0.15,M,Ammonium acetate,0.01,M,Calcium chloride dihydrate,0.1,M,Tris,"8,5",28,% v/v,PEG Smear Broad,,,
+F9,,,,,,,0.1,M,BICINE,"9,0",25,% v/v,PEG Smear Broad,10,% v/v,2-Propanol
+F10,0.2,M,Ammonium sulfate,,,,0.1,M,Tris,"8,0",20,% v/v,PEG Smear Broad,,,
+F11,0.02,M,Magnesium sulfate heptahydrate,0.2,M,Potassium chloride,0.1,M,BICINE,"8,8","22,5",% v/v,PEG Smear Broad,,,
+F12,0.1,M,Potassium sodium tartrate tetrahydrate,,,,0.1,M,Sodium cacodylate,"5,5","22,5",% v/v,PEG Smear Broad,10,% v/v,Ethylene glycol
+G1,0.01,M,Cobalt(II) chloride hexahydrate,0.1,M,Magnesium formate dihydrate,0.1,M,MES,"6,2",14,% v/v,PEG Smear Low,,,
+G2,0.15,M,Lithium sulfate,0.05,M,Magnesium chloride hexahydrate,0.1,M,Bis-Tris ,"6,8",25,% v/v,PEG Smear Low,,,
+G3,0.2,M,Ammonium sulfate,0.01,M,Cadmium chloride hemi(pentahydrate),0.1,M,HEPES,"7,5",25,% v/v,PEG Smear Medium,,,
+G4,0.1,M,Potassium chloride,0.1,M,Magnesium chloride hexahydrate,,,,,18,% v/v,PEG Smear Medium,10,% v/v,Ethylene glycol
+G5,0.1,M,Magnesium acetate tetrahydrate,,,,0.1,M,MES,"6,5",12,% v/v,PEG Smear Medium,10,% v/v,Ethylene glycol
+G6,"0,1",M,Magnesium acetate tetrahydrate,0.1,M,Potassium chloride,0.1,M,MES,"6,2",12,% v/v,PEG Smear High,,,
+G7,0.04,M,Calcium chloride dihydrate,0.04,M,Sodium formate,0.1,M,PIPES,"7,0",8,% v/v,PEG Smear High,,,
+G8,0.075,M,Magnesium chloride hexahydrate,0.075,M,Sodium citrate tribasic dihydrate,0.1,M,Bis-Tris ,"6,0",18,% v/v,PEG Smear Broad,,,
+G9,0.1,M,Magnesium chloride hexahydrate,0.1,M,Sodium acetate trihydrate,0.1,M,Bis-Tris ,"6,5",15,% v/v,PEG Smear Broad,,,
+G10,0.1,M,Ammonium sulfate,0.1,M,Sodium formate,0.1,M,HEPES,"7,0",25,% v/v,PEG Smear Broad,,,
+G11,"0,2",M,Sodium/potassium phosphate pH 7.5,,,,0.1,M,HEPES,"7,5","22,5",% v/v,PEG Smear Medium,10,% v/v,Glycerol
+G12,0.3,M,Sodium chloride,0.05,M,L-Arginine,0.1,M,Tris,"7,5","22,5",% v/v,PEG Smear Broad,0.05,M,L-Glutamic acid monosodium salt hydrate
+H1,0.04,M,Calcium chloride dihydrate,0.04,M,Sodium formate,0.1,M,Tris,"8,0",25,% v/v,PEG Smear Low,,,
+H2,0.1,M,Magnesium chloride hexahydrate,0.1,M,Rubidium chloride,0.1,M,PIPES,"7,0",20,% v/v,PEG Smear Low,,,
+H3,0.2,M,Magnesium chloride hexahydrate,10,% v/v,Ethylene glycol,0.1,M,HEPES,"7,5",15,% v/v,PEG Smear Medium,5,% v/v,2-Propanol
+H4,0.05,M,Ammonium acetate,0.15,M,Magnesium sulfate heptahydrate,0.1,M,HEPES,"7,0",12,% v/v,PEG Smear Medium,,,
+H5,7,% v/v,T-mate pH 7.0,,,,0.1,M,HEPES,"7,2",20,% v/v,PEG Smear Medium,,,
+H6,0.1,M,Ammonium acetate,0.1,M,Zinc chloride,0.1,M,Bis-Tris ,"7,2",15,% v/v,PEG Smear High,,,
+H7,0.15,M,Lithium sulfate,0.05,M,Magnesium chloride hexahydrate,0.1,M,HEPES,"7,8",20,% v/v,PEG Smear High,,,
+H8,0.1,M,Potassium thiocyanate,0.1,M,Sodium bromide,0.1,M,Tris,"7,8",25,% v/v,PEG Smear Broad,,,
+H9,0.05,M,Ammonium sulfate,0.05,M,Lithium sulfate,0.1,M,Bis-Tris propane,"8,5",28,% v/v,PEG Smear Broad,,,
+H10,0.2,M,Ammonium sulfate,0.01,M,Cadmium chloride hemi(pentahydrate),0.1,M,PIPES,"7,0",15,% v/v,PEG Smear Broad,10,% v/v,Ethylene glycol
+H11,0.2,M,Lithium sulfate,0.05,M,Zinc acetate dihydrate,0.1,M,Bis-Tris ,"7,5","22,5",% v/v,PEG Smear Broad,,,
+H12,0.075,M,Sodium bromide,0.05,M,Sodium fluoride,0.1,M,HEPES,"7,8","22,5",% v/v,PEG Smear Broad,0.075,M,Sodium iodide

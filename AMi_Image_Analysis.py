@@ -164,6 +164,9 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.actionSaltRx.triggered.connect(lambda: self.show_CrystScreen("HR-SaltRx_HT_screen"))
         self.actionMD_PACT_Premier.triggered.connect(lambda: self.show_CrystScreen("MD_PACT_Premier"))
         self.actionNextal_JCSG_Plus.triggered.connect(lambda: self.show_CrystScreen("NeXtal-JCSG-Plus-Suite"))
+        self.actionMD_MIDAS.triggered.connect(lambda: self.show_CrystScreen("MD_MIDAS"))
+        self.actionMD_BCS_Screen.triggered.connect(lambda: self.show_CrystScreen("MD_BCS_Screen"))
+        
         
         self.actionQuit_2.triggered.connect(self.on_exit)
         
@@ -627,36 +630,6 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         pdf_writer.create_pdf(values)
         print("Report for well %s saved to %s"%(well, pdfpath))
 
-
-    # def Directory(self, path):
-    #     directory = path.split("/")
-    #     if directory[-1]=="rawimages" or directory[-1]=="cropped":
-    #         self.rootDir = "/".join(directory[:-2])
-    #         self.project=directory[-4]
-    #         self.target=directory[-4]
-    #         self.plate=directory[-3]
-    #         self.date=directory[-2].split("_")[0]
-    #         prep_date_path = "/".join(directory[:-2]) + "/"+ "prep_date.txt"
-    #     else:
-    #         self.rootDir = "/".join(directory[:-1])
-    #         self.project=str(directory[-3])
-    #         self.target=directory[-3]
-    #         self.plate=directory[-2]
-    #         self.date=directory[-1].split("_")[0]
-    #         prep_date_path = "/".join(directory[:-1]) + "/"+ "prep_date.txt"
-        
-    #     if Path(prep_date_path).exists():
-    #         file = open(prep_date_path)
-    #         contents = file.read().strip("\n")
-    #         self.prepdate=contents
-    #     else:
-    #         text, okPressed = QInputDialog.getText(self, "File prep_date.txt not found","Preparation date (YYYYMMDD)", QLineEdit.Normal, "")
-    #         if okPressed and text != '':
-    #             with open(prep_date_path, 'w') as f:
-    #                 f.write(text)
-    #             self.prepdate=text
-    #         else:
-    #             self.prepdate="None"
 
 
     def buildWellImagePath(self,directory, well, wellimage_list):

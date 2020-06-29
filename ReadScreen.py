@@ -12,8 +12,10 @@ from pathlib import Path
 
 from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
 
-ScreenFile={'MD-PGA':'Md1-51_pga_screen.csv',
+ScreenFile={'MD_BCS_Screen':'Md1-105_BCS_Screen.csv',
+            'MD_MIDAS':'Md1-107_MIDASPlus.csv',
             'MD_PACT_Premier':'Md1-36_PACT_Premier_HT.csv',
+            'MD-PGA':'Md1-51_pga_screen.csv',
             'Nextal-MBClassII': 'NeXtal-MbClass-II-Suite.csv',
             'Nextal-Classics-Suite': 'NeXtal-Classics-Suite.csv',
             'Nextal-ClassicsII-Suite': 'NeXtal-ClassicsII-Suite.csv',
