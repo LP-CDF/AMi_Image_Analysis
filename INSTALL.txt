@@ -31,6 +31,13 @@ Please read this carefully before proceeding.
 
     You may consider using a virtual environment to avoid python package conflict (recommended).
 
+    NEW installation description:
+    * Unzip/untar the archive
+    * Change to the directory containing the file Setup.py
+    * type "python3 Setup.py". If you are lucky, everything should be set properly.
+    * It is recommended to create an alias (e.g. for bash you can add in your .bashrc alias  AMI_Image_Analysis='/whereveryouinstalled/bin/AMI_Image_Analysis.sh')
+    
+    OLD installation description (still usefull in case of issues)
     To create a virtual environment with venv adapt the following commands:
     * python3 -m venv --without-pip /wherever/you/want/venvs/AMI_IMAGE_ANALYSIS_TENSORFLOW1
     * source /wherever/you/want/venvs/AMI_IMAGE_ANALYSIS_TENSORFLOW1/bin/activate

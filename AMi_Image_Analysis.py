@@ -348,7 +348,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
             return
         
         path=Path(self.imageDir).joinpath("cropped")
-        ensure_directory(str(path)+"/")
+        ensure_directory(path)
         
         errors, error_list = 0, []
         
