@@ -406,6 +406,10 @@ class Ui_MainWindow(object):
         self.actionJBScreen_Classic_1_4.setObjectName("actionJBScreen_Classic_1_4")
         self.actionJBScreen_Classic_5_8 = QtWidgets.QAction(MainWindow)
         self.actionJBScreen_Classic_5_8.setObjectName("actionJBScreen_Classic_5_8")
+        self.actionMD_MIDAS = QtWidgets.QAction(MainWindow)
+        self.actionMD_MIDAS.setObjectName("actionMD_MIDAS")
+        self.actionMD_BCS_Screen = QtWidgets.QAction(MainWindow)
+        self.actionMD_BCS_Screen.setObjectName("actionMD_BCS_Screen")
         self.menuFile.addAction(self.openFile)
         self.menuFile.addAction(self.openDir)
         self.menuFile.addAction(self.actionExport_to_PDF)
@@ -422,6 +426,8 @@ class Ui_MainWindow(object):
         self.menuDisplay_Heat_Map.addAction(self.menuShow_autoMARCO_Grid.menuAction())
         self.menuHelp.addAction(self.actionShortcuts)
         self.menuHelp.addAction(self.actionAbout)
+        self.menuMolecular_Dimensions.addAction(self.actionMD_BCS_Screen)
+        self.menuMolecular_Dimensions.addAction(self.actionMD_MIDAS)
         self.menuMolecular_Dimensions.addAction(self.actionMD_PACT_Premier)
         self.menuMolecular_Dimensions.addAction(self.actionMD_PGA)
         self.menuNextal.addAction(self.actionNextal_Classics_Suite)
@@ -537,6 +543,8 @@ class Ui_MainWindow(object):
         self.actionNextal_JCSG_Plus.setText(_translate("MainWindow", "Nextal JCSG Plus"))
         self.actionJBScreen_Classic_1_4.setText(_translate("MainWindow", "JBScreen Classic 1-4"))
         self.actionJBScreen_Classic_5_8.setText(_translate("MainWindow", "JBScreen Classic 5-8"))
+        self.actionMD_MIDAS.setText(_translate("MainWindow", "MD MIDAS"))
+        self.actionMD_BCS_Screen.setText(_translate("MainWindow", "MD BCS Screen"))
 
 
 
