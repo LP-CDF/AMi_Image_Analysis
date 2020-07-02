@@ -179,7 +179,7 @@ class ExtendedEnvBuilder(venv.EnvBuilder):
         
         #Finishing setup
         if sys.platform=='linux' or sys.platform=='darwin':
-            print("\nUPDATING INTIALISATION SCRIPT AMI_Image_Analysis.sh\n")
+            print("\nUPDATING INTIALISATION SCRIPT bin/AMI_Image_Analysis.sh\n")
             Setup_bin_VENV=Path(filepath).joinpath("Setup_bin_VENV.py")
             subprocess.call([binpath, Setup_bin_VENV])
         

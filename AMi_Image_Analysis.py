@@ -31,9 +31,9 @@ QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True) #en
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True) #use highdpi icons
 QtWidgets.QApplication.setAttribute(QtCore.Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
 
-__version__ = "1.2.3"
+__version__ = "1.2.3.1"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "24-06-2020"
+__date__ = "01-07-2020"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -70,7 +70,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.SplashScreen(2500)
         self.ui=Ui_MainWindow()
         self.setupUi(self)
-        self.setWindowTitle("LCPB AMi Image Analysis version %s"%__version__)
+        self.setWindowTitle(f"LCPB AMi Image Analysis version {__version__}")
         #Setup a progressBar not placed in Designer
 #        self.progressBar = QProgressBar(self)
         self._nsre = re.compile('([0-9]+)') #used to sort alphanumerics
@@ -140,6 +140,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.actionAutomated_Annotation_MARCO.triggered.connect(self.autoAnnotation)
         self.actionDisplay_Heat_Map.triggered.connect(self.show_HeatMap)
         self.actionExport_to_PDF.triggered.connect(self.export_pdf)
+        self.actionDelete_Folder_rawimages.triggered.connect(lambda: self.DeleteRaw(self.imageDir))
         self.actionautoMARCO_subwell_a.triggered.connect(lambda: self.show_autoMARCO("a"))
         self.actionautoMARCO_subwell_b.triggered.connect(lambda: self.show_autoMARCO("b"))
         self.actionautoMARCO_subwell_c.triggered.connect(lambda: self.show_autoMARCO("c"))
@@ -1269,7 +1270,34 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         screenshot.save(str(filename), 'jpg')
         message="File saved to:\n %s"%filename
         self.informationDialog(message)
+
+
+    def DeleteRaw(self,path):
+        '''Delete directory rawimages to save disk space, path is a string'''
+        import shutil
         
+        try:
+            path=Path(self.imageDir).joinpath("rawimages")
+        except:
+            self.handle_error("Open a directory containing images first!!!")
+            return
+        
+        #WARN USER
+        info = QMessageBox(self)
+        info.setWindowTitle("Warning!")
+        info.setText(f'''This will erase the directory: "{path}" and its content. \nThis action cannot be undone!!!''')
+        info.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+        retval = info.exec_()
+        
+        if retval == QtWidgets.QMessageBox.Cancel:
+            return
+        try:
+            os.path.isdir(path)
+            shutil.rmtree(path)
+        except:
+            self.handle_error(f"WARNING: {path} not found")
+            return
+
 
 class HeatMapGrid(QtWidgets.QDialog, HeatMap_Grid.Ui_Dialog):
     ''' '''
