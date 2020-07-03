@@ -73,16 +73,20 @@ Release 1.1.8.
 2020/01/29:
 Updated tensorflow to 1.15.2 in requirements.txt
 
-2020/02/03
+2020/02/03:
 Images in Timeline can be clicked to load corresponding image in main viewing frame for closer inspection.
 autoMARCO windows can all be displayed at the same time (previously only a single window could be loaded)
 
-2020/03/03
+2020/03/03:
 Merging Z-stacks can be done within AMI_Image_Analysis or command line using the script Merge_Zstack.py. It is done in python using openCV and is much faster than using Hugin.
 
-2020/05/20
+2020/05/20:
 Improved navigation with shortcuts: Now only visible wells through "Filter" option are selected.
 Added Screens Tables to quickly check crystallization conditions. Crystallization Tables are read from csv files stored in the folder "Screen_Database".
+
+2020/07/03:
+Easier installation procedure using Setup.py. Creation of an uninstallation script.
+Release 1.2.3.1
 
 ## Screenshots
 

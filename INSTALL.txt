@@ -35,6 +35,8 @@ Please read this carefully before proceeding.
     * Unzip/untar the archive
     * Change to the directory containing the file Setup.py
     * type "python3 Setup.py". If you are lucky, everything should be set properly.
+      Please note that only python dependencies are installed with the Setup.py script.
+      If necessary, you will have to manually install distribution specific packages.
     * It is recommended to create an alias (e.g. for bash you can add in your .bashrc alias  AMI_Image_Analysis='/whereveryouinstalled/bin/AMI_Image_Analysis.sh')
     
     OLD installation description (still usefull in case of issues)
@@ -98,3 +100,7 @@ Then autoMARCO should work though slowly at least on a Pi3B+.
       Uninstall tensorflow and reinstall with python3 -m pip install pathToWheel.whl
       Or build yourself from source.
     * For OSX, when exporting Heatmap grid to jpeg, a screenshot of the entire screen is taken instead of the specific window.
+
+# Uninstallation:
+    * Either use the uninstallation script "Uninstallation.py" if you used the Setup.py script during installation
+    * or simply delete the folders containing the program and the python virtual environment.

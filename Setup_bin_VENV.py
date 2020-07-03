@@ -9,6 +9,53 @@ import os, sys
 from pathlib import Path
 import stat
 
+
+def CreateUninstall(app_path, venv_path):
+    '''Create a python script to remove program or most of it
+    app_path and venv_path are string
+    '''
+    file_path=Path(app_path).joinpath("Uninstall.py")
+    print(f"Creating uninstall script in {file_path}")
+    content=f'''#!/usr/bin/env python3
+
+import os, sys, shutil
+from pathlib import Path
+from subprocess import call
+
+app_path="{app_path}"
+venv_path="{venv_path}"
+
+print("APP_PATH: ", app_path)
+
+venv_path=Path(venv_path).parent
+print("VENV_PATH: ", venv_path)
+
+try:
+    os.path.isdir(venv_path)
+    shutil.rmtree(venv_path)
+    print("SUCCESSFULLY removed Python virtual env for AMi_Image_Analysis")
+except:
+    print("WARNING: %s not Found, exiting."%venv_path)
+    sys.exit()
+
+try:
+    os.path.isdir(app_path)
+    shutil.rmtree(app_path)
+    print("SUCCESSFULLY removed AMi_Image_Analysis")
+except :
+    print("WARNING: %s not found"%app_path)
+    sys.exit()
+
+
+print("------------------------------------------------------")
+print("You have to manually remove any Startup Icon")
+print("------------------------------------------------------")
+
+'''    
+    with open(file_path, 'w') as f:
+        f.write(content)
+    os.chmod(file_path, st.st_mode |  stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
+
 activate_venv={'linux': 'activate', 'darwin': 'activate', 'win32': 'activate.bat'}[sys.platform]
 python_path=os.path.join(os.path.dirname(sys.executable))
 
@@ -56,6 +103,14 @@ Type=Application'''
     with open(file_path, 'w') as f:
         for l in lines: f.write(l)
     print(f'''
+------------------------------------------------------
 If you want you can put an icon on your desktop by issuing the following command
 cp {file_path} {os.path.expanduser("~/Desktop")}/.
+------------------------------------------------------
 ''')
+
+if sys.platform=='linux' or sys.platform=='darwin':
+    CreateUninstall(app_path, python_path)
+
+print("\nInstallation Finished.\n")
+print("------------------------------------------------------")
