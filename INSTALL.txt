@@ -34,7 +34,7 @@ Please read this carefully before proceeding.
     NEW installation description:
     * Unzip/untar the archive
     * Change to the directory containing the file Setup.py
-    * type "python3 Setup.py". If you are lucky, everything should be set properly.
+    * type "python3 Setup.py" to install with defaults or "python3 Setup.py -h" for help. If you are lucky, everything should be set properly.
       Please note that only python dependencies are installed with the Setup.py script.
       If necessary, you will have to manually install distribution specific packages.
     * It is recommended to create an alias (e.g. for bash you can add in your .bashrc alias  AMI_Image_Analysis='/whereveryouinstalled/bin/AMI_Image_Analysis.sh')

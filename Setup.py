@@ -187,12 +187,10 @@ def main(args=None):
     script_path=os.path.abspath(os.path.dirname(sys.argv[0]))
     print(f"Setup.py path is {script_path}")
     temp=Path(script_path).parent
+    
+    #Setup ENV_DIR if no destination given.
     ENV_DIR=temp.joinpath("python", "venvs", "AMI_IMAGE_ANALYSIS_TENSORFLOW1")
-    print(f"Will install venv in {ENV_DIR}")
     root=ENV_DIR.parent
-    if not root.parent.exists(): root.parent.mkdir()
-    if not root.exists(): root.mkdir()
-    if not ENV_DIR.exists(): ENV_DIR.mkdir()
     
     compatible = True
     if sys.version_info < (3, 6):
@@ -264,7 +262,12 @@ def main(args=None):
                                        verbose=options.verbose)
         
         if options.dirs is None:
-                options.dirs=str(ENV_DIR)
+            options.dirs=str(ENV_DIR)
+            if not root.parent.exists(): root.parent.mkdir()
+            if not root.exists(): root.mkdir()
+            if not ENV_DIR.exists(): ENV_DIR.mkdir()
+
+        print(f"Will install venv in {options.dirs}")            
         builder.create(options.dirs)
 
 if __name__ == '__main__':

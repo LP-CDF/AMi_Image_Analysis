@@ -32,7 +32,7 @@ The tree must be organized like:
             └── YYYYMMDD_HHMMSS
                 ├── stacked images (generated from directory rawimages)
                 └── rawimages
-                    └── files at different focus height
+                    └── files at different focus height (name e.g. A1_1, A1_2... or A1, A2... if no subwell)
             ├── YYYYMMDD_HHMMSS
             ├── ...
             └── prep_date.txt
@@ -69,9 +69,6 @@ Release 1.1.6.
 Fixed autoMARCO on Raspbian Buster.
 Fixed bug leading to program crash when stopping autoMARCO and filtering results.
 Release 1.1.8.
-
-2020/01/29:
-Updated tensorflow to 1.15.2 in requirements.txt
 
 2020/02/03:
 Images in Timeline can be clicked to load corresponding image in main viewing frame for closer inspection.
