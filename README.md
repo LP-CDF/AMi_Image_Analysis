@@ -32,7 +32,7 @@ The tree must be organized like:
             └── YYYYMMDD_HHMMSS
                 ├── stacked images (generated from directory rawimages)
                 └── rawimages
-                    └── files at different focus height (name e.g. A1_1, A1_2... or A1, A2... if no subwell)
+                    └── files at different focus height (name e.g. A1a_1, A1a_2... or A1_1, A1_2... if no subwell)
             ├── YYYYMMDD_HHMMSS
             ├── ...
             └── prep_date.txt
