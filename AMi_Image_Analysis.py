@@ -140,7 +140,8 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.actionAutomated_Annotation_MARCO.triggered.connect(self.autoAnnotation)
         self.actionDisplay_Heat_Map.triggered.connect(self.show_HeatMap)
         self.actionExport_to_PDF.triggered.connect(self.export_pdf)
-        self.actionDelete_Folder_rawimages.triggered.connect(lambda: self.DeleteRaw(self.imageDir))
+        self.actionDelete_Folder_rawimages.triggered.connect(lambda: self.DeleteFolder(self.imageDir, "rawimages"))
+        self.actionDelete_Folder_cropped.triggered.connect(lambda: self.DeleteFolder(self.imageDir, "cropped"))        
         self.actionautoMARCO_subwell_a.triggered.connect(lambda: self.show_autoMARCO("a"))
         self.actionautoMARCO_subwell_b.triggered.connect(lambda: self.show_autoMARCO("b"))
         self.actionautoMARCO_subwell_c.triggered.connect(lambda: self.show_autoMARCO("c"))
@@ -387,26 +388,30 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
 For more information check log file %s
 
 you can use the tool Check_Circle_detection.py filename to check
+and modify detection parameters.
 '''%(errors, log))
 
         #INFORM USER TO RELOAD images from cropped if needed
         self.informationDialog("You need to load the images from the directory \"cropped\" to use the cropped images")
-        # info = QMessageBox(self)
-        # info.setWindowTitle("Information!")
-        # info.setText("You need to load the images from the directory \"cropped\" to use the cropped images")
-        # info.setStandardButtons(QMessageBox.Ok)
-        # retval = info.exec_()
 
 
     def AutoMerge(self):
         # if len(self.files)==0:
         self.informationDialog('''
+                               
 Please open the directory 'rawimages' !!!
-The GUI will not be responsive during processing.''')
+The GUI will not be responsive during processing.
+
+You can check progress in the terminal window.
+
+''')
         self.openDirDialog()
         if len(self.files)==0:
             return
         
+        # message="You can check progress in the terminal window."        
+        # self.informationDialog(message)
+
         nproc=multiprocessing.cpu_count()
         #To Fix multiprocessing issue with OSX Catalina
         if self.os=='darwin'and multiprocessing.get_start_method()!='forkserver':
@@ -443,7 +448,6 @@ The GUI will not be responsive during processing.''')
         results=[pool.apply_async(Merge_Zstack.MERGE_Zstack, arg) for arg in args]
         pool.close(); pool.join()
         time_end=time.perf_counter()        
-
             
         self.informationDialog(f'''
 Operation performed in {time_end - time_start:0.2f} seconds.
@@ -1272,12 +1276,12 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         self.informationDialog(message)
 
 
-    def DeleteRaw(self,path):
-        '''Delete directory rawimages to save disk space, path is a string'''
+    def DeleteFolder(self, datepath, folder):
+        '''Delete specific Folder at location datepath in  to save disk space, platepath and folder are string'''
         import shutil
         
         try:
-            path=Path(self.imageDir).joinpath("rawimages")
+            path=Path(datepath).joinpath(folder)
         except:
             self.handle_error("Open a directory containing images first!!!")
             return

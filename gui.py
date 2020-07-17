@@ -412,10 +412,14 @@ class Ui_MainWindow(object):
         self.actionMD_BCS_Screen.setObjectName("actionMD_BCS_Screen")
         self.actionDelete_Folder_rawimages = QtWidgets.QAction(MainWindow)
         self.actionDelete_Folder_rawimages.setObjectName("actionDelete_Folder_rawimages")
+        self.actionDelete_Folder_cropped = QtWidgets.QAction(MainWindow)
+        self.actionDelete_Folder_cropped.setObjectName("actionDelete_Folder_cropped")
         self.menuFile.addAction(self.openFile)
         self.menuFile.addAction(self.openDir)
-        self.menuFile.addAction(self.actionDelete_Folder_rawimages)
         self.menuFile.addAction(self.actionExport_to_PDF)
+        self.menuFile.addSeparator()
+        self.menuFile.addAction(self.actionDelete_Folder_cropped)
+        self.menuFile.addAction(self.actionDelete_Folder_rawimages)
         self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionQuit_2)
         self.menuShow_autoMARCO_Grid.addAction(self.actionautoMARCO_subwell_a)
@@ -550,6 +554,7 @@ class Ui_MainWindow(object):
         self.actionMD_MIDAS.setText(_translate("MainWindow", "MD MIDAS"))
         self.actionMD_BCS_Screen.setText(_translate("MainWindow", "MD BCS Screen"))
         self.actionDelete_Folder_rawimages.setText(_translate("MainWindow", "Delete \"rawimages\""))
+        self.actionDelete_Folder_cropped.setText(_translate("MainWindow", "Delete \"cropped\""))
 
 
 
