@@ -66,6 +66,9 @@ def create_pdf(_list):
         prepdate="Not available"
     else:
         prepdate=_list[6]
+        d0=datetime.date(int(prepdate[0:4]), int(prepdate[4:6]), int(prepdate[6:]))
+        d1=datetime.date(int(date[0:4]), int(date[4:6]), int(date[6:]))
+        delta = d1 - d0
         prepdate="%s-%s-%s"%(prepdate[0:4], prepdate[4:6], prepdate[6:])
 
     outputpath=_list[7]
@@ -114,7 +117,7 @@ def create_pdf(_list):
     pdf.cell(50, 18, "Date of image: ", align="R", ln=0)
 
     pdf.set_font("Arial", size=14)
-    pdf.cell(0, 18, "%s-%s-%s (Preparation date: %s)"%(date[0:4], date[4:6], date[6:], prepdate), align="L", ln=1)
+    pdf.cell(0, 18, "%s-%s-%s (Preparation date: %s, Number of days: %s)"%(date[0:4], date[4:6], date[6:], prepdate, delta.days), align="L", ln=1)
 
     pdf.ln(10)
 
