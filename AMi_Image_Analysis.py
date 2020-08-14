@@ -8,6 +8,7 @@ Created on Wed Nov 27 13:57:18 2019
 
 from gui import Ui_MainWindow
 import os, sys, platform
+import datetime
 import re
 import csv
 import math
@@ -33,7 +34,7 @@ QtWidgets.QApplication.setAttribute(QtCore.Qt.HighDpiScaleFactorRoundingPolicy.P
 
 __version__ = "1.2.3.2"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "11-08-2020"
+__date__ = "14-08-2020"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -575,6 +576,13 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             self.ImageDate.setText(self.date)
             self.TargetName.setText(self.target)
             self.PlateName.setText(self.plate)
+            
+            if self.prepdate!="None":
+                d0=datetime.date(int(self.prepdate[0:4]), int(self.prepdate[4:6]), int(self.prepdate[6:]))
+                d1=datetime.date(int(self.date[0:4]), int(self.date[4:6]), int(self.date[6:]))
+                delta = d1 - d0
+                self.label_NDays.setText(str(delta.days))
+                del d0,d1,delta
 
         if directory:
             self.files_it = iter([os.path.join(directory, file) for file in os.listdir(directory) if os.path.splitext(file)[1] in Ext])
