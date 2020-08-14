@@ -117,7 +117,10 @@ def create_pdf(_list):
     pdf.cell(50, 18, "Date of image: ", align="R", ln=0)
 
     pdf.set_font("Arial", size=14)
-    pdf.cell(0, 18, "%s-%s-%s (Preparation date: %s, Number of days: %s)"%(date[0:4], date[4:6], date[6:], prepdate, delta.days), align="L", ln=1)
+    if prepdate=="Not available":
+        pdf.cell(0, 18, "%s-%s-%s (Preparation date: %s)"%(date[0:4], date[4:6], date[6:], prepdate), align="L", ln=1)
+    else:
+        pdf.cell(0, 18, "%s-%s-%s (Preparation date: %s, Number of days: %s)"%(date[0:4], date[4:6], date[6:], prepdate, delta.days), align="L", ln=1)
 
     pdf.ln(10)
 

@@ -31,9 +31,9 @@ QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True) #en
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True) #use highdpi icons
 QtWidgets.QApplication.setAttribute(QtCore.Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
 
-__version__ = "1.2.3.1"
+__version__ = "1.2.3.2"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "01-07-2020"
+__date__ = "11-08-2020"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -50,7 +50,7 @@ ClassificationColor={
 
 def Citation():
     print('''
-Program written for python3/PyQt5 by
+Program written by
 Ludovic Pecqueur
 Laboratoire de Chimie des Processus Biologiques
 Collège de France.
@@ -408,9 +408,6 @@ You can check progress in the terminal window.
         self.openDirDialog()
         if len(self.files)==0:
             return
-        
-        # message="You can check progress in the terminal window."        
-        # self.informationDialog(message)
 
         nproc=multiprocessing.cpu_count()
         #To Fix multiprocessing issue with OSX Catalina
@@ -802,6 +799,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
                                             color:%s;"""
                                             %(ClassificationColor[self.classifications[well]]["background"],
                                               ClassificationColor[self.classifications[well]]["text"]))
+        self.ImageViewer.setStyleSheet("""border: 2px solid %s;"""%(ClassificationColor[self.classifications[well]]["background"]))
         
 
     # def LoadWellImage(self,path):
@@ -1260,6 +1258,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         '''things to do before exiting'''
 #        self.SaveNotes(self.currentWell)
         app.closeAllWindows()
+        Citation()
 
 
     def take_screenshot(self):
@@ -1359,7 +1358,7 @@ class HeatMapGrid(QtWidgets.QDialog, HeatMap_Grid.Ui_Dialog):
             coordinates = well_to_coordinates(well)
             qp.setBrush(QColor(0, 0, 0))
             qp.drawRect(coordinates[0], coordinates[1], coordinates[2], coordinates[3])
-#            
+            
         classification=str
         for i in range(len(self.well_images)):
             well = self.well_images[i].split(".")[0]
@@ -1395,4 +1394,3 @@ if __name__ == "__main__":
     app.setStyle(QStyleFactory.create('Fusion'))
     MainWindow = ViewerModule()
     sys.exit(app.exec_())
-    Citation()

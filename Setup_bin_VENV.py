@@ -56,6 +56,17 @@ print("------------------------------------------------------")
         f.write(content)
     os.chmod(file_path, st.st_mode |  stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
 
+def ChangeSheBang(app_path, filename, python_path):
+    '''app_path and filename are strings'''
+    file_path=Path(app_path).joinpath(filename)
+    with open(file_path, 'r') as f:
+        lines=f.readlines()
+    lines[0]="#!"+ python_path+'/python \n'
+    with open(file_path, 'w') as f:    
+        for l in lines: f.write(l)
+    st = os.stat(file_path)
+    os.chmod(file_path, st.st_mode |  stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)    
+
 activate_venv={'linux': 'activate', 'darwin': 'activate', 'win32': 'activate.bat'}[sys.platform]
 python_path=os.path.join(os.path.dirname(sys.executable))
 
@@ -79,17 +90,9 @@ deactivate'''%(python_path, activate_venv))
 st = os.stat(file_path)
 os.chmod(file_path, st.st_mode |  stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
 
-#Change shebang Merge_Zstack.py
-file_path=Path(app_path).joinpath("Merge_Zstack.py")
-with open(file_path, 'r') as f:
-    lines=f.readlines()
-lines[0]="#!"+ python_path+'/python \n'
-
-with open(file_path, 'w') as f:    
-    for l in lines: f.write(l)
-
-st = os.stat(file_path)
-os.chmod(file_path, st.st_mode |  stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
+#Change shebang for some files that can be used in terminal
+ChangeSheBang(app_path, "Merge_Zstack.py", python_path)
+ChangeSheBang(app_path, "autocrop.py", python_path)
 
 if sys.platform=='linux':
     file_path=Path(app_path).joinpath("AMi_IA.desktop")

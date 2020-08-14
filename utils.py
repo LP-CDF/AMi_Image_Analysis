@@ -21,7 +21,6 @@ def ensure_directory(file_path):
 class initProject(object):
     """Initialise various variables. Put in utils for later compatibility
     if changes are needed for other microscopes.
-    Not used yet
     path is a pathlib.Path
     """
     def __init__(self, path):
