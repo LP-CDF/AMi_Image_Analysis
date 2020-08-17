@@ -32,7 +32,7 @@ QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True) #en
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True) #use highdpi icons
 QtWidgets.QApplication.setAttribute(QtCore.Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
 
-__version__ = "1.2.3.2"
+__version__ = "1.2.3.3"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
 __date__ = "17-08-2020"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
@@ -709,6 +709,8 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             except StopIteration:
                 self._timer.stop()
                 self.progressBar.setValue(vmax)
+        #Needed here for shortcuts to run at first data load, why?
+        self.SetAllVisible()
 
 
     def add_pixmap(self, layout, pixmap, x, y):
