@@ -34,7 +34,7 @@ QtWidgets.QApplication.setAttribute(QtCore.Qt.HighDpiScaleFactorRoundingPolicy.P
 
 __version__ = "1.2.3.2"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "14-08-2020"
+__date__ = "17-08-2020"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -134,7 +134,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         
         #Setup Menu
         self.openFile.triggered.connect(self.openFileNameDialog)
-        self.openDir.triggered.connect(self.openDirDialog)
+        self.openDir.triggered.connect(lambda: self.openDirDialog(dialog=True))
         
         self.actionAutoCrop.triggered.connect(self.AutoCrop)
         self.actionAutoMerge.triggered.connect(self.AutoMerge)
@@ -397,7 +397,6 @@ and modify detection parameters.
 
 
     def AutoMerge(self):
-        # if len(self.files)==0:
         self.informationDialog('''
                                
 Please open the directory 'rawimages' !!!
@@ -454,6 +453,8 @@ Please load the merged images located in: \n {path}''')
         #Clean up
         for i in total_wells: del i
         del results, total_wells
+        #autoLoad Merged
+        self.openDirDialog(dialog=False, directory=path)
 
     
     def ShowShortcuts(self):
@@ -538,11 +539,17 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             else:
                 text, okPressed = QInputDialog.getText(self, "File prep_date.txt not found","Preparation date (YYYYMMDD)", QLineEdit.Normal, "")
                 if okPressed and text != '':
-                    with open(self.prep_date_path, 'w') as f:
-                        f.write(text)
-                    self.prepdate=text
+                    try:
+                        datetime.datetime.strptime(text, '%Y%m%d')
+                        with open(self.prep_date_path, 'w') as f:
+                            f.write(text)
+                        self.prepdate=text
+                    except:
+                        self.handle_error(f"Input date \"{text}\" not with correct format, skipping calculation of number of days")
+                        self.prepdate="None" 
                 else:
-                    self.prepdate="None"         
+                    self.prepdate="None"      
+
 
 
     def Reset(self):
@@ -559,11 +566,12 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         self.MARCO_window.clear()
 
 
-    def openDirDialog(self):
+    def openDirDialog(self, dialog=True, directory=''):
         Ext=[".tif",".tiff",".TIFF",".jpg", ".jpeg",".JPG",".JPEG",".png",".PNG"]
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        directory = str(QFileDialog.getExistingDirectory(self,"Directory containing Images"))
+        if dialog is True:
+            options = QFileDialog.Options()
+            options |= QFileDialog.DontUseNativeDialog
+            directory = str(QFileDialog.getExistingDirectory(self,"Directory containing Images"))
         if directory !='': directory=Path(directory)
         self.Reset()
 
@@ -606,7 +614,9 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         for i in self.well_images:
             well=os.path.splitext(i)[0]
             self.ReadClassification(self.rootDir, self.date, well)
-            
+        
+        #line below to reset Filter to All
+        self.radioButton_All.setChecked(True)
 
     def export_pdf(self):
         '''export to PDF a report for current well'''
@@ -699,13 +709,6 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             except StopIteration:
                 self._timer.stop()
                 self.progressBar.setValue(vmax)
-        
-        #line below to reset Filter to All or reset self.VisiblesIdx (due to issue with OSX Catalina)
-        if self.os=='darwin' and platform.release()>"17.7.0":
-            self.SetAllVisible()
-        else:
-            self.SetAllVisible()
-            self.radioButton_All.setChecked(True)
 
 
     def add_pixmap(self, layout, pixmap, x, y):
@@ -1002,8 +1005,14 @@ https://github.com/LP-CDF/AMi_Image_Analysis
 
 
     def ClearLayout(self, layout):
-        for widget_item in self.layout_widgets(layout):
-                widget_item.widget().deleteLater()
+        '''Code commented was crashing in specific cases
+        solution found at https://www.thetopsites.net/article/51691104.shtml'''
+        # for widget_item in self.layout_widgets(layout):
+        #         widget_item.widget().deleteLater()
+        for i in reversed(range(layout.count())):
+            widgetToRemove=layout.itemAt(i).widget()
+            layout.removeWidget(widgetToRemove)
+            widgetToRemove.setParent(None)
 
 
     def ScoreDrop(self, radioButton, well):

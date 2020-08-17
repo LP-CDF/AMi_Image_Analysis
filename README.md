@@ -102,7 +102,7 @@ You will need a screen with minimum resolution of **1920*1080**.
     
 It is recommended to create a virtual environment for python (see INSTALL.txt)
 
-Download the latest released version and gunzip it or clone this repository with
+Download the latest released version and decompress it or clone this repository with
 git clone https://github.com/LP-CDF/AMi_Image_Analysis AMi_Image_Analysis.
 Then follow the instructions in INSTALL.txt
 
