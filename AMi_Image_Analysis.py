@@ -16,7 +16,7 @@ from pathlib import Path
 import multiprocessing, time
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import QPixmap, QFont, QColor, QKeySequence
-from PyQt5.QtWidgets import (QLabel, QTableWidgetItem, QFileDialog, QSplashScreen,
+from PyQt5.QtWidgets import (QTableWidgetItem, QFileDialog, QSplashScreen,
     QMessageBox, QGridLayout,QStyleFactory, QProgressDialog, QInputDialog, QLineEdit)
 from utils import ensure_directory, initProject
 from shutil import copyfile
@@ -34,7 +34,7 @@ QtWidgets.QApplication.setAttribute(QtCore.Qt.HighDpiScaleFactorRoundingPolicy.P
 
 __version__ = "1.2.3.3"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "17-08-2020"
+__date__ = "18-08-2020"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -239,7 +239,10 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         data=self.ScreenTable.open_sheet(Screen)
         # self.ScreenTable.setColumnWidth(0, 100)
         self.ScreenTable.resize(1000, 500)
+ 
         if data is not False:
+            header = self.ScreenTable.horizontalHeader()
+            header.setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
             self.ScreenTable.show()
         else:
             self.handle_error("WARNING: File %s not found in database"%ReadScreen.ScreenFile[Screen])
@@ -728,7 +731,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
     def add_button(self, path, x, y):
             button = QtWidgets.QPushButton()
             button.setStyleSheet("""background-color: lightgray;""")
-            text=self.extract_WellLabel
+            # text=self.extract_WellLabel
             button.setText(self.extract_WellLabel(path))
             button.clicked.connect(self.buttonClicked)
             self._lay.addWidget(button, x, y, alignment=QtCore.Qt.AlignLeft)
@@ -1142,7 +1145,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         location=self.currentButtonIndex
         currentrow=location[0]; currentcol=location[1]
         self.ChangeButtonColor(self._lay, self.currentButtonIndex, state="checked")
-        NumberOfColumns=self._lay.columnCount()
+        # NumberOfColumns=self._lay.columnCount()
         # NumberOfRows=self._lay.rowCount()
 
         shortcut=pref.Shortcut()
