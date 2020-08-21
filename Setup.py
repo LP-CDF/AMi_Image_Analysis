@@ -125,7 +125,7 @@ class ExtendedEnvBuilder(venv.EnvBuilder):
         :param context: The information for the virtual environment
                         creation request being processed.
         """
-        url = 'https://bitbucket.org/pypa/setuptools/downloads/ez_setup.py'
+        url = 'https://bootstrap.pypa.io/ez_setup.py'
         self.install_script(context, 'setuptools', url)
         # clear up the setuptools archive which gets downloaded
         pred = lambda o: o.startswith('setuptools-') and o.endswith('.tar.gz')
