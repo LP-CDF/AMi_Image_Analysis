@@ -68,12 +68,11 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         super(ViewerModule, self).__init__(parent)
         self.app_path=os.path.abspath(os.path.dirname(sys.argv[0]))
         # print("self.app_path ", self.app_path)
-        self.SplashScreen(2500)
+        self.SplashScreen(2000)
         self.ui=Ui_MainWindow()
         self.setupUi(self)
         self.setWindowTitle(f"LCPB AMi Image Analysis version {__version__}")
-        #Setup a progressBar not placed in Designer
-#        self.progressBar = QProgressBar(self)
+
         self._nsre = re.compile('([0-9]+)') #used to sort alphanumerics
         
         content_widget = QtWidgets.QWidget()
@@ -1196,6 +1195,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
 
 
     def Calculate_Statistics(self):
+        from decimal import Decimal, ROUND_HALF_UP
         '''Calculate statistics for plate'''
 
         Count_subwell_a={"Clear":0, "Precipitate":0, "Crystal":0, "PhaseSep":0, "Other":0, "Unknown":0}
@@ -1224,7 +1224,9 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         for i in _list:
             for classification, count in i.items():
                 try:
-                    i[classification]=round(count/totals[_list.index(i)]*100,1)
+                    # i[classification]=round(count/totals[_list.index(i)]*100,2)
+                    value=Decimal(count/totals[_list.index(i)]*100.)
+                    i[classification]=Decimal(value.quantize(Decimal('.01'), rounding=ROUND_HALF_UP))
                 except ValueError:
                     i[classification]=0
                 except ZeroDivisionError:

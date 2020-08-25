@@ -38,7 +38,7 @@ The tree must be organized like:
 ```
 AMi controlling software needs a folder named "images".
 The date directory must have the format YYYYMMDD_HHMMSS (eg. 20191211_151023)
-The file "prep_date.txt" contains the preparation date of the plate. It contains a single line with a date with format YYYYMMDD and is created within the program. It is used for logging purpose only and is not mandatory.
+The file "prep_date.txt" contains the preparation date as a single line with format YYYYMMDD and is created within the program. It is used for logging purpose only and is not mandatory.
 
 
 2019/12/12:

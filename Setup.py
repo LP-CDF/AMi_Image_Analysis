@@ -18,14 +18,12 @@ import venv
 
 class ExtendedEnvBuilder(venv.EnvBuilder):
     """
-    This builder installs setuptools and pip so that you can pip or
-    easy_install other packages into the created virtual environment.
+    This builder installs pip so that you can pip install other packages
+    into the created virtual environment.
 
-    :param nodist: If true, setuptools and pip are not installed into the
-                   created virtual environment.
     :param nopip: If true, pip is not installed into the created
                   virtual environment.
-    :param progress: If setuptools or pip are installed, the progress of the
+    :param progress: If pip is installed, the progress of the
                      installation can be monitored by passing a progress
                      callable. If specified, it is called with two
                      arguments: a string indicating some progress, and a
@@ -41,7 +39,6 @@ class ExtendedEnvBuilder(venv.EnvBuilder):
     """
 
     def __init__(self, *args, **kwargs):
-        self.nodist = kwargs.pop('nodist', False)
         self.nopip = kwargs.pop('nopip', False)
         self.progress = kwargs.pop('progress', None)
         self.verbose = kwargs.pop('verbose', False)
@@ -56,10 +53,9 @@ class ExtendedEnvBuilder(venv.EnvBuilder):
                         creation request being processed.
         """
         os.environ['VIRTUAL_ENV'] = context.env_dir
-        if not self.nodist:
-            self.install_setuptools(context)
-        # Can't install pip without setuptools
-        if not self.nopip and not self.nodist:
+
+        #setuptools not required to install pip
+        if not self.nopip:
             self.install_pip(context)
         
         self.install_dep(context)
@@ -118,21 +114,6 @@ class ExtendedEnvBuilder(venv.EnvBuilder):
         # Clean up - no longer needed
         os.unlink(distpath)
 
-    def install_setuptools(self, context):
-        """
-        Install setuptools in the virtual environment.
-
-        :param context: The information for the virtual environment
-                        creation request being processed.
-        """
-        url = 'https://bootstrap.pypa.io/ez_setup.py'
-        self.install_script(context, 'setuptools', url)
-        # clear up the setuptools archive which gets downloaded
-        pred = lambda o: o.startswith('setuptools-') and o.endswith('.tar.gz')
-        files = filter(pred, os.listdir(context.bin_path))
-        for f in files:
-            f = os.path.join(context.bin_path, f)
-            os.unlink(f)
 
     def install_pip(self, context):
         """
@@ -211,10 +192,6 @@ def main(args=None):
         parser.add_argument('dirs', metavar='ENV_DIR', nargs='?',
                             help='A directory in which to create the'
                                   'virtual environment.')
-        parser.add_argument('--no-setuptools', default=False,
-                            action='store_true', dest='nodist',
-                            help="Don't install setuptools or pip in the "
-                                 "virtual environment.")
         parser.add_argument('--no-pip', default=False,
                             action='store_true', dest='nopip',
                             help="Don't install pip in the virtual "
@@ -248,7 +225,7 @@ def main(args=None):
         parser.add_argument('--verbose', default=False, action='store_true',
                             dest='verbose', help='Display the output '
                                                'from the scripts which '
-                                               'install setuptools and pip.')
+                                               'install pip.')
         options = parser.parse_args(args)
         
         if options.upgrade and options.clear:
@@ -257,7 +234,6 @@ def main(args=None):
                                        clear=options.clear,
                                        symlinks=options.symlinks,
                                        upgrade=options.upgrade,
-                                       nodist=options.nodist,
                                        nopip=options.nopip,
                                        verbose=options.verbose)
         
