@@ -109,10 +109,16 @@ Type=Application'''
 ------------------------------------------------------
 If you want you can put an icon on your desktop by issuing the following command
 cp {file_path} {os.path.expanduser("~/Desktop")}/.
-------------------------------------------------------
-''')
+------------------------------------------------------''')
 
 if sys.platform=='linux' or sys.platform=='darwin':
+    file_path=Path(app_path).joinpath("bin", "AMI_Image_Analysis.sh")
+    print(f'''
+------------------------------------------------------
+Recommended: create an alias in your .bashrc or .bash_profile with:
+alias AMI_IMage_Analysis='{file_path}'
+------------------------------------------------------
+''')
     CreateUninstall(app_path, python_path)
 
 print("\nInstallation Finished.\n")

@@ -20,7 +20,9 @@ class ExtendedEnvBuilder(venv.EnvBuilder):
     """
     This builder installs pip so that you can pip install other packages
     into the created virtual environment.
-
+    
+    :param nodist: If true, setuptools and pip are not installed into the
+                   created virtual environment.
     :param nopip: If true, pip is not installed into the created
                   virtual environment.
     :param progress: If pip is installed, the progress of the
@@ -39,6 +41,7 @@ class ExtendedEnvBuilder(venv.EnvBuilder):
     """
 
     def __init__(self, *args, **kwargs):
+        self.nodist = kwargs.pop('nodist', False)
         self.nopip = kwargs.pop('nopip', False)
         self.progress = kwargs.pop('progress', None)
         self.verbose = kwargs.pop('verbose', False)
@@ -192,6 +195,10 @@ def main(args=None):
         parser.add_argument('dirs', metavar='ENV_DIR', nargs='?',
                             help='A directory in which to create the'
                                   'virtual environment.')
+        parser.add_argument('--no-setuptools', default=False,
+                            action='store_true', dest='nodist',
+                            help="Don't install setuptools or pip in the "
+                                 "virtual environment.")
         parser.add_argument('--no-pip', default=False,
                             action='store_true', dest='nopip',
                             help="Don't install pip in the virtual "
@@ -234,6 +241,7 @@ def main(args=None):
                                        clear=options.clear,
                                        symlinks=options.symlinks,
                                        upgrade=options.upgrade,
+                                       nodist=options.nodist,
                                        nopip=options.nopip,
                                        verbose=options.verbose)
         
