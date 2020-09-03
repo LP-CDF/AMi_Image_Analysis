@@ -48,7 +48,7 @@ except :
 
 
 print("------------------------------------------------------")
-print("You have to manually remove any Startup Icon")
+print("You have to manually remove any Startup Icon or alias")
 print("------------------------------------------------------")
 
 '''    

@@ -32,9 +32,9 @@ QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True) #en
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True) #use highdpi icons
 QtWidgets.QApplication.setAttribute(QtCore.Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
 
-__version__ = "1.2.3.3"
+__version__ = "1.2.3.4"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "18-08-2020"
+__date__ = "02-09-2020"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -175,6 +175,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.actionCalculate_Statistics.triggered.connect(self.show_Statistics)
         self.actionShortcuts.triggered.connect(self.ShowShortcuts)
         self.actionAbout.triggered.connect(self.ShowAbout)
+        self.actionManual.triggered.connect(self.ShowManual)
         
         
         self.label_ProjectDetails.setFont(QtGui.QFont("Arial", 12, QtGui.QFont.Black))
@@ -509,7 +510,13 @@ https://github.com/LP-CDF/AMi_Image_Analysis
  '''%__license__
         about.information(self,"About", text)    
 
-    
+
+    def ShowManual(self):
+        import webbrowser
+        path=Path(self.app_path).joinpath("Manual_AMi_Image_Analysis.pdf")
+        webbrowser.open(str(path))
+
+
     def openFileNameDialog(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
@@ -1300,7 +1307,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
 
 
     def DeleteFolder(self, datepath, folder):
-        '''Delete specific Folder at location datepath in  to save disk space, platepath and folder are string'''
+        '''Delete specific Folder at location datepath to save disk space, platepath and folder are string'''
         import shutil
         
         try:

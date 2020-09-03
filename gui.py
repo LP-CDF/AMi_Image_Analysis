@@ -420,6 +420,8 @@ class Ui_MainWindow(object):
         self.actionDelete_Folder_rawimages.setObjectName("actionDelete_Folder_rawimages")
         self.actionDelete_Folder_cropped = QtWidgets.QAction(MainWindow)
         self.actionDelete_Folder_cropped.setObjectName("actionDelete_Folder_cropped")
+        self.actionManual = QtWidgets.QAction(MainWindow)
+        self.actionManual.setObjectName("actionManual")
         self.menuFile.addAction(self.openFile)
         self.menuFile.addAction(self.openDir)
         self.menuFile.addAction(self.actionExport_to_PDF)
@@ -440,6 +442,8 @@ class Ui_MainWindow(object):
         self.menuDisplay_Heat_Map.addAction(self.menuShow_autoMARCO_Grid.menuAction())
         self.menuHelp.addAction(self.actionShortcuts)
         self.menuHelp.addAction(self.actionAbout)
+        self.menuHelp.addSeparator()
+        self.menuHelp.addAction(self.actionManual)
         self.menuMolecular_Dimensions.addAction(self.actionMD_BCS_Screen)
         self.menuMolecular_Dimensions.addAction(self.actionMD_MIDAS)
         self.menuMolecular_Dimensions.addAction(self.actionMD_PACT_Premier)
@@ -564,6 +568,7 @@ class Ui_MainWindow(object):
         self.actionMD_BCS_Screen.setText(_translate("MainWindow", "MD BCS Screen"))
         self.actionDelete_Folder_rawimages.setText(_translate("MainWindow", "Delete \"rawimages\""))
         self.actionDelete_Folder_cropped.setText(_translate("MainWindow", "Delete \"cropped\""))
+        self.actionManual.setText(_translate("MainWindow", "Manual"))
 
 
 
