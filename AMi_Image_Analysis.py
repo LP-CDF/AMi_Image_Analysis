@@ -7,7 +7,7 @@ Created on Wed Nov 27 13:57:18 2019
 """
 
 from gui import Ui_MainWindow
-import os, sys, platform
+import os, sys
 import datetime
 import re
 import csv
@@ -581,7 +581,9 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             options = QFileDialog.Options()
             options |= QFileDialog.DontUseNativeDialog
             directory = str(QFileDialog.getExistingDirectory(self,"Directory containing Images"))
-        if directory !='': directory=Path(directory)
+        # if directory !='': directory=Path(directory)
+        if directory =='': return
+        else: directory=Path(directory)
         self.Reset()
 
         #Initialise Project Details
