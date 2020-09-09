@@ -40,12 +40,12 @@ __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 #Dictionnary used to update color of labelVisuClassif
 ClassificationColor={
-    "Clear":{"background":"white", "text":"black"},
-    "Precipitate":{"background":"red", "text":"white"},
-    "Crystal":{"background":"green", "text":"white"},
-    "PhaseSep":{"background":"orange", "text":"black"},
-    "Other":{"background":"magenta", "text":"white"},
-    "Unknown":{"background":"yellow", "text":"black"}
+    "Clear":{"background":"white", "text":"black", "Qcolor":"#ffffff"},
+    "Precipitate":{"background":"red", "text":"white","Qcolor":"#ff0000"},
+    "Crystal":{"background":"green", "text":"white","Qcolor":"#00ff00"},
+    "PhaseSep":{"background":"orange", "text":"black","Qcolor":"#ff7f00"},
+    "Other":{"background":"magenta", "text":"white","Qcolor":"#ff00ff"},
+    "Unknown":{"background":"yellow", "text":"black","Qcolor":"#ffff00"}
     }
 
 
@@ -452,7 +452,7 @@ You can check progress in the terminal window.
         self.informationDialog(f'''
 Operation performed in {time_end - time_start:0.2f} seconds.
 
-Please load the merged images located in: \n {path}''')
+Merged images were automatically loaded from : \n {path}''')
         #Clean up
         for i in total_wells: del i
         del results, total_wells
@@ -1402,17 +1402,17 @@ class HeatMapGrid(QtWidgets.QDialog, HeatMap_Grid.Ui_Dialog):
                 classification=="Unknown"
             color=QtGui.QColor()
             if classification == "Unknown":
-                color = QtGui.QColor(0, 0, 0) #Black
+                color = QtGui.QColor(ClassificationColor["Unknown"]["Qcolor"])
             elif classification == "Clear":
-                color = QtGui.QColor(255, 255, 255) #White
+                color = QtGui.QColor(ClassificationColor["Clear"]["Qcolor"])
             elif classification == "Precipitate":
-                color = QtGui.QColor(255, 0, 0) #red
+                color = QtGui.QColor(ClassificationColor["Precipitate"]["Qcolor"])
             elif classification == "Crystal":
-                color = QtGui.QColor(0, 255, 0) #green
+                color = QtGui.QColor(ClassificationColor["Crystal"]["Qcolor"])
             elif classification == "PhaseSep":
-                color = QtGui.QColor(255, 153, 51) #orange
+                color = QtGui.QColor(ClassificationColor["PhaseSep"]["Qcolor"])
             elif classification == "Other":
-                color = QtGui.QColor(255, 0, 255) #magenta
+                color = QtGui.QColor(ClassificationColor["Other"]["Qcolor"])
             qp.setBrush(color)
             qp.drawRect(coordinates[0], coordinates[1], coordinates[2], coordinates[3])
             if well[-1] not in wells:

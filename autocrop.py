@@ -65,11 +65,17 @@ def find_best_circle(image):
     # image = cv2.resize(image,(599,450), interpolation = cv2.INTER_AREA)
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     # gray_blurred = cv2.blur(gray, (3, 3))
-    gray_blurred = cv2.GaussianBlur(gray, (3, 3),1) 
+    gray_blurred = cv2.GaussianBlur(gray, (3, 3),1)
     w,h = gray.shape[1],gray.shape[0]
-    circles = cv2.HoughCircles(gray_blurred,  
-                    cv2.HOUGH_GRADIENT, 1, pref.minDistance, param1 = pref.param1, 
-                param2 = pref.param2, minRadius = pref.minRadius, maxRadius = pref.maxRadius)
+    # circles = cv2.HoughCircles(gray_blurred,  
+    #                 cv2.HOUGH_GRADIENT, 1, pref.minDistance, param1 = pref.param1, 
+    #             param2 = pref.param2, minRadius = pref.minRadius, maxRadius = pref.maxRadius)
+    
+    #Try to enhance edges
+    smooth = cv2.addWeighted(gray_blurred,1.5,gray,-0.5,0)
+    circles = cv2.HoughCircles(smooth,  
+                cv2.HOUGH_GRADIENT, 1, pref.minDistance, param1 = pref.param1, 
+            param2 = pref.param2, minRadius = pref.minRadius, maxRadius = pref.maxRadius)
 
     R, X, Y = 0, 0, 0
     euclidians=[]
@@ -133,4 +139,5 @@ if __name__ == "__main__":
 For more information check log file %s
 
 You can use the tool Check_Circle_detection.py filename to check
+and modify detection parameters.
 '''%(errors, log))
