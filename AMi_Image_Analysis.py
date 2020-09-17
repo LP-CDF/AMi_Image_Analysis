@@ -32,9 +32,9 @@ QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True) #en
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True) #use highdpi icons
 QtWidgets.QApplication.setAttribute(QtCore.Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
 
-__version__ = "1.2.3.4"
+__version__ = "1.2.3.5"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "02-09-2020"
+__date__ = "17-09-2020"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -95,6 +95,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.date = str
         self.prepdate = str
         self.classifications = {}
+        self.WellHasNotes = {}
         self.previousWell = None
         self.currentWell = None
         self.currentButtonIndex= None
@@ -191,6 +192,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.radioButton_Precipitate.toggled.connect(lambda:self.FilterClassification(self._lay,"Precipitate"))
         self.radioButton_PhaseSep.toggled.connect(lambda:self.FilterClassification(self._lay,"PhaseSep"))
         self.radioButton_Unsorted.toggled.connect(lambda:self.FilterClassification(self._lay,"Unknown"))
+        self.radioButton_HasNotes.toggled.connect(lambda:self.FilterNotes(self._lay))
         
         #Stylesheet scrollAreaPlate
         self.scrollAreaPlate.setStyleSheet("""background-color: rgb(220,220,220);""")
@@ -564,6 +566,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
     def Reset(self):
         '''reset file list and more when changing folder and reset layout grid'''
         self.classifications.clear()
+        self.WellHasNotes.clear()
         self.rootDir = None
         self.previousWell = None
         self.currentWell = None
@@ -598,7 +601,12 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             
             if self.prepdate!="None":
                 d0=datetime.date(int(self.prepdate[0:4]), int(self.prepdate[4:6]), int(self.prepdate[6:]))
-                d1=datetime.date(int(self.date[0:4]), int(self.date[4:6]), int(self.date[6:]))
+                try:
+                    d1=datetime.date(int(self.date[0:4]), int(self.date[4:6]), int(self.date[6:]))
+                except:
+                    message='''Unexpected directory name!!!s \nAre you are opening the correct directory?'''
+                    self.handle_error(message)
+                    return
                 delta = d1 - d0
                 self.label_NDays.setText(str(delta.days))
                 del d0,d1,delta
@@ -624,7 +632,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
 
         for i in self.well_images:
             well=os.path.splitext(i)[0]
-            self.ReadClassification(self.rootDir, self.date, well)
+            self.CheckClassificationNotes(self.rootDir, self.date, well)
         
         #line below to reset Filter to All
         self.radioButton_All.setChecked(True)
@@ -936,6 +944,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
     def SaveNotes(self, well):
         '''Save Notes in QPlainTextEdit and more'''
         text=self.Notes_TextEdit.toPlainText()
+        if len(text)!=0: self.WellHasNotes[well]=True
         path=Path(self.rootDir).joinpath("Image_Data", self.date, "%s_data.txt"%well)
         Notes=[]
         Notes.append("Project Code:%s:\n"%self.project)
@@ -957,15 +966,18 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             self.handle_error(str(e))
                
 
-    def ReadClassification(self, path, date, well):
+    def CheckClassificationNotes(self, path, date, well):
         data_file=Path(self.rootDir).joinpath("Image_Data", self.date, "%s_data.txt"%well)
         if Path(data_file).exists():
             with open(data_file, "r") as f:
                 content=f.readlines()
                 classifications = content[5].split(":")
                 self.AddtoClassificationDict(well, classifications[1])
+                if len(content[10:])!=0: self.WellHasNotes[well]=True
+                else: self.WellHasNotes[well]=False
         else:
             self.AddtoClassificationDict(well, "Unknown")
+            self.WellHasNotes[well]=False
 
 
     def AddtoClassificationDict(self, well, classification):
@@ -1011,6 +1023,17 @@ https://github.com/LP-CDF/AMi_Image_Analysis
                 widget.setVisible(False)
 #            print("well ",widget.text(), "dico Classif ", self.classifications[widget.text()])
         # print("Visibles", self.VisiblesIdx)
+
+
+    def FilterNotes(self, layout):
+        self.VisiblesIdx.clear() #Clear before modification
+        for widget_item in self.layout_widgets(layout):
+            widget = widget_item.widget()
+            if self.WellHasNotes[widget.text()]==True:
+                widget.setVisible(True)
+                self.VisiblesIdx.append(layout.indexOf(widget))
+            else:
+                widget.setVisible(False)
 
 
     def layout_widgets(self,layout):
