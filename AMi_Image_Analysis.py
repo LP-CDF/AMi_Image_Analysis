@@ -32,7 +32,7 @@ QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True) #en
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True) #use highdpi icons
 QtWidgets.QApplication.setAttribute(QtCore.Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
 
-__version__ = "1.2.3.5"
+__version__ = "1.2.3.6"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
 __date__ = "17-09-2020"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
@@ -604,7 +604,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
                 try:
                     d1=datetime.date(int(self.date[0:4]), int(self.date[4:6]), int(self.date[6:]))
                 except:
-                    message='''Unexpected directory name!!!s \nAre you are opening the correct directory?'''
+                    message='''Unexpected directory name!!! \nAre you are opening the correct directory?'''
                     self.handle_error(message)
                     return
                 delta = d1 - d0
