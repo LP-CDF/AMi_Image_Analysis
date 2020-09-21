@@ -108,11 +108,11 @@ Then follow the instructions in INSTALL.txt
 
 Dependencies:
 * Qt5
-* PyQt5 (v5.9.2 or higher)
+* PyQt5
 * Python Imaging Library (Pillow, v6.2.1 or higher)
 * PyFPDF (v1.7.2 or higher)
-* openCV for merging and cropping tools (tested with opencv 4.0.1)
-*NumPy
+* openCV for merging and cropping tools
+* NumPy
 
 Optional dependencies:
 * TensorFlow (v1.14 or 1.15, not v2)

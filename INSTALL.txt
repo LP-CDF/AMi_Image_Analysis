@@ -3,7 +3,7 @@
 Please read this carefully before proceeding.
 
     The software was tested on:
-    * linux CentOS 7 (PyQt5 (v5.9.2 and v5.12.1) and python3 (v3.6.8 and v3.7.3))
+    * linux CentOS 7 (PyQt5 and python3 (v3.6.8 and v3.7.3))
     * Raspbian 10 (on a Pi 3B+, not recommended)
     * macOS HighSierra and Catalina
 
@@ -17,7 +17,7 @@ Please read this carefully before proceeding.
 
     Dependencies:
     * Qt5
-    * PyQt5 (v5.9.2 or higher)
+    * PyQt5
     * Python Imaging Library (Pillow, v6.2.1 or higher)
     * PyFPDF (v1.7.2 or higher)
 

@@ -93,6 +93,8 @@ os.chmod(file_path, st.st_mode |  stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
 #Change shebang for some files that can be used in terminal
 ChangeSheBang(app_path, "Merge_Zstack.py", python_path)
 ChangeSheBang(app_path, "autocrop.py", python_path)
+ChangeSheBang(app_path, "Check_Circle_detection.py", python_path)
+ChangeSheBang(app_path, "Merge_AllNewPlates.py", python_path)
 
 if sys.platform=='linux':
     file_path=Path(app_path).joinpath("AMi_IA.desktop")

@@ -32,9 +32,9 @@ QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True) #en
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True) #use highdpi icons
 QtWidgets.QApplication.setAttribute(QtCore.Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
 
-__version__ = "1.2.3.6"
+__version__ = "1.2.3.7"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "17-09-2020"
+__date__ = "21-09-2020"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -455,6 +455,11 @@ You can check progress in the terminal window.
 Operation performed in {time_end - time_start:0.2f} seconds.
 
 Merged images were automatically loaded from : \n {path}''')
+
+        last=self.well_images[-1].split("_")[0]+".jpg"
+        if Path(path).joinpath(last).is_file():
+            with open(str(Path(path).joinpath("DONE")), 'w') as f: pass
+        
         #Clean up
         for i in total_wells: del i
         del results, total_wells
@@ -522,7 +527,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
     def openFileNameDialog(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
-        fileName, _ = QFileDialog.getOpenFileName(self,"Open File", "","All Files (*);;Image Files (*.tiff *.tif *.jpg *.jpeg)", options=options)
+        fileName, _ = QFileDialog.getOpenFileName(self,"Open File", "","All Files (*);;Image Files (*.tiff *.tif *.jpg *.jpeg *.png *.PNG)", options=options)
         if fileName:
             print(fileName)
         if fileName:
@@ -581,10 +586,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
     def openDirDialog(self, dialog=True, directory=''):
         Ext=[".tif",".tiff",".TIFF",".jpg", ".jpeg",".JPG",".JPEG",".png",".PNG"]
         if dialog is True:
-            options = QFileDialog.Options()
-            options |= QFileDialog.DontUseNativeDialog
             directory = str(QFileDialog.getExistingDirectory(self,"Directory containing Images"))
-        # if directory !='': directory=Path(directory)
         if directory =='': return
         else: directory=Path(directory)
         self.Reset()
@@ -945,6 +947,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         '''Save Notes in QPlainTextEdit and more'''
         text=self.Notes_TextEdit.toPlainText()
         if len(text)!=0: self.WellHasNotes[well]=True
+        elif len(text)==0 and self.WellHasNotes[well]==True:self.WellHasNotes[well]=False
         path=Path(self.rootDir).joinpath("Image_Data", self.date, "%s_data.txt"%well)
         Notes=[]
         Notes.append("Project Code:%s:\n"%self.project)
@@ -993,20 +996,6 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         for widget_item in self.layout_widgets(self._lay):
             widget = widget_item.widget()
             self.VisiblesIdx.append(self._lay.indexOf(widget))
-
-        # radiobuttonlist=[self.verticalLayout,self.verticalLayout_2,self.verticalLayout_3]        
-        # for layout in radiobuttonlist:
-        #     for widget_item in self.layout_widgets(layout):
-        #         widget = widget_item.widget()
-        #         if widget.isChecked() is True:
-        #             widget.setAutoExclusive(False)
-        #             widget.setChecked(False)
-        #         widget.setAutoExclusive(True)        
-        # if self.radioButton_Unsorted.isChecked() is True:
-        #     self.radioButton_Unsorted.setAutoExclusive(False)
-        #     self.radioButton_Unsorted.setChecked(False)
-        #     self.radioButton_Unsorted.setAutoExclusive(True)
-        # self.radioButton_All.setChecked(True)
 
 
     def FilterClassification(self, layout, classification):
