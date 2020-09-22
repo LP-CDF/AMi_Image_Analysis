@@ -230,6 +230,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.heatmap_window = HeatMapGrid()
         self.heatmap_window.well_images=self.well_images
         self.heatmap_window.classifications=self.classifications
+        self.heatmap_window.notes=self.WellHasNotes
         self.heatmap_window.pushButton_ExportImage.clicked.connect(self.take_screenshot)
         self.heatmap_window.pushButton_Close.clicked.connect(self.heatmap_window.close)
         self.heatmap_window.show()
@@ -1427,11 +1428,17 @@ class HeatMapGrid(QtWidgets.QDialog, HeatMap_Grid.Ui_Dialog):
                 color = QtGui.QColor(ClassificationColor["Other"]["Qcolor"])
             qp.setBrush(color)
             qp.drawRect(coordinates[0], coordinates[1], coordinates[2], coordinates[3])
+            if self.notes[well] is True:
+                qp.setBrush(QColor(0, 0, 0))
+                # qp.setPen(QtGui.QPen(QtCore.Qt.black, 2, QtCore.Qt.SolidLine))
+                qp.drawEllipse(coordinates[0]+25, coordinates[1]+6, 8, 8) #6=(dy-8)/2
+                # qp.setPen(QtGui.QPen(QtCore.Qt.black, 1, QtCore.Qt.SolidLine))
             if well[-1] not in wells:
                 qp.drawText(coordinates[0], coordinates[1], coordinates[2], coordinates[3], QtCore.Qt.AlignCenter,'')
             else:
                 qp.setFont(QFont("Courier New", 10))
                 qp.drawText(coordinates[0], coordinates[1], coordinates[2], coordinates[3], QtCore.Qt.AlignCenter, wells[coordinates[4]])
+
 
             
 if __name__ == "__main__":
