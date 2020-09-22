@@ -84,6 +84,10 @@ Added Screens Tables to quickly check crystallization conditions. Crystallizatio
 Easier installation procedure using Setup.py. Creation of an uninstallation script.
 Release 1.2.3.1
 
+2020/09/22:
+Two new command line tools: Merge_AllNewPlates.py and SaveDiskSpace.py to automate the tedious processing of several datasets or save disk space.
+Release 1.2.3.7
+
 ## Screenshots
 
 ![Screenshot 1](./screenshot1.png)
@@ -93,7 +97,7 @@ Release 1.2.3.1
 ## Install
 
 The software was tested on:
-* linux CentOS 7 (PyQt5 (v5.9.2 and v5.12.1) and python3 (v3.6.8 and v3.7.3))
+* linux CentOS 7 and python3 (v3.6.8 and v3.7.3))
 * Raspbian 10 (on a Pi 3B+, not recommended)
 * macOS HighSierra and Catalina
 

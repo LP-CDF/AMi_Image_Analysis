@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/local/PROGRAMS/XTAL/GIT-AMi_Image_Analysis/python/venvs/AMI_IMAGE_ANALYSIS_TENSORFLOW1/bin/python 
 # -*- coding: utf-8 -*-
 
 """This file was adpated from the following source:
@@ -305,6 +305,14 @@ def MERGE_Zstack(well_list, file_list, imageDir, outputpath):
 ########################################################################################################################
 
 if __name__ == '__main__':
+    import re
+    _nsre = re.compile('([0-9]+)')
+
+    def natural_sort_key(s):
+        global _nsre
+        return [int(text) if text.isdigit() else text.lower()
+                for text in re.split(_nsre,s)]
+    
     directory = os.getcwd()
     TEMP=directory.split("/")
     if TEMP[-1]!="rawimages":
@@ -338,7 +346,7 @@ if __name__ == '__main__':
     for file in os.listdir(directory):
         if os.path.splitext(file)[1] in Ext:
             order.append(file)
-    order.sort()
+    order.sort(key=natural_sort_key)
 
     outputpath=str(Path(directory).parent)
     
@@ -360,6 +368,10 @@ if __name__ == '__main__':
     time_end=time.perf_counter()
     
     print(f"\nOperation performed in {time_end - time_start:0.2f} seconds")
+
+    last=order[-1].split("_")[0]+".jpg"
+    if Path(outputpath).joinpath(last).is_file():
+        with open(str(Path(outputpath).joinpath("DONE")), 'w') as f: pass
 
     #Clean up
     for i in total_wells: del i

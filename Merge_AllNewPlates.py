@@ -11,7 +11,7 @@ import numpy as np
 from scipy import ndimage
 import cv2
 import multiprocessing
-import copy
+import argparse
 
 def generating_kernel(a):
     kernel = np.array([0.25 - a / 2.0, 0.25, a, 0.25, 0.25 - a / 2.0])
@@ -267,13 +267,9 @@ def MERGE_Zstack(well_list, file_list, imageDir, outputpath):
                 if well_list[i][:-1] not in filtered:
                     filtered.append(well_list[i][:-1])
             well_list=filtered
-        # print("well_list ", well_list)
-        # print("filtered  ", filtered)
 
         for well in well_list:
-            # print("well ", well)
             imagesToStack= [_file for _file in file_list if well==_file.split('_')[0]]
-            # print('imagesToStack',imagesToStack)
             if len(imagesToStack)!=0:
                 for _file in imagesToStack:
                     image = cv2.imread(imageDir + '/' + _file, cv2.IMREAD_COLOR)
@@ -294,7 +290,6 @@ def Calculate(directory):
     global Ext, total_wells, nproc
     order = []
     for file in os.listdir(directory):
-        # print("FILE: ", file)
         if os.path.splitext(file)[1] in Ext:
             order.append(file)
     order.sort(key=natural_sort_key)
@@ -330,9 +325,27 @@ def Calculate(directory):
              
 ########################################################################################################################
 
-def main():
+def main(args=None):
     global total_wells
     dirName = os.getcwd()
+    
+    parser = argparse.ArgumentParser(prog=__name__,
+                             description='Tool to find and  '
+                                         'process all unprocessed '
+                                         'plates. ')
+    parser.add_argument('dir', metavar='dirName', nargs='?',
+                    help='Directory to iterate over.')
+    parser.add_argument('--dry', default=False, action='store_true',
+                    dest='dry', help='if using --dry '
+                                     'Only checking, no merging ')
+    
+    options = parser.parse_args(args)
+    # print("options ", options)
+
+    if  options.dir=="." or options.dir==None:
+        dirName = os.getcwd()
+    else:
+        dirName=Path(options.dir)
     
     # Get the list of all files in directory tree at given path
     listOfDirs = list()
@@ -345,22 +358,24 @@ def main():
         if os.path.islink(elem) is False:
             directory=Path(elem)
             parents=directory.parents
-            # print("PARENTS: ", parents)
             if directory.parts[-1]=="rawimages" and not Path(parents[0]).joinpath("DONE").is_file():
                 rawdata_subfolders += [Path(parents[0]).joinpath("rawimages")]
             elif directory.parts[-1]=="rawimages" and Path(parents[0]).joinpath("DONE").is_file():
                 print(f"Data in {directory} seem to have already been processed, skipping")
-    # print("rawdata_subfolders: ", rawdata_subfolders)
     del listOfDirs
 
     #To Fix multiprocessing issue with OSX Catalina
     if sys.platform=='darwin'and multiprocessing.get_start_method()!='forkserver':
         multiprocessing.set_start_method('forkserver', force=True)
 
+    if len(rawdata_subfolders)==0:
+        print("\nNo data to merge, it seems everything has already been processed.\n")
     for _dir in rawdata_subfolders:
         print("Merging Z-stacks for directory: ", _dir)
-        Calculate(_dir)
-        time.sleep(2)
+        if options.dry is False:
+            Calculate(_dir)
+            time.sleep(2)
+            
 
     #Clean up
     for i in total_wells: del i
