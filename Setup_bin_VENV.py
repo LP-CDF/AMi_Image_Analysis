@@ -90,7 +90,7 @@ deactivate'''%(python_path, activate_venv))
 st = os.stat(file_path)
 os.chmod(file_path, st.st_mode |  stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
 
-#Change shebang for some files that can be used in terminal
+#Change shebang for some files that can be used in terminal and use openCV
 ChangeSheBang(app_path, "Merge_Zstack.py", python_path)
 ChangeSheBang(app_path, "autocrop.py", python_path)
 ChangeSheBang(app_path, "Check_Circle_detection.py", python_path)
