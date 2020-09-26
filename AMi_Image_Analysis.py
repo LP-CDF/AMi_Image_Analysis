@@ -34,7 +34,7 @@ QtWidgets.QApplication.setAttribute(QtCore.Qt.HighDpiScaleFactorRoundingPolicy.P
 
 __version__ = "1.2.3.7"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "21-09-2020"
+__date__ = "25-09-2020"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -50,7 +50,7 @@ ClassificationColor={
 
 
 def Citation():
-    print('''
+    print(f'''
 Program written by
 Ludovic Pecqueur
 Laboratoire de Chimie des Processus Biologiques
@@ -61,6 +61,7 @@ the following link:
 https://github.com/LP-CDF/AMi_Image_Analysis  
   
 licence: %s
+2019-{datetime.date.today().year}
 '''%__license__)
 
 class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -512,6 +513,7 @@ https://www.college-de-france.fr/site/en-chemistry-of-biological-processes/index
 
 Released under licence:
 %s    
+2019-{datetime.date.today().year}
  
 GitHub repository:
 https://github.com/LP-CDF/AMi_Image_Analysis    
@@ -520,9 +522,13 @@ https://github.com/LP-CDF/AMi_Image_Analysis
 
 
     def ShowManual(self):
-        import webbrowser
         path=Path(self.app_path).joinpath("Manual_AMi_Image_Analysis.pdf")
-        webbrowser.open(str(path))
+        if self.os=='linux':
+            import webbrowser
+            webbrowser.open(str(path))
+        else:
+            from subprocess import run
+            run(['open', path], check=True)
 
 
     def openFileNameDialog(self):
@@ -554,7 +560,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
                 contents = file.read().strip("\n")
                 self.prepdate=contents
             else:
-                text, okPressed = QInputDialog.getText(self, "File prep_date.txt not found","Preparation date (YYYYMMDD)", QLineEdit.Normal, "")
+                text, okPressed = QInputDialog.getText(self, "File prep_date.txt not found","Preparation date (format: YYYYMMDD)     ", QLineEdit.Normal, "")
                 if okPressed and text != '':
                     try:
                         datetime.datetime.strptime(text, '%Y%m%d')
