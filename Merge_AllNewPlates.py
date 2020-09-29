@@ -292,6 +292,9 @@ def Calculate(directory):
     for file in os.listdir(directory):
         if os.path.splitext(file)[1] in Ext:
             order.append(file)
+    if len(order)==0:
+        print("No Images found: No data? file permission issue?")
+        return
     order.sort(key=natural_sort_key)
 
     outputpath=Path(directory).parent
