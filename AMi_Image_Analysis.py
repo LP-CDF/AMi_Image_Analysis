@@ -1289,14 +1289,15 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         
         try:
             import tensorflow as tf
-            if tf.__version__ >= '2.0.0':
-                self.handle_error("TensorFlow version %s not supported"%tf.__version__)
-                return
-            else:
-                from Automated_Marco import predict
         except:
             self.handle_error("TensorFlow not found")
             return
+        
+        if tf.__version__ >= '2.0.0':
+            self.handle_error("TensorFlow version %s not supported"%tf.__version__)
+            return
+        else:
+            from Automated_Marco import predict
         
         self.classifications.clear()
         logdir=Path(self.rootDir).joinpath("Image_Data", self.date)
@@ -1358,7 +1359,7 @@ class HeatMapGrid(QtWidgets.QDialog, HeatMap_Grid.Ui_Dialog):
     ''' '''
     def __init__(self, parent=None):
         super(HeatMapGrid, self).__init__(parent)
-        ui = HeatMap_Grid.Ui_Dialog()
+        #ui = HeatMap_Grid.Ui_Dialog()
         self.setupUi(self)
 
   
