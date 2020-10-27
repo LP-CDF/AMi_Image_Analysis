@@ -552,7 +552,7 @@ class Ui_MainWindow(object):
         self.actionAutoCrop.setText(_translate("MainWindow", "AutoCrop"))
         self.actionAutoCrop.setShortcut(_translate("MainWindow", "Shift+C"))
         self.actionAutoMerge.setText(_translate("MainWindow", "AutoMerge"))
-        self.actionAutoMerge.setShortcut(_translate("MainWindow", "Ctrl+M"))
+        self.actionAutoMerge.setShortcut(_translate("MainWindow", "Shift+M"))
         self.actionMD_PGA.setText(_translate("MainWindow", "MD PGA"))
         self.actionNextal_MbClassII_Suite.setText(_translate("MainWindow", "Nextal MbClassII Suite"))
         self.actionNextal_Classics_Suite.setText(_translate("MainWindow", "Nextal Classics Suite"))

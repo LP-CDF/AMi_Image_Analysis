@@ -23,7 +23,7 @@
 import os, sys
 from pathlib import Path
 import tensorflow as tf
-from PyQt5.QtWidgets import QProgressDialog as QProgressDialog
+from PyQt5.QtWidgets import QProgressDialog
 import preferences as pref
 
 """ 
@@ -63,6 +63,7 @@ def predict(file_list, classifications,logDir):
         progress.setValue(_)
         data, name = next(iterator)
         well=os.path.splitext(os.path.basename(name))[0]
+        # progress.setLabelText(f'''processing well: {well}''')
         print("Processing File ", name)
         results = predicter(data)
 
@@ -103,7 +104,7 @@ def predict(file_list, classifications,logDir):
         
     log=Path(logDir).joinpath("auto_MARCO.log")
     
-    progress.setLabelText("Saving results to files")
+    # progress.setLabelText("Saving results to files")
     
     with open(log, 'w') as f:
             f.write("%9s%15s%15s%17s%15s \n"%("WELL", "Pb_CRYSTAL", "Pb_OTHER", "Pb_Precipitate", "Pb_Clear"))

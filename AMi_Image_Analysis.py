@@ -34,7 +34,7 @@ QtWidgets.QApplication.setAttribute(QtCore.Qt.HighDpiScaleFactorRoundingPolicy.P
 
 __version__ = "1.2.3.7"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "25-09-2020"
+__date__ = "09-10-2020"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -1288,16 +1288,15 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             return
         
         try:
-            import tensorflow as tf
+            import tensorflow as tf          
         except:
             self.handle_error("TensorFlow not found")
             return
-        
-        if tf.__version__ >= '2.0.0':
-            self.handle_error("TensorFlow version %s not supported"%tf.__version__)
-            return
         else:
-            from Automated_Marco import predict
+            if tf.__version__ >= '2.0.0':
+                self.handle_error("TensorFlow version %s not supported"%tf.__version__)
+                return
+            else: from Automated_Marco import predict
         
         self.classifications.clear()
         logdir=Path(self.rootDir).joinpath("Image_Data", self.date)
