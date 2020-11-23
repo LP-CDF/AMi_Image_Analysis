@@ -32,9 +32,9 @@ QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True) #en
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True) #use highdpi icons
 QtWidgets.QApplication.setAttribute(QtCore.Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
 
-__version__ = "1.2.3.7"
+__version__ = "1.2.3.8"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "09-10-2020"
+__date__ = "23-11-2020"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -588,6 +588,8 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         self.well_images.clear()
         self.ClearLayout(self._lay)
         self.MARCO_window.clear()
+        self.InitialNotes = None
+        self.InitialClassif = None
 
 
     def openDirDialog(self, dialog=True, directory=''):
@@ -641,7 +643,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
 
         for i in self.well_images:
             well=os.path.splitext(i)[0]
-            self.CheckClassificationNotes(self.rootDir, self.date, well)
+            self.CheckClassificationAndNotes(self.rootDir, self.date, well)
         
         #line below to reset Filter to All
         self.radioButton_All.setChecked(True)
@@ -796,6 +798,18 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         layout.addWidget(label, x, y, alignment=QtCore.Qt.AlignBottom | QtCore.Qt.AlignCenter)
 
 
+    def CheckForChanges(self, InitialClassif, CurrentClass, InitialNotes, CurrentNotes, well):
+        '''Check for modifications '''
+        # print(f'''
+        #       InitialClassif: {InitialClassif}
+        #       CurrentClass: {CurrentClass}
+        #       InitialNotes: {InitialNotes}
+        #       CurrentNotes: {CurrentNotes}
+        #       well: {well}
+        #       ''')
+        if InitialClassif!=CurrentClass or InitialNotes!=CurrentNotes: return True
+        else: return False
+
     def buttonClicked(self):
         button = self.sender()            
         self.idx=self._lay.indexOf(button)
@@ -810,28 +824,52 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         self.open_image(path)
         #Change color of button after click
         self.ChangeButtonColor(self._lay, self.currentButtonIndex, state="active")
-        
+
+###################### TO DELETE IF EVERYTHING OK #################        
+#         #Save Notes previous well before loading New notes
+#         if self.previousWell is None:
+#             self.LoadNotes(self.rootDir, self.date, well)
+# #            print("\n\npreviousWell ", self.previousWell)
+# #            print("currentWell ", self.currentWell)
+#             self.previousWell=well
+#         else:
+# #            print("\n\npreviousWell ", self.previousWell)
+# #            print("currentWell ", self.currentWell)
+#             self.SaveDATA(self.previousWell)
+#             #Load notes current wells
+#             self.LoadNotes(self.rootDir, self.date, well)
+#             #change Color previous well to "checked"
+#             for widget_item in self.layout_widgets(self._lay):
+#                 widget = widget_item.widget()             
+#                 previousButtonIndex=self._lay.getItemPosition(self._lay.indexOf(widget))
+#                 if widget.text()==self.previousWell:
+#                     self.ChangeButtonColor(self._lay, previousButtonIndex, state="checked")
+#             #Update self.previousWell
+#             self.previousWell=well
+###################### END BLOCK TO DELETE  ################# 
+
         #Save Notes previous well before loading New notes
         if self.previousWell is None:
-            self.LoadNotes(self.rootDir, self.date, well)
 #            print("\n\npreviousWell ", self.previousWell)
 #            print("currentWell ", self.currentWell)
             self.previousWell=well
-
         else:
-#            print("\n\npreviousWell ", self.previousWell)
-#            print("currentWell ", self.currentWell)
-            self.SaveNotes(self.previousWell)
-            #Load notes current wells
-            self.LoadNotes(self.rootDir, self.date, well)
-            #change Color previous well to "checked"
-            for widget_item in self.layout_widgets(self._lay):
-                widget = widget_item.widget()             
-                previousButtonIndex=self._lay.getItemPosition(self._lay.indexOf(widget))
-                if widget.text()==self.previousWell:
-                    self.ChangeButtonColor(self._lay, previousButtonIndex, state="checked")
-            #Update self.previousWell
-            self.previousWell=well
+            if self.CheckForChanges(self.InitialClassif, self.classifications[self.previousWell], 
+                                    self.InitialNotes, self.Notes_TextEdit.toPlainText(), self.previousWell) is True:
+                self.SaveDATA(self.previousWell)
+                
+        #Load notes current wells
+        self.LoadNotes(self.rootDir, self.date, well)
+        self.InitialNotes=self.Notes_TextEdit.toPlainText()
+        self.InitialClassif=self.classifications[well]
+        #change Color previous well to "checked"
+        for widget_item in self.layout_widgets(self._lay):
+            widget = widget_item.widget()             
+            previousButtonIndex=self._lay.getItemPosition(self._lay.indexOf(widget))
+            if widget.text()==self.previousWell and self.previousWell!=well:
+                self.ChangeButtonColor(self._lay, previousButtonIndex, state="checked")
+        #Update self.previousWell
+        self.previousWell=well
 
         self.Set_ScoreButtonState(self.Scoring_Layout, self.classifications[well])
         self.Load_Timeline(self.rootDir, self.imageDir, well)
@@ -950,7 +988,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
                 for i in notes: self.Notes_TextEdit.insertPlainText(i)
 
 
-    def SaveNotes(self, well):
+    def SaveDATA(self, well):
         '''Save Notes in QPlainTextEdit and more'''
         text=self.Notes_TextEdit.toPlainText()
         if len(text)!=0: self.WellHasNotes[well]=True
@@ -976,7 +1014,9 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             self.handle_error(str(e))
                
 
-    def CheckClassificationNotes(self, path, date, well):
+    def CheckClassificationAndNotes(self, path, date, well):
+        '''create a dir well:classif when calling func AddtoClassificationDict
+        and create a dict WellHasNotes True or False'''
         data_file=Path(self.rootDir).joinpath("Image_Data", self.date, "%s_data.txt"%well)
         if Path(data_file).exists():
             with open(data_file, "r") as f:
@@ -1171,7 +1211,6 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             return
         location=self.currentButtonIndex
         currentrow=location[0]; currentcol=location[1]
-        self.ChangeButtonColor(self._lay, self.currentButtonIndex, state="checked")
         # NumberOfColumns=self._lay.columnCount()
         # NumberOfRows=self._lay.rowCount()
 
@@ -1303,12 +1342,12 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         predict(self.files, self.classifications, logdir)
 
         for well, classif in self.classifications.items():
-            self.SaveNotes(well)
+            self.SaveDATA(well)
 
             
     def on_exit(self):
         '''things to do before exiting'''
-#        self.SaveNotes(self.currentWell)
+#        self.SaveDATA(self.currentWell)
         app.closeAllWindows()
         Citation()
 
