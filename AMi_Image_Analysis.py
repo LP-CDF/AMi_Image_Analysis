@@ -38,16 +38,8 @@ __date__ = "23-11-2020"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
-#Dictionnary used to update color of labelVisuClassif
-ClassificationColor={
-    "Clear":{"background":"white", "text":"black", "Qcolor":"#ffffff"},
-    "Precipitate":{"background":"red", "text":"white","Qcolor":"#ff0000"},
-    "Crystal":{"background":"green", "text":"white","Qcolor":"#00ff00"},
-    "PhaseSep":{"background":"orange", "text":"black","Qcolor":"#ff7f00"},
-    "Other":{"background":"magenta", "text":"white","Qcolor":"#ff00ff"},
-    "Unknown":{"background":"yellow", "text":"black","Qcolor":"#ffff00"}
-    }
-
+#Dictionnary used to update color of labelVisuClassif. Definition in preferences.py
+ClassificationColor=pref.ClassificationColor
 
 def Citation():
     print(f'''
@@ -101,6 +93,8 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.currentWell = None
         self.currentButtonIndex= None
         self.VisiblesIdx = []
+        self.InitialNotes = None
+        self.InitialClassif = None
 
         #If using the QGraphics view, use open_image
         #If not comment the next five lines and use

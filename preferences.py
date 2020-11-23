@@ -18,6 +18,16 @@ from PyQt5 import QtCore
 keyboard_layout="qwerty"
 #keyboard_layout="azerty"
 
+#Dictionnary used to update color of labelVisuClassif
+ClassificationColor={
+    "Clear":{"background":"white", "text":"black", "Qcolor":"#ffffff"},
+    "Precipitate":{"background":"red", "text":"white","Qcolor":"#ff0000"},
+    "Crystal":{"background":"green", "text":"white","Qcolor":"#00ff00"},
+    "PhaseSep":{"background":"orange", "text":"black","Qcolor":"#ff7f00"},
+    "Other":{"background":"magenta", "text":"white","Qcolor":"#ff00ff"},
+    "Unknown":{"background":"yellow", "text":"black","Qcolor":"#ffff00"}
+    }
+
 #autoMARCO acceptance probability criterium
 autoMARCO_threshold=0.60
 
