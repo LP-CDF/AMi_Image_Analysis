@@ -34,7 +34,7 @@ QtWidgets.QApplication.setAttribute(QtCore.Qt.HighDpiScaleFactorRoundingPolicy.P
 
 __version__ = "1.2.3.8"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "23-11-2020"
+__date__ = "24-11-2020"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -61,7 +61,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         super(ViewerModule, self).__init__(parent)
         self.app_path=os.path.abspath(os.path.dirname(sys.argv[0]))
         # print("self.app_path ", self.app_path)
-        self.SplashScreen(2000)
+        # self.SplashScreen(2000)
         self.ui=Ui_MainWindow()
         self.setupUi(self)
         self.setWindowTitle(f"LCPB AMi Image Analysis version {__version__}")
@@ -217,6 +217,13 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.pushButton_DisplayHeatMap.clicked.connect(self.show_HeatMap)
         self.pushButton_ExportToPDF.clicked.connect(self.export_pdf)
         
+        #Show shortcut in GUI for class selection
+        self.label_ShortcutClear.setText("(%s)"%QKeySequence(pref.Shortcut.Clear).toString())
+        self.label_ShortcutPrec.setText("(%s)"%QKeySequence(pref.Shortcut.Precipitate).toString())
+        self.label_ShortcutCrystal.setText("(%s)"%QKeySequence(pref.Shortcut.Crystal).toString())
+        self.label_ShortcutPhaseSep.setText("(%s)"%QKeySequence(pref.Shortcut.PhaseSep).toString())
+        self.label_ShortcutOther.setText("(%s)"%QKeySequence(pref.Shortcut.Other).toString())
+     
         self.show()
 
 
@@ -1090,16 +1097,21 @@ https://github.com/LP-CDF/AMi_Image_Analysis
 
 
     def Set_ScoreButtonState(self, layout, classification):
-        #Reset Activation State first
+        widgetlist=[]
+        #Extract non Qlabel widgets
         for widget_item in self.layout_widgets(layout):
             widget = widget_item.widget()
+            if isinstance(widget, QtWidgets.QLabel) is False:
+                 widgetlist.append(widget)
+        #Reset Activation State first
+        for widget in widgetlist:
             if widget.isChecked() is True:
                 widget.setAutoExclusive(False)
                 widget.setChecked(False)
             widget.setAutoExclusive(True)
         #Then do the job
-        for widget_item in self.layout_widgets(layout):
-            widget = widget_item.widget()
+        for widget in widgetlist:
+            # widget = widget_item.widget()
             if widget.text()==classification:
                 widget.setChecked(True)
             elif classification=="Unknown":
@@ -1109,6 +1121,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
                 else: widget.setChecked(False)
             else:
                 widget.setChecked(False)
+        del widgetlist
 
 
     def Load_Timeline(self, rootdirectory, imagedir, well):
