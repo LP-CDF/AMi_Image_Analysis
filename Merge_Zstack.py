@@ -301,6 +301,19 @@ def MERGE_Zstack(well_list, file_list, imageDir, outputpath):
                 print("Merged File for well %s saved to %s"%(well, outputpath + '/'+ well + ".jpg"))
                 images.clear(); imagesToStack.clear()
                 del merged
+
+
+def MERGE_Zstack2(well, file_list, imageDir, outputpath):
+        images=[]  
+        imagesToStack= [_file for _file in file_list if well==_file.split('_')[0]]
+        if len(imagesToStack)!=0:
+            for _file in imagesToStack:
+                image = cv2.imread(imageDir + '/' + _file, cv2.IMREAD_COLOR)
+                images.append(image)
+            stack_focus(images, outputpath + '/', name="%s"%well)
+            print("Merged File for well %s saved to %s"%(well, outputpath + '/'+ well + ".jpg"))
+            images.clear(); imagesToStack.clear()
+
                 
 ########################################################################################################################
 
@@ -330,17 +343,17 @@ if __name__ == '__main__':
     rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
     cols = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
     wells = ['a', 'b', 'c']
+    total_wells = [row + str(col) + str(well) for row in rows for col in cols for well in wells]
 
-    A_wells = ["A" + str(col) + str(well) for col in cols for well in wells]
-    B_wells = ["B" + str(col) + str(well) for col in cols for well in wells]
-    C_wells = ["C" + str(col) + str(well) for col in cols for well in wells]
-    D_wells = ["D" + str(col) + str(well) for col in cols for well in wells]
-    E_wells = ["E" + str(col) + str(well) for col in cols for well in wells]
-    F_wells = ["F" + str(col) + str(well) for col in cols for well in wells]
-    G_wells = ["G" + str(col) + str(well) for col in cols for well in wells]
-    H_wells = ["H" + str(col) + str(well) for col in cols for well in wells]
-    
-    total_wells=[A_wells,B_wells,C_wells,D_wells,E_wells,F_wells,G_wells,H_wells]
+    # A_wells = ["A" + str(col) + str(well) for col in cols for well in wells]
+    # B_wells = ["B" + str(col) + str(well) for col in cols for well in wells]
+    # C_wells = ["C" + str(col) + str(well) for col in cols for well in wells]
+    # D_wells = ["D" + str(col) + str(well) for col in cols for well in wells]
+    # E_wells = ["E" + str(col) + str(well) for col in cols for well in wells]
+    # F_wells = ["F" + str(col) + str(well) for col in cols for well in wells]
+    # G_wells = ["G" + str(col) + str(well) for col in cols for well in wells]
+    # H_wells = ["H" + str(col) + str(well) for col in cols for well in wells]    
+    # total_wells=[A_wells,B_wells,C_wells,D_wells,E_wells,F_wells,G_wells,H_wells]
 
     order = []
     for file in os.listdir(directory):
@@ -348,6 +361,15 @@ if __name__ == '__main__':
             order.append(file)
     order.sort(key=natural_sort_key)
 
+    if order[0].split('_')[0][-1] in ['a', 'b', 'c']: SUBWELL=True
+    else:SUBWELL=False
+    
+    filtered=[]
+    if SUBWELL==False:
+        for i in  range(len(total_wells)):
+            if total_wells[i][:-1] not in filtered:
+                filtered.append(total_wells[i][:-1])
+        total_wells=filtered
     outputpath=str(Path(directory).parent)
     
     args=[]
@@ -362,9 +384,9 @@ if __name__ == '__main__':
     print("Number of CORES = ", nproc, "| Number of processes= ", number_processes)
     time_start=time.perf_counter()
     pool = multiprocessing.Pool(number_processes)
-    results=[pool.apply_async(MERGE_Zstack, arg) for arg in args]
+    # results=[pool.apply_async(MERGE_Zstack, arg) for arg in args]
+    results=[pool.apply_async(MERGE_Zstack2, arg) for arg in args]
     pool.close(); pool.join()
-    # MERGE_Zstack(A_wells, order, directory, outputpath)
     time_end=time.perf_counter()
     
     print(f"\nOperation performed in {time_end - time_start:0.2f} seconds")

@@ -13,6 +13,14 @@ import cv2
 import multiprocessing
 import argparse
 
+MAX_CPU=None #set to desired integer if needed ie MAX_CPU="8" (keep the "")
+
+__version__ = "0.1"
+__author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
+__date__ = "03-12-2020"
+__license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
+
+
 def generating_kernel(a):
     kernel = np.array([0.25 - a / 2.0, 0.25, a, 0.25, 0.25 - a / 2.0])
     return np.outer(kernel, kernel)
@@ -279,6 +287,17 @@ def MERGE_Zstack(well_list, file_list, imageDir, outputpath):
                 images.clear(); imagesToStack.clear()
                 del merged
 
+def MERGE_Zstack2(well, file_list, imageDir, outputpath):
+        images=[]  
+        imagesToStack= [_file for _file in file_list if well==_file.split('_')[0]]
+        if len(imagesToStack)!=0:
+            for _file in imagesToStack:
+                image = cv2.imread(imageDir + '/' + _file, cv2.IMREAD_COLOR)
+                images.append(image)
+            stack_focus(images, outputpath + '/', name="%s"%well)
+            print("Merged File for well %s saved to %s"%(well, outputpath + '/'+ well + ".jpg"))
+            images.clear(); imagesToStack.clear()
+
 
 def natural_sort_key(s):
     global _nsre
@@ -287,7 +306,7 @@ def natural_sort_key(s):
 
 
 def Calculate(directory):
-    global Ext, total_wells, nproc
+    global Ext, total_wells, nproc, MAX_CPU
     order = []
     for file in os.listdir(directory):
         if os.path.splitext(file)[1] in Ext:
@@ -297,6 +316,16 @@ def Calculate(directory):
         return
     order.sort(key=natural_sort_key)
 
+    if order[0].split('_')[0][-1] in ['a', 'b', 'c']: SUBWELL=True
+    else:SUBWELL=False
+    
+    if SUBWELL==False:
+        filtered=[]
+        for i in  range(len(total_wells)):
+            if total_wells[i][:-1] not in filtered:
+                filtered.append(total_wells[i][:-1])
+        total_wells=filtered
+        
     outputpath=Path(directory).parent
     
     args=[]
@@ -305,13 +334,24 @@ def Calculate(directory):
         args.append(arg)
     
     njobs=len(args)
-    if njobs > nproc and nproc !=1 : number_processes=nproc-1
-    elif nproc==1: number_processes=1
-    else: number_processes=njobs
+    if MAX_CPU!=None:
+        try:
+            int(MAX_CPU)
+            if int(MAX_CPU) >= nproc: MAX_CPU=nproc-1
+        except:
+            print("ABORTING, MAX_CPU not set properly")
+            sys.exit()
+            
+    if nproc==1: number_processes=1
+    elif njobs >= nproc and nproc !=1 :
+        if MAX_CPU==None: number_processes=nproc-1
+        else: number_processes=int(MAX_CPU)
+
+    
     print("Number of CORES = ", nproc, "| Number of processes= ", number_processes)
     time_start=time.perf_counter()
     pool = multiprocessing.Pool(number_processes)
-    results=[pool.apply_async(MERGE_Zstack, arg) for arg in args]
+    results=[pool.apply_async(MERGE_Zstack2, arg) for arg in args]
     pool.close(); pool.join()
     # MERGE_Zstack(A_wells, order, directory, outputpath)
     time_end=time.perf_counter()
@@ -361,6 +401,7 @@ def main(args=None):
         if os.path.islink(elem) is False:
             directory=Path(elem)
             parents=directory.parents
+            if "Image_Data" in str(directory): continue
             if directory.parts[-1]=="rawimages" and not Path(parents[0]).joinpath("DONE").is_file():
                 rawdata_subfolders += [Path(parents[0]).joinpath("rawimages")]
             elif directory.parts[-1]=="rawimages" and Path(parents[0]).joinpath("DONE").is_file():
@@ -394,16 +435,7 @@ if __name__ == '__main__':
     wells = ['a', 'b', 'c']
     _nsre = re.compile('([0-9]+)')
     
-    A_wells = ["A" + str(col) + str(well) for col in cols for well in wells]
-    B_wells = ["B" + str(col) + str(well) for col in cols for well in wells]
-    C_wells = ["C" + str(col) + str(well) for col in cols for well in wells]
-    D_wells = ["D" + str(col) + str(well) for col in cols for well in wells]
-    E_wells = ["E" + str(col) + str(well) for col in cols for well in wells]
-    F_wells = ["F" + str(col) + str(well) for col in cols for well in wells]
-    G_wells = ["G" + str(col) + str(well) for col in cols for well in wells]
-    H_wells = ["H" + str(col) + str(well) for col in cols for well in wells]
-    
-    total_wells=[A_wells,B_wells,C_wells,D_wells,E_wells,F_wells,G_wells,H_wells]
+    total_wells = [row + str(col) + str(well) for row in rows for col in cols for well in wells]
 
     nproc=multiprocessing.cpu_count()
 ########################################################################################################################

@@ -32,9 +32,9 @@ QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True) #en
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True) #use highdpi icons
 QtWidgets.QApplication.setAttribute(QtCore.Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
 
-__version__ = "1.2.3.8"
+__version__ = "1.2.3.9"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "24-11-2020"
+__date__ = "03-12-2020"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -61,7 +61,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         super(ViewerModule, self).__init__(parent)
         self.app_path=os.path.abspath(os.path.dirname(sys.argv[0]))
         # print("self.app_path ", self.app_path)
-        # self.SplashScreen(2000)
+        self.SplashScreen(2000)
         self.ui=Ui_MainWindow()
         self.setupUi(self)
         self.setWindowTitle(f"LCPB AMi Image Analysis version {__version__}")
@@ -422,25 +422,41 @@ You can check progress in the terminal window.
         if self.os=='darwin'and multiprocessing.get_start_method()!='forkserver':
             multiprocessing.set_start_method('forkserver', force=True)
 
-        # rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+        rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
         cols = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
         wells = ['a', 'b', 'c']
-    
-        A_wells = ["A" + str(col) + str(well) for col in cols for well in wells]
-        B_wells = ["B" + str(col) + str(well) for col in cols for well in wells]
-        C_wells = ["C" + str(col) + str(well) for col in cols for well in wells]
-        D_wells = ["D" + str(col) + str(well) for col in cols for well in wells]
-        E_wells = ["E" + str(col) + str(well) for col in cols for well in wells]
-        F_wells = ["F" + str(col) + str(well) for col in cols for well in wells]
-        G_wells = ["G" + str(col) + str(well) for col in cols for well in wells]
-        H_wells = ["H" + str(col) + str(well) for col in cols for well in wells]
+        total_wells = [row + str(col) + str(well) for row in rows for col in cols for well in wells]
+
+###################### TO DELETE IF EVERYTHING OK #################    
+        # A_wells = ["A" + str(col) + str(well) for col in cols for well in wells]
+        # B_wells = ["B" + str(col) + str(well) for col in cols for well in wells]
+        # C_wells = ["C" + str(col) + str(well) for col in cols for well in wells]
+        # D_wells = ["D" + str(col) + str(well) for col in cols for well in wells]
+        # E_wells = ["E" + str(col) + str(well) for col in cols for well in wells]
+        # F_wells = ["F" + str(col) + str(well) for col in cols for well in wells]
+        # G_wells = ["G" + str(col) + str(well) for col in cols for well in wells]
+        # H_wells = ["H" + str(col) + str(well) for col in cols for well in wells]        
+        # total_wells=[A_wells,B_wells,C_wells,D_wells,E_wells,F_wells,G_wells,H_wells]   
+        # for _list in total_wells:
+        #     arg=_list, self.well_images, self.imageDir, path
+        #     args.append(arg)   
+###################### END BLOCK TO DELETE  #################
         
-        total_wells=[A_wells,B_wells,C_wells,D_wells,E_wells,F_wells,G_wells,H_wells]    
         path=str(Path(self.imageDir).parent)
         
+        if self.well_images[0].split('_')[0][-1] in ['a', 'b', 'c']: SUBWELL=True
+        else:SUBWELL=False
+        
+        if SUBWELL==False:
+            filtered=[]
+            for i in  range(len(total_wells)):
+                if total_wells[i][:-1] not in filtered:
+                    filtered.append(total_wells[i][:-1])
+            total_wells=filtered        
+        
         args=[]
-        for _list in total_wells:
-            arg=_list, self.well_images, self.imageDir, path
+        for well in total_wells:
+            arg=well, self.well_images, self.imageDir, path
             args.append(arg)
     
         njobs=len(args)
@@ -450,7 +466,7 @@ You can check progress in the terminal window.
         print("Number of CORES = ", nproc, "Number of processes= ", number_processes)
         time_start=time.perf_counter()
         pool = multiprocessing.Pool(number_processes)
-        results=[pool.apply_async(Merge_Zstack.MERGE_Zstack, arg) for arg in args]
+        results=[pool.apply_async(Merge_Zstack.MERGE_Zstack2, arg) for arg in args]
         pool.close(); pool.join()
         time_end=time.perf_counter()        
             
