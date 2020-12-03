@@ -19,6 +19,7 @@ import os, sys, time
 import multiprocessing
 from pathlib import Path
 
+MAX_CPU=None #set to desired integer if needed ie MAX_CPU="8" (keep the "")
 
 def usage():
     print('''
@@ -378,9 +379,19 @@ if __name__ == '__main__':
         args.append(arg)
         
     njobs=len(args)
-    if njobs > nproc and nproc !=1 : number_processes=nproc-1
-    elif nproc==1: number_processes=1
-    else: number_processes=njobs
+    if MAX_CPU!=None:
+        try:
+            int(MAX_CPU)
+            if int(MAX_CPU) >= nproc: MAX_CPU=nproc-1
+        except:
+            print("ABORTING, MAX_CPU not set properly")
+            sys.exit()
+            
+    if nproc==1: number_processes=1
+    elif njobs >= nproc and nproc !=1 :
+        if MAX_CPU==None: number_processes=nproc-1
+        else: number_processes=int(MAX_CPU)
+        
     print("Number of CORES = ", nproc, "| Number of processes= ", number_processes)
     time_start=time.perf_counter()
     pool = multiprocessing.Pool(number_processes)

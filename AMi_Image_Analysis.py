@@ -460,9 +460,21 @@ You can check progress in the terminal window.
             args.append(arg)
     
         njobs=len(args)
-        if njobs > nproc and nproc !=1 : number_processes=nproc-1
-        elif nproc==1: number_processes=1
-        else: number_processes=njobs
+
+        MAX_CPU=pref.MAX_CPU
+        if MAX_CPU!=None:
+            try:
+                int(MAX_CPU)
+                if int(MAX_CPU) >= nproc: MAX_CPU=nproc-1
+            except:
+                self.handle_error("ABORTING, MAX_CPU not set properly, you must edit the value of MAX_CPU in preferences.py and restart the GUI")
+                return
+                
+        if nproc==1: number_processes=1
+        elif njobs >= nproc and nproc !=1 :
+            if MAX_CPU==None: number_processes=nproc-1
+            else: number_processes=int(MAX_CPU)
+       
         print("Number of CORES = ", nproc, "Number of processes= ", number_processes)
         time_start=time.perf_counter()
         pool = multiprocessing.Pool(number_processes)
