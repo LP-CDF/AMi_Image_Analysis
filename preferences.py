@@ -18,6 +18,8 @@ from PyQt5 import QtCore
 keyboard_layout="qwerty"
 #keyboard_layout="azerty"
 
+MAX_CPU=None #set to desired integer if needed ie MAX_CPU="8" (keep the "")
+
 #Dictionnary used to update color of labelVisuClassif
 ClassificationColor={
     "Clear":{"background":"white", "text":"black", "Qcolor":"#ffffff"},
