@@ -34,7 +34,7 @@ QtWidgets.QApplication.setAttribute(QtCore.Qt.HighDpiScaleFactorRoundingPolicy.P
 
 __version__ = "1.2.3.9"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "03-12-2020"
+__date__ = "20-01-2021"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -147,6 +147,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         #Crystallization Screens
         self.actionMD_PGA.triggered.connect(lambda: self.show_CrystScreen("MD-PGA"))
         self.actionNextal_MbClassII_Suite.triggered.connect(lambda: self.show_CrystScreen("Nextal-MBClassII"))
+        self.actionNeXtal_Ammonium_Sulfate_Suite.triggered.connect(lambda: self.show_CrystScreen("NeXtal-Ammonium_Sulfate_Suite"))
         self.actionNextal_Classics_Suite.triggered.connect(lambda: self.show_CrystScreen("Nextal-Classics-Suite"))
         self.actionNextal_ClassicsII_Suite.triggered.connect(lambda: self.show_CrystScreen("Nextal-ClassicsII-Suite"))
         self.actionNextal_PEGII_Suite.triggered.connect(lambda: self.show_CrystScreen("NeXtal-PEGs-II-Suite"))
@@ -189,8 +190,9 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.radioButton_Unsorted.toggled.connect(lambda:self.FilterClassification(self._lay,"Unknown"))
         self.radioButton_HasNotes.toggled.connect(lambda:self.FilterNotes(self._lay))
         
-        #Stylesheet scrollAreaPlate
+        #Stylesheet scrollAreaPlate and some Qlabel
         self.scrollAreaPlate.setStyleSheet("""background-color: rgb(220,220,220);""")
+        self.label_LastSaved.setStyleSheet("""background-color: rgb(230,230,230);""")
         
         
         #Change Some Styles in Scoring Section
@@ -467,7 +469,7 @@ You can check progress in the terminal window.
                 int(MAX_CPU)
                 if int(MAX_CPU) >= nproc: MAX_CPU=nproc-1
             except:
-                self.handle_error("ABORTING, MAX_CPU not set properly, you must edit the value of MAX_CPU in preferences.py and restart the GUI")
+                self.handle_error(f"ABORTING, MAX_CPU not set properly, you must edit the value of MAX_CPU in:\n{self.app_path}/preferences.py \nand restart the GUI")
                 return
                 
         if nproc==1: number_processes=1
@@ -582,6 +584,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         self.plate=PATHS.plate
         self.prep_date_path=PATHS.prep_date_path
         self.imageDir=str(Path.resolve(directory))
+        self.label_LastSaved.setText("")
 
         if self.rootDir is not None:
             if Path(self.prep_date_path).exists():
@@ -852,30 +855,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         path=self.buildWellImagePath(self.imageDir, well, self.well_images)
         self.open_image(path)
         #Change color of button after click
-        self.ChangeButtonColor(self._lay, self.currentButtonIndex, state="active")
-
-###################### TO DELETE IF EVERYTHING OK #################        
-#         #Save Notes previous well before loading New notes
-#         if self.previousWell is None:
-#             self.LoadNotes(self.rootDir, self.date, well)
-# #            print("\n\npreviousWell ", self.previousWell)
-# #            print("currentWell ", self.currentWell)
-#             self.previousWell=well
-#         else:
-# #            print("\n\npreviousWell ", self.previousWell)
-# #            print("currentWell ", self.currentWell)
-#             self.SaveDATA(self.previousWell)
-#             #Load notes current wells
-#             self.LoadNotes(self.rootDir, self.date, well)
-#             #change Color previous well to "checked"
-#             for widget_item in self.layout_widgets(self._lay):
-#                 widget = widget_item.widget()             
-#                 previousButtonIndex=self._lay.getItemPosition(self._lay.indexOf(widget))
-#                 if widget.text()==self.previousWell:
-#                     self.ChangeButtonColor(self._lay, previousButtonIndex, state="checked")
-#             #Update self.previousWell
-#             self.previousWell=well
-###################### END BLOCK TO DELETE  ################# 
+        self.ChangeButtonColor(self._lay, self.currentButtonIndex, state="active") 
 
         #Save Notes previous well before loading New notes
         if self.previousWell is None:
@@ -1036,6 +1016,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         Notes.append(text)
 
         print("Saving data to %s"%path)
+        self.label_LastSaved.setText(f"### Data for {well} saved ###")
         try:
             with open(path, 'w') as f:
                 for i in Notes: f.write(i)

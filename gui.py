@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'DesignerFiles/mainwindow.ui'
+# Form implementation generated from reading ui file 'DesignerFiles/mainwindow_test.ui'
 #
-# Created by: PyQt5 UI code generator 5.12.1
+# Created by: PyQt5 UI code generator 5.9.2
 #
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -79,7 +78,7 @@ class Ui_MainWindow(object):
         self.scrollAreaPlate.setWidgetResizable(True)
         self.scrollAreaPlate.setObjectName("scrollAreaPlate")
         self.scrollAreaPlateContent = QtWidgets.QWidget()
-        self.scrollAreaPlateContent.setGeometry(QtCore.QRect(0, 0, 667, 417))
+        self.scrollAreaPlateContent.setGeometry(QtCore.QRect(0, 0, 665, 403))
         self.scrollAreaPlateContent.setObjectName("scrollAreaPlateContent")
         self.scrollAreaPlate.setWidget(self.scrollAreaPlateContent)
         self.gridLayout.addWidget(self.scrollAreaPlate, 3, 0, 1, 1)
@@ -185,9 +184,21 @@ class Ui_MainWindow(object):
         self.progressBar.setProperty("value", 0)
         self.progressBar.setObjectName("progressBar")
         self.horizontalLayout_4.addWidget(self.progressBar, 0, QtCore.Qt.AlignLeft)
+        self.label_LastSaved = QtWidgets.QLabel(self.gridLayoutWidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.label_LastSaved.sizePolicy().hasHeightForWidth())
+        self.label_LastSaved.setSizePolicy(sizePolicy)
+        self.label_LastSaved.setMinimumSize(QtCore.QSize(220, 0))
+        self.label_LastSaved.setMaximumSize(QtCore.QSize(220, 16777215))
+        self.label_LastSaved.setText("")
+        self.label_LastSaved.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_LastSaved.setObjectName("label_LastSaved")
+        self.horizontalLayout_4.addWidget(self.label_LastSaved)
         self.gridLayout.addLayout(self.horizontalLayout_4, 0, 0, 1, 1)
         self.gridLayoutWidget_2 = QtWidgets.QWidget(self.verticalFrame)
-        self.gridLayoutWidget_2.setGeometry(QtCore.QRect(20, 650, 1544, 280))
+        self.gridLayoutWidget_2.setGeometry(QtCore.QRect(20, 650, 1541, 280))
         self.gridLayoutWidget_2.setObjectName("gridLayoutWidget_2")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.gridLayoutWidget_2)
         self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -206,7 +217,7 @@ class Ui_MainWindow(object):
         self.scrollArea_Timeline.setWidgetResizable(True)
         self.scrollArea_Timeline.setObjectName("scrollArea_Timeline")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 828, 248))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 826, 246))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.scrollArea_Timeline.setWidget(self.scrollAreaWidgetContents)
         self.gridLayout_2.addWidget(self.scrollArea_Timeline, 1, 2, 1, 1)
@@ -262,13 +273,13 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.groupBox.sizePolicy().hasHeightForWidth())
         self.groupBox.setSizePolicy(sizePolicy)
-        self.groupBox.setMinimumSize(QtCore.QSize(150, 110))
+        self.groupBox.setMinimumSize(QtCore.QSize(148, 135))
         self.groupBox.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.groupBox.setBaseSize(QtCore.QSize(150, 0))
         self.groupBox.setTitle("")
         self.groupBox.setObjectName("groupBox")
         self.layoutWidget1 = QtWidgets.QWidget(self.groupBox)
-        self.layoutWidget1.setGeometry(QtCore.QRect(10, 30, 125, 73))
+        self.layoutWidget1.setGeometry(QtCore.QRect(10, 30, 133, 99))
         self.layoutWidget1.setObjectName("layoutWidget1")
         self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.layoutWidget1)
         self.verticalLayout_5.setContentsMargins(0, 0, 0, 0)
@@ -363,7 +374,7 @@ class Ui_MainWindow(object):
         self.ImageViewer.setWidgetResizable(True)
         self.ImageViewer.setObjectName("ImageViewer")
         self.scrollAreaWidgetContents_3 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_3.setGeometry(QtCore.QRect(0, 0, 859, 629))
+        self.scrollAreaWidgetContents_3.setGeometry(QtCore.QRect(0, 0, 857, 627))
         self.scrollAreaWidgetContents_3.setObjectName("scrollAreaWidgetContents_3")
         self.ImageViewer.setWidget(self.scrollAreaWidgetContents_3)
         self.horizontalLayout.addWidget(self.verticalFrame)
@@ -372,7 +383,7 @@ class Ui_MainWindow(object):
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
         self.menuBar = QtWidgets.QMenuBar(MainWindow)
-        self.menuBar.setGeometry(QtCore.QRect(0, 0, 1600, 22))
+        self.menuBar.setGeometry(QtCore.QRect(0, 0, 1600, 28))
         self.menuBar.setObjectName("menuBar")
         self.menuFile = QtWidgets.QMenu(self.menuBar)
         self.menuFile.setObjectName("menuFile")
@@ -472,6 +483,8 @@ class Ui_MainWindow(object):
         self.actionDelete_Folder_cropped.setObjectName("actionDelete_Folder_cropped")
         self.actionManual = QtWidgets.QAction(MainWindow)
         self.actionManual.setObjectName("actionManual")
+        self.actionNeXtal_Ammonium_Sulfate_Suite = QtWidgets.QAction(MainWindow)
+        self.actionNeXtal_Ammonium_Sulfate_Suite.setObjectName("actionNeXtal_Ammonium_Sulfate_Suite")
         self.menuFile.addAction(self.openFile)
         self.menuFile.addAction(self.openDir)
         self.menuFile.addAction(self.actionExport_to_PDF)
@@ -498,6 +511,7 @@ class Ui_MainWindow(object):
         self.menuMolecular_Dimensions.addAction(self.actionMD_MIDAS)
         self.menuMolecular_Dimensions.addAction(self.actionMD_PACT_Premier)
         self.menuMolecular_Dimensions.addAction(self.actionMD_PGA)
+        self.menuNextal.addAction(self.actionNeXtal_Ammonium_Sulfate_Suite)
         self.menuNextal.addAction(self.actionNextal_Classics_Suite)
         self.menuNextal.addAction(self.actionNextal_ClassicsII_Suite)
         self.menuNextal.addAction(self.actionNextal_JCSG_Plus)
@@ -625,8 +639,7 @@ class Ui_MainWindow(object):
         self.actionDelete_Folder_rawimages.setText(_translate("MainWindow", "Delete \"rawimages\""))
         self.actionDelete_Folder_cropped.setText(_translate("MainWindow", "Delete \"cropped\""))
         self.actionManual.setText(_translate("MainWindow", "Manual"))
-
-
+        self.actionNeXtal_Ammonium_Sulfate_Suite.setText(_translate("MainWindow", "NeXtal Ammonium Sulfate Suite"))
 
 
 if __name__ == "__main__":
@@ -637,3 +650,4 @@ if __name__ == "__main__":
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
+
