@@ -17,7 +17,7 @@ MAX_CPU=None #set to desired integer if needed ie MAX_CPU="8" (keep the "")
 
 __version__ = "0.1"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "03-12-2020"
+__date__ = "05-02-2021"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -260,43 +260,19 @@ def align(images, iterations = 1, epsilon = 1e-10):
 
     return aligned_images
 
-def MERGE_Zstack(well_list, file_list, imageDir, outputpath):
-        images=[]
-        SUBWELL=True
-        
-        if file_list[0].split('_')[0][-1] in ['a', 'b', 'c']: SUBWELL=True
-        else: SUBWELL=False
-        print("TYPE of DATA with SUBWELLS: %s"%SUBWELL)
-        
-        #Alter list to remove subwell (NOT TESTED)
-        filtered=[]
-        if SUBWELL==False:
-            for i in  range(len(well_list)):
-                if well_list[i][:-1] not in filtered:
-                    filtered.append(well_list[i][:-1])
-            well_list=filtered
-
-        for well in well_list:
-            imagesToStack= [_file for _file in file_list if well==_file.split('_')[0]]
-            if len(imagesToStack)!=0:
-                for _file in imagesToStack:
-                    image = cv2.imread(imageDir + '/' + _file, cv2.IMREAD_COLOR)
-                    images.append(image)
-                merged = stack_focus(images, outputpath + '/', name="%s"%well)
-                print("Merged File for well %s saved to %s"%(well, outputpath + '/'+ well + ".jpg"))
-                images.clear(); imagesToStack.clear()
-                del merged
 
 def MERGE_Zstack2(well, file_list, imageDir, outputpath):
+        '''file_list only contains images from a single well'''
         images=[]  
-        imagesToStack= [_file for _file in file_list if well==_file.split('_')[0]]
-        if len(imagesToStack)!=0:
-            for _file in imagesToStack:
+        # gogol=0
+        if len(file_list)!=0:
+            for _file in file_list:
+                # gogol+=1
                 image = cv2.imread(imageDir + '/' + _file, cv2.IMREAD_COLOR)
                 images.append(image)
             stack_focus(images, outputpath + '/', name="%s"%well)
             print("Merged File for well %s saved to %s"%(well, outputpath + '/'+ well + ".jpg"))
-            images.clear(); imagesToStack.clear()
+            images.clear()
 
 
 def natural_sort_key(s):
@@ -306,7 +282,7 @@ def natural_sort_key(s):
 
 
 def Calculate(directory):
-    global Ext, total_wells, nproc, MAX_CPU
+    global Ext, total_wells, MAX_CPU, nproc
     order = []
     for file in os.listdir(directory):
         if os.path.splitext(file)[1] in Ext:
@@ -316,44 +292,49 @@ def Calculate(directory):
         return
     order.sort(key=natural_sort_key)
 
-    if order[0].split('_')[0][-1] in ['a', 'b', 'c']: SUBWELL=True
+    if order[0].split('_')[0][-1] in ['a', 'b', 'c']:SUBWELL=True
     else:SUBWELL=False
+    print("TYPE of DATA with SUBWELLS: %s"%SUBWELL)
     
+    if SUBWELL==True:
+        _wells=[]
+        for i in  range(len(total_wells)):
+            _wells.append(total_wells[i])
+            
     if SUBWELL==False:
         filtered=[]
         for i in  range(len(total_wells)):
             if total_wells[i][:-1] not in filtered:
                 filtered.append(total_wells[i][:-1])
-        total_wells=filtered
+        _wells=filtered
         
     outputpath=Path(directory).parent
     
     args=[]
-    for i in total_wells:
-        arg=i, order, str(directory), str(outputpath)
-        args.append(arg)
+    for i in _wells:
+        # arg=i, order, str(directory), str(outputpath)
+        imagesToStack= [_file for _file in order if i==_file.split('_')[0]]
+        arg=i, imagesToStack, str(directory), str(outputpath)
+        if len(imagesToStack)!=0:
+            args.append(arg)
+        # print("ARGUMENT TO PASS: ", arg)
     
     njobs=len(args)
-    if MAX_CPU!=None:
-        try:
-            int(MAX_CPU)
-            if int(MAX_CPU) >= nproc: MAX_CPU=nproc-1
-        except:
-            print("ABORTING, MAX_CPU not set properly")
-            sys.exit()
-            
-    if nproc==1: number_processes=1
-    elif njobs >= nproc and nproc !=1 :
-        if MAX_CPU==None: number_processes=nproc-1
-        else: number_processes=int(MAX_CPU)
+        
+    if MAX_CPU==1 or nproc==1:
+        number_processes=1
+    elif njobs >= MAX_CPU and MAX_CPU < nproc:
+        number_processes=MAX_CPU
+    elif njobs >= MAX_CPU and MAX_CPU==nproc:
+        number_processes=nproc-1
+    elif njobs < MAX_CPU: number_processes=njobs
 
     
-    print("Number of CORES = ", nproc, "| Number of processes= ", number_processes)
+    print("Number of CORES = ", nproc, "| Number of processes= ", number_processes, "| Number of wells to process :", njobs)
     time_start=time.perf_counter()
     pool = multiprocessing.Pool(number_processes)
     results=[pool.apply_async(MERGE_Zstack2, arg) for arg in args]
     pool.close(); pool.join()
-    # MERGE_Zstack(A_wells, order, directory, outputpath)
     time_end=time.perf_counter()
     
     print(f"\nOperation performed in {time_end - time_start:0.2f} seconds")
@@ -362,14 +343,13 @@ def Calculate(directory):
     if Path(outputpath).joinpath(last).is_file():
         with open(str(Path(outputpath).joinpath("DONE")), 'w') as f: pass
     
-    
     #Clean up
-    del results, order
+    del results, order, _wells
              
 ########################################################################################################################
 
 def main(args=None):
-    global total_wells
+    global total_wells, nproc
     dirName = os.getcwd()
     
     parser = argparse.ArgumentParser(prog=__name__,
@@ -381,6 +361,9 @@ def main(args=None):
     parser.add_argument('--dry', default=False, action='store_true',
                     dest='dry', help='if using --dry '
                                      'Only checking, no merging ')
+    parser.add_argument('-nproc', metavar='nproc', type=int,
+                        help='Set the MAX number of parallel jobs '
+                                      'to limit RAM usage')    
     
     options = parser.parse_args(args)
     # print("options ", options)
@@ -389,6 +372,20 @@ def main(args=None):
         dirName = os.getcwd()
     else:
         dirName=Path(options.dir)
+    if options.nproc is not None:
+        global MAX_CPU
+        MAX_CPU=options.nproc
+
+    if MAX_CPU!=None:
+        try:
+            int(MAX_CPU)
+            if int(MAX_CPU) >= nproc: MAX_CPU=nproc #MAX_CPU cannot be greater than nproc
+        except:
+            print("ABORTING, nproc not set properly")
+            sys.exit()
+    else:
+        MAX_CPU=nproc-1 #if MAX_CPU is initially None
+
     
     # Get the list of all files in directory tree at given path
     listOfDirs = list()
