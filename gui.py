@@ -2,11 +2,12 @@
 
 # Form implementation generated from reading ui file 'DesignerFiles/mainwindow_test.ui'
 #
-# Created by: PyQt5 UI code generator 5.9.2
+# Created by: PyQt5 UI code generator 5.12.1
 #
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -485,6 +486,8 @@ class Ui_MainWindow(object):
         self.actionManual.setObjectName("actionManual")
         self.actionNeXtal_Ammonium_Sulfate_Suite = QtWidgets.QAction(MainWindow)
         self.actionNeXtal_Ammonium_Sulfate_Suite.setObjectName("actionNeXtal_Ammonium_Sulfate_Suite")
+        self.action_Cryo_HT = QtWidgets.QAction(MainWindow)
+        self.action_Cryo_HT.setObjectName("action_Cryo_HT")
         self.menuFile.addAction(self.openFile)
         self.menuFile.addAction(self.openDir)
         self.menuFile.addAction(self.actionExport_to_PDF)
@@ -525,6 +528,7 @@ class Ui_MainWindow(object):
         self.menuJena_Bioscience.addAction(self.actionJBScreen_Classic_HTS_II)
         self.menuJena_Bioscience.addAction(self.actionJena_JCSG_Plus_Plus)
         self.menuJena_Bioscience.addAction(self.actionPi_PEG_HTS)
+        self.menuHampton_Research.addAction(self.action_Cryo_HT)
         self.menuHampton_Research.addAction(self.actionPeg_Rx1Rx2)
         self.menuHampton_Research.addAction(self.actionSaltRx)
         self.menuScreen_Tables.addSeparator()
@@ -638,16 +642,9 @@ class Ui_MainWindow(object):
         self.actionMD_BCS_Screen.setText(_translate("MainWindow", "MD BCS Screen"))
         self.actionDelete_Folder_rawimages.setText(_translate("MainWindow", "Delete \"rawimages\""))
         self.actionDelete_Folder_cropped.setText(_translate("MainWindow", "Delete \"cropped\""))
+        self.actionDelete_Folder_cropped.setToolTip(_translate("MainWindow", "Delete \"cropped\""))
         self.actionManual.setText(_translate("MainWindow", "Manual"))
         self.actionNeXtal_Ammonium_Sulfate_Suite.setText(_translate("MainWindow", "NeXtal Ammonium Sulfate Suite"))
+        self.action_Cryo_HT.setText(_translate("MainWindow", "Cryo HT"))
 
-
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())
 

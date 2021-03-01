@@ -6,6 +6,8 @@ Created on Wed May 20 09:42:40 2020
 Adapted from https://gist.github.com/anonymous/1918b6fec0ab55ae681861e1e36ef754
 """
 
+__date__ = "23-02-2021"
+
 import os, sys
 import csv
 from pathlib import Path
@@ -31,7 +33,8 @@ ScreenFile={'MD_BCS_Screen':'Md1-105_BCS_Screen.csv',
             'JBScreen_Classic_5-8':'JBScreen_Classic_5-8.csv',
             'Pi-PEG_HTS':'Jena-Pi-PEG_Screen_HTS.csv',
             'HR-PEGRx_HT_screen':'HR-PEGRx_HT_screen.csv',
-            'HR-SaltRx_HT_screen':'HR-SaltRx_HT_screen.csv'}
+            'HR-SaltRx_HT_screen':'HR-SaltRx_HT_screen.csv',
+            'HR-Cryo_HT_screen':'HR-Cryo_HT_screen.csv'}
 
 class MyTable(QTableWidget):
     def __init__(self, r, c):

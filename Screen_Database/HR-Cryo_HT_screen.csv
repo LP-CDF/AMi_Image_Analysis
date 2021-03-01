@@ -1,0 +1,98 @@
+Reagent,Well,[Salt 1],[Salt 1],Salt 1,[Salt 2],[Salt 2],Salt 2,[Buffer],[Buffer],Buffer,Buffer,[Ppt 1],[Ppt 1],Ppt 1,[Ppt 2],[Ppt 2],Ppt 2,[Cryo],[Cryo],Cryoprotectant,Average,Average,Average,
+#,#,,units,,,units,,,units,,pH,,units,,,units,,,units,,pH,Ref. Index,Conductivity,
+1,A1,0.02,M,Calcium chloride dihydrate,,,,0.1,M,Sodium acetate trihydrate,4.6,30,% v/v,"(+/-)-2-Methyl-2,4-pentanediol",,,,,,,5.1,1.37090,4.6,mS/cm
+2,A2,,,,,,,,,,,0.26,M,Potassium sodium tartate tetrahydrate,,,,35,% v/v,Glycerol,7.6,1.39239,10.2,mS/cm
+3,A3,,,,,,,,,,,0.26,M,Ammonium phosphate monobasic,,,,35,% v/v,Glycerol,4.3,1.38868,6.3,mS/cm
+4,A4,,,,,,,0.075,M,TRIS hydrochloride,8.5,1.5,M,Ammonium sulfate,,,,25,% v/v,Glycerol,8.0,1.39837,77.1,mS/cm
+5,A5,0.2,M,Sodium citrate tribasic dihydrate,,,,0.1,M,HEPES sodium,7.5,30,% v/v,"(+/-)-2-Methyl-2,4-pentanediol",,,,,,,7.4,1.38134,9.3,mS/cm
+6,A6,0.16,M,Magnesium chloride hexahydrate,,,,0.08,M,TRIS hydrochloride,8.5,24,% w/v,"Polyethylene glycol 4,000",,,,20,% v/v,Glycerol,8.5,1.40128,6.9,mS/cm
+7,A7,,,,,,,0.07,M,Sodium cacodylate trihydrate,6.5,0.98,M,Sodium acetate trihydrate,,,,30,% v/v,Glycerol,6.8,1.38935,18.6,mS/cm
+8,A8,0.14,M,Sodium citrate tribasic dihydrate,,,,0.07,M,Sodium cacodylate trihydrate,6.5,21,% v/v,2-Propanol,,,,30,% v/v,Glycerol,7.0,1.39933,3.4,mS/cm
+9,A9,0.17,M,Ammonium acetate,,,,0.085,M,Sodium citrate tribasic dihydrate,5.6,25.5,% w/v,"Polyethylene glycol 4,000",,,,15,% v/v,Glycerol,6.5,1.39502,6.0,mS/cm
+10,A10,0.17,M,Ammonium acetate,,,,0.085,M,Sodium acetate trihydrate,4.6,25.5,% w/v,"Polyethylene glycol 4,000",,,,15,% v/v,Glycerol,5.8,1.39313,5.3,mS/cm
+11,A11,,,,,,,0.07,M,Sodium citrate tribasic dihydrate,5.6,0.7,M,Ammonium phosphate monobasic,,,,30,% v/v,Glycerol,4.9,1.39035,17.6,mS/cm
+12,A12,0.18,M,Magnesium chloride hexahydrate,,,,0.09,M,HEPES sodium,7.5,27,% v/v,2-Propanol,,,,10,% v/v,Glycerol,7.2,1.37508,10.6,mS/cm
+13,B1,0.2,M,Sodium citrate tribasic dihydrate,,,,0.1,M,TRIS hydrochloride,8.5,30,% v/v,Polyethylene glycol 400 ,,,,,,,8.8,1.38898,9.3,mS/cm
+14,B2,0.19,M,Calcium chloride dihydrate,,,,0.095,M,HEPES sodium,7.5,26.6,% v/v,Polyethylene glycol 400,,,,5,% v/v,Glycerol,7.2,1.38871,12.1,mS/cm
+15,B3,0.17,M,Ammonium sulfate,,,,0.085,M,Sodium cacodylate trihydrate,6.5,25.5,% w/v,"Polyethylene glycol 8,000",,,,15,% v/v,Glycerol,6.6,1.39544,7.6,mS/cm
+16,B4,,,,,,,0.075,M,HEPES sodium,7.5,1.125,M,Lithium sulfate monohydrate,,,,25,% v/v,Glycerol,7.5,1.39098,29.3,mS/cm
+17,B5,0.17,M,Lithium sulfate monohydrate,,,,0.085,M,TRIS hydrochloride,8.5,25.5,% w/v,"Polyethylene glycol 4,000",,,,15,% v/v,Glycerol,8.6,1.39533,5.9,mS/cm
+18,B6,0.16,M,Magnesium acetate tetrahydrate,,,,0.08,M,Sodium cacodylate trihydrate,6.5,16,% w/v,"Polyethylene glycol 8,000",,,,20,% v/v,Glycerol,6.5,1.39050,4.9,mS/cm
+19,B7,0.16,M,Ammonium acetate,,,,0.08,M,TRIS hydrochloride,8.5,24,% v/v,2-Propanol,,,,20,% v/v,Glycerol,8.2,1.38347,5.2,mS/cm
+20,B8,0.16,M,Ammonium sulfate,,,,0.08,M,Sodium acetate trihydrate,4.6,20,% w/v,"Polyethylene glycol 4,000",,,,20,% v/v,Glycerol,4.9,1.39396,8.2,mS/cm
+21,B9,0.2,M,Magnesium acetate tetrahydrate,,,,0.1,M,Sodium cacodylate trihydrate,6.5,30,% v/v,"(+/-)-2-Methyl-2,4-pentanediol",,,,,,,6.7,1.37659,6.8,mS/cm
+22,B10,0.17,M,Sodium acetate trihydrate,,,,0.085,M,TRIS hydrochloride,8.5,25.5,% w/v,"Polyethylene glycol 4,000",,,,15,% v/v,Glycerol,8.6,1.39432,4.8,mS/cm
+23,B11,0.2,M,Magnesium chloride hexahydrate,,,,0.1,M,HEPES sodium,7.5,30,% v/v,Polyethylene glycol 400,,,,,,,7.2,1.38615,12.4,mS/cm
+24,B12,0.14,M,Calcium chloride dihydrate,,,,0.07,M,Sodium acetate trihydrate,4.6,14,% v/v,2-Propanol,,,,30,% v/v,Glycerol,4.7,1.39009,6.5,mS/cm
+25,C1,,,,,,,0.07,M,Imidazole,6.5,0.7,M,Sodium acetate trihydrate,,,,30,% v/v,Glycerol,6.8,1.38620,15.8,mS/cm
+26,C2,0.2,M,Ammonium acetate,,,,0.1,M,Sodium citrate tribasic dihydrate,5.6,30,% v/v,"(+/-)-2-Methyl-2,4-pentanediol",,,,,,,6.4,1.37557,10.2,mS/cm
+27,C3,0.14,M,Sodium citrate tribasic dihydrate,,,,0.07,M,HEPES sodium,7.5,14,% v/v,2-Propanol,,,,30,% v/v,Glycerol,7.4,1.39616,4.7,mS/cm
+28,C4,0.17,M,Sodium acetate trihydrate,,,,0.085,M,Sodium cacodylate trihydrate,6.5,25.5,% w/v,"Polyethylene glycol 8,000",,,,15,% v/v,Glycerol,6.9,1.39413,4.2,mS/cm
+29,C5,,,,,,,0.065,M,HEPES sodium,7.5,0.52,M,Potassium sodium tartate tetrahydrate,,,,35,% v/v,Glycerol,7.5,1.40191,15.8,mS/cm
+30,C6,0.17,M,Ammonium sulfate,,,,,,,,25.5,% w/v,"Polyethylene glycol 8,000",,,,15,% v/v,Glycerol,5.6,1.39366,6.7,mS/cm
+31,C7,0.17,M,Ammonium sulfate,,,,,,,,25.5,% w/v,"Polyethylene glycol 4,000",,,,15,% v/v,Glycerol,5.6,1.39345,6.8,mS/cm
+32,C8,,,,,,,,,,,1.5,M,Ammonium sulfate,,,,25,% v/v,Glycerol,5.2,1.39638,78.0,mS/cm
+33,C9,,,,,,,,,,,3.6,M,Sodium formate,,,,10,% v/v,Glycerol,8.3,1.37720,91.5,mS/cm
+34,C10,,,,,,,0.07,M,Sodium acetate trihydrate,4.6,1.4,M,Sodium formate,,,,30,% v/v,Glycerol,5.5,1.38838,32.0,mS/cm
+35,C11,,,,,,,0.075,M,HEPES sodium,7.5,0.6,M,Sodium phosphate monobasic monohydrate,0.6,M,Potassium phosphate monobasic,25,% v/v,Glycerol,4.7,1.38924,23.9,mS/cm
+36,C12,,,,,,,0.065,M,TRIS hydrochloride,8.5,5.2,% w/v,"Polyethylene glycol 8,000",,,,35,% v/v,Glycerol,8.4,1.39363,1864.0,µS/cm
+37,D1,,,,,,,0.07,M,Sodium acetate trihydrate,4.6,5.6,% w/v,"Polyethylene glycol 4,000",,,,30,% v/v,Glycerol,4.9,1.38598,2.2,mS/cm
+38,D2,,,,,,,0.09,M,HEPES sodium,7.5,1.26,M,Sodium citrate tribasic dihydrate,,,,10,% v/v,Glycerol,7.8,1.39978,38.9,mS/cm
+39,D3,,,,,,,0.085,M,HEPES sodium,7.5,1.7,% v/v,Polyethylene glycol 400,1.7,M,Ammonium sulfate,15,% v/v,Glycerol,7.4,1.39140,106.4,mS/cm
+40,D4,,,,,,,0.095,M,Sodium citrate tribasic dihydrate,5.6,19,% v/v,2-Propanol,19,% w/v,"Polyethylene glycol 4,000",5,% v/v,Glycerol,6.5,1.38412,3.1,mS/cm
+41,D5,,,,,,,0.085,M,HEPES sodium,7.5,8.5,% v/v,2-Propanol,17,% w/v,"Polyethylene glycol 4,000",15,% v/v,Glycerol,7.3,1.38870,1956.5,µS/cm
+42,D6,0.04,M,Potassium phosphate monobasic,,,,,,,,16,% w/v,"Polyethylene glycol 8,000",,,,20,% v/v,Glycerol,5.0,1.38527,1029.0,µS/cm
+43,D7,,,,,,,,,,,24,% w/v,"Polyethylene glycol 1,500",,,,20,% v/v,Glycerol,6.8,1.39519,28.5,µS/cm
+44,D8,,,,,,,,,,,0.1,M,Magnesium formate dihydrate,,,,50,% v/v,Glycerol,7.1,1.40857,1838.0,µS/cm
+45,D9,0.16,M,Zinc acetate dihydrate,,,,0.08,M,Sodium cacodylate trihydrate,6.5,14.4,% w/v,"Polyethylene glycol 8,000",,,,20,% v/v,Glycerol,5.9,1.38392,3.4,mS/cm
+46,D10,0.16,M,Calcium acetate hydrate,,,,0.08,M,Sodium cacodylate trihydrate,6.5,14.4,% w/v,"Polyethylene glycol 8,000",,,,20,% v/v,Glycerol,6.6,1.38823,5.2,mS/cm
+47,D11,,,,,,,0.08,M,Sodium acetate trihydrate,4.6,1.6,M,Ammonium sulfate,,,,20,% v/v,Glycerol,4.6,1.39182,96.1,mS/cm
+48,D12,,,,,,,0.08,M,TRIS hydrochloride,8.5,1.6,M,Ammonium phosphate monobasic,,,,20,% v/v,Glycerol,4.3,1.38674,39.0,mS/cm
+49,E1,1.6,M,Sodium chloride,,,,,,,,8,% w/v,"Polyethylene glycol 6,000",,,,20,% v/v,Glycerol,5.3,1.38818,55.0,mS/cm
+50,E2,0.3,M,Sodium chloride,"0,006",M,Magnesium chloride hexahydrate,,,,,0.006,M,Hexadecyltrimethylammonium bromide,,,,40,% v/v,Glycerol,5.3,1.39552,8.9,mS/cm
+51,E3,,,,,,,,,,,21.25,% v/v,Ethylene glycol,,,,15,% v/v,Glycerol,5.8,1.37825,2.4,µS/cm
+52,E4,,,,,,,,,,,26.25,% v/v,"1,4-Dioxane",,,,25,% v/v,Glycerol,4.9,1.39609,3.1,µS/cm
+53,E5,1.5,M,Ammonium sulfate ,,,,,,,,3.75,% v/v,2-Propanol,,,,25,% v/v,Glycerol,5.2,1.39890,69.1,mS/cm
+54,E6,,,,,,,,,,,0.65,M,Imidazole pH 7.0,,,,35,% v/v,Glycerol,7.0,1.39456,9.3,mS/cm
+55,E7,,,,,,,,,,,8,% w/v,"Polyethylene glycol 1,000",8,% w/v,"Polyethylene glycol 8,000",20,% v/v,Glycerol,6.1,1.38451,19.7,µS/cm
+56,E8,1.05,M,Sodium chloride,,,,,,,,7,% v/v,Ethanol,,,,30,% v/v,Glycerol,5.6,1.39091,29.8,mS/cm
+57,E9,,,,,,,0.075,M,Sodium acetate trihydrate,4.6,1.5,M,Sodium chloride,,,,25,% v/v,Glycerol,4.5,1.38467,59.1,mS/cm
+58,E10,0.2,M,Sodium chloride,,,,0.1,M,Sodium acetate trihydrate,4.6,30,% v/v,"(+/-)-2-Methyl-2,4-pentanediol",,,,,,,5.0,1.37223,10.7,mS/cm
+59,E11,0.008,M,Cobalt(II) chloride hexahydrate,,,,0.08,M,Sodium acetate trihydrate,4.6,0.8,M,"1,6-Hexanediol",,,,20,% v/v,Glycerol,4.8,1.37627,3.6,mS/cm
+60,E12,0.095,M,Cadmium chloride hydrate,,,,0.095,M,Sodium acetate trihydrate,4.6,28.5,% v/v,Polyethylene glycol 400,,,,5,% v/v,Glycerol,4.9,1.38579,4.1,mS/cm
+61,F1,0.18,M,Ammonium sulfate ,,,,0.09,M,Sodium acetate trihydrate,4.6,27,% w/v,"Polyethylene glycol monomethyl ether 2,000",,,,10,% v/v,Glycerol,5.0,1.38915,10.0,mS/cm
+62,F2,0.15,M,Potassium sodium tartrate tetrahydrate,,,,0.075,M,Sodium citrate tribasic dihydrate,5.6,1.5,M,Ammonium sulfate ,,,,25,% v/v,Glycerol,5.7,1.40308,76.2,mS/cm
+63,F3,0.375,M,Ammonium sulfate ,,,,0.075,M,Sodium citrate tribasic dihydrate,5.6,0.75,M,Lithium sulfate monohydrate,,,,25,% v/v,Glycerol,5.3,1.39149,40.5,mS/cm
+64,F4,0.3,M,Sodium chloride,,,,0.06,M,Sodium citrate tribasic dihydrate,5.6,1.2,% v/v,Ethylene imine polymer,,,,40,% v/v,Glycerol,5.6,1.39939,11.4,mS/cm
+65,F5,,,,,,,0.08,M,Sodium citrate tribasic dihydrate,5.6,28,% v/v,tert-Butanol,,,,20,% v/v,Glycerol,6.4,1.38746,2372,µS/cm
+66,F6,0.007,M,Iron(III) chloride hexahydrate,,,,0.07,M,Sodium citrate tribasic dihydrate,5.6,7,% v/v,Jeffamine M-600,,,,30,% v/v,Glycerol,5.6,1.39139,6.5,mS/cm
+67,F7,,,,,,,0.095,M,Sodium citrate tribasic dihydrate,5.6,2.375,M,"1,6-Hexanediol",,,,5,% v/v,Glycerol,6.3,1.38092,5.0,mS/cm
+68,F8,,,,,,,0.08,M,MES monohydrate,6.5,1.28,M,Magnesium sulfate heptahydrate,,,,20,% v/v,Glycerol,6.5,1.39156,23.8,mS/cm
+69,F9,0.075,M,Sodium phosphate monobasic monohydrate,"0,075",M,Potassium phosphate monobasic,0.075,M,MES monohydrate,6.5,1.5,M,Sodium chloride,,,,25,% v/v,Glycerol,5.5,1.38832,57.0,mS/cm
+70,F10,,,,,,,0.065,M,MES monohydrate,6.5,7.8,% w/v,"Polyethylene glycol 20,000",,,,35,% v/v,Glycerol,6.5,1.39743,645.5,µS/cm
+71,F11,1.2,M,Ammonium sulfate ,,,,0.075,M,MES monohydrate,6.5,7.5,% v/v,"1,4-Dioxane",,,,25,% v/v,Glycerol,6.6,1.40093,50.8,mS/cm
+72,F12,0.05,M,Cesium chloride,,,,0.1,M,MES monohydrate,6.5,30,% v/v,Jeffamine M-600,,,,,,,6.5,1.38227,15.2,mS/cm
+73,G1,0.0075,M,Cobalt(II) chloride hexahydrate,,,,0.075,M,MES monohydrate,6.5,1.35,M,Ammonium sulfate ,,,,25,% v/v,Glycerol,6.6,1.39621,74.1,mS/cm
+74,G2,0.18,M,Ammonium sulfate ,,,,0.09,M,MES monohydrate,6.5,27,% w/v,"Polyethylene glycol monomethyl ether 5,000",,,,10,% v/v,Glycerol,6.3,1.39090,8.4,mS/cm
+75,G3,0.009,M,Zinc sulfate heptahydrate,,,,0.09,M,MES monohydrate,6.5,22.5,% v/v,Polyethylene glycol monomethyl ether 550,,,,10,% v/v,Glycerol,6.5,1.38306,1451,µS/cm
+76,G4,,,,,,,,,,,1.6,M,Sodium citrate tribasic dihydrate pH 6.5,,,,,,,6.5,1.39486,59.7,mS/cm
+77,G5,0.5,M,Ammonium sulfate ,,,,0.1,M,HEPES,7.5,30,% v/v,"(+/-)-2-Methyl-2,4-pentanediol",,,,,,,7.2,1.38195,24.6,mS/cm
+78,G6,,,,,,,0.08,M,HEPES,7.5,8,% w/v,"Polyethylene glycol 6,000",4,% v/v,"(+/-)-2-Methyl-2,4-pentanediol",20,% v/v,Glycerol,7.4,1.38172,711.5,µS/cm
+79,G7,,,,,,,0.085,M,HEPES,7.5,17,% v/v,Jeffamine M-600,,,,15,% v/v,Glycerol,7.5,1.38437,7.1,mS/cm
+80,G8,0.075,M,Sodium chloride,,,,0.075,M,HEPES,7.5,1.2,M,Ammonium sulfate ,,,,25,% v/v,Glycerol,7.4,1.39519,69.2,mS/cm
+81,G9,,,,,,,0.07,M,HEPES,7.5,1.4,M,Ammonium formate,,,,30,% v/v,Glycerol,7.3,1.39137,43.6,mS/cm
+82,G10,0.0375,M,Cadmium sulfate hydrate,,,,0.075,M,HEPES,7.5,0.75,M,Sodium acetate trihydrate,,,,25,% v/v,Glycerol,7.3,1.38324,18.0,mS/cm
+83,G11,,,,,,,0.1,M,HEPES,7.5,70,% v/v,"(+/-)-2-Methyl-2,4-pentanediol",,,,,,,7.4,1.41308,177.6,µS/cm
+84,G12,,,,,,,0.085,M,HEPES,7.5,3.655,M,Sodium chloride,,,,15,% v/v,Glycerol,7.8,1.39068,131.3,mS/cm
+85,H1,,,,,,,0.075,M,HEPES,7.5,7.5,% w/v,"Polyethylene glycol 8,000",6,% v/v,Ethylene glycol,25,% v/v,Glycerol,7.4,1.38987,552.5,µS/cm
+86,H2,,,,,,,0.075,M,HEPES,7.5,15,% w/v,"Polyethylene glycol 10,000",,,,25,% v/v,Glycerol,7.5,1.39357,488.5,µS/cm
+87,H3,0.2,M,Magnesium chloride hexahydrate,,,,0.1,M,Tris,8.5,3.4,M,"1,6-Hexanediol",,,,,,,8.4,1.39153,8.8,mS/cm
+88,H4,,,,,,,0.075,M,Tris,8.5,18.75,% v/v,tert-Butanol,,,,25,% v/v,Glycerol,8.3,1.38650,572.5,µS/cm
+89,H5,0.0075,M,Nickel(II) chloride hexahydrate,,,,0.075,M,Tris,8.5,0.75,M,Lithium sulfate monohydrate,,,,25,% v/v,Glycerol,8.4,1.38416,26.5,mS/cm
+90,H6,1.275,M,Ammonium sulfate ,,,,0.085,M,Tris,8.5,,,,,,,"25,2",% v/v,Glycerol,8.1,1.39498,71,mS/cm
+91,H7,0.2,M,Ammonium phosphate monobasic,,,,0.1,M,Tris,8.5,50,% v/v,"(+/-)-2-Methyl-2,4-pentanediol",,,,,,,6.3,1.39518,2407,µS/cm
+92,H8,,,,,,,0.075,M,Tris,8.5,15,% v/v,Ethanol,,,,25,% v/v,Glycerol,8.4,1.38019,757,µS/cm
+93,H9,0.008,M,Nickel(II) chloride hexahydrate,,,,0.08,M,Tris,8.5,16,% w/v,"Polyethylene glycol monomethyl ether 2,000",,,,20,% v/v,Glycerol,8.3,1.38628,1263.5,µS/cm
+94,H10,0.085,M,Sodium chloride,,,,0.085,M,BICINE,"9,0",17,% v/v,Polyethylene glycol monomethyl ether 550,,,,15,% v/v,Glycerol,9.0,1.38278,4.5,mS/cm
+95,H11,,,,,,,0.095,M,BICINE,"9,0",1.9,M,Magnesium chloride hexahydrate,,,,5,% v/v,Glycerol,7.4,1.38361,126.4,mS/cm
+96,H12,,,,,,,0.07,M,BICINE,"9,0",1.4,% v/v,"1,4-Dioxane",7,% w/v,"Polyethylene glycol 20,000",30,% v/v,Glycerol,9.1,1.39040,1052.5,µS/cm
