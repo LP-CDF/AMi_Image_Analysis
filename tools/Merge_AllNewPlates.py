@@ -14,10 +14,12 @@ import multiprocessing
 import argparse
 
 MAX_CPU=None #set to desired integer if needed ie MAX_CPU="8" (keep the "")
+#Define below the name of the folder containing unstacked Z images.
+_rawimages="rawimages"
 
 __version__ = "0.1"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "05-02-2021"
+__date__ = "04-03-2021"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -399,9 +401,9 @@ def main(args=None):
             directory=Path(elem)
             parents=directory.parents
             if "Image_Data" in str(directory): continue
-            if directory.parts[-1]=="rawimages" and not Path(parents[0]).joinpath("DONE").is_file():
-                rawdata_subfolders += [Path(parents[0]).joinpath("rawimages")]
-            elif directory.parts[-1]=="rawimages" and Path(parents[0]).joinpath("DONE").is_file():
+            if directory.parts[-1]==_rawimages and not Path(parents[0]).joinpath("DONE").is_file():
+                rawdata_subfolders += [Path(parents[0]).joinpath(_rawimages)]
+            elif directory.parts[-1]==_rawimages and Path(parents[0]).joinpath("DONE").is_file():
                 print(f"Data in {directory} seem to have already been processed, skipping")
     del listOfDirs
 

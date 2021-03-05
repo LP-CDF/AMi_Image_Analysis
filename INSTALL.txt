@@ -1,6 +1,6 @@
 # Install
 
-Please read this carefully before proceeding.
+Please read this carefully and completely before proceeding.
 
     The software was tested on:
     * linux CentOS 7 (PyQt5 and python3 (v3.6.8 and v3.7.3))
@@ -40,6 +40,7 @@ Please read this carefully before proceeding.
       If necessary, you will have to manually install distribution specific packages.
     * It is recommended to create an alias (e.g. for bash you can add in your .bashrc alias  AMI_Image_Analysis='/whereveryouinstalled/bin/AMI_Image_Analysis.sh')
     
+
     OLD installation description (still usefull in case of issues)
     To create a virtual environment with venv adapt the following commands:
     * python3 -m venv --without-pip /wherever/you/want/venvs/AMI_IMAGE_ANALYSIS_TENSORFLOW1
@@ -58,8 +59,41 @@ Please read this carefully before proceeding.
     ./whereveryouinstalled/bin/AMI_Image_Analysis.sh
     or use your alias.
 
+################################################################################################
+    The following details MUST BE checked:
     If you have an AZERTY keyboard, comment/uncomment lines 18 or 19 in the file preferences.py.
     If you use a QWERTY keyboard, you should not have to do anything.
+
+    FILE TREE:
+    The program can deal with the following trees given minor modifications are done (see below):
+    case 1 (No Project ID):
+	images
+	└──TargetID
+	   └── PlateID
+	       └── YYYYMMDD_HHMMSS
+		   └── rawimages
+
+    case 2 (With Project ID):
+	images
+	└── ProjectID
+	    └── TargetID
+		└── PlateID
+		    └── YYYYMMDD_HHMMSS
+		        └── rawimages
+
+    For case 1: Edit the file utils.py and check that you have the line 31 and 38
+    			self.project=directory.parts[-4] #-5 if projectID is set. or -4
+			self.project=directory.parts[-3] #-4 if projectID is set. or -3
+
+    For case 2: Edit the file utils.py and check that you have the line
+    			self.project=directory.parts[-5] #-5 if projectID is set. or -4
+			self.project=directory.parts[-4] #-4 if projectID is set. or -3
+
+    If the folder containing the individual Z focused images is not named "rawimages" just edit the file "utils.py"
+    and modify the field _rawimages at line 4 accordingly before running Setup.py. However the organization of the
+    other folders must follow the previously described layout in FILE TREE.
+
+################################################################################################
 
 ## Raspbian specific installation notes
 

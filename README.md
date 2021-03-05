@@ -26,7 +26,7 @@ The tree must be organized like:
 ```bash
 .
 └── images
-    └── sample directory (used as Project Code)
+    └── sample directory (used as Project and Target Code)
         └── plate directory (used as Plate name)
             └── YYYYMMDD_HHMMSS
                 ├── stacked images (generated from directory rawimages)
@@ -36,7 +36,23 @@ The tree must be organized like:
             ├── ...
             └── prep_date.txt
 ```
-AMi controlling software needs a folder named "images".
+or
+```bash
+.
+└── images
+    └── Project directory (used as Project Code)
+        └── sample directory (used as Target Code)
+            └── plate directory (used as Plate name)
+		└── YYYYMMDD_HHMMSS
+		    ├── stacked images (generated from directory rawimages)
+		        └── rawimages
+		            └── files at different focus height (name e.g. A1a_1.jpg, A1a_2... or A1_1.jpg, A1_2... if no subwell)
+		    ├── YYYYMMDD_HHMMSS
+		    ├── ...
+		    └── prep_date.txt
+```
+
+AMiGUI (the software controlling the AMi microscope) needs a folder named "images" but this is not important for AMi_Image_Analysis. 
 The date directory must have the format YYYYMMDD_HHMMSS (eg. 20191211_151023)
 The file "prep_date.txt" contains the preparation date as a single line with format YYYYMMDD and is created within the program. It is used for logging purpose only and is not mandatory.
 
@@ -87,6 +103,12 @@ Release 1.2.3.1
 2020/09/22:
 Two new command line tools: Merge_AllNewPlates.py and SaveDiskSpace.py to automate the tedious processing of several datasets or save disk space.
 Release 1.2.3.7
+
+2020/12/04:
+Changed parallel processing. Defined MAX\_CPU in Merge\_Zstack.py, Merge\_AllNewPlates.py and preferences.py. Value can be set to limit number of processes if for example, RAM is completely used leading to the use of swap memory.
+
+2021/03/05:
+By default AMi_Image_Analysis expects the individual Z focus images to be located in a folder "rawimages". As of 2021/03/05, a parameter named "_rawimages" can be modified in utils.py before installation. 
 
 ## Screenshots
 

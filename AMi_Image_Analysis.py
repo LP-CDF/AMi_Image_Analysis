@@ -18,13 +18,13 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import QPixmap, QFont, QColor, QKeySequence
 from PyQt5.QtWidgets import (QTableWidgetItem, QFileDialog, QSplashScreen,
     QMessageBox, QGridLayout,QStyleFactory, QProgressDialog, QInputDialog, QLineEdit)
-from utils import ensure_directory, initProject
+from utils import ensure_directory, initProject, _rawimages
 from shutil import copyfile
 import pdf_writer 
 import HeatMap_Grid
 from  MARCO_Results_Analysis import MARCO_Results
 import StatisticsDialog
-import Merge_Zstack
+import tools.Merge_Zstack as Merge_Zstack
 import ReadScreen
 import preferences as pref
 
@@ -34,7 +34,7 @@ QtWidgets.QApplication.setAttribute(QtCore.Qt.HighDpiScaleFactorRoundingPolicy.P
 
 __version__ = "1.2.3.9"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "20-01-2021"
+__date__ = "04-03-2021"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -95,6 +95,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.VisiblesIdx = []
         self.InitialNotes = None
         self.InitialClassif = None
+        self.rawimages=_rawimages
 
         #If using the QGraphics view, use open_image
         #If not comment the next five lines and use
@@ -136,7 +137,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.actionAutomated_Annotation_MARCO.triggered.connect(self.autoAnnotation)
         self.actionDisplay_Heat_Map.triggered.connect(self.show_HeatMap)
         self.actionExport_to_PDF.triggered.connect(self.export_pdf)
-        self.actionDelete_Folder_rawimages.triggered.connect(lambda: self.DeleteFolder(self.imageDir, "rawimages"))
+        self.actionDelete_Folder_rawimages.triggered.connect(lambda: self.DeleteFolder(self.imageDir, self.rawimages))
         self.actionDelete_Folder_cropped.triggered.connect(lambda: self.DeleteFolder(self.imageDir, "cropped"))        
         self.actionautoMARCO_subwell_a.triggered.connect(lambda: self.show_autoMARCO("a"))
         self.actionautoMARCO_subwell_b.triggered.connect(lambda: self.show_autoMARCO("b"))
@@ -161,6 +162,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.actionPi_PEG_HTS.triggered.connect(lambda: self.show_CrystScreen("Pi-PEG_HTS"))
         self.actionPeg_Rx1Rx2.triggered.connect(lambda: self.show_CrystScreen("HR-PEGRx_HT_screen"))
         self.actionSaltRx.triggered.connect(lambda: self.show_CrystScreen("HR-SaltRx_HT_screen"))
+        self.action_Cryo_HT.triggered.connect(lambda: self.show_CrystScreen("HR-Cryo_HT_screen"))
         self.actionMD_PACT_Premier.triggered.connect(lambda: self.show_CrystScreen("MD_PACT_Premier"))
         self.actionNextal_JCSG_Plus.triggered.connect(lambda: self.show_CrystScreen("NeXtal-JCSG-Plus-Suite"))
         self.actionMD_MIDAS.triggered.connect(lambda: self.show_CrystScreen("MD_MIDAS"))
@@ -407,9 +409,10 @@ and modify detection parameters.
 
 
     def AutoMerge(self):
-        self.informationDialog('''
+        from utils import _rawimages
+        self.informationDialog(f'''
                                
-Please open the directory 'rawimages' !!!
+Please open the directory {_rawimages} !!!
 The GUI will not be responsive during processing.
 
 You can check progress in the terminal window.
@@ -577,6 +580,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
     def Initialise(self, directory):
         '''directory is pathlib.Path object'''
         PATHS=initProject(directory)
+        self.rawimages=PATHS.rawimages
         self.rootDir=PATHS.rootDir
         self.project=PATHS.project
         self.date=PATHS.date
@@ -1145,8 +1149,8 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         self.ClearLayout(self._timlay)
         
         for date in other_dates:
-            if imagedir.split("/")[-1]=="rawimages":
-                path=Path(date).joinpath("rawimages")
+            if imagedir.split("/")[-1]==self.rawimages:
+                path=Path(date).joinpath(self.rawimages)
             else:
                 path=Path(date)
             name=self.buildWellImagePath(str(path), well, self.well_images)
@@ -1178,7 +1182,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         path=Path(self.buildWellImagePath(self.imageDir, well, self.well_images))
         parts=list(path.parts)
         imagedir=self.imageDir.split("/")
-        if imagedir[-1]=="rawimages" or imagedir[-1]=="cropped":
+        if imagedir[-1]==self.rawimages or imagedir[-1]=="cropped":
             parts[-3]=date
         else:
             parts[-2]=date

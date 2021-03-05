@@ -10,7 +10,7 @@
    and modified for AMi_Image_Analysis
 """
 
-
+__date__ = "04-03-2021"
 
 import numpy as np
 from scipy import ndimage
@@ -20,11 +20,13 @@ import multiprocessing
 from pathlib import Path
 
 MAX_CPU=None #set to desired integer if needed ie MAX_CPU="8" (keep the "")
+#Define below the name of the folder containing unstacked Z images.
+_rawimages="rawimages"
 
 def usage():
-    print('''
+    print(f'''
 Wrong starting location
-Use the program inside the directory "rawimages"
+Use the program inside the directory {_rawimages}
 ''')
 
 def generating_kernel(a):
@@ -329,7 +331,7 @@ if __name__ == '__main__':
     
     directory = os.getcwd()
     TEMP=directory.split("/")
-    if TEMP[-1]!="rawimages":
+    if TEMP[-1]!=_rawimages:
         usage()
         sys.exit()
     

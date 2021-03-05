@@ -8,6 +8,7 @@ Created on Mon Jan 20 09:57:50 2020
 import os, sys
 from pathlib import Path
 import stat
+from utils import _rawimages
 
 
 def CreateUninstall(app_path, venv_path):
@@ -67,6 +68,19 @@ def ChangeSheBang(app_path, filename, python_path):
     st = os.stat(file_path)
     os.chmod(file_path, st.st_mode |  stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)    
 
+def ChangeRAW(app_path, filename,_string):
+    '''app_path and filename are strings'''
+    file_path=Path(app_path).joinpath(filename)
+    with open(file_path, 'r') as f:
+        lines=f.readlines()
+    for i in lines:
+        if "_rawimages=" in i:
+            INDEX=lines.index(i)
+            break
+    lines[INDEX]='''_rawimages="%s"\n'''%_string
+    with open(file_path, 'w') as f:    
+        for l in lines: f.write(l)
+
 activate_venv={'linux': 'activate', 'darwin': 'activate', 'win32': 'activate.bat'}[sys.platform]
 python_path=os.path.join(os.path.dirname(sys.executable))
 
@@ -87,14 +101,22 @@ python3 $parentdir/AMi_Image_Analysis.py
 
 deactivate'''%(python_path, activate_venv))
 
+#Change _rawimages to adapt to maybe different but compatible microscope softwares
+ChangeRAW(app_path, "utils.py",_rawimages)
+ChangeRAW(app_path+'/tools/', "Merge_AllNewPlates.py",_rawimages)
+ChangeRAW(app_path+'/tools/', "Merge_Zstack.py",_rawimages)
+ChangeRAW(app_path+'/tools/', "SaveDiskSpace.py",_rawimages)
+
+
 st = os.stat(file_path)
 os.chmod(file_path, st.st_mode |  stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
 
 #Change shebang for some files that can be used in terminal and use openCV
-ChangeSheBang(app_path, "Merge_Zstack.py", python_path)
-ChangeSheBang(app_path, "autocrop.py", python_path)
+ChangeSheBang(app_path+'/tools/', "Merge_Zstack.py", python_path)
+ChangeSheBang(app_path+'/tools/', "autocrop.py", python_path)
 ChangeSheBang(app_path, "Check_Circle_detection.py", python_path)
-ChangeSheBang(app_path, "Merge_AllNewPlates.py", python_path)
+ChangeSheBang(app_path+'/tools/', "Merge_AllNewPlates.py", python_path)
+
 
 if sys.platform=='linux':
     file_path=Path(app_path).joinpath("AMi_IA.desktop")

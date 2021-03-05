@@ -10,6 +10,9 @@ from pathlib import Path
 import shutil
 import argparse
 
+#Define below the name of the folder containing unstacked Z images.
+_rawimages="rawimages"
+
 def main(args=None):
     global total_wells
     # dirName = os.getcwd()
@@ -44,15 +47,15 @@ def main(args=None):
         if os.path.islink(elem) is False:
             directory=Path(elem)
             parents=directory.parents
-            if directory.parts[-1]=="rawimages" and not Path(parents[0]).joinpath("DONE").is_file():
+            if directory.parts[-1]==_rawimages and not Path(parents[0]).joinpath("DONE").is_file():
                 print(f"Data in {directory} likely have not been processed, skipping deletion")
             elif directory.parts[-1]=="rawimages" and Path(parents[0]).joinpath("DONE").is_file():
-                rawdata_subfolders += [Path(parents[0]).joinpath("rawimages")]
+                rawdata_subfolders += [Path(parents[0]).joinpath(_rawimages)]
     del listOfDirs
     
     # for path in rawdata_subfolders: print(path)
     if len(rawdata_subfolders)==0:
-        print("No directory ""rawimages"" found, nothing to do!!!")
+        print(f"No directory {_rawimages} found, nothing to do!!!")
         return
     for path in rawdata_subfolders:
         try:

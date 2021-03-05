@@ -1,1 +1,1 @@
-../autocrop.py
+../tools/autocrop.py

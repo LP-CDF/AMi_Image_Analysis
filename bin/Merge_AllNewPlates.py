@@ -1,1 +1,1 @@
-../Merge_AllNewPlates.py
+../tools/Merge_AllNewPlates.py
