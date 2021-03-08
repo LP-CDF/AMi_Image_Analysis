@@ -42,11 +42,11 @@ or
             └── plate directory (used as Plate name)
 		└── YYYYMMDD_HHMMSS
 		    ├── stacked images (generated from directory containing individual Z focus images: e.g: "rawimages")
-		        └── rawimages (or else)
-		            └── files at different focus height (name e.g. A1a_1.jpg, A1a_2... or A1_1.jpg, A1_2... if no subwell)
-		    ├── YYYYMMDD_HHMMSS
-		    ├── ...
-		    └── prep_date.txt
+		    └── rawimages (or else)
+		        └── files at different focus height (name e.g. A1a_1.jpg, A1a_2... or A1_1.jpg, A1_2... if no subwell)
+		├── YYYYMMDD_HHMMSS
+		├── ...
+		└── prep_date.txt
 ```
 
 AMiGUI (the software controlling the AMi microscope) needs a folder named "images" but this is not important for AMi_Image_Analysis. 
