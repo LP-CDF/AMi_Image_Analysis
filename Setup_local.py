@@ -5,6 +5,8 @@ Created on Mon Jan 20 09:57:50 2020
 
 """
 
+__date__ = "08-03-2021"
+
 import os, sys
 from pathlib import Path
 import stat
@@ -101,22 +103,24 @@ python3 $parentdir/AMi_Image_Analysis.py
 
 deactivate'''%(python_path, activate_venv))
 
-#Change _rawimages to adapt to maybe different but compatible microscope softwares
-ChangeRAW(app_path, "utils.py",_rawimages)
-ChangeRAW(app_path+'/tools/', "Merge_AllNewPlates.py",_rawimages)
-ChangeRAW(app_path+'/tools/', "Merge_Zstack.py",_rawimages)
-ChangeRAW(app_path+'/tools/', "SaveDiskSpace.py",_rawimages)
+#_list is [(path,filename,True/false for ChangeRaw, True/false for ChangeSheBang)]
+_list=[(app_path,"utils.py",True, False),
+       (app_path+'/tools/',"Merge_AllNewPlates.py", True, True),
+       (app_path+'/tools/',"Merge_Zstack.py", True, True),
+       (app_path+'/tools/',"SaveDiskSpace.py", True, True),
+       (app_path,"autocrop.py", False, True),
+       (app_path,"Check_Circle_detection.py", False, True)]
 
+#Change _rawimages to adapt to maybe different but compatible microscope softwares
+for i in _list:
+    if i[2] is True: ChangeRAW(i[0], i[1],_rawimages)
 
 st = os.stat(file_path)
 os.chmod(file_path, st.st_mode |  stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
 
 #Change shebang for some files that can be used in terminal and use openCV
-ChangeSheBang(app_path+'/tools/', "Merge_Zstack.py", python_path)
-ChangeSheBang(app_path+'/tools/', "autocrop.py", python_path)
-ChangeSheBang(app_path, "Check_Circle_detection.py", python_path)
-ChangeSheBang(app_path+'/tools/', "Merge_AllNewPlates.py", python_path)
-
+for i in _list:
+    if i[3] is True: ChangeSheBang(i[0], i[1], python_path)
 
 if sys.platform=='linux':
     file_path=Path(app_path).joinpath("AMi_IA.desktop")

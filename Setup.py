@@ -6,6 +6,8 @@ Created on Tue Jun 30 10:50:12 2020
 @author: ludovic
 """
 
+__date__ = "08-03-2021"
+
 import os
 import os.path
 from pathlib import Path
@@ -164,7 +166,7 @@ class ExtendedEnvBuilder(venv.EnvBuilder):
         #Finishing setup
         if sys.platform=='linux' or sys.platform=='darwin':
             print("\nUPDATING INTIALISATION SCRIPT bin/AMI_Image_Analysis.sh\n")
-            Setup_bin_VENV=Path(filepath).joinpath("Setup_bin_VENV.py")
+            Setup_bin_VENV=Path(filepath).joinpath("Setup_local.py")
             subprocess.call([binpath, Setup_bin_VENV])
         
 def main(args=None):
