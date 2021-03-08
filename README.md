@@ -12,14 +12,11 @@ This program should work with images taken by other machines given the folder tr
 I created this application to help the members of our laboratory in their crystallization work.
 The software can read tiff, jpeg or png files.
 Images are accessed via clicking on the corresponding well button or by navigating with keyboard shortcuts.
-Images can be zoomed for thorough inspection and a timeline of the corresponding well is displayed if several pictures of the same well taken at different times are available.
+Images can be zoomed for thorough inspection and a timeline of the corresponding well is displayed if several pictures of the same well but taken at different times are available.
 
-Images are scored using the Drop Score section.
-Notes can be taken and are saved to file.
-
+Images are scored using the Drop Score section and more details can be written in notes and saved to file.
+The results can be displayed on a grid for quick overall inspection and statistics are calculated.
 A report of the current well can be saved as a pdf.
-
-The results can be displayed on a grid and statistics are also calculated.
 
 The tree must be organized like:
 
@@ -29,8 +26,8 @@ The tree must be organized like:
     └── sample directory (used as Project and Target Code)
         └── plate directory (used as Plate name)
             └── YYYYMMDD_HHMMSS
-                ├── stacked images (generated from directory rawimages)
-                └── rawimages
+                ├── stacked images (generated from directory containing individual Z focus images: e.g: "rawimages")
+                └── rawimages (or else)
                     └── files at different focus height (name e.g. A1a_1.jpg, A1a_2... or A1_1.jpg, A1_2... if no subwell)
             ├── YYYYMMDD_HHMMSS
             ├── ...
@@ -44,8 +41,8 @@ or
         └── sample directory (used as Target Code)
             └── plate directory (used as Plate name)
 		└── YYYYMMDD_HHMMSS
-		    ├── stacked images (generated from directory rawimages)
-		        └── rawimages
+		    ├── stacked images (generated from directory containing individual Z focus images: e.g: "rawimages")
+		        └── rawimages (or else)
 		            └── files at different focus height (name e.g. A1a_1.jpg, A1a_2... or A1_1.jpg, A1_2... if no subwell)
 		    ├── YYYYMMDD_HHMMSS
 		    ├── ...

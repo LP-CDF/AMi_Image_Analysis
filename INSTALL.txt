@@ -49,9 +49,9 @@ Please read this carefully and completely before proceeding.
     * deactivate
     * source /wherever/you/want/venvs/AMI_IMAGE_ANALYSIS_TENSORFLOW1/bin/activate
     * python3 -m pip install -r /whereveryouinstalled/requirements.txt (or requirements_Raspbian.txt or requirements_OSX.txt)
-    * If you use a virtual environment, make sure it is activated before using the script Setup_bin_VENV.py. This script will overwrite the file in 
+    * If you use a virtual environment, make sure it is activated before using the script Setup_local.py. This script will overwrite the file in 
       /whereveryouinstalled/bin/AMI_Image_Analysis.sh so that virtenv points to your virtual environment.
-      If you don't use a virtual environment, **do not use** the script Setup_bin_VENV.py.
+      If you don't use a virtual environment, **do not use** the script Setup_local.py.
 
     Check the file /whereveryouinstalled/bin/AMI_Image_Analysis.sh is executable.
     It is recommended to create an alias (e.g. for bash you can add in your .bashrc alias  AMI_Image_Analysis='/whereveryouinstalled/bin/AMI_Image_Analysis.sh')
