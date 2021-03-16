@@ -5,9 +5,9 @@ Created on Mon Jan 20 09:57:50 2020
 
 """
 
-__date__ = "08-03-2021"
+__date__ = "11-03-2021"
 
-import os, sys
+import os, sys, argparse
 from pathlib import Path
 import stat
 from utils import _rawimages
@@ -83,71 +83,107 @@ def ChangeRAW(app_path, filename,_string):
     with open(file_path, 'w') as f:    
         for l in lines: f.write(l)
 
-activate_venv={'linux': 'activate', 'darwin': 'activate', 'win32': 'activate.bat'}[sys.platform]
-python_path=os.path.join(os.path.dirname(sys.executable))
+def SetNoPRojectID(_string, _list):
+    indexes=[_list.index(i) for i in _list if _string in i]
+    _list[indexes[0]]="            self.project=directory.parts[-4] #-5 if projectID is set. or -4\n"
+    _list[indexes[1]]="            self.project=directory.parts[-3] #-4 if projectID is set. or -3\n"
+    return _list
 
-app_path=os.path.abspath(os.path.dirname(sys.argv[0]))
-file_path=Path(app_path).joinpath("bin", "AMI_Image_Analysis.sh")
+def main(args=None):
+    global st
+    parser = argparse.ArgumentParser(prog=__name__,
+                                     description='Creates virtual Python '
+                                                 'environments in one or '
+                                                 'more target '
+                                                 'directories.')
+    parser.add_argument('--no-ProjectID', default=False,
+                        action='store_true', dest='noprojectID',
+                        help="Don't use ProjectID in tree")
+    options = parser.parse_args(args)
+    
+    print("within Setup_local.py OPTIONS noprojectID is", options.noprojectID)
 
-with open(file_path, 'w') as f:
-    f.write('''#!/usr/bin/env bash
-
-#File generated with Setup_bin_VENV.py
-virtenv="%s"
-. ${virtenv}/%s
-
-#DO NOT EDIT the next THREE LINES
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-parentdir="$(dirname "$DIR")"
-python3 $parentdir/AMi_Image_Analysis.py
-
-deactivate'''%(python_path, activate_venv))
-
-#_list is [(path,filename,True/false for ChangeRaw, True/false for ChangeSheBang)]
-_list=[(app_path,"utils.py",True, False),
-       (app_path+'/tools/',"Merge_AllNewPlates.py", True, True),
-       (app_path+'/tools/',"Merge_Zstack.py", True, True),
-       (app_path+'/tools/',"SaveDiskSpace.py", True, True),
-       (app_path,"autocrop.py", False, True),
-       (app_path,"Check_Circle_detection.py", False, True)]
-
-#Change _rawimages to adapt to maybe different but compatible microscope softwares
-for i in _list:
-    if i[2] is True: ChangeRAW(i[0], i[1],_rawimages)
-
-st = os.stat(file_path)
-os.chmod(file_path, st.st_mode |  stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
-
-#Change shebang for some files that can be used in terminal and use openCV
-for i in _list:
-    if i[3] is True: ChangeSheBang(i[0], i[1], python_path)
-
-if sys.platform=='linux':
-    file_path=Path(app_path).joinpath("AMi_IA.desktop")
-    lines=f'''[Desktop Entry]
-Name=AMi_Image_Analysis
-Comment=Run AMI_Image_Analysis
-Exec={Path(app_path).joinpath("bin", "AMI_Image_Analysis.sh")}
-Icon={Path(app_path).joinpath("AMi_IA.png")}
-Terminal=true
-Type=Application'''
-    with open(file_path, 'w') as f:
-        for l in lines: f.write(l)
-    print(f'''
-------------------------------------------------------
-If you want you can put an icon on your desktop by issuing the following command
-cp {file_path} {os.path.expanduser("~/Desktop")}/.
-------------------------------------------------------''')
-
-if sys.platform=='linux' or sys.platform=='darwin':
+    activate_venv={'linux': 'activate', 'darwin': 'activate', 'win32': 'activate.bat'}[sys.platform]
+    python_path=os.path.join(os.path.dirname(sys.executable))
+    
+    app_path=os.path.abspath(os.path.dirname(sys.argv[0]))
     file_path=Path(app_path).joinpath("bin", "AMI_Image_Analysis.sh")
-    print(f'''
-------------------------------------------------------
-Recommended: create an alias in your .bashrc or .bash_profile with:
-alias AMI_IMage_Analysis='{file_path}'
-------------------------------------------------------
-''')
-    CreateUninstall(app_path, python_path)
+    
+    with open(file_path, 'w') as f:
+        f.write('''#!/usr/bin/env bash
+    
+    #File generated with Setup_local.py
+    virtenv="%s"
+    . ${virtenv}/%s
+    
+    #DO NOT EDIT the next THREE LINES
+    DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+    parentdir="$(dirname "$DIR")"
+    python3 $parentdir/AMi_Image_Analysis.py
+    
+    deactivate'''%(python_path, activate_venv))
+    
+    #_list is [(path,filename,True/false for ChangeRaw, True/false for ChangeSheBang)]
+    _list=[(app_path,"utils.py",True, False),
+           (app_path+'/tools/',"Merge_AllNewPlates.py", True, True),
+           (app_path+'/tools/',"Merge_Zstack.py", True, True),
+           (app_path+'/tools/',"SaveDiskSpace.py", True, True),
+           (app_path,"autocrop.py", False, True),
+           (app_path,"Check_Circle_detection.py", False, True)]
+    
+    #Change _rawimages to adapt to maybe different but compatible microscope softwares
+    for i in _list:
+        if i[2] is True: ChangeRAW(i[0], i[1],_rawimages)
+    
+    #do not use Set ProjectID if --no-ProjectID
+    with open('utils.py', 'r') as f:lines=f.readlines()    
+    if options.noprojectID is True:
+        NEW=SetNoPRojectID("self.project", lines)
+        with open("utils.py", 'w') as f:
+            for l in NEW: f.write(l)
+    
+    st = os.stat(file_path)
+    os.chmod(file_path, st.st_mode |  stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
+    
+    #Change shebang for some files that can be used in terminal and use openCV
+    for i in _list:
+        if i[3] is True: ChangeSheBang(i[0], i[1], python_path)
+    
+    if sys.platform=='linux':
+        file_path=Path(app_path).joinpath("AMi_IA.desktop")
+        lines=f'''[Desktop Entry]
+    Name=AMi_Image_Analysis
+    Comment=Run AMI_Image_Analysis
+    Exec={Path(app_path).joinpath("bin", "AMI_Image_Analysis.sh")}
+    Icon={Path(app_path).joinpath("AMi_IA.png")}
+    Terminal=true
+    Type=Application'''
+        with open(file_path, 'w') as f:
+            for l in lines: f.write(l)
+        print(f'''
+    ------------------------------------------------------
+    If you want you can put an icon on your desktop by issuing the following command
+    cp {file_path} {os.path.expanduser("~/Desktop")}/.
+    ------------------------------------------------------''')
+    
+    if sys.platform=='linux' or sys.platform=='darwin':
+        file_path=Path(app_path).joinpath("bin", "AMI_Image_Analysis.sh")
+        print(f'''
+    ------------------------------------------------------
+    Recommended: create an alias in your .bashrc or .bash_profile with:
+    alias AMI_IMage_Analysis='{file_path}'
+    ------------------------------------------------------
+    ''')
+        CreateUninstall(app_path, python_path)
+    
+    print("\nInstallation Finished.\n")
+    print("------------------------------------------------------")
 
-print("\nInstallation Finished.\n")
-print("------------------------------------------------------")
+if __name__ == '__main__':
+    rc = 1
+    try:
+        main()
+        rc = 0
+    except Exception as e:
+        print('Error: %s' % e, file=sys.stderr)
+    sys.exit(rc)

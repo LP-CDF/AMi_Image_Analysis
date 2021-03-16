@@ -1,6 +1,6 @@
 # Install
 
-Please read this carefully and completely before proceeding.
+Please read this carefully until the end before proceeding.
 
     The software was tested on:
     * linux CentOS 7 (PyQt5 and python3 (v3.6.8 and v3.7.3))
@@ -37,6 +37,7 @@ Please read this carefully and completely before proceeding.
     * Change to the directory containing the file Setup.py
     * type "python3 Setup.py" to install with defaults or "python3 Setup.py -h" for help. If you are lucky, everything should be set properly.
       Please note that only python dependencies are installed with the Setup.py script.
+      Type "python3 Setup.py --no-ProjectID" if your folder tree is without a ProjectID (see section "The following details MUST BE checked" case 1)
       If necessary, you will have to manually install distribution specific packages.
     * It is recommended to create an alias (e.g. for bash you can add in your .bashrc alias  AMI_Image_Analysis='/whereveryouinstalled/bin/AMI_Image_Analysis.sh')
     
@@ -88,6 +89,8 @@ Please read this carefully and completely before proceeding.
     For case 2: Edit the file utils.py and check that you have the line
     			self.project=directory.parts[-5] #-5 if projectID is set. or -4
 			self.project=directory.parts[-4] #-4 if projectID is set. or -3
+    
+    Or at setup, type "python3 Setup.py --no-ProjectID" if your folder tree is without a ProjectID (case 1).
 
     If the folder containing the individual Z focused images is not named "rawimages" just edit the file "utils.py"
     and modify the field _rawimages at line 4 accordingly before running Setup.py. However the organization of the

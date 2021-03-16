@@ -1,0 +1,80 @@
+2021/03/11:
+Default folder tree has one more folder (see case 2 in INSTALL.txt).
+If the local tree does not have this folder, use the following command at install "python3 Setup.py --no-ProjectID".
+Also, if the local folder containing the unmerged Z-stacks is not called "rawimages", edit the parameter "_rawimages" in utils.py before installation.
+
+2021/03/05:
+By default AMi_Image_Analysis expects the individual Z focus images to be located in a folder "rawimages". As of 2021/03/05, a parameter named "_rawimages" can be modified in utils.py before installation. 
+
+2020/12/04:
+Changed parallel processing. Defined MAX\_CPU in Merge\_Zstack.py, Merge\_AllNewPlates.py and preferences.py. Value can be set to limit number of processes if for example, RAM is completely used leading to the use of swap memory.
+
+2020/09/22:
+Two new command line tools: Merge_AllNewPlates.py and SaveDiskSpace.py to automate the tedious processing of several datasets or save disk space.
+Release 1.2.3.7
+
+2020/07/03:
+Easier installation procedure using Setup.py. Creation of an uninstallation script.
+Release 1.2.3.1
+
+2020/05/20:
+Improved navigation with shortcuts: Now only visible wells through "Filter" option are selected.
+Added Screens Tables to quickly check crystallization conditions. Crystallization Tables are read from csv files stored in the folder "Screen_Database".
+
+2020/03/03:
+Merging Z-stacks can be done within AMI_Image_Analysis or command line using the script Merge_Zstack.py. It is done in python using openCV and is much faster than using Hugin.
+
+2020/02/03:
+Images in Timeline can be clicked to load corresponding image in main viewing frame for closer inspection.
+autoMARCO windows can all be displayed at the same time (previously only a single window could be loaded)
+
+2020/01/23:
+Fixed autoMARCO on Raspbian Buster.
+Fixed bug leading to program crash when stopping autoMARCO and filtering results.
+Release 1.1.8.
+
+2020/01/16:
+Changed startup routine to include python virtual environment initialisation.
+Release 1.1.6.
+
+2020/01/10:
+Parameters controlling circle detection are set in preferences.py
+The color of the field indicating the actual classification changes dynamically.
+New release.
+
+2019/12/17:
+Added a tool to automatically crop images using opencv (autocrop.py). This enhances autoMARCO results.
+Added a tool to check circle detection on a given image (Check_Circle_detection.py).
+
+2019/12/13:
+Added visualisation of autoMARCO results
+
+2019/12/12:
+Automated annotation using TensorFlow (https://www.tensorflow.org/) and MARCO (https://marco.ccr.buffalo.edu/) has been added.
+For now, this requires TensorFlow version previous to v2.
+**Important Note:** a threshold is applied to accept or not autoMARCO most probable prediction. If the prediction probability is below
+this threshold (currently 0.6 and can be modified in preferences.py), the drop classification is set to "Unknown". 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

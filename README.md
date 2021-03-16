@@ -7,12 +7,14 @@ For more details on this device, please look at:
 
 This program should work with images taken by other machines given the folder tree is as expected (see below).
 
+
 ## Features:
 
 I created this application to help the members of our laboratory in their crystallization work.
 The software can read tiff, jpeg or png files.
 Images are accessed via clicking on the corresponding well button or by navigating with keyboard shortcuts.
-Images can be zoomed for thorough inspection and a timeline of the corresponding well is displayed if several pictures of the same well but taken at different times are available.
+Images can be zoomed for thorough inspection.
+A timeline is available if the plate has already been imaged.
 
 Images are scored using the Drop Score section and more details can be written in notes and saved to file.
 The results can be displayed on a grid for quick overall inspection and statistics are calculated.
@@ -33,7 +35,7 @@ The tree must be organized like:
             ├── ...
             └── prep_date.txt
 ```
-or
+or (default from 2021/03/05) 
 ```bash
 .
 └── images
@@ -48,70 +50,18 @@ or
 		├── ...
 		└── prep_date.txt
 ```
-
+The Tree format is defined during setup (see INSTALL notes).
 AMiGUI (the software controlling the AMi microscope) needs a folder named "images" but this is not important for AMi_Image_Analysis. 
-The date directory must have the format YYYYMMDD_HHMMSS (eg. 20191211_151023)
-The file "prep_date.txt" contains the preparation date as a single line with format YYYYMMDD and is created within the program. It is used for logging purpose only and is not mandatory.
+The date directory must have the format **YYYYMMDD_HHMMSS** (eg. 20191211_151023)
+The file "prep_date.txt" contains the preparation date as a single line with format **YYYYMMDD** and is created within the program. It is used for logging purpose only and is not mandatory.
 
-
-2019/12/12:
-Automated annotation using TensorFlow (https://www.tensorflow.org/) and MARCO (https://marco.ccr.buffalo.edu/) has been added.
-For now, this requires TensorFlow version previous to v2.
-
-**Important Note:** a threshold is applied to accept or not autoMARCO most probable prediction. If the prediction probability is below
-this threshold (currently 0.6 and can be modified in preferences.py), the drop classification is set to "Unknown". 
-
-2019/12/13:
-Added visualisation of autoMARCO results
-
-2019/12/17:
-Added a tool to automatically crop images using opencv (autocrop.py). This enhances autoMARCO results.
-Added a tool to check circle detection on a given image (Check_Circle_detection.py).
-
-2020/01/10:
-Parameters controlling circle detection are set in preferences.py
-The color of the field indicating the actual classification changes dynamically.
-New release.
-
-2020/01/16:
-Changed startup routine to include python virtual environment initialisation.
-Release 1.1.6.
-
-2020/01/23:
-Fixed autoMARCO on Raspbian Buster.
-Fixed bug leading to program crash when stopping autoMARCO and filtering results.
-Release 1.1.8.
-
-2020/02/03:
-Images in Timeline can be clicked to load corresponding image in main viewing frame for closer inspection.
-autoMARCO windows can all be displayed at the same time (previously only a single window could be loaded)
-
-2020/03/03:
-Merging Z-stacks can be done within AMI_Image_Analysis or command line using the script Merge_Zstack.py. It is done in python using openCV and is much faster than using Hugin.
-
-2020/05/20:
-Improved navigation with shortcuts: Now only visible wells through "Filter" option are selected.
-Added Screens Tables to quickly check crystallization conditions. Crystallization Tables are read from csv files stored in the folder "Screen_Database".
-
-2020/07/03:
-Easier installation procedure using Setup.py. Creation of an uninstallation script.
-Release 1.2.3.1
-
-2020/09/22:
-Two new command line tools: Merge_AllNewPlates.py and SaveDiskSpace.py to automate the tedious processing of several datasets or save disk space.
-Release 1.2.3.7
-
-2020/12/04:
-Changed parallel processing. Defined MAX\_CPU in Merge\_Zstack.py, Merge\_AllNewPlates.py and preferences.py. Value can be set to limit number of processes if for example, RAM is completely used leading to the use of swap memory.
-
-2021/03/05:
-By default AMi_Image_Analysis expects the individual Z focus images to be located in a folder "rawimages". As of 2021/03/05, a parameter named "_rawimages" can be modified in utils.py before installation. 
 
 ## Screenshots
 
 ![Screenshot 1](./screenshot1.png)
 ![Screenshot 2](./screenshot2.png)
 ![Screenshot 3](./screenshot3.png)
+
 
 ## Install
 
@@ -139,9 +89,9 @@ Dependencies:
 * NumPy
 
 Optional dependencies:
-* TensorFlow (v1.14 or 1.15, not v2)
+* TensorFlow (v1.1x, not v2)
 * MARCO tensorflow model (https://storage.googleapis.com/marco-168219-model/savedmodel.zip)
-One version of this model is included in saved_model/
+A copy of this model is included in saved_model/
 Methodology details are published in [[2]](#2)
 
 Note: a pip requirement file is available for easy install of python dependencies.
@@ -149,6 +99,7 @@ Note: a pip requirement file is available for easy install of python dependencie
 Known issues: 
 * On Raspbian AutoMARCO does not work with regular PyPi tensorflow package (see INSTALL.txt).
 * If your CPU does not support AVX instruction sets (CPU before SandyBridge), you will need to find a tensorflow with the correct building options (have a look [here](https://github.com/yaroslavvb/tensorflow-community-wheels/issues))
+
 
 ## Citation
 

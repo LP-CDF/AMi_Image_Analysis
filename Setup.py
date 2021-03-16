@@ -6,7 +6,7 @@ Created on Tue Jun 30 10:50:12 2020
 @author: ludovic
 """
 
-__date__ = "08-03-2021"
+__date__ = "11-03-2021"
 
 import os
 import os.path
@@ -47,6 +47,7 @@ class ExtendedEnvBuilder(venv.EnvBuilder):
         self.nopip = kwargs.pop('nopip', False)
         self.progress = kwargs.pop('progress', None)
         self.verbose = kwargs.pop('verbose', False)
+        self.noprojectID= kwargs.pop('noprojectID', False)
         super().__init__(*args, **kwargs)
 
     def post_setup(self, context):
@@ -166,8 +167,14 @@ class ExtendedEnvBuilder(venv.EnvBuilder):
         #Finishing setup
         if sys.platform=='linux' or sys.platform=='darwin':
             print("\nUPDATING INTIALISATION SCRIPT bin/AMI_Image_Analysis.sh\n")
+            print("TESTING OPTIONS")
             Setup_bin_VENV=Path(filepath).joinpath("Setup_local.py")
-            subprocess.call([binpath, Setup_bin_VENV])
+            if self.noprojectID is True:
+                print("TESTING OPTIONS TRUE")
+                subprocess.run([binpath, Setup_bin_VENV, "--no-ProjectID"])
+            else:
+                print("TESTING OPTIONS FALSE")
+                subprocess.run([binpath, Setup_bin_VENV])
         
 def main(args=None):
     script_path=os.path.abspath(os.path.dirname(sys.argv[0]))
@@ -235,6 +242,10 @@ def main(args=None):
                             dest='verbose', help='Display the output '
                                                'from the scripts which '
                                                'install pip.')
+        parser.add_argument('--no-ProjectID', default=False,
+                    action='store_true', dest='noprojectID',
+                    help="Don't use ProjectID in tree")
+        
         options = parser.parse_args(args)
         
         if options.upgrade and options.clear:
@@ -245,7 +256,8 @@ def main(args=None):
                                        upgrade=options.upgrade,
                                        nodist=options.nodist,
                                        nopip=options.nopip,
-                                       verbose=options.verbose)
+                                       verbose=options.verbose,
+                                       noprojectID=options.noprojectID)
         
         if options.dirs is None:
             options.dirs=str(ENV_DIR)
