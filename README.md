@@ -80,7 +80,7 @@ git clone https://github.com/LP-CDF/AMi_Image_Analysis AMi_Image_Analysis.
 Then follow the instructions in INSTALL.txt
 
 Dependencies:
-* Python 3
+* Python 3 (python below 3.8 if you want to use TensorFlow 1.1x)
 * Qt5
 * PyQt5
 * Python Imaging Library (Pillow, v6.2.1 or higher)

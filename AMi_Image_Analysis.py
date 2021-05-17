@@ -26,15 +26,16 @@ from  MARCO_Results_Analysis import MARCO_Results
 import StatisticsDialog
 import tools.Merge_Zstack as Merge_Zstack
 import ReadScreen
+import ExternalViewer
 import preferences as pref
 
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True) #enable highdpi scaling
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True) #use highdpi icons
 QtWidgets.QApplication.setAttribute(QtCore.Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
 
-__version__ = "1.2.3.9"
+__version__ = "1.2.3.10"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "04-03-2021"
+__date__ = "14-05-2021"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -96,6 +97,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.InitialNotes = None
         self.InitialClassif = None
         self.rawimages=_rawimages
+        self.TimelineInspector=None
 
         #If using the QGraphics view, use open_image
         #If not comment the next five lines and use
@@ -1187,7 +1189,14 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         else:
             parts[-2]=date
         path=str(Path(*parts))
-        self.open_image(path)
+        # self.open_image(path)
+        if self.TimelineInspector is None:
+            self.TimelineInspector=ExternalViewer.Window()
+        self.TimelineInspector.open_image(path)
+        self.TimelineInspector.setWindowTitle("Timeline Inspector Well: %s Date: %s"%(well,date))
+        self.TimelineInspector.show()
+        self.TimelineInspector.activateWindow()
+        self.TimelineInspector.raise_()        
         
         #Don't know if it is useful in case of long term use
         del imagedir, widget, date, path, parts, row, col, item, idx, location

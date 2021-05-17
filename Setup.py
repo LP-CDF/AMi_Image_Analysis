@@ -270,6 +270,17 @@ def main(args=None):
 
 if __name__ == '__main__':
     rc = 1
+    if sys.version >= '3.8':
+        print(f'''
+#########################################################################################################   
+           
+              WARNING:
+              Python version {sys.version} is more recent than the recommended version.
+              You will likely encounter setup issues.
+              If you don't want to use Tensorflow, this should be fine.
+              
+#########################################################################################################            
+              ''')
     try:
         main()
         rc = 0
