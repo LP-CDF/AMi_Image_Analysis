@@ -211,6 +211,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.radioButton_ScoreCrystal.setStyleSheet("""color: green;""")                                            
         self.radioButton_ScorePhaseSep.setStyleSheet("""color: orange;""")
         self.radioButton_ScoreOther.setStyleSheet("""color: magenta;""")
+        self.radioButton_ScoreUnknown.setStyleSheet("""background-color:yellow ; color: black;""")
 
         #Listen Scoring RadioButtons
         self.radioButton_ScoreClear.toggled.connect(lambda:self.ScoreDrop(self.radioButton_ScoreClear, self.currentWell))
@@ -218,6 +219,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.radioButton_ScoreCrystal.toggled.connect(lambda:self.ScoreDrop(self.radioButton_ScoreCrystal, self.currentWell))
         self.radioButton_ScorePhaseSep.toggled.connect(lambda:self.ScoreDrop(self.radioButton_ScorePhaseSep, self.currentWell))
         self.radioButton_ScoreOther.toggled.connect(lambda:self.ScoreDrop(self.radioButton_ScoreOther, self.currentWell))
+        self.radioButton_ScoreUnknown.toggled.connect(lambda:self.ScoreDrop(self.radioButton_ScoreUnknown, self.currentWell))
 
         #Listen Display Heat Map and export to pdf buttons
         self.pushButton_DisplayHeatMap.clicked.connect(self.show_HeatMap)
@@ -1367,6 +1369,8 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             else: from Automated_Marco import predict
         
         self.classifications.clear()
+        self.Notes_TextEdit.clear() # if not emptied, note is given to all wells
+        
         logdir=Path(self.rootDir).joinpath("Image_Data", self.date)
         predict(self.files, self.classifications, logdir)
 
