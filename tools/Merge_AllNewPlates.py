@@ -392,7 +392,9 @@ def main(args=None):
     # Get the list of all files in directory tree at given path
     listOfDirs = list()
     for (dirpath, dirnames, filenames) in os.walk(dirName):
-        listOfDirs += [os.path.join(dirpath, file) for file in os.listdir(dirpath) if os.path.isdir(os.path.join(dirpath,file))]
+        # listOfDirs += [os.path.join(dirpath, file) for file in os.listdir(dirpath) if os.path.isdir(os.path.join(dirpath,file))]
+        if _rawimages in dirnames:
+            listOfDirs += [os.path.join(dirpath, file) for file in os.listdir(dirpath) if os.path.isdir(os.path.join(dirpath,file))]
         
 
     rawdata_subfolders=list()

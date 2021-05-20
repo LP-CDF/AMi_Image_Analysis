@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/local/PROGRAMS/XTAL/GIT-AMi_Image_Analysis/python/venvs/AMI_IMAGE_ANALYSIS_TENSORFLOW1/bin/python 
 # -*- coding: utf-8 -*-
 """
 Created on Mon Sep 21 09:25:59 2020
@@ -36,11 +36,13 @@ def main(args=None):
         dirName=Path(options.dir)
     # print("dirName: ", dirName)
     
-    # Get the list of all files in directory tree at given path
+    # Get the list of all directories _rawimges at given path
     listOfDirs = list()
     for (dirpath, dirnames, filenames) in os.walk(dirName):
-        listOfDirs += [os.path.join(dirpath, file) for file in os.listdir(dirpath) if os.path.isdir(os.path.join(dirpath,file))]
-        
+        # listOfDirs += [os.path.join(dirpath, file) for file in os.listdir(dirpath) if os.path.isdir(os.path.join(dirpath,file))]
+        if _rawimages in dirnames:
+            listOfDirs += [os.path.join(dirpath, file) for file in os.listdir(dirpath) if os.path.isdir(os.path.join(dirpath,file))]
+    # print(listOfDirs)  
 
     rawdata_subfolders=list()
     for elem in listOfDirs:
