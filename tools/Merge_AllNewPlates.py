@@ -18,8 +18,7 @@ MAX_CPU=None #set to desired integer if needed ie MAX_CPU="8" (keep the "")
 _rawimages="rawimages"
 
 __version__ = "0.1"
-__author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "04-03-2021"
+__date__ = "20-05-2021"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 

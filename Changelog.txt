@@ -1,3 +1,7 @@
+2021/05/20
+Clicking a well in the Timeline spawns a new viewing window.
+Added the option to class as "Unknown" in the drop score section.
+
 2021/03/11:
 Default folder tree has one more folder (see case 2 in INSTALL.txt).
 If the local tree does not have this folder, use the following command at install "python3 Setup.py --no-ProjectID".

@@ -211,7 +211,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.radioButton_ScoreCrystal.setStyleSheet("""color: green;""")                                            
         self.radioButton_ScorePhaseSep.setStyleSheet("""color: orange;""")
         self.radioButton_ScoreOther.setStyleSheet("""color: magenta;""")
-        self.radioButton_ScoreUnknown.setStyleSheet("""background-color:yellow ; color: black;""")
+        self.radioButton_ScoreUnknown.setStyleSheet("""color: black;""")
 
         #Listen Scoring RadioButtons
         self.radioButton_ScoreClear.toggled.connect(lambda:self.ScoreDrop(self.radioButton_ScoreClear, self.currentWell))
@@ -367,17 +367,18 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
             return
         
         path=Path(self.imageDir).joinpath("cropped")
-        ensure_directory(path)
-        
+        _f=ensure_directory(path)
+        if _f is not None: #if Permission issue
+            self.handle_error(f"> {_f}\n\nYou must change the permissions to continue")
+            return
+                    
         errors, error_list = 0, []
-        
         count, size=0, len(self.files)
 
         progress = QProgressDialog("Processing files...", "Abort", 0, size)
         progress.setWindowTitle("AutoCrop")
         progress.setMinimumWidth(300)
         progress.setModal(True)
-
         
         for _file in self.files:
             progress.setValue(count+1)
@@ -980,19 +981,22 @@ https://github.com/LP-CDF/AMi_Image_Analysis
                 return
             most_recent = self.compare_most_recent(most_recent, date)
         newPath = path.joinpath(current_date)
+        _f=ensure_directory(newPath)
+        if _f is not None: #if Permission issue
+            self.handle_error(f"> {_f}\n\nYou must change the permissions and reload the directory to continue")
+            return
+            # self.handle_error(f"> {ensure_directory(newPath)}\n\nThe program will quit")
+            # loop = QtCore.QEventLoop()
+            # QtCore.QTimer.singleShot(3000, loop.quit)
+            # loop.exec_()
+            # sys.exit()
 
-        if len(os.listdir(path)) !=0:
+        if len(os.listdir(path)) !=1: #if not first time more than one folder is present
             path=path.joinpath(most_recent)
-            ensure_directory(newPath)
-            if not newPath.exists():
-                newPath.mkdir()
-
             for file in path.iterdir():
                 copyfile(str(file), str(newPath.joinpath(file.name)))
             print("> Copied previous notes from: " + most_recent)
             print("> ")
-        else:
-            ensure_directory(newPath)
 
 
     def LoadNotes(self, path, date, well):

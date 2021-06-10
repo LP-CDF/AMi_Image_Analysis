@@ -10,6 +10,10 @@ from pathlib import Path
 import shutil
 import argparse
 
+__version__ = "0.1"
+__date__ = "20-05-2021"
+__license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
+
 #Define below the name of the folder containing unstacked Z images.
 _rawimages="rawimages"
 

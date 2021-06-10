@@ -7,8 +7,11 @@ def ensure_directory(file_path):
     """Checks the given file path for a directory, and creates one if not already present.
     Args:
         file_path: a pathlib.Path
+    returns the err message if permission issue, else is None
     """
-    if not file_path.exists(): file_path.mkdir()
+    if not file_path.exists():
+        try: file_path.mkdir()
+        except Exception as err: return err
 
         
 class initProject(object):
