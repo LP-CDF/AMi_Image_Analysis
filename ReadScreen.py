@@ -10,6 +10,7 @@ __date__ = "23-02-2021"
 
 import os, sys
 import csv
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
@@ -58,5 +59,48 @@ class MyTable(QTableWidget):
                         self.setItem(row, column, item)
             del my_screen
         else : return False
-                           
-        del app_path, path
+
+
+    def open_xml(self, _file):
+        '''Read a RockMaker or Dragonfly XML '''
+        path=Path(_file)        
+        if Path(path).is_file():
+            tree = ET.parse(path)
+            root = tree.getroot()
+            #Create Dictionnary of localID: ingredient name    
+            DictIng={}
+            for chemical in root.iter('ingredients'):
+                for ingredient in chemical.iter('ingredient'):
+                    localID=[]
+                    for stock in ingredient.iter('stock'):
+                        DictIng[stock.find('localID').text]= {'name':str(ingredient.find('name').text),'units':str(stock.find('units').text)}            
+
+        subsections=("concentration","pH") #subsections of interest
+
+        i=1; my_screen={}
+        for conditions in root.iter('conditions'):
+            for condition in conditions.iter('condition'):
+                temp=[]
+                for ingredient in condition:
+                    content=DictIng[ingredient.find('stockLocalID').text]['name']
+                    for child in ingredient:
+                        # print(child.tag, child.attrib, child.text)
+                        if child.tag in subsections:
+                            if child.tag=='pH':
+                                content+=' '+child.tag+' '+child.text
+                            else:
+                                content+=' '+child.text+' '+DictIng[ingredient.find('stockLocalID').text]['units']
+                    temp.append(content)
+                my_screen[i]=temp; i+=1
+            # for i,j in my_screen.items(): print(i,j)          
+            self.setRowCount(0); self.setColumnCount(10)
+            for i,row_data in my_screen.items():
+                row = self.rowCount()
+                self.insertRow(row)
+                if len(row_data) > 10:
+                    self.setColumnCount(len(row_data))
+                for column, stuff in enumerate(row_data):
+                    item = QTableWidgetItem(str(stuff))
+                    self.setItem(i-1, column, item)
+            del my_screen
+        else : return False

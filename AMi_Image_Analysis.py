@@ -169,6 +169,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.actionNextal_JCSG_Plus.triggered.connect(lambda: self.show_CrystScreen("NeXtal-JCSG-Plus-Suite"))
         self.actionMD_MIDAS.triggered.connect(lambda: self.show_CrystScreen("MD_MIDAS"))
         self.actionMD_BCS_Screen.triggered.connect(lambda: self.show_CrystScreen("MD_BCS_Screen"))
+        self.actionimport_RockMaker_XML.triggered.connect(self.openXMLDialog)
         
         
         self.actionQuit_2.triggered.connect(self.on_exit)
@@ -259,6 +260,19 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
             self.ScreenTable.show()
         else:
             self.handle_error("WARNING: File %s not found in database"%ReadScreen.ScreenFile[Screen])
+
+
+    def show_XMLScreen(self, fileName):
+        if Path(fileName).suffix not in ['.xml', '.XML']:
+                self.handle_error("WARNING: unexpected format for file %s"%fileName)
+                return
+        self.ScreenTable=ReadScreen.MyTable(10, 10)
+        self.ScreenTable.setWindowTitle("TEST")
+        data=self.ScreenTable.open_xml(fileName)
+        self.ScreenTable.resize(1000, 500)
+        header = self.ScreenTable.horizontalHeader()
+        header.setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
+        self.ScreenTable.show()
 
 
     def show_autoMARCO(self, subwell):
@@ -569,6 +583,15 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             from subprocess import run
             run(['open', path], check=True)
 
+
+    def openXMLDialog(self):
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        fileName, _ = QFileDialog.getOpenFileName(self,"Open File", "","All Files (*);;XML Files (*.xml *.XML)", options=options)
+        if fileName:
+            print(fileName)
+        if fileName:
+            self.show_XMLScreen(fileName)
 
     def openFileNameDialog(self):
         options = QFileDialog.Options()

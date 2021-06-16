@@ -491,6 +491,8 @@ class Ui_MainWindow(object):
         self.actionNeXtal_Ammonium_Sulfate_Suite.setObjectName("actionNeXtal_Ammonium_Sulfate_Suite")
         self.action_Cryo_HT = QtWidgets.QAction(MainWindow)
         self.action_Cryo_HT.setObjectName("action_Cryo_HT")
+        self.actionimport_RockMaker_XML = QtWidgets.QAction(MainWindow)
+        self.actionimport_RockMaker_XML.setObjectName("actionimport_RockMaker_XML")
         self.menuFile.addAction(self.openFile)
         self.menuFile.addAction(self.openDir)
         self.menuFile.addAction(self.actionExport_to_PDF)
@@ -540,6 +542,7 @@ class Ui_MainWindow(object):
         self.menuScreen_Tables.addAction(self.menuMolecular_Dimensions.menuAction())
         self.menuScreen_Tables.addAction(self.menuNextal.menuAction())
         self.menuScreen_Tables.addSeparator()
+        self.menuScreen_Tables.addAction(self.actionimport_RockMaker_XML)
         self.menuBar.addAction(self.menuFile.menuAction())
         self.menuBar.addAction(self.menuDisplay_Heat_Map.menuAction())
         self.menuBar.addAction(self.menuScreen_Tables.menuAction())
@@ -650,5 +653,6 @@ class Ui_MainWindow(object):
         self.actionManual.setText(_translate("MainWindow", "Manual"))
         self.actionNeXtal_Ammonium_Sulfate_Suite.setText(_translate("MainWindow", "NeXtal Ammonium Sulfate Suite"))
         self.action_Cryo_HT.setText(_translate("MainWindow", "Cryo HT"))
+        self.actionimport_RockMaker_XML.setText(_translate("MainWindow", "import RockMaker/Dragonfly XML"))
 
 
