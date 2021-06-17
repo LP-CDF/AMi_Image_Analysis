@@ -35,7 +35,7 @@ QtWidgets.QApplication.setAttribute(QtCore.Qt.HighDpiScaleFactorRoundingPolicy.P
 
 __version__ = "1.2.3.10"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "14-05-2021"
+__date__ = "17-06-2021"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -239,6 +239,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
     def show_HeatMap(self):
         ''' Create window and map results on a grid'''
         self.heatmap_window = HeatMapGrid()
+        self.heatmap_window.setWindowTitle("Heat Map: %s"%self.plate)
         self.heatmap_window.well_images=self.well_images
         self.heatmap_window.classifications=self.classifications
         self.heatmap_window.notes=self.WellHasNotes
@@ -248,6 +249,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
 
 
     def show_CrystScreen(self, Screen):
+        '''Screen is taken from key ScreenFile dictionnary in ReadScreen.py '''
         self.ScreenTable=ReadScreen.MyTable(10, 10)
         self.ScreenTable.setWindowTitle("%s"%Screen)
         data=self.ScreenTable.open_sheet(Screen)
@@ -263,11 +265,12 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
 
 
     def show_XMLScreen(self, fileName):
-        if Path(fileName).suffix not in ['.xml', '.XML']:
+        path=Path(fileName)
+        if path.suffix not in ['.xml', '.XML']:
                 self.handle_error("WARNING: unexpected format for file %s"%fileName)
                 return
         self.ScreenTable=ReadScreen.MyTable(10, 10)
-        self.ScreenTable.setWindowTitle("TEST")
+        self.ScreenTable.setWindowTitle(path.stem)
         data=self.ScreenTable.open_xml(fileName)
         self.ScreenTable.resize(1000, 500)
         header = self.ScreenTable.horizontalHeader()
@@ -587,9 +590,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
     def openXMLDialog(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
-        fileName, _ = QFileDialog.getOpenFileName(self,"Open File", "","All Files (*);;XML Files (*.xml *.XML)", options=options)
-        if fileName:
-            print(fileName)
+        fileName, _ = QFileDialog.getOpenFileName(self,"Open File", "","XML Files (*.xml *.XML)", options=options)
         if fileName:
             self.show_XMLScreen(fileName)
 

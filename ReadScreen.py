@@ -6,7 +6,7 @@ Created on Wed May 20 09:42:40 2020
 Adapted from https://gist.github.com/anonymous/1918b6fec0ab55ae681861e1e36ef754
 """
 
-__date__ = "23-02-2021"
+__date__ = "17-06-2021"
 
 import os, sys
 import csv
@@ -62,7 +62,7 @@ class MyTable(QTableWidget):
 
 
     def open_xml(self, _file):
-        '''Read a RockMaker or Dragonfly XML '''
+        '''Read a RockMaker or Dragonfly XML, _file as str '''
         path=Path(_file)        
         if Path(path).is_file():
             tree = ET.parse(path)
@@ -81,6 +81,7 @@ class MyTable(QTableWidget):
         for conditions in root.iter('conditions'):
             for condition in conditions.iter('condition'):
                 temp=[]
+                temp.append(i)
                 for ingredient in condition:
                     content=DictIng[ingredient.find('stockLocalID').text]['name']
                     for child in ingredient:
@@ -102,5 +103,5 @@ class MyTable(QTableWidget):
                 for column, stuff in enumerate(row_data):
                     item = QTableWidgetItem(str(stuff))
                     self.setItem(i-1, column, item)
-            del my_screen
         else : return False
+        del tree, root, my_screen, DictIng
