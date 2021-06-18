@@ -35,7 +35,7 @@ QtWidgets.QApplication.setAttribute(QtCore.Qt.HighDpiScaleFactorRoundingPolicy.P
 
 __version__ = "1.2.3.10"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "17-06-2021"
+__date__ = "18-06-2021"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -194,6 +194,9 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.radioButton_PhaseSep.toggled.connect(lambda:self.FilterClassification(self._lay,"PhaseSep"))
         self.radioButton_Unsorted.toggled.connect(lambda:self.FilterClassification(self._lay,"Unknown"))
         self.radioButton_HasNotes.toggled.connect(lambda:self.FilterNotes(self._lay))
+        self.radioButton_Subwella.toggled.connect(lambda:self.FilterSubwell(self._lay,"a"))
+        self.radioButton_Subwellb.toggled.connect(lambda:self.FilterSubwell(self._lay,"b"))
+        self.radioButton_Subwellc.toggled.connect(lambda:self.FilterSubwell(self._lay,"c"))
         
         #Stylesheet scrollAreaPlate and some Qlabel
         self.scrollAreaPlate.setStyleSheet("""background-color: rgb(220,220,220);""")
@@ -1105,6 +1108,18 @@ https://github.com/LP-CDF/AMi_Image_Analysis
                 widget.setVisible(False)
 #            print("well ",widget.text(), "dico Classif ", self.classifications[widget.text()])
         # print("Visibles", self.VisiblesIdx)
+
+    def FilterSubwell(self, layout, subwell):
+        self.VisiblesIdx.clear() #Clear before modification
+        for widget_item in self.layout_widgets(layout):
+            widget = widget_item.widget()
+            if subwell not in ['a', 'b', 'c']: #Plate without subwell stop
+                return
+            elif widget.text()[-1]==subwell:
+                widget.setVisible(True)
+                self.VisiblesIdx.append(layout.indexOf(widget))
+            else:
+                widget.setVisible(False)
 
 
     def FilterNotes(self, layout):

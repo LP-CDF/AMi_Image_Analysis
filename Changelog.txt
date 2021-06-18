@@ -1,6 +1,7 @@
-2021/06/17
+2021/06/18
 Added functionality to import RockMaker XML files. Therefore, one can import XML files downloaded from RockMaker website
 or import custom screens performed with the SPTLabtech Dragonfly and exported to XML.
+Added Filters to only show subwells
 
 2021/05/20
 Clicking a well in the Timeline spawns a new viewing window.
