@@ -6,7 +6,7 @@ Created on Wed May 20 09:42:40 2020
 Adapted from https://gist.github.com/anonymous/1918b6fec0ab55ae681861e1e36ef754
 """
 
-__date__ = "17-06-2021"
+__date__ = "21-06-2021"
 
 import os, sys
 import csv
@@ -33,6 +33,7 @@ ScreenFile={'MD_BCS_Screen':'Md1-105_BCS_Screen.csv',
             'JBScreen_Classic_1-4':'JBScreen_Classic_1-4.csv',
             'JBScreen_Classic_5-8':'JBScreen_Classic_5-8.csv',
             'Pi-PEG_HTS':'Jena-Pi-PEG_Screen_HTS.csv',
+            'HR-AdditiveScreen_HT':'HR-Additive_HT_screen.csv',
             'HR-PEGRx_HT_screen':'HR-PEGRx_HT_screen.csv',
             'HR-SaltRx_HT_screen':'HR-SaltRx_HT_screen.csv',
             'HR-Cryo_HT_screen':'HR-Cryo_HT_screen.csv'}

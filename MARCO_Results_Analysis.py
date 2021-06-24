@@ -51,7 +51,7 @@ class MARCO_Results(QtWidgets.QDialog, Ui_Dialog):
             dx = 60
             y1 = (80 + row * 80)
             dy = 60
-            return x1, y1, dx, dy
+            return (x1, y1, dx, dy)
         
         for row in rows:
             row_int = int(ord(row)) - 65
@@ -66,50 +66,52 @@ class MARCO_Results(QtWidgets.QDialog, Ui_Dialog):
             qp.drawText(x1, 20, 60, 60, QtCore.Qt.AlignCenter, col)
 
         for well in total_wells:
-            coordinates = well_to_coordinates(well)
+            # coordinates = well_to_coordinates(well)
+            (x1, y1, dx, dy)=well_to_coordinates(well)
             qp.setBrush(QColor(255, 255, 255))
-            qp.drawRect(coordinates[0], coordinates[1], coordinates[2], coordinates[3])
+            # qp.drawRect(coordinates[0], coordinates[1], coordinates[2], coordinates[3])
+            qp.drawRect(x1, y1, dx, dy)
         
         
         for line in self.autoMARCO_data:
             if self.subwell!="" and self.subwell in line[0][-1]:
                 well=line[0]
-                coordinates = well_to_coordinates(well)
+                (x1, y1, dx, dy) = well_to_coordinates(well)
                 #Crystal
                 qp.setBrush(QColor(0, 255, 0))
                 # qp.drawRect(coordinates[0]+4, coordinates[1], 10, coordinates[3]*float(line[1]))
-                qp.drawRect(coordinates[0], coordinates[1]+4, coordinates[2]*float(line[1]), 10)
+                qp.drawRect(x1, y1+4, dx*float(line[1]), 10)
                 #Other
                 qp.setBrush(QColor(255, 0, 255))
                 # qp.drawRect(coordinates[0]+18, coordinates[1], 10, coordinates[3]*float(line[2]))
-                qp.drawRect(coordinates[0], coordinates[1]+18, coordinates[2]*float(line[2]), 10)
+                qp.drawRect(x1, y1+18, dx*float(line[2]), 10)
                 #Precipitate
                 qp.setBrush(QColor(255, 0, 0))
                 # qp.drawRect(coordinates[0]+32, coordinates[1], 10, coordinates[3]*float(line[3]))
-                qp.drawRect(coordinates[0], coordinates[1]+32, coordinates[2]*float(line[3]), 10)
+                qp.drawRect(x1, y1+32, dx*float(line[3]), 10)
                 #Clear
                 qp.setBrush(QColor(0, 0, 0))
                 # qp.drawRect(coordinates[0]+46, coordinates[1], 10, coordinates[3]*float(line[4]))
-                qp.drawRect(coordinates[0], coordinates[1]+46, coordinates[2]*float(line[4]), 10)
+                qp.drawRect(x1, y1+46, dx*float(line[4]), 10)
             elif self.subwell=="" and line[0][-1] not in wells:
                 well=line[0]
-                coordinates = well_to_coordinates(well)
+                (x1, y1, dx, dy) = well_to_coordinates(well)
                 #Crystal
                 qp.setBrush(QColor(0, 255, 0))
                 # qp.drawRect(coordinates[0]+4, coordinates[1], 10, coordinates[3]*float(line[1]))
-                qp.drawRect(coordinates[0], coordinates[1]+4, coordinates[2]*float(line[1]), 10)
+                qp.drawRect(x1, y1+4, dx*float(line[1]), 10)
                 #Other
                 qp.setBrush(QColor(255, 0, 255))
                 # qp.drawRect(coordinates[0]+18, coordinates[1], 10, coordinates[3]*float(line[2]))
-                qp.drawRect(coordinates[0], coordinates[1]+18, coordinates[2]*float(line[2]), 10)
+                qp.drawRect(x1, y1+18, dx*float(line[2]), 10)
                 #Precipitate
                 qp.setBrush(QColor(255, 0, 0))
                 # qp.drawRect(coordinates[0]+32, coordinates[1], 10, coordinates[3]*float(line[3]))
-                qp.drawRect(coordinates[0], coordinates[1]+32, coordinates[2]*float(line[3]), 10)
+                qp.drawRect(x1, y1+32, dx*float(line[3]), 10)
                 #Clear
                 qp.setBrush(QColor(0, 0, 0))
                 # qp.drawRect(coordinates[0]+46, coordinates[1], 10, coordinates[3]*float(line[4]))  
-                qp.drawRect(coordinates[0], coordinates[1]+46, coordinates[2]*float(line[4]), 10)
+                qp.drawRect(x1, y1+46, dx*float(line[4]), 10)
             else:
                 continue
 

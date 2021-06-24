@@ -23,6 +23,7 @@ from shutil import copyfile
 import pdf_writer 
 import HeatMap_Grid
 from  MARCO_Results_Analysis import MARCO_Results
+import PlateOverview
 import StatisticsDialog
 import tools.Merge_Zstack as Merge_Zstack
 import ReadScreen
@@ -33,9 +34,9 @@ QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True) #en
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True) #use highdpi icons
 QtWidgets.QApplication.setAttribute(QtCore.Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
 
-__version__ = "1.2.3.10"
+__version__ = "1.2.4"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "18-06-2021"
+__date__ = "23-06-2021"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -77,26 +78,26 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.scrollArea_Timeline.setWidget(timeline_widget)
         self._timlay = QGridLayout(timeline_widget)
         
-        self.os=sys.platform
-        self.files = []
-        self.well_images = []
+        self.os=sys.platform                   #Name of the OS
+        self.files = []                        #Full path of Z-stacked images
+        self.well_images = []                  #Only names of well images
         self.directory = str
-        self.rootDir = str
-        self.imageDir = str
-        self.project = str
-        self.target = str
-        self.plate = str
-        self.date = str
-        self.prepdate = str
-        self.classifications = {}
-        self.WellHasNotes = {}
+        self.rootDir = str                     #Full path where folders at different times are
+        self.imageDir = str                    #Full path where images at a given time are
+        self.project = str                     #Name of the project
+        self.target = str                      #Name of the protein within the project
+        self.plate = str                       #Name of the plate
+        self.date = str                        #Date of images
+        self.prepdate = str                    #Date of plate preparation
+        self.classifications = {}              #Dictionnary in memory containing well:classif
+        self.WellHasNotes = {}                 #Dictionnary in memory containing well:True/False
         self.previousWell = None
         self.currentWell = None
         self.currentButtonIndex= None
-        self.VisiblesIdx = []
+        self.VisiblesIdx = []                  #list in memory with index of visible well widgets
         self.InitialNotes = None
         self.InitialClassif = None
-        self.rawimages=_rawimages
+        self.rawimages=_rawimages              #Name of the directory containing individual Z-focus images
         self.TimelineInspector=None
 
         #If using the QGraphics view, use open_image
@@ -110,6 +111,8 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         
         #To see all autoMARCO results windows create a dict subwell:object
         self.MARCO_window={}
+        #To see all Plates windows create a dict subwell:object
+        self.PLATE_window={}
                 
         self.initUI()
 
@@ -146,6 +149,11 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.actionautoMARCO_subwell_c.triggered.connect(lambda: self.show_autoMARCO("c"))
         self.actionautoMARCO_no_subwell.triggered.connect(lambda: self.show_autoMARCO(""))
         
+        self.actionPlateSubwell_a.triggered.connect(lambda: self.show_Plates("a"))
+        self.actionPlateSubwell_b.triggered.connect(lambda: self.show_Plates("b"))
+        self.actionPlateSubwell_c.triggered.connect(lambda: self.show_Plates("c"))
+        self.actionPlateno_subwell.triggered.connect(lambda: self.show_Plates(""))
+        
         
         #Crystallization Screens
         self.actionMD_PGA.triggered.connect(lambda: self.show_CrystScreen("MD-PGA"))
@@ -162,6 +170,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.actionJBScreen_Classic_1_4.triggered.connect(lambda: self.show_CrystScreen("JBScreen_Classic_1-4"))
         self.actionJBScreen_Classic_5_8.triggered.connect(lambda: self.show_CrystScreen("JBScreen_Classic_5-8"))
         self.actionPi_PEG_HTS.triggered.connect(lambda: self.show_CrystScreen("Pi-PEG_HTS"))
+        self.action_Additive_screen_HT.triggered.connect(lambda: self.show_CrystScreen("HR-AdditiveScreen_HT"))
         self.actionPeg_Rx1Rx2.triggered.connect(lambda: self.show_CrystScreen("HR-PEGRx_HT_screen"))
         self.actionSaltRx.triggered.connect(lambda: self.show_CrystScreen("HR-SaltRx_HT_screen"))
         self.action_Cryo_HT.triggered.connect(lambda: self.show_CrystScreen("HR-Cryo_HT_screen"))
@@ -242,11 +251,11 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
     def show_HeatMap(self):
         ''' Create window and map results on a grid'''
         self.heatmap_window = HeatMapGrid()
-        self.heatmap_window.setWindowTitle("Heat Map: %s"%self.plate)
+        self.heatmap_window.setWindowTitle("Heat Map: %s (%s)"%(self.plate, self.date))
         self.heatmap_window.well_images=self.well_images
         self.heatmap_window.classifications=self.classifications
         self.heatmap_window.notes=self.WellHasNotes
-        self.heatmap_window.pushButton_ExportImage.clicked.connect(self.take_screenshot)
+        self.heatmap_window.pushButton_ExportImage.clicked.connect(lambda:self.take_screenshot(self.heatmap_window, "HeatMap_Grid"))
         self.heatmap_window.pushButton_Close.clicked.connect(self.heatmap_window.close)
         self.heatmap_window.show()
 
@@ -300,7 +309,6 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         
         for line in data:
             autoMARCO_data.append(line.split())
-        
         #delete HEADER from list
         del autoMARCO_data[0]
         
@@ -317,8 +325,26 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         
         self.MARCO_window[subwell].show()
         del autoMARCO_data
-        
 
+
+    def show_Plates(self, subwell):
+        ''' Create window and map results on a grid'''
+
+        if len(self.classifications)==0:
+            self.handle_error("Please choose a directory containing the images first")
+            return
+        
+        self.PLATE_window[subwell] = PlateOverview.Plate(9,13)
+        self.PLATE_window[subwell].subwell=subwell
+        self.PLATE_window[subwell].setWindowTitle(f"Overview Screen: {self.plate} ({self.date}) subwell {subwell}")
+        # self.PLATE_window[subwell].files=self.files
+        # self.PLATE_window[subwell].positions=self.GenerateGrid(self.files)
+        self.PLATE_window[subwell].display_images(self.files)
+        self.PLATE_window[subwell].resize(1520, 810)
+        self.PLATE_window[subwell].show()
+        QtGui.QPixmapCache.clear()
+        
+        
     def show_Statistics(self):
         '''Calculate statistics on the plate'''
         #Check data before going further
@@ -656,6 +682,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         self.well_images.clear()
         self.ClearLayout(self._lay)
         self.MARCO_window.clear()
+        self.PLATE_window.clear()
         self.InitialNotes = None
         self.InitialClassif = None
 
@@ -715,6 +742,8 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         
         #line below to reset Filter to All
         self.radioButton_All.setChecked(True)
+
+
 
     def export_pdf(self):
         '''export to PDF a report for current well'''
@@ -817,10 +846,10 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             layout.addWidget(label, x, y, alignment=QtCore.Qt.AlignCenter)
 
 
-    def add_Timeline_pixmap(self, layout, pixmap, x, y):
-        if not pixmap.isNull():
-            label = QtWidgets.QLabel(pixmap=pixmap)
-            layout.addWidget(label, x, y, alignment=QtCore.Qt.AlignBottom | QtCore.Qt.AlignCenter)
+    # def add_Timeline_pixmap(self, layout, pixmap, x, y):
+    #     if not pixmap.isNull():
+    #         label = QtWidgets.QLabel(pixmap=pixmap)
+    #         layout.addWidget(label, x, y, alignment=QtCore.Qt.AlignBottom | QtCore.Qt.AlignCenter)
 
 
     def add_button(self, path, x, y):
@@ -1113,9 +1142,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         self.VisiblesIdx.clear() #Clear before modification
         for widget_item in self.layout_widgets(layout):
             widget = widget_item.widget()
-            if subwell not in ['a', 'b', 'c']: #Plate without subwell stop
-                return
-            elif widget.text()[-1]==subwell:
+            if widget.text()[-1]==subwell:
                 widget.setVisible(True)
                 self.VisiblesIdx.append(layout.indexOf(widget))
             else:
@@ -1202,9 +1229,6 @@ https://github.com/LP-CDF/AMi_Image_Analysis
                 path=Path(date)
             name=self.buildWellImagePath(str(path), well, self.well_images)
             if Path(name).exists():
-                # pixmap = QtGui.QPixmap(name)
-                # self.add_Timeline_pixmap(self._timlay, pixmap.scaled(300, 230, QtCore.Qt.KeepAspectRatio, QtCore.Qt.FastTransformation), 0, other_dates.index(date))
-                # self.add_Label_Timeline(self._timlay, date, 0,other_dates.index(date))
                 button = QtWidgets.QPushButton()
                 icon=QtGui.QIcon(name)
                 button.setIcon(icon)
@@ -1285,8 +1309,6 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             return
         location=self.currentButtonIndex
         currentrow=location[0]; currentcol=location[1]
-        # NumberOfColumns=self._lay.columnCount()
-        # NumberOfRows=self._lay.rowCount()
 
         shortcut=pref.Shortcut()
 
@@ -1428,15 +1450,16 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         Citation()
 
 
-    def take_screenshot(self):
+    def take_screenshot(self, window, title):
         #If no data prevent crashing
         if len(self.classifications)==0:
             self.handle_error("No data yet!!!")
             return
         
-        filename=Path(self.rootDir).joinpath("Image_Data", "HeatMap_Grid_%s_%s.jpg"%(self.plate ,self.date))
+        filename=Path(self.rootDir).joinpath("Image_Data", "%s_%s_%s.jpg"%(title, self.plate ,self.date))
         screen=QtWidgets.QApplication.primaryScreen()
-        screenshot = screen.grabWindow(self.heatmap_window.winId())
+        # screenshot = screen.grabWindow(self.heatmap_window.winId())
+        screenshot = screen.grabWindow(window.winId())
         screenshot.save(str(filename), 'jpg')
         message="File saved to:\n %s"%filename
         self.informationDialog(message)
@@ -1473,7 +1496,6 @@ class HeatMapGrid(QtWidgets.QDialog, HeatMap_Grid.Ui_Dialog):
     ''' '''
     def __init__(self, parent=None):
         super(HeatMapGrid, self).__init__(parent)
-        #ui = HeatMap_Grid.Ui_Dialog()
         self.setupUi(self)
 
   
@@ -1505,7 +1527,7 @@ class HeatMapGrid(QtWidgets.QDialog, HeatMap_Grid.Ui_Dialog):
             dx = 20
             y1 = (80 + row * 80) + (subrow * 20)
             dy = 20
-            return x1, y1, dx, dy, subrow
+            return (x1, y1, dx, dy, subrow)
         
         for row in rows:
             row_int = int(ord(row)) - 65
@@ -1522,14 +1544,14 @@ class HeatMapGrid(QtWidgets.QDialog, HeatMap_Grid.Ui_Dialog):
             qp.drawText(x1, 30, 40, 40, QtCore.Qt.AlignCenter, col)
 
         for well in total_wells:
-            coordinates = well_to_coordinates(well)
+            (x1, y1, dx, dy, subrow) = well_to_coordinates(well)
             qp.setBrush(QColor(0, 0, 0))
-            qp.drawRect(coordinates[0], coordinates[1], coordinates[2], coordinates[3])
+            qp.drawRect(x1, y1, dx, dy)
             
         classification=str
         for i in range(len(self.well_images)):
             well = self.well_images[i].split(".")[0]
-            coordinates = well_to_coordinates(well)
+            (x1, y1, dx, dy, subrow) = well_to_coordinates(well)
             try:
                 classification = self.classifications[well]
             except:
@@ -1548,19 +1570,17 @@ class HeatMapGrid(QtWidgets.QDialog, HeatMap_Grid.Ui_Dialog):
             elif classification == "Other":
                 color = QtGui.QColor(ClassificationColor["Other"]["Qcolor"])
             qp.setBrush(color)
-            qp.drawRect(coordinates[0], coordinates[1], coordinates[2], coordinates[3])
+            qp.drawRect(x1, y1, dx, dy)
             if self.notes[well] is True:
                 qp.setBrush(QColor(0, 0, 0))
                 # qp.setPen(QtGui.QPen(QtCore.Qt.black, 2, QtCore.Qt.SolidLine))
-                qp.drawEllipse(coordinates[0]+25, coordinates[1]+6, 8, 8) #6=(dy-8)/2
+                qp.drawEllipse(x1+25, y1+6, 8, 8) #6=(dy-8)/2
                 # qp.setPen(QtGui.QPen(QtCore.Qt.black, 1, QtCore.Qt.SolidLine))
             if well[-1] not in wells:
-                qp.drawText(coordinates[0], coordinates[1], coordinates[2], coordinates[3], QtCore.Qt.AlignCenter,'')
+                qp.drawText(x1, y1, dx, dy, QtCore.Qt.AlignCenter,'')
             else:
                 qp.setFont(QFont("Courier New", 10))
-                qp.drawText(coordinates[0], coordinates[1], coordinates[2], coordinates[3], QtCore.Qt.AlignCenter, wells[coordinates[4]])
-
-
+                qp.drawText(x1, y1, dx, dy, QtCore.Qt.AlignCenter, wells[subrow])
             
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)

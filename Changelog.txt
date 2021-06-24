@@ -1,3 +1,8 @@
+2021/06/24
+Changed version to 1.2.4
+Added possibility to have an overview of the plate
+Added kit Hampton additives HT to database.
+
 2021/06/18
 Added functionality to import RockMaker XML files. Therefore, one can import XML files downloaded from RockMaker website
 or import custom screens performed with the SPTLabtech Dragonfly and exported to XML.
