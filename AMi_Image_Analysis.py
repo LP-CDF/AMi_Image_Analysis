@@ -336,10 +336,11 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         
         self.PLATE_window[subwell] = PlateOverview.Plate(9,13)
         self.PLATE_window[subwell].subwell=subwell
-        self.PLATE_window[subwell].setWindowTitle(f"Overview Screen: {self.plate} ({self.date}) subwell {subwell}")
+        self.PLATE_window[subwell].setWindowTitle(f"Plate Overview: {self.plate} ({self.date}) | subwell {subwell}")
         # self.PLATE_window[subwell].files=self.files
         # self.PLATE_window[subwell].positions=self.GenerateGrid(self.files)
-        self.PLATE_window[subwell].display_images(self.files)
+        self.PLATE_window[subwell].display_images(self.files, self.classifications)
+        self.PLATE_window[subwell].setStyleSheet("""background-color: rgb(240,240,240)""")
         self.PLATE_window[subwell].resize(1520, 810)
         self.PLATE_window[subwell].show()
         QtGui.QPixmapCache.clear()

@@ -5,7 +5,7 @@ This is a Python 3 / PyQt5 project dedicated to the analysis of the images gener
 For more details on this device, please look at:
 "AMi: a GUI-based, open-source system for imaging samples in multi-well plates" [[1]](#1)
 
-This program should work with images taken by other machines given the folder tree is as expected (see below).
+This program should work with images taken by other machines given the folder hierarchy is respected (see below).
 
 
 ## Features:
@@ -20,7 +20,7 @@ Images are scored using the Drop Score section and more details can be written i
 The results can be displayed on a grid for quick overall inspection and statistics are calculated.
 A report of the current well can be saved as a pdf.
 
-The tree must be organized like:
+The tree must be organized like this:
 
 ```bash
 .
@@ -61,6 +61,7 @@ The file "prep_date.txt" contains the preparation date as a single line with for
 ![Screenshot 1](./screenshot1.png)
 ![Screenshot 2](./screenshot2.png)
 ![Screenshot 3](./screenshot3.png)
+![Screenshot 4](./screenshot4.png)
 
 
 ## Install
