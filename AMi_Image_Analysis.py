@@ -153,6 +153,10 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.actionPlateSubwell_b.triggered.connect(lambda: self.show_Plates("b"))
         self.actionPlateSubwell_c.triggered.connect(lambda: self.show_Plates("c"))
         self.actionPlateno_subwell.triggered.connect(lambda: self.show_Plates(""))
+        self.PlateScreenshot_subwell_a.triggered.connect(lambda: self.take_plate_screenshot("a"))
+        self.PlateScreenshot_subwell_b.triggered.connect(lambda: self.take_plate_screenshot("b"))
+        self.PlateScreenshot_subwell_c.triggered.connect(lambda: self.take_plate_screenshot("c"))
+        self.PlateScreenshot_no_subwell.triggered.connect(lambda: self.take_plate_screenshot(""))
         
         
         #Crystallization Screens
@@ -1450,6 +1454,23 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         app.closeAllWindows()
         Citation()
 
+    def take_plate_screenshot(self,subwell):
+        if len(self.classifications)==0:
+            self.handle_error("No data yet!!!")
+            return
+        
+        if subwell=="":title="PlateOverview_%s_%s_%snosubwell"
+        else: title="PlateOverview_%s_%s_subwell_%s"
+
+        if subwell in self.PLATE_window:           
+            self.take_screenshot(self.PLATE_window[subwell], title%(self.plate,self.date,subwell))
+        else:
+            self.show_Plates(subwell)
+            #wait some time to generate the window
+            loop = QtCore.QEventLoop()
+            QtCore.QTimer.singleShot(8000, loop.quit)
+            loop.exec_()
+            self.take_screenshot(self.PLATE_window[subwell], title%(self.plate,self.date,subwell))
 
     def take_screenshot(self, window, title):
         #If no data prevent crashing
