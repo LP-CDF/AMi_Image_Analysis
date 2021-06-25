@@ -123,17 +123,27 @@ class Plate(QTableWidget):
         self.rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
         self.cols = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
         self.wells = ['a', 'b', 'c']
-        # self.total_wells = [row + str(col) for row in rows for col in cols]
 
     def well_to_coordinates(self,well):
         row = int(ord(well[0])) - 64
         column = int(('').join(re.findall(r'\d+',well)))
-        # print("ROW: ", row, "column: ", column)
         return (row, column)
-    
-    def display_images(self, files, classifications):
+
+    def UpdateBorder(self, files, classifications):
         for path in files:
-            # print(position, path)
+            well=Path(path).stem
+            if self.subwell!="" and self.subwell in well[-1]:
+                (row, column)=self.well_to_coordinates(str(well))
+                item=self.cellWidget(row, column)
+                item.setStyleSheet("color: %s;"%ClassificationColor[classifications[well]]["background"])
+            elif self.subwell=="" and well[-1] not in self.wells:
+                (row, column)=self.well_to_coordinates(str(well))
+                item=self.cellWidget(row, column)
+                item.setStyleSheet("color: %s;"%ClassificationColor[classifications[well]]["background"])
+            else: continue
+
+    def create_table(self, files, classifications):
+        for path in files:
             filepath=Path(path)
             well=filepath.stem
             for row in self.rows:

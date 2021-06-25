@@ -338,14 +338,13 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
             self.handle_error("Please choose a directory containing the images first")
             return
         if subwell in self.PLATE_window:
+            self.PLATE_window[subwell].UpdateBorder(self.files, self.classifications)
             self.PLATE_window[subwell].show()
         else:
             self.PLATE_window[subwell] = PlateOverview.Plate(9,13)
             self.PLATE_window[subwell].subwell=subwell
             self.PLATE_window[subwell].setWindowTitle(f"Plate Overview: {self.plate} ({self.date}) | subwell {subwell}")
-            # self.PLATE_window[subwell].files=self.files
-            # self.PLATE_window[subwell].positions=self.GenerateGrid(self.files)
-            self.PLATE_window[subwell].display_images(self.files, self.classifications)
+            self.PLATE_window[subwell].create_table(self.files, self.classifications)
             self.PLATE_window[subwell].setStyleSheet("""background-color: rgb(240,240,240)""")
             self.PLATE_window[subwell].resize(1520, 810)
             self.PLATE_window[subwell].show()
@@ -1466,6 +1465,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
 
         if subwell in self.PLATE_window:
             # print("Window is VISIBLE? :",self.PLATE_window[subwell].isVisible())
+            self.PLATE_window[subwell].UpdateBorder(self.files, self.classifications) #Update Classif if changes were made after table creation
             self.PLATE_window[subwell].show()
             self.PLATE_window[subwell].activateWindow() #Ensure window is on foreground
             #wait some time to before screenshot
