@@ -1,6 +1,6 @@
 2021/06/24
 Changed version to 1.2.4
-Added possibility to have an overview of the plate
+Added possibility to have an overview of the plate and export image of the plate (per subwell)
 Added kit Hampton additives HT to database.
 
 2021/06/18

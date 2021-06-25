@@ -36,7 +36,7 @@ QtWidgets.QApplication.setAttribute(QtCore.Qt.HighDpiScaleFactorRoundingPolicy.P
 
 __version__ = "1.2.4"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "23-06-2021"
+__date__ = "24-06-2021"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -259,7 +259,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.heatmap_window.well_images=self.well_images
         self.heatmap_window.classifications=self.classifications
         self.heatmap_window.notes=self.WellHasNotes
-        self.heatmap_window.pushButton_ExportImage.clicked.connect(lambda:self.take_screenshot(self.heatmap_window, "HeatMap_Grid"))
+        self.heatmap_window.pushButton_ExportImage.clicked.connect(lambda:self.take_screenshot(self.heatmap_window, "HeatMap_Grid_%s_%s"%(self.plate ,self.date)))
         self.heatmap_window.pushButton_Close.clicked.connect(self.heatmap_window.close)
         self.heatmap_window.show()
 
@@ -337,16 +337,18 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         if len(self.classifications)==0:
             self.handle_error("Please choose a directory containing the images first")
             return
-        
-        self.PLATE_window[subwell] = PlateOverview.Plate(9,13)
-        self.PLATE_window[subwell].subwell=subwell
-        self.PLATE_window[subwell].setWindowTitle(f"Plate Overview: {self.plate} ({self.date}) | subwell {subwell}")
-        # self.PLATE_window[subwell].files=self.files
-        # self.PLATE_window[subwell].positions=self.GenerateGrid(self.files)
-        self.PLATE_window[subwell].display_images(self.files, self.classifications)
-        self.PLATE_window[subwell].setStyleSheet("""background-color: rgb(240,240,240)""")
-        self.PLATE_window[subwell].resize(1520, 810)
-        self.PLATE_window[subwell].show()
+        if subwell in self.PLATE_window:
+            self.PLATE_window[subwell].show()
+        else:
+            self.PLATE_window[subwell] = PlateOverview.Plate(9,13)
+            self.PLATE_window[subwell].subwell=subwell
+            self.PLATE_window[subwell].setWindowTitle(f"Plate Overview: {self.plate} ({self.date}) | subwell {subwell}")
+            # self.PLATE_window[subwell].files=self.files
+            # self.PLATE_window[subwell].positions=self.GenerateGrid(self.files)
+            self.PLATE_window[subwell].display_images(self.files, self.classifications)
+            self.PLATE_window[subwell].setStyleSheet("""background-color: rgb(240,240,240)""")
+            self.PLATE_window[subwell].resize(1520, 810)
+            self.PLATE_window[subwell].show()
         QtGui.QPixmapCache.clear()
         
         
@@ -1459,18 +1461,32 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             self.handle_error("No data yet!!!")
             return
         
-        if subwell=="":title="PlateOverview_%s_%s_%snosubwell"
-        else: title="PlateOverview_%s_%s_subwell_%s"
+        if subwell=="":title="PlateOverview_%s_%s_%snosubwell"%(self.plate,self.date,subwell)
+        else: title="PlateOverview_%s_%s_subwell_%s"%(self.plate,self.date,subwell)
 
-        if subwell in self.PLATE_window:           
-            self.take_screenshot(self.PLATE_window[subwell], title%(self.plate,self.date,subwell))
+        if subwell in self.PLATE_window:
+            # print("Window is VISIBLE? :",self.PLATE_window[subwell].isVisible())
+            self.PLATE_window[subwell].show()
+            self.PLATE_window[subwell].activateWindow() #Ensure window is on foreground
+            #wait some time to before screenshot
+            loop = QtCore.QEventLoop()
+            QtCore.QTimer.singleShot(500, loop.quit)
+            loop.exec_()
+            self.take_screenshot(self.PLATE_window[subwell], title)
         else:
             self.show_Plates(subwell)
+            # print("Window is VISIBLE? :",self.PLATE_window[subwell].isVisible())
             #wait some time to generate the window
+            try:
+                self.PLATE_window[subwell].isVisible() is True
+            except:
+                time.sleep(1)
+            self.PLATE_window[subwell].activateWindow() #Ensure window is on foreground
+            #wait some time to before screenshot
             loop = QtCore.QEventLoop()
-            QtCore.QTimer.singleShot(8000, loop.quit)
+            QtCore.QTimer.singleShot(500, loop.quit)
             loop.exec_()
-            self.take_screenshot(self.PLATE_window[subwell], title%(self.plate,self.date,subwell))
+            self.take_screenshot(self.PLATE_window[subwell], title)
 
     def take_screenshot(self, window, title):
         #If no data prevent crashing
@@ -1478,7 +1494,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             self.handle_error("No data yet!!!")
             return
         
-        filename=Path(self.rootDir).joinpath("Image_Data", "%s_%s_%s.jpg"%(title, self.plate ,self.date))
+        filename=Path(self.rootDir).joinpath("Image_Data", "%s.jpg"%title)
         screen=QtWidgets.QApplication.primaryScreen()
         # screenshot = screen.grabWindow(self.heatmap_window.winId())
         screenshot = screen.grabWindow(window.winId())

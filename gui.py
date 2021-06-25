@@ -652,7 +652,7 @@ class Ui_MainWindow(object):
         self.menuJena_Bioscience.setTitle(_translate("MainWindow", "Jena Bioscience"))
         self.menuHampton_Research.setTitle(_translate("MainWindow", "Hampton Research"))
         self.menuPlate_Overview.setTitle(_translate("MainWindow", "Plate Overview"))
-        self.menuExport_to_PNG.setTitle(_translate("MainWindow", "Export Plate to PNG"))
+        self.menuExport_to_PNG.setTitle(_translate("MainWindow", "Export Plate to JPG"))
         self.openFile.setText(_translate("MainWindow", "Open File"))
         self.openFile.setShortcut(_translate("MainWindow", "Ctrl+O"))
         self.actionQuit.setText(_translate("MainWindow", "Quit"))
