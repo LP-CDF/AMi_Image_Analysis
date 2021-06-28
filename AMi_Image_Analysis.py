@@ -36,7 +36,7 @@ QtWidgets.QApplication.setAttribute(QtCore.Qt.HighDpiScaleFactorRoundingPolicy.P
 
 __version__ = "1.2.4"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "24-06-2021"
+__date__ = "27-06-2021"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -341,7 +341,9 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
             self.PLATE_window[subwell].UpdateBorder(self.files, self.classifications)
             self.PLATE_window[subwell].show()
         else:
-            self.PLATE_window[subwell] = PlateOverview.Plate(9,13)
+            self.PLATE_window[subwell] = PlateOverview.Plate(9,13, self.rootDir, self.date)
+            self.PLATE_window[subwell].rootDir = self.rootDir
+            self.PLATE_window[subwell].date = self.date
             self.PLATE_window[subwell].subwell=subwell
             self.PLATE_window[subwell].setWindowTitle(f"Plate Overview: {self.plate} ({self.date}) | subwell {subwell}")
             self.PLATE_window[subwell].create_table(self.files, self.classifications)
@@ -684,7 +686,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         self.currentWell = None
         self.currentButtonIndex= None
         self.idx= None
-        self.files.clear()
+        self.files.clear()  
         self.well_images.clear()
         self.ClearLayout(self._lay)
         self.MARCO_window.clear()

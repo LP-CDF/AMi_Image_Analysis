@@ -7,16 +7,17 @@ Created on Wed Jun 23 09:36:00 2021
 
 __version__ = "0.0.1"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "24-06-2021"
+__date__ = "27-06-2021"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
 from PyQt5 import QtCore, QtWidgets, QtGui
-import re
+import os, re
 from PyQt5.QtGui import QFont, QPixmap
-from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem, QLabel,QFrame
+from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem, QLabel,QFrame, QProgressDialog
 from pathlib import Path
 from preferences import ClassificationColor
+from utils import ensure_directory
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
@@ -116,13 +117,17 @@ class Ui_Dialog(object):
 #                 continue
 
 class Plate(QTableWidget):
-    def __init__(self, r, c):
+    def __init__(self, r, c, rootDir, date):
         super().__init__(r, c)
+        self.Ext=[".tif",".tiff",".TIFF",".jpg", ".jpeg",".JPG",".JPEG",".png",".PNG"]
         self.dx=120
         self.dy=90
         self.rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
         self.cols = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
         self.wells = ['a', 'b', 'c']
+        self.resizedpath=Path(rootDir).joinpath("Image_Data", date, "Miniatures")
+        ensure_directory(self.resizedpath)
+        self.miniatures=[os.path.join(self.resizedpath, file) for file in os.listdir(self.resizedpath) if os.path.splitext(file)[1] in self.Ext]
 
     def well_to_coordinates(self,well):
         row = int(ord(well[0])) - 64
@@ -142,8 +147,30 @@ class Plate(QTableWidget):
                 item.setStyleSheet("color: %s;"%ClassificationColor[classifications[well]]["background"])
             else: continue
 
-    def create_table(self, files, classifications):
+    def create_miniatures(self, files):
+        count, size=0, len(files)
+        progress = QProgressDialog("Generating miniatures...", "Abort", 0, size)
+        progress.setWindowTitle("Plate Overview")
+        progress.setMinimumWidth(300)
+        progress.setModal(True)
         for path in files:
+            progress.setValue(count+1)
+            filepath=Path(path)
+            well=filepath.stem
+            pixmap=QPixmap(str(filepath))
+            pixmap = pixmap.scaled(self.dx,self.dy, QtCore.Qt.KeepAspectRatio, QtCore.Qt.FastTransformation)
+            path=self.resizedpath.joinpath("%s.jpg"%well)
+            pixmap.save(str(path))
+            count+=1
+            if progress.wasCanceled(): break
+
+    def create_table(self, files, classifications):
+        #Create miniatures if not present
+        if len(self.miniatures)!=len(files):
+            self.create_miniatures(files)
+            self.miniatures=[os.path.join(self.resizedpath, file) for file in os.listdir(self.resizedpath) if os.path.splitext(file)[1] in self.Ext]
+        
+        for path in self.miniatures:
             filepath=Path(path)
             well=filepath.stem
             for row in self.rows:
@@ -161,7 +188,7 @@ class Plate(QTableWidget):
                 (row, column)=self.well_to_coordinates(str(well))
                 label=QLabel()
                 pixmap=QPixmap(str(filepath))
-                pixmap = pixmap.scaled(self.dx,self.dy, QtCore.Qt.KeepAspectRatio, QtCore.Qt.FastTransformation)
+                # pixmap = pixmap.scaled(self.dx,self.dy, QtCore.Qt.KeepAspectRatio, QtCore.Qt.FastTransformation)
                 label.setPixmap(pixmap)
                 label.setFrameShape(QFrame.Panel)
                 label.setLineWidth(2)
@@ -172,7 +199,7 @@ class Plate(QTableWidget):
                 (row, column)=self.well_to_coordinates(str(well))
                 label=QLabel()
                 pixmap=QPixmap(str(filepath))
-                pixmap = pixmap.scaled(self.dx-2,self.dy-2, QtCore.Qt.KeepAspectRatio, QtCore.Qt.FastTransformation)
+                # pixmap = pixmap.scaled(self.dx-2,self.dy-2, QtCore.Qt.KeepAspectRatio, QtCore.Qt.FastTransformation)
                 label.setPixmap(pixmap)
                 label.setFrameShape(QFrame.Panel)
                 label.setLineWidth(2)
