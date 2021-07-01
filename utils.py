@@ -3,6 +3,9 @@ from pathlib import Path
 #Define below the name of the folder containing unstacked Z images.
 _rawimages="rawimages"
 
+#Define Compatible images
+Ext=[".tif",".tiff",".TIFF",".jpg", ".jpeg",".JPG",".JPEG",".png",".PNG"]
+
 def ensure_directory(file_path):
     """Checks the given file path for a directory, and creates one if not already present.
     Args:

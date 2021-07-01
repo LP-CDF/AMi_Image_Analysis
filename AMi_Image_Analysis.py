@@ -18,7 +18,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import QPixmap, QFont, QColor, QKeySequence
 from PyQt5.QtWidgets import (QTableWidgetItem, QFileDialog, QSplashScreen,
     QMessageBox, QGridLayout,QStyleFactory, QProgressDialog, QInputDialog, QLineEdit)
-from utils import ensure_directory, initProject, _rawimages
+from utils import ensure_directory, initProject, _rawimages, Ext
 from shutil import copyfile
 import pdf_writer 
 import HeatMap_Grid
@@ -36,7 +36,7 @@ QtWidgets.QApplication.setAttribute(QtCore.Qt.HighDpiScaleFactorRoundingPolicy.P
 
 __version__ = "1.2.4"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "27-06-2021"
+__date__ = "30-06-2021"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -342,8 +342,6 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
             self.PLATE_window[subwell].show()
         else:
             self.PLATE_window[subwell] = PlateOverview.Plate(9,13, self.rootDir, self.date)
-            self.PLATE_window[subwell].rootDir = self.rootDir
-            self.PLATE_window[subwell].date = self.date
             self.PLATE_window[subwell].subwell=subwell
             self.PLATE_window[subwell].setWindowTitle(f"Plate Overview: {self.plate} ({self.date}) | subwell {subwell}")
             self.PLATE_window[subwell].create_table(self.files, self.classifications)
@@ -491,21 +489,6 @@ You can check progress in the terminal window.
         wells = ['a', 'b', 'c']
         total_wells = [row + str(col) + str(well) for row in rows for col in cols for well in wells]
 
-###################### TO DELETE IF EVERYTHING OK #################    
-        # A_wells = ["A" + str(col) + str(well) for col in cols for well in wells]
-        # B_wells = ["B" + str(col) + str(well) for col in cols for well in wells]
-        # C_wells = ["C" + str(col) + str(well) for col in cols for well in wells]
-        # D_wells = ["D" + str(col) + str(well) for col in cols for well in wells]
-        # E_wells = ["E" + str(col) + str(well) for col in cols for well in wells]
-        # F_wells = ["F" + str(col) + str(well) for col in cols for well in wells]
-        # G_wells = ["G" + str(col) + str(well) for col in cols for well in wells]
-        # H_wells = ["H" + str(col) + str(well) for col in cols for well in wells]        
-        # total_wells=[A_wells,B_wells,C_wells,D_wells,E_wells,F_wells,G_wells,H_wells]   
-        # for _list in total_wells:
-        #     arg=_list, self.well_images, self.imageDir, path
-        #     args.append(arg)   
-###################### END BLOCK TO DELETE  #################
-        
         path=str(Path(self.imageDir).parent)
         
         if self.well_images[0].split('_')[0][-1] in ['a', 'b', 'c']: SUBWELL=True
@@ -696,7 +679,6 @@ https://github.com/LP-CDF/AMi_Image_Analysis
 
 
     def openDirDialog(self, dialog=True, directory=''):
-        Ext=[".tif",".tiff",".TIFF",".jpg", ".jpeg",".JPG",".JPEG",".png",".PNG"]
         if dialog is True:
             directory = str(QFileDialog.getExistingDirectory(self,"Directory containing Images"))
         if directory =='': return
@@ -786,7 +768,6 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         print("Report for well %s saved to %s"%(well, pdfpath))
 
 
-
     def buildWellImagePath(self,directory, well, wellimage_list):
         '''search for a substring, returns a list, use first element
         directory is a string'''
@@ -822,8 +803,6 @@ https://github.com/LP-CDF/AMi_Image_Analysis
     def GenerateGrid(self, filelist):
         MaxCol=self.MaxCol
         MaxRow=math.ceil(len(filelist)/MaxCol)+1
-#        print("Nb of Files", len(filelist))
-#        print("MaxCol ", MaxCol, "MaxRow ", MaxRow)
         positions = [(i,j) for i in range(MaxRow) for j in range(MaxCol)]
         return positions
 
@@ -1049,11 +1028,6 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         if _f is not None: #if Permission issue
             self.handle_error(f"> {_f}\n\nYou must change the permissions and reload the directory to continue")
             return
-            # self.handle_error(f"> {ensure_directory(newPath)}\n\nThe program will quit")
-            # loop = QtCore.QEventLoop()
-            # QtCore.QTimer.singleShot(3000, loop.quit)
-            # loop.exec_()
-            # sys.exit()
 
         if len(os.listdir(path)) !=1: #if not first time more than one folder is present
             path=path.joinpath(most_recent)

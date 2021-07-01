@@ -7,7 +7,7 @@ Created on Wed Jun 23 09:36:00 2021
 
 __version__ = "0.0.1"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "27-06-2021"
+__date__ = "30-06-2021"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -17,7 +17,7 @@ from PyQt5.QtGui import QFont, QPixmap
 from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem, QLabel,QFrame, QProgressDialog
 from pathlib import Path
 from preferences import ClassificationColor
-from utils import ensure_directory
+from utils import ensure_directory, Ext
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
@@ -119,7 +119,6 @@ class Ui_Dialog(object):
 class Plate(QTableWidget):
     def __init__(self, r, c, rootDir, date):
         super().__init__(r, c)
-        self.Ext=[".tif",".tiff",".TIFF",".jpg", ".jpeg",".JPG",".JPEG",".png",".PNG"]
         self.dx=120
         self.dy=90
         self.rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
@@ -127,7 +126,7 @@ class Plate(QTableWidget):
         self.wells = ['a', 'b', 'c']
         self.resizedpath=Path(rootDir).joinpath("Image_Data", date, "Miniatures")
         ensure_directory(self.resizedpath)
-        self.miniatures=[os.path.join(self.resizedpath, file) for file in os.listdir(self.resizedpath) if os.path.splitext(file)[1] in self.Ext]
+        self.miniatures=[os.path.join(self.resizedpath, file) for file in os.listdir(self.resizedpath) if os.path.splitext(file)[1] in Ext]
 
     def well_to_coordinates(self,well):
         row = int(ord(well[0])) - 64
@@ -168,7 +167,7 @@ class Plate(QTableWidget):
         #Create miniatures if not present
         if len(self.miniatures)!=len(files):
             self.create_miniatures(files)
-            self.miniatures=[os.path.join(self.resizedpath, file) for file in os.listdir(self.resizedpath) if os.path.splitext(file)[1] in self.Ext]
+            self.miniatures=[os.path.join(self.resizedpath, file) for file in os.listdir(self.resizedpath) if os.path.splitext(file)[1] in Ext]
         
         for path in self.miniatures:
             filepath=Path(path)

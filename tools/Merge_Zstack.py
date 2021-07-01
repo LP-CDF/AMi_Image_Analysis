@@ -274,36 +274,36 @@ def align(images, iterations = 1, epsilon = 1e-10):
 
     return aligned_images
 
-def MERGE_Zstack(well_list, file_list, imageDir, outputpath):
-        images=[]
-        SUBWELL=True
+# def MERGE_Zstack(well_list, file_list, imageDir, outputpath):
+#         images=[]
+#         SUBWELL=True
         
-        if file_list[0].split('_')[0][-1] in ['a', 'b', 'c']: SUBWELL=True
-        else: SUBWELL=False
-        print("TYPE of DATA with SUBWELLS: %s"%SUBWELL)
+#         if file_list[0].split('_')[0][-1] in ['a', 'b', 'c']: SUBWELL=True
+#         else: SUBWELL=False
+#         print("TYPE of DATA with SUBWELLS: %s"%SUBWELL)
         
-        #Alter list to remove subwell (NOT TESTED)
-        filtered=[]
-        if SUBWELL==False:
-            for i in  range(len(well_list)):
-                if well_list[i][:-1] not in filtered:
-                    filtered.append(well_list[i][:-1])
-            well_list=filtered
-        # print("well_list ", well_list)
-        # print("filtered  ", filtered)
+#         #Alter list to remove subwell (NOT TESTED)
+#         filtered=[]
+#         if SUBWELL==False:
+#             for i in  range(len(well_list)):
+#                 if well_list[i][:-1] not in filtered:
+#                     filtered.append(well_list[i][:-1])
+#             well_list=filtered
+#         # print("well_list ", well_list)
+#         # print("filtered  ", filtered)
 
-        for well in well_list:
-            # print("well ", well)
-            imagesToStack= [_file for _file in file_list if well==_file.split('_')[0]]
-            # print('imagesToStack',imagesToStack)
-            if len(imagesToStack)!=0:
-                for _file in imagesToStack:
-                    image = cv2.imread(imageDir + '/' + _file, cv2.IMREAD_COLOR)
-                    images.append(image)
-                merged = stack_focus(images, outputpath + '/', name="%s"%well)
-                print("Merged File for well %s saved to %s"%(well, outputpath + '/'+ well + ".jpg"))
-                images.clear(); imagesToStack.clear()
-                del merged
+#         for well in well_list:
+#             # print("well ", well)
+#             imagesToStack= [_file for _file in file_list if well==_file.split('_')[0]]
+#             # print('imagesToStack',imagesToStack)
+#             if len(imagesToStack)!=0:
+#                 for _file in imagesToStack:
+#                     image = cv2.imread(imageDir + '/' + _file, cv2.IMREAD_COLOR)
+#                     images.append(image)
+#                 merged = stack_focus(images, outputpath + '/', name="%s"%well)
+#                 print("Merged File for well %s saved to %s"%(well, outputpath + '/'+ well + ".jpg"))
+#                 images.clear(); imagesToStack.clear()
+#                 del merged
 
 
 def MERGE_Zstack2(well, file_list, imageDir, outputpath):
@@ -347,16 +347,6 @@ if __name__ == '__main__':
     cols = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
     wells = ['a', 'b', 'c']
     total_wells = [row + str(col) + str(well) for row in rows for col in cols for well in wells]
-
-    # A_wells = ["A" + str(col) + str(well) for col in cols for well in wells]
-    # B_wells = ["B" + str(col) + str(well) for col in cols for well in wells]
-    # C_wells = ["C" + str(col) + str(well) for col in cols for well in wells]
-    # D_wells = ["D" + str(col) + str(well) for col in cols for well in wells]
-    # E_wells = ["E" + str(col) + str(well) for col in cols for well in wells]
-    # F_wells = ["F" + str(col) + str(well) for col in cols for well in wells]
-    # G_wells = ["G" + str(col) + str(well) for col in cols for well in wells]
-    # H_wells = ["H" + str(col) + str(well) for col in cols for well in wells]    
-    # total_wells=[A_wells,B_wells,C_wells,D_wells,E_wells,F_wells,G_wells,H_wells]
 
     order = []
     for file in os.listdir(directory):
