@@ -231,12 +231,12 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.radioButton_ScoreUnknown.setStyleSheet("""color: black;""")
 
         #Listen Scoring RadioButtons
-        self.radioButton_ScoreClear.toggled.connect(lambda:self.ScoreDrop(self.radioButton_ScoreClear, self.currentWell))
-        self.radioButton_ScorePrecipitate.toggled.connect(lambda:self.ScoreDrop(self.radioButton_ScorePrecipitate, self.currentWell))
-        self.radioButton_ScoreCrystal.toggled.connect(lambda:self.ScoreDrop(self.radioButton_ScoreCrystal, self.currentWell))
-        self.radioButton_ScorePhaseSep.toggled.connect(lambda:self.ScoreDrop(self.radioButton_ScorePhaseSep, self.currentWell))
-        self.radioButton_ScoreOther.toggled.connect(lambda:self.ScoreDrop(self.radioButton_ScoreOther, self.currentWell))
-        self.radioButton_ScoreUnknown.toggled.connect(lambda:self.ScoreDrop(self.radioButton_ScoreUnknown, self.currentWell))
+        self.radioButton_ScoreClear.toggled.connect(lambda:self.SetDropClassif(self.radioButton_ScoreClear, self.currentWell))
+        self.radioButton_ScorePrecipitate.toggled.connect(lambda:self.SetDropClassif(self.radioButton_ScorePrecipitate, self.currentWell))
+        self.radioButton_ScoreCrystal.toggled.connect(lambda:self.SetDropClassif(self.radioButton_ScoreCrystal, self.currentWell))
+        self.radioButton_ScorePhaseSep.toggled.connect(lambda:self.SetDropClassif(self.radioButton_ScorePhaseSep, self.currentWell))
+        self.radioButton_ScoreOther.toggled.connect(lambda:self.SetDropClassif(self.radioButton_ScoreOther, self.currentWell))
+        self.radioButton_ScoreUnknown.toggled.connect(lambda:self.SetDropClassif(self.radioButton_ScoreUnknown, self.currentWell))
 
         #Listen Display Heat Map and export to pdf buttons
         self.pushButton_DisplayHeatMap.clicked.connect(self.show_HeatMap)
@@ -932,7 +932,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         #Update self.previousWell
         self.previousWell=well
 
-        self.Set_ScoreButtonState(self.Scoring_Layout, self.classifications[well])
+        self.Set_ClassifButtonState(self.Scoring_Layout, self.classifications[well])
         self.Load_Timeline(self.rootDir, self.imageDir, well)
         self.labelVisuClassif.setText(self.classifications[well])
         self.labelVisuClassif.setStyleSheet("""background-color:%s;
@@ -1031,10 +1031,11 @@ https://github.com/LP-CDF/AMi_Image_Analysis
 
         if len(os.listdir(path)) !=1: #if not first time more than one folder is present
             path=path.joinpath(most_recent)
-            for file in path.iterdir():
-                copyfile(str(file), str(newPath.joinpath(file.name)))
-            print("> Copied previous notes from: " + most_recent)
+            filesToCopy=[file for file in path.iterdir() if not Path(file).is_dir()] #skip folders like Miniatures
+            for file in filesToCopy: copyfile(str(file), str(newPath.joinpath(file.name)))
+            print(f"> Copied previous notes from: {most_recent}")
             print("> ")
+            del filesToCopy
 
 
     def LoadNotes(self, path, date, well):
@@ -1157,7 +1158,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             widgetToRemove.setParent(None)
 
 
-    def ScoreDrop(self, radioButton, well):
+    def SetDropClassif(self, radioButton, well):
         if radioButton.isChecked() is True:
             if radioButton.text()=="Phase Separation":
                 self.classifications[well]="PhaseSep"
@@ -1165,7 +1166,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
                 self.classifications[well]=radioButton.text()
 
 
-    def Set_ScoreButtonState(self, layout, classification):
+    def Set_ClassifButtonState(self, layout, classification):
         widgetlist=[]
         #Extract non Qlabel widgets
         for widget_item in self.layout_widgets(layout):
@@ -1472,7 +1473,6 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         
         filename=Path(self.rootDir).joinpath("Image_Data", "%s.jpg"%title)
         screen=QtWidgets.QApplication.primaryScreen()
-        # screenshot = screen.grabWindow(self.heatmap_window.winId())
         screenshot = screen.grabWindow(window.winId())
         screenshot.save(str(filename), 'jpg')
         message="File saved to:\n %s"%filename

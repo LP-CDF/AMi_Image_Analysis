@@ -18,6 +18,8 @@ from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem, QLabel,QFrame, QProg
 from pathlib import Path
 from preferences import ClassificationColor
 from utils import ensure_directory, Ext
+from multiprocessing import Pool
+from multiprocessing import cpu_count
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
@@ -146,20 +148,28 @@ class Plate(QTableWidget):
                 item.setStyleSheet("color: %s;"%ClassificationColor[classifications[well]]["background"])
             else: continue
 
+    def ScaleAndSavePixmap(self,path):
+        filepath=Path(path)
+        well=filepath.stem
+        pixmap=QPixmap(str(filepath))
+        pixmap = pixmap.scaled(self.dx,self.dy, QtCore.Qt.KeepAspectRatio, QtCore.Qt.FastTransformation)
+        path=self.resizedpath.joinpath("%s.jpg"%well)
+        pixmap.save(str(path))
+        return 1 #return 1 when done to increment counter
+
     def create_miniatures(self, files):
         count, size=0, len(files)
         progress = QProgressDialog("Generating miniatures...", "Abort", 0, size)
         progress.setWindowTitle("Plate Overview")
         progress.setMinimumWidth(300)
         progress.setModal(True)
+        # pool = Pool(cpu_count())
+        # jobs=[pool.apply_async(self.ScaleAndSavePixmap(path)) for path in files]
+        # pool.close(); pool.join()
+        
         for path in files:
             progress.setValue(count+1)
-            filepath=Path(path)
-            well=filepath.stem
-            pixmap=QPixmap(str(filepath))
-            pixmap = pixmap.scaled(self.dx,self.dy, QtCore.Qt.KeepAspectRatio, QtCore.Qt.FastTransformation)
-            path=self.resizedpath.joinpath("%s.jpg"%well)
-            pixmap.save(str(path))
+            self.ScaleAndSavePixmap(path)
             count+=1
             if progress.wasCanceled(): break
 
@@ -187,7 +197,6 @@ class Plate(QTableWidget):
                 (row, column)=self.well_to_coordinates(str(well))
                 label=QLabel()
                 pixmap=QPixmap(str(filepath))
-                # pixmap = pixmap.scaled(self.dx,self.dy, QtCore.Qt.KeepAspectRatio, QtCore.Qt.FastTransformation)
                 label.setPixmap(pixmap)
                 label.setFrameShape(QFrame.Panel)
                 label.setLineWidth(2)
@@ -198,7 +207,6 @@ class Plate(QTableWidget):
                 (row, column)=self.well_to_coordinates(str(well))
                 label=QLabel()
                 pixmap=QPixmap(str(filepath))
-                # pixmap = pixmap.scaled(self.dx-2,self.dy-2, QtCore.Qt.KeepAspectRatio, QtCore.Qt.FastTransformation)
                 label.setPixmap(pixmap)
                 label.setFrameShape(QFrame.Panel)
                 label.setLineWidth(2)

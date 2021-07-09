@@ -625,7 +625,7 @@ class Ui_MainWindow(object):
         self.radioButton_Unsorted.setText(_translate("MainWindow", "Unsorted"))
         self.radioButton_HasNotes.setText(_translate("MainWindow", "With Notes"))
         self.label_2.setText(_translate("MainWindow", "Notes"))
-        self.label_4.setText(_translate("MainWindow", "Drop Score"))
+        self.label_4.setText(_translate("MainWindow", "Drop Classification"))
         self.label_Timeline.setText(_translate("MainWindow", "Timeline for well :"))
         self.label_CurrentWell.setText(_translate("MainWindow", "------"))
         self.pushButton_DisplayHeatMap.setText(_translate("MainWindow", "Display Heat Map"))
