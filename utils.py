@@ -6,6 +6,10 @@ _rawimages="rawimages"
 #Define Compatible images
 Ext=[".tif",".tiff",".TIFF",".jpg", ".jpeg",".JPG",".JPEG",".png",".PNG"]
 
+#Define rows and columns
+rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+cols = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+
 def ensure_directory(file_path):
     """Checks the given file path for a directory, and creates one if not already present.
     Args:

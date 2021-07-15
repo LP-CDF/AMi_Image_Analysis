@@ -5,7 +5,7 @@ This is a Python 3 / PyQt5 project dedicated to the analysis of the images gener
 For more details on this device, please look at:
 "AMi: a GUI-based, open-source system for imaging samples in multi-well plates" [[1]](#1)
 
-This program should work with images taken by other machines given the folder hierarchy is respected (see below).
+This program works with images taken by other machines or manual microscopes given the folder hierarchy is respected (see below).
 
 
 ## Features:
@@ -15,6 +15,7 @@ The software can read tiff, jpeg or png files.
 Images are accessed via clicking on the corresponding well button or by navigating with keyboard shortcuts.
 Images can be zoomed for thorough inspection.
 A timeline is available if the plate has already been imaged.
+Screen composition can be loaded from included screens or imported from files following the RockMaker XML format.
 
 Images are scored using the Drop Score section and more details can be written in notes and saved to file.
 The results can be displayed on a grid for quick overall inspection and statistics are calculated.

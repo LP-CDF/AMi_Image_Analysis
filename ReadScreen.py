@@ -12,6 +12,7 @@ import os, sys
 import csv
 import xml.etree.ElementTree as ET
 from pathlib import Path
+from utils import rows, cols
 
 from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
 
@@ -77,12 +78,24 @@ class MyTable(QTableWidget):
                         DictIng[stock.find('localID').text]= {'name':str(ingredient.find('name').text),'units':str(stock.find('units').text)}            
 
         subsections=("concentration","pH") #subsections of interest
+        
+        #Check number of conditions
+        count=0
+        for conditions in root.iter('condition'):count+=1
+        if count==96: lastcol,lastrow="12","H"
+        elif count==48: lastcol,lastrow="6","H"
+        elif count==24: lastcol,lastrow="6","D"
+        else: count=False #Plate configuration not implemented
+        if count!=False:
+            total_wells = [row + str(col) for row in rows if rows.index(row)<=rows.index(lastrow) 
+                           for col in cols if cols.index(col)<=cols.index(lastcol)]
 
         i=1; my_screen={}
         for conditions in root.iter('conditions'):
             for condition in conditions.iter('condition'):
                 temp=[]
-                temp.append(i)
+                if count!=False: temp.append(total_wells[i-1])
+                else:temp.append(i)
                 for ingredient in condition:
                     content=DictIng[ingredient.find('stockLocalID').text]['name']
                     for child in ingredient:
@@ -94,7 +107,8 @@ class MyTable(QTableWidget):
                                 content+=' '+child.text+' '+DictIng[ingredient.find('stockLocalID').text]['units']
                     temp.append(content)
                 my_screen[i]=temp; i+=1
-            # for i,j in my_screen.items(): print(i,j)          
+            # for i,j in my_screen.items(): print(i,j)
+                
             self.setRowCount(0); self.setColumnCount(10)
             for i,row_data in my_screen.items():
                 row = self.rowCount()
