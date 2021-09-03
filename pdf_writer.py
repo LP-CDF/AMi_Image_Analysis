@@ -127,7 +127,7 @@ def create_pdf(_list):
     pdf.set_font("Arial", size=14, style="B")
     pdf.cell(50, 0, "Notes: ", align="R", ln=0)
 
-    pdf.set_font("Arial", size=12)
+    pdf.set_font("Arial", size=10)
     pdf.multi_cell(120, 8, notes, 'J')
 
     pdf.output(outputpath)

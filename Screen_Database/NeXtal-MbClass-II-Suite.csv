@@ -1,7 +1,7 @@
 Number,Well,Salt 1,Salt 2,Buffer ,Precipitant ,final pH
 1,A1,0.1 M Lithium sulfate ,,0.1 M Sodium acetate pH 4.6 ,1.0 M Ammonium phosphate ,"4,6"
 2,A2, , ,0.1 M tri-Sodium citrate pH 5.6 ,1.0 M Ammonium phosphate ,"5,6"
-3,H, , ,0.1 M TRIS pH 8.5 ,2.0 M Ammonium phosphate ,"8,5"
+3,A3, , ,0.1 M TRIS pH 8.5 ,2.0 M Ammonium phosphate ,"8,5"
 4,A4, , ,0.1 M Sodium acetate pH 4.6 ,2.0 M Ammonium sulfate ,
 5,A5, , ,0.1 M ADA pH 6.5 ,1.0 M Ammonium sulfate ,
 6,A6, , ,,2.0 M Ammonium sulfate ,

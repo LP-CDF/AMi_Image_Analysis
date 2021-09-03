@@ -34,9 +34,9 @@ QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True) #en
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True) #use highdpi icons
 QtWidgets.QApplication.setAttribute(QtCore.Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
 
-__version__ = "1.2.4"
+__version__ = "1.2.4.1"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "30-06-2021"
+__date__ = "03-09-2021"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -140,6 +140,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.actionAutoCrop.triggered.connect(self.AutoCrop)
         self.actionAutoMerge.triggered.connect(self.AutoMerge)
         self.actionAutomated_Annotation_MARCO.triggered.connect(self.autoAnnotation)
+        self.actionAutoMARCO_current_image.triggered.connect(self.annotateCurrent)
         self.actionDisplay_Heat_Map.triggered.connect(self.show_HeatMap)
         self.actionExport_to_PDF.triggered.connect(self.export_pdf)
         self.actionDelete_Folder_rawimages.triggered.connect(lambda: self.DeleteFolder(self.imageDir, self.rawimages))
@@ -766,6 +767,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         values.append(text)
         pdf_writer.create_pdf(values)
         print("Report for well %s saved to %s"%(well, pdfpath))
+        self.label_LastSaved.setText(f"### Report for {well} saved ###")
 
 
     def buildWellImagePath(self,directory, well, wellimage_list):
@@ -1424,6 +1426,40 @@ https://github.com/LP-CDF/AMi_Image_Analysis
 
         for well, classif in self.classifications.items():
             self.SaveDATA(well)
+
+    def annotateCurrent(self):
+        '''Single image classification using MARCO'''
+        Unsupported_Ext=[".tif",".tiff",".TIFF"]
+        if self.currentWell is None: return
+        
+        ext=os.path.splitext(os.path.basename(self.files[0]))[1]
+        if ext in Unsupported_Ext:
+            self.handle_error("Image type ""%s"" unsupported for automated annotation"
+                         %ext)
+            return
+        
+        try:
+            import tensorflow as tf          
+        except:
+            self.handle_error("TensorFlow not found")
+            return
+        else:
+            if tf.__version__ >= '2.0.0':
+                self.handle_error("TensorFlow version %s not supported"%tf.__version__)
+                return
+            else: from Automated_Marco import single_predict
+        
+        imgpath=self.buildWellImagePath(self.imageDir, self.currentWell, self.well_images)
+        result=single_predict(str(imgpath), self.classifications)
+        self.Set_ClassifButtonState(self.Scoring_Layout, self.classifications[self.currentWell])
+
+        info = QMessageBox(self)
+        info.setWindowTitle("autoMARCO prediction results")
+        info.setText(f"classification: {result[1]} | probability: {round(float(result[0]),3)}")
+        info.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+        info.show()
+        
+        del result
 
             
     def on_exit(self):

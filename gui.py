@@ -377,6 +377,9 @@ class Ui_MainWindow(object):
         self.label_ShortcutOther.setObjectName("label_ShortcutOther")
         self.Scoring_Layout.addWidget(self.label_ShortcutOther, 4, 1, 1, 1)
         self.radioButton_ScoreUnknown = QtWidgets.QRadioButton(self.gridLayoutWidget_2)
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.radioButton_ScoreUnknown.setFont(font)
         self.radioButton_ScoreUnknown.setObjectName("radioButton_ScoreUnknown")
         self.Scoring_Layout.addWidget(self.radioButton_ScoreUnknown, 5, 0, 1, 1)
         self.gridLayout_2.addLayout(self.Scoring_Layout, 1, 1, 1, 1)
@@ -526,6 +529,8 @@ class Ui_MainWindow(object):
         self.PlateScreenshot_subwell_c.setObjectName("PlateScreenshot_subwell_c")
         self.PlateScreenshot_no_subwell = QtWidgets.QAction(MainWindow)
         self.PlateScreenshot_no_subwell.setObjectName("PlateScreenshot_no_subwell")
+        self.actionAutoMARCO_current_image = QtWidgets.QAction(MainWindow)
+        self.actionAutoMARCO_current_image.setObjectName("actionAutoMARCO_current_image")
         self.menuFile.addAction(self.openFile)
         self.menuFile.addAction(self.openDir)
         self.menuFile.addAction(self.actionExport_to_PDF)
@@ -541,6 +546,7 @@ class Ui_MainWindow(object):
         self.menuDisplay_Heat_Map.addAction(self.actionAutoCrop)
         self.menuDisplay_Heat_Map.addAction(self.actionAutoMerge)
         self.menuDisplay_Heat_Map.addAction(self.actionAutomated_Annotation_MARCO)
+        self.menuDisplay_Heat_Map.addAction(self.actionAutoMARCO_current_image)
         self.menuDisplay_Heat_Map.addAction(self.actionCalculate_Statistics)
         self.menuDisplay_Heat_Map.addAction(self.actionDisplay_Heat_Map)
         self.menuDisplay_Heat_Map.addAction(self.menuShow_autoMARCO_Grid.menuAction())
@@ -717,5 +723,6 @@ class Ui_MainWindow(object):
         self.PlateScreenshot_subwell_b.setText(_translate("MainWindow", "subwell b"))
         self.PlateScreenshot_subwell_c.setText(_translate("MainWindow", "subwell c"))
         self.PlateScreenshot_no_subwell.setText(_translate("MainWindow", "no subwell"))
+        self.actionAutoMARCO_current_image.setText(_translate("MainWindow", "AutoMARCO current image"))
 
 

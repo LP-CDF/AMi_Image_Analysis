@@ -32,7 +32,7 @@ Processes all .jpg, .png, .bmp and .gif files found in the specified directory a
  --PATH ( Path to directory of images or path to directory with subdirectory of images). e.g Path/To/Directory/
  --Model_PATH path to the tensorflow model
 """
-
+    
 def predict(file_list, classifications,logDir):
 # def predict(image_directory, project_data):
     app_path=os.path.abspath(os.path.dirname(sys.argv[0]))
@@ -110,4 +110,49 @@ def predict(file_list, classifications,logDir):
             f.write("%9s%15s%15s%17s%15s \n"%("WELL", "Pb_CRYSTAL", "Pb_OTHER", "Pb_Precipitate", "Pb_Clear"))
             for i in logresult: f.write("%9s%15.3f%15.3f%17.3f%15.3f \n"%(i[0],i[1][b"Crystals"],i[1][b"Other"],
                                                                           i[1][b"Precipitate"],i[1][b"Clear"]))
-    del dictionary, MostProbable, logresult       
+    del dictionary, MostProbable, logresult     
+
+def single_predict(filepath, classifications):
+    '''predict only one image
+    TODO: update auto_MARCO.log'''
+    app_path=os.path.abspath(os.path.dirname(sys.argv[0]))
+    model_path = Path(app_path).joinpath("saved_model")
+    
+    #unsupported image type in tensorflow <2.0
+    unsupported=['.tif', '.tiff','.TIF', '.TIFF']
+    if os.path.splitext(os.path.basename(filepath))[1] not in unsupported:
+        file = open(filepath, "rb")
+
+    predicter = tf.contrib.predictor.from_saved_model(str(model_path))
+    logresult=[]
+    
+    well=os.path.splitext(os.path.basename(filepath))[0]
+    print("Processing File ", filepath)
+    results = predicter({"image_bytes": [file.read()]})
+
+    vals = results['scores'][0]
+    classes = results['classes'][0]
+
+    for i in range(len(classes)):
+        val=str(classes[i]).strip('b')
+        val=val.replace("'","")
+        classes[i]=val
+    dictionary = dict(zip(classes,vals))
+    logresult.append((well, dictionary))
+    
+    #Find the most probable and return a tuple(well,dict)
+    MostProbable=max(zip(dictionary.values(),dictionary.keys()))
+    print("autoMARCO prediction:", dictionary)
+
+
+    classification = MostProbable[1]
+
+    #Adding a filter
+    if MostProbable[0]<pref.autoMARCO_threshold:
+        classification = "Unknown"
+            
+    classifications[well]=classification
+    # print("classifications[well] ", classifications[well])
+
+    return MostProbable
+    del MostProbable,dictionary
