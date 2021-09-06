@@ -99,6 +99,8 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.InitialClassif = None
         self.rawimages=_rawimages              #Name of the directory containing individual Z-focus images
         self.TimelineInspector=None
+        self.MARCO=None                        #Automated_Marco Predictor object
+        self.Predicter=None                    #Automated_Marco predicter
 
         #If using the QGraphics view, use open_image
         #If not comment the next five lines and use
@@ -239,9 +241,10 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.radioButton_ScoreOther.toggled.connect(lambda:self.SetDropClassif(self.radioButton_ScoreOther, self.currentWell))
         self.radioButton_ScoreUnknown.toggled.connect(lambda:self.SetDropClassif(self.radioButton_ScoreUnknown, self.currentWell))
 
-        #Listen Display Heat Map and export to pdf buttons
+        #Listen Display Heat Map and export to pdf buttons, other push buttons
         self.pushButton_DisplayHeatMap.clicked.connect(self.show_HeatMap)
         self.pushButton_ExportToPDF.clicked.connect(self.export_pdf)
+        self.pushButton_Evaluate.clicked.connect(self.annotateCurrent)
         
         #Show shortcut in GUI for class selection
         self.label_ShortcutClear.setText("(%s)"%QKeySequence(pref.Shortcut.Clear).toString())
@@ -1384,6 +1387,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         
 
     def autoAnnotation(self):
+        from Automated_Marco import Predictor
         '''Do automated classification using MARCO'''
         Unsupported_Ext=[".tif",".tiff",".TIFF"]
         
@@ -1406,31 +1410,32 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         
         if retval == QtWidgets.QMessageBox.Cancel:
             return
-        
-        try:
-            import tensorflow as tf          
-        except:
-            self.handle_error("TensorFlow not found")
-            return
-        else:
-            if tf.__version__ >= '2.0.0':
-                self.handle_error("TensorFlow version %s not supported"%tf.__version__)
+            
+        if self.Predicter is None:
+            self.MARCO=Predictor()
+            if self.MARCO.loadtensorflow() is True:
+                self.Predicter=self.MARCO.createpredicter()
+            else:
+                self.handle_error("TensorFlow version %s not supported"%self.MARCO.tfversion)
                 return
-            else: from Automated_Marco import predict
-        
+            
         self.classifications.clear()
         self.Notes_TextEdit.clear() # if not emptied, note is given to all wells
         
         logdir=Path(self.rootDir).joinpath("Image_Data", self.date)
-        predict(self.files, self.classifications, logdir)
+        self.MARCO.predict(self.files, self.classifications, logdir, self.Predicter)
 
         for well, classif in self.classifications.items():
             self.SaveDATA(well)
 
     def annotateCurrent(self):
+        from Automated_Marco import Predictor
         '''Single image classification using MARCO'''
         Unsupported_Ext=[".tif",".tiff",".TIFF"]
-        if self.currentWell is None: return
+
+        if self.currentWell is None:
+            self.handle_error("Please choose a well first")
+            return
         
         ext=os.path.splitext(os.path.basename(self.files[0]))[1]
         if ext in Unsupported_Ext:
@@ -1438,24 +1443,22 @@ https://github.com/LP-CDF/AMi_Image_Analysis
                          %ext)
             return
         
-        try:
-            import tensorflow as tf          
-        except:
-            self.handle_error("TensorFlow not found")
-            return
-        else:
-            if tf.__version__ >= '2.0.0':
-                self.handle_error("TensorFlow version %s not supported"%tf.__version__)
+        if self.Predicter is None:
+            self.MARCO=Predictor()
+            if self.MARCO.loadtensorflow() is True:
+                self.Predicter=self.MARCO.createpredicter()
+            else:
+                self.handle_error("TensorFlow version %s not supported"%self.MARCO.tfversion)
                 return
-            else: from Automated_Marco import single_predict
         
         imgpath=self.buildWellImagePath(self.imageDir, self.currentWell, self.well_images)
-        result=single_predict(str(imgpath), self.classifications)
+        result=self.MARCO.single_predict(str(imgpath), self.classifications, self.Predicter)
         self.Set_ClassifButtonState(self.Scoring_Layout, self.classifications[self.currentWell])
 
         info = QMessageBox(self)
         info.setWindowTitle("autoMARCO prediction results")
-        info.setText(f"classification: {result[1]} | probability: {round(float(result[0]),3)}")
+        info.setText(f'''classification: {result[1]} | probability: {round(float(result[0]),3)}
+Threshold for accepting prediction is: {pref.autoMARCO_threshold}''')
         info.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
         info.show()
         

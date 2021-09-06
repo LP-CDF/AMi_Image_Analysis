@@ -15,10 +15,10 @@ the values stored in this file.
 from PyQt5 import QtCore
 
 #Comment/uncomment the two lines below according to your need
-keyboard_layout="qwerty"
-#keyboard_layout="azerty"
+#keyboard_layout="qwerty"
+keyboard_layout="azerty"
 
-MAX_CPU=None #set to desired integer if needed ie MAX_CPU="8" (keep the "")
+MAX_CPU="10" #set to desired integer if needed ie MAX_CPU="8" (keep the "")
 
 #Dictionnary used to update color of labelVisuClassif
 ClassificationColor={

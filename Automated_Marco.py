@@ -22,7 +22,6 @@
 
 import os, sys
 from pathlib import Path
-import tensorflow as tf
 from PyQt5.QtWidgets import QProgressDialog
 import preferences as pref
 
@@ -32,127 +31,137 @@ Processes all .jpg, .png, .bmp and .gif files found in the specified directory a
  --PATH ( Path to directory of images or path to directory with subdirectory of images). e.g Path/To/Directory/
  --Model_PATH path to the tensorflow model
 """
-    
-def predict(file_list, classifications,logDir):
-# def predict(image_directory, project_data):
-    app_path=os.path.abspath(os.path.dirname(sys.argv[0]))
-    # print("app_path ", app_path)
-    model_path = Path(app_path).joinpath("saved_model")
-    size = len(file_list)
-    
-    #unsupported image type in tensorflow <2.0
-    unsupported=['.tif', '.tiff','.TIF', '.TIFF']
-    
-    def load_images(file_list):
-        for i in file_list:
-            if os.path.splitext(os.path.basename(i))[1] not in unsupported:
-                file = open(i, "rb")
-                yield {"image_bytes": [file.read()]}, i
 
-    iterator = load_images(file_list)
-
-    predicter = tf.contrib.predictor.from_saved_model(str(model_path))
-
-    logresult=[]
-    progress = QProgressDialog("Processing files...", "Abort", 0, size)
-    progress.setWindowTitle("autoMARCO")
-    progress.setMinimumWidth(300)
-    progress.setModal(True)
+class Predictor():
+    def __init__(self, parent=None):
+        self.tensorflowOK=self.loadtensorflow()
     
-    for _ in range(size):
-        progress.setValue(_)
-        data, name = next(iterator)
-        well=os.path.splitext(os.path.basename(name))[0]
-        # progress.setLabelText(f'''processing well: {well}''')
-        print("Processing File ", name)
-        results = predicter(data)
-
+    def loadtensorflow(self):
+        '''check if tensorflow is available, checks version, must be below TF2'''
+        try:
+            import tensorflow as tf
+            self.tfversion=tf.__version__
+            if tf.__version__ <= '2.0.0': return True
+            else: return False
+        except: return False
+        
+    def createpredicter(self):
+        if self.tensorflowOK is True: import tensorflow as tf
+        else: return
+        app_path=os.path.abspath(os.path.dirname(sys.argv[0]))
+        model_path = Path(app_path).joinpath("saved_model")
+        predicter = tf.contrib.predictor.from_saved_model(str(model_path))
+        return predicter
+        
+    def predict(self,file_list, classifications,logDir, predicter):
+    # def predict(image_directory, project_data):
+        app_path=os.path.abspath(os.path.dirname(sys.argv[0]))
+        # print("app_path ", app_path)
+        model_path = Path(app_path).joinpath("saved_model")
+        size = len(file_list)
+        
+        #unsupported image type in tensorflow <2.0
+        unsupported=['.tif', '.tiff','.TIF', '.TIFF']
+        
+        def load_images(file_list):
+            for i in file_list:
+                if os.path.splitext(os.path.basename(i))[1] not in unsupported:
+                    file = open(i, "rb")
+                    yield {"image_bytes": [file.read()]}, i
+    
+        iterator = load_images(file_list)
+    
+        logresult=[]
+        progress = QProgressDialog("Processing files...", "Abort", 0, size)
+        progress.setWindowTitle("autoMARCO")
+        progress.setMinimumWidth(300)
+        progress.setModal(True)
+        
+        for _ in range(size):
+            progress.setValue(_)
+            data, name = next(iterator)
+            well=os.path.splitext(os.path.basename(name))[0]
+            # progress.setLabelText(f'''processing well: {well}''')
+            print("Processing File ", name)
+            results = predicter(data)
+    
+            vals = results['scores'][0]
+            classes = results['classes'][0]
+            dictionary = dict(zip(classes,vals))
+            
+            logresult.append((well, dictionary))
+            
+            #Find the most probable and return a tuple(well,dict)
+            MostProbable=max(zip(dictionary.values(),dictionary.keys()))
+            # print("MostProbable ", MostProbable)
+    
+            classification = ""
+            if MostProbable[1] == b"Crystals":
+                classification = "Crystal"
+            elif MostProbable[1] == b"Other":
+                classification = "Other"
+            elif MostProbable[1] == b"Precipitate":
+                classification = "Precipitate"
+            elif MostProbable[1] == b"Clear":
+                classification = "Clear"
+    
+            #Adding a filter
+            if MostProbable[0]<pref.autoMARCO_threshold:
+                classification = "Unknown"
+                
+            classifications[well]=classification
+            # print("classifications[well] ", classifications[well])
+            if progress.wasCanceled():
+                #To prevent crash reassign classification to Unknown
+                # for _file in file_list:
+                #     classifications[os.path.splitext(os.path.basename(_file))[0]]="Unknown"
+                #To prevent crash assign classification to Unknown for unprocessed images
+                for i in range(file_list.index(name), len(file_list)):
+                    classifications[os.path.splitext(os.path.basename(file_list[i]))[0]]="Unknown"
+                break
+            
+        log=Path(logDir).joinpath("auto_MARCO.log")
+        
+        # progress.setLabelText("Saving results to files")
+        
+        with open(log, 'w') as f:
+                f.write("%9s%15s%15s%17s%15s \n"%("WELL", "Pb_CRYSTAL", "Pb_OTHER", "Pb_Precipitate", "Pb_Clear"))
+                for i in logresult: f.write("%9s%15.3f%15.3f%17.3f%15.3f \n"%(i[0],i[1][b"Crystals"],i[1][b"Other"],
+                                                                              i[1][b"Precipitate"],i[1][b"Clear"]))
+        del dictionary, MostProbable, logresult     
+    
+    def single_predict(self,filepath, classifications, predicter):
+        '''predict only one image
+        TODO: update auto_MARCO.log'''
+    
+        # logresult=[]
+        
+        well=os.path.splitext(os.path.basename(filepath))[0]
+        print("Processing File ", filepath)
+        file = open(filepath, "rb")
+        results = predicter({"image_bytes": [file.read()]})
+    
         vals = results['scores'][0]
         classes = results['classes'][0]
+    
+        for i in range(len(classes)):
+            val=str(classes[i]).strip('b')
+            val=val.replace("'","")
+            classes[i]=val
         dictionary = dict(zip(classes,vals))
-        
-        logresult.append((well, dictionary))
+        # logresult.append((well, dictionary))
         
         #Find the most probable and return a tuple(well,dict)
         MostProbable=max(zip(dictionary.values(),dictionary.keys()))
-        # print("MostProbable ", MostProbable)
-
-        classification = ""
-        if MostProbable[1] == b"Crystals":
-            classification = "Crystal"
-        elif MostProbable[1] == b"Other":
-            classification = "Other"
-        elif MostProbable[1] == b"Precipitate":
-            classification = "Precipitate"
-        elif MostProbable[1] == b"Clear":
-            classification = "Clear"
-
+        print("autoMARCO prediction:", dictionary)
+        classification = MostProbable[1]
+    
         #Adding a filter
         if MostProbable[0]<pref.autoMARCO_threshold:
             classification = "Unknown"
-            
+                
         classifications[well]=classification
         # print("classifications[well] ", classifications[well])
-        if progress.wasCanceled():
-            #To prevent crash reassign classification to Unknown
-            # for _file in file_list:
-            #     classifications[os.path.splitext(os.path.basename(_file))[0]]="Unknown"
-            #To prevent crash assign classification to Unknown for unprocessed images
-            for i in range(file_list.index(name), len(file_list)):
-                classifications[os.path.splitext(os.path.basename(file_list[i]))[0]]="Unknown"
-            break
-        
-    log=Path(logDir).joinpath("auto_MARCO.log")
     
-    # progress.setLabelText("Saving results to files")
-    
-    with open(log, 'w') as f:
-            f.write("%9s%15s%15s%17s%15s \n"%("WELL", "Pb_CRYSTAL", "Pb_OTHER", "Pb_Precipitate", "Pb_Clear"))
-            for i in logresult: f.write("%9s%15.3f%15.3f%17.3f%15.3f \n"%(i[0],i[1][b"Crystals"],i[1][b"Other"],
-                                                                          i[1][b"Precipitate"],i[1][b"Clear"]))
-    del dictionary, MostProbable, logresult     
-
-def single_predict(filepath, classifications):
-    '''predict only one image
-    TODO: update auto_MARCO.log'''
-    app_path=os.path.abspath(os.path.dirname(sys.argv[0]))
-    model_path = Path(app_path).joinpath("saved_model")
-    
-    #unsupported image type in tensorflow <2.0
-    unsupported=['.tif', '.tiff','.TIF', '.TIFF']
-    if os.path.splitext(os.path.basename(filepath))[1] not in unsupported:
-        file = open(filepath, "rb")
-
-    predicter = tf.contrib.predictor.from_saved_model(str(model_path))
-    logresult=[]
-    
-    well=os.path.splitext(os.path.basename(filepath))[0]
-    print("Processing File ", filepath)
-    results = predicter({"image_bytes": [file.read()]})
-
-    vals = results['scores'][0]
-    classes = results['classes'][0]
-
-    for i in range(len(classes)):
-        val=str(classes[i]).strip('b')
-        val=val.replace("'","")
-        classes[i]=val
-    dictionary = dict(zip(classes,vals))
-    logresult.append((well, dictionary))
-    
-    #Find the most probable and return a tuple(well,dict)
-    MostProbable=max(zip(dictionary.values(),dictionary.keys()))
-    print("autoMARCO prediction:", dictionary)
-
-
-    classification = MostProbable[1]
-
-    #Adding a filter
-    if MostProbable[0]<pref.autoMARCO_threshold:
-        classification = "Unknown"
-            
-    classifications[well]=classification
-    # print("classifications[well] ", classifications[well])
-
-    return MostProbable
-    del MostProbable,dictionary
+        return MostProbable
+        del MostProbable,dictionary

@@ -1,4 +1,5 @@
 from pathlib import Path
+from PyQt5.QtWidgets import QMessageBox
 
 #Define below the name of the folder containing unstacked Z images.
 _rawimages="rawimages"

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'DesignerFiles/mainwindow_test_subwells_2.ui'
+# Form implementation generated from reading ui file 'DesignerFiles/mainwindow_test_subwells_06092021.ui'
 #
 # Created by: PyQt5 UI code generator 5.12.1
 #
@@ -210,7 +210,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_2.addWidget(self.labelVisuClassif, 0, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
         self.gridLayout.addWidget(self.FilterBox, 2, 0, 1, 1)
         self.gridLayoutWidget_2 = QtWidgets.QWidget(self.verticalFrame)
-        self.gridLayoutWidget_2.setGeometry(QtCore.QRect(20, 650, 1541, 280))
+        self.gridLayoutWidget_2.setGeometry(QtCore.QRect(20, 650, 1549, 280))
         self.gridLayoutWidget_2.setObjectName("gridLayoutWidget_2")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.gridLayoutWidget_2)
         self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -382,6 +382,9 @@ class Ui_MainWindow(object):
         self.radioButton_ScoreUnknown.setFont(font)
         self.radioButton_ScoreUnknown.setObjectName("radioButton_ScoreUnknown")
         self.Scoring_Layout.addWidget(self.radioButton_ScoreUnknown, 5, 0, 1, 1)
+        self.pushButton_Evaluate = QtWidgets.QPushButton(self.gridLayoutWidget_2)
+        self.pushButton_Evaluate.setObjectName("pushButton_Evaluate")
+        self.Scoring_Layout.addWidget(self.pushButton_Evaluate, 5, 1, 1, 1)
         self.gridLayout_2.addLayout(self.Scoring_Layout, 1, 1, 1, 1)
         self.ImageViewer = QtWidgets.QScrollArea(self.verticalFrame)
         self.ImageViewer.setGeometry(QtCore.QRect(700, 10, 861, 631))
@@ -648,6 +651,7 @@ class Ui_MainWindow(object):
         self.label_ShortcutPhaseSep.setText(_translate("MainWindow", "(-)"))
         self.label_ShortcutOther.setText(_translate("MainWindow", "(-)"))
         self.radioButton_ScoreUnknown.setText(_translate("MainWindow", "Unknown"))
+        self.pushButton_Evaluate.setText(_translate("MainWindow", "Evaluate me"))
         self.menuFile.setTitle(_translate("MainWindow", "File"))
         self.menuDisplay_Heat_Map.setTitle(_translate("MainWindow", "Tools"))
         self.menuShow_autoMARCO_Grid.setTitle(_translate("MainWindow", "Show autoMARCO Results"))
