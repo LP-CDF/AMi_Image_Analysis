@@ -36,7 +36,7 @@ QtWidgets.QApplication.setAttribute(QtCore.Qt.HighDpiScaleFactorRoundingPolicy.P
 
 __version__ = "1.2.4.1"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "03-09-2021"
+__date__ = "09-09-2021"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -1250,7 +1250,13 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         if self.TimelineInspector is None:
             self.TimelineInspector=ExternalViewer.Window()
         self.TimelineInspector.open_image(path)
-        self.TimelineInspector.setWindowTitle("Timeline Inspector Well: %s Date: %s"%(well,date))
+        if self.prepdate!="None":
+            d0=datetime.date(int(self.prepdate[0:4]), int(self.prepdate[4:6]), int(self.prepdate[6:]))
+            d1=datetime.date(int(date[0:4]), int(date[4:6]), int(date[6:8]))
+            delta = d1 - d0
+            self.TimelineInspector.setWindowTitle("Timeline Inspector Well: %s Date: %s (%s day(s))"%(well,date[0:8],delta.days))
+        else:
+            self.TimelineInspector.setWindowTitle("Timeline Inspector Well: %s Date: %s "%(well,date[0:8]))
         self.TimelineInspector.show()
         self.TimelineInspector.activateWindow()
         self.TimelineInspector.raise_()        
@@ -1452,15 +1458,21 @@ https://github.com/LP-CDF/AMi_Image_Analysis
                 return
         
         imgpath=self.buildWellImagePath(self.imageDir, self.currentWell, self.well_images)
-        result=self.MARCO.single_predict(str(imgpath), self.classifications, self.Predicter)
-        self.Set_ClassifButtonState(self.Scoring_Layout, self.classifications[self.currentWell])
+        result=self.MARCO.single_predict(str(imgpath), self.Predicter)
 
         info = QMessageBox(self)
         info.setWindowTitle("autoMARCO prediction results")
-        info.setText(f'''classification: {result[1]} | probability: {round(float(result[0]),3)}
-Threshold for accepting prediction is: {pref.autoMARCO_threshold}''')
+        info.setText(f'''classification: {result[0]} | probability: {round(float(result[1]),3)}
+Threshold set in preferences for accepting prediction is: {pref.autoMARCO_threshold}
+
+Click "OK" to accept prediction, "Cancel" to ignore''')
         info.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
-        info.show()
+        retval = info.exec_()
+        
+        if retval == QtWidgets.QMessageBox.Ok:
+            self.classifications[self.currentWell]=result[0]
+            self.Set_ClassifButtonState(self.Scoring_Layout, self.classifications[self.currentWell])
+        else: return
         
         del result
 

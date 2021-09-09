@@ -52,12 +52,19 @@ class Predictor():
         model_path = Path(app_path).joinpath("saved_model")
         predicter = tf.contrib.predictor.from_saved_model(str(model_path))
         return predicter
+
+    def convertclassification(self,entry)->list:
+        if entry[1] == b"Crystals":
+            classification = "Crystal"
+        elif entry[1] == b"Other":
+            classification = "Other"
+        elif entry[1] == b"Precipitate":
+            classification = "Precipitate"
+        elif entry[1] == b"Clear":
+            classification = "Clear"
+        return classification
         
     def predict(self,file_list, classifications,logDir, predicter):
-    # def predict(image_directory, project_data):
-        app_path=os.path.abspath(os.path.dirname(sys.argv[0]))
-        # print("app_path ", app_path)
-        model_path = Path(app_path).joinpath("saved_model")
         size = len(file_list)
         
         #unsupported image type in tensorflow <2.0
@@ -95,15 +102,7 @@ class Predictor():
             MostProbable=max(zip(dictionary.values(),dictionary.keys()))
             # print("MostProbable ", MostProbable)
     
-            classification = ""
-            if MostProbable[1] == b"Crystals":
-                classification = "Crystal"
-            elif MostProbable[1] == b"Other":
-                classification = "Other"
-            elif MostProbable[1] == b"Precipitate":
-                classification = "Precipitate"
-            elif MostProbable[1] == b"Clear":
-                classification = "Clear"
+            classification = self.convertclassification(MostProbable)
     
             #Adding a filter
             if MostProbable[0]<pref.autoMARCO_threshold:
@@ -112,9 +111,6 @@ class Predictor():
             classifications[well]=classification
             # print("classifications[well] ", classifications[well])
             if progress.wasCanceled():
-                #To prevent crash reassign classification to Unknown
-                # for _file in file_list:
-                #     classifications[os.path.splitext(os.path.basename(_file))[0]]="Unknown"
                 #To prevent crash assign classification to Unknown for unprocessed images
                 for i in range(file_list.index(name), len(file_list)):
                     classifications[os.path.splitext(os.path.basename(file_list[i]))[0]]="Unknown"
@@ -130,7 +126,7 @@ class Predictor():
                                                                               i[1][b"Precipitate"],i[1][b"Clear"]))
         del dictionary, MostProbable, logresult     
     
-    def single_predict(self,filepath, classifications, predicter):
+    def single_predict(self,filepath, predicter):
         '''predict only one image
         TODO: update auto_MARCO.log'''
     
@@ -144,24 +140,16 @@ class Predictor():
         vals = results['scores'][0]
         classes = results['classes'][0]
     
-        for i in range(len(classes)):
-            val=str(classes[i]).strip('b')
-            val=val.replace("'","")
-            classes[i]=val
+        # for i in range(len(classes)):
+        #     val=str(classes[i]).strip('b')
+        #     val=val.replace("'","")
+        #     classes[i]=val
         dictionary = dict(zip(classes,vals))
-        # logresult.append((well, dictionary))
         
         #Find the most probable and return a tuple(well,dict)
         MostProbable=max(zip(dictionary.values(),dictionary.keys()))
         print("autoMARCO prediction:", dictionary)
-        classification = MostProbable[1]
-    
-        #Adding a filter
-        if MostProbable[0]<pref.autoMARCO_threshold:
-            classification = "Unknown"
-                
-        classifications[well]=classification
-        # print("classifications[well] ", classifications[well])
-    
-        return MostProbable
-        del MostProbable,dictionary
+        classification = self.convertclassification(MostProbable)
+   
+        return (classification, MostProbable[0])
+        del MostProbable,dictionary,classification
