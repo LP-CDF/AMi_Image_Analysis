@@ -29,6 +29,7 @@ ScreenFile={'MD_BCS_Screen':'Md1-105_BCS_Screen.csv',
             'NeXtal-Nucleix-Suite':'NeXtal-Nucleix-Suite.csv',
             'NeXtal-JCSG-Plus-Suite':'NeXtal-JCSG-Plus-Suite.csv',
             'Jena-JCSG-Plus-Plus':'Jena-JCSGPlusPlus.csv',
+            'Jena-XP-Screen':'CS-350.xml',
             'JBScreen_Classic_HTS_I':'JBScreen_Classic_HTS_I.csv',
             'JBScreen_Classic_HTS_II':'JBScreen_Classic_HTS_II.csv',
             'JBScreen_Classic_1-4':'JBScreen_Classic_1-4.csv',
@@ -42,10 +43,12 @@ ScreenFile={'MD_BCS_Screen':'Md1-105_BCS_Screen.csv',
 class MyTable(QTableWidget):
     def __init__(self, r, c):
         super().__init__(r, c)
+        self.app_path=os.path.abspath(os.path.dirname(sys.argv[0]))
+
 
     def open_sheet(self, Screen):
-        app_path=os.path.abspath(os.path.dirname(sys.argv[0]))
-        path=Path(app_path).joinpath("Screen_Database", ScreenFile[Screen])
+        # app_path=os.path.abspath(os.path.dirname(sys.argv[0]))
+        path=Path(self.app_path).joinpath("Screen_Database", ScreenFile[Screen])
         
         if Path(path).is_file():
             with open(path, newline='') as csv_file:
@@ -63,9 +66,17 @@ class MyTable(QTableWidget):
         else : return False
 
 
-    def open_xml(self, _file):
-        '''Read a RockMaker or Dragonfly XML, _file as str '''
-        path=Path(_file)        
+    def open_xml(self, _screen)->str:
+        '''Read a RockMaker or Dragonfly XML, _file as str, checks if Screen is
+        already in database
+        _screen is either a file or a screen name in ScreenFile'''
+
+        #checking if _file is in database meaning XML is loaded from a self.action in GUI
+        if _screen in ScreenFile.keys(): 
+            path=Path(self.app_path).joinpath("Screen_Database", ScreenFile[_screen])
+        else:
+            path=Path(_screen)
+        
         if Path(path).is_file():
             tree = ET.parse(path)
             root = tree.getroot()
@@ -75,7 +86,9 @@ class MyTable(QTableWidget):
                 for ingredient in chemical.iter('ingredient'):
                     localID=[]
                     for stock in ingredient.iter('stock'):
-                        DictIng[stock.find('localID').text]= {'name':str(ingredient.find('name').text),'units':str(stock.find('units').text)}            
+                        DictIng[stock.find('localID').text]= {'name':str(ingredient.find('name').text),'units':str(stock.find('units').text)}
+        else:
+            return False
 
         subsections=("concentration","pH") #subsections of interest
         
@@ -118,5 +131,5 @@ class MyTable(QTableWidget):
                 for column, stuff in enumerate(row_data):
                     item = QTableWidgetItem(str(stuff))
                     self.setItem(i-1, column, item)
-        else : return False
+        # else : return False
         del tree, root, my_screen, DictIng

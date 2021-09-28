@@ -534,6 +534,8 @@ class Ui_MainWindow(object):
         self.PlateScreenshot_no_subwell.setObjectName("PlateScreenshot_no_subwell")
         self.actionAutoMARCO_current_image = QtWidgets.QAction(MainWindow)
         self.actionAutoMARCO_current_image.setObjectName("actionAutoMARCO_current_image")
+        self.actionXP_Screen = QtWidgets.QAction(MainWindow)
+        self.actionXP_Screen.setObjectName("actionXP_Screen")
         self.menuFile.addAction(self.openFile)
         self.menuFile.addAction(self.openDir)
         self.menuFile.addAction(self.actionExport_to_PDF)
@@ -575,6 +577,7 @@ class Ui_MainWindow(object):
         self.menuJena_Bioscience.addAction(self.actionJBScreen_Classic_HTS_II)
         self.menuJena_Bioscience.addAction(self.actionJena_JCSG_Plus_Plus)
         self.menuJena_Bioscience.addAction(self.actionPi_PEG_HTS)
+        self.menuJena_Bioscience.addAction(self.actionXP_Screen)
         self.menuHampton_Research.addAction(self.action_Additive_screen_HT)
         self.menuHampton_Research.addAction(self.action_Cryo_HT)
         self.menuHampton_Research.addAction(self.actionPeg_Rx1Rx2)
@@ -728,5 +731,6 @@ class Ui_MainWindow(object):
         self.PlateScreenshot_subwell_c.setText(_translate("MainWindow", "subwell c"))
         self.PlateScreenshot_no_subwell.setText(_translate("MainWindow", "no subwell"))
         self.actionAutoMARCO_current_image.setText(_translate("MainWindow", "AutoMARCO current image"))
+        self.actionXP_Screen.setText(_translate("MainWindow", "XP Screen"))
 
 

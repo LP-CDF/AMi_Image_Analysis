@@ -20,12 +20,12 @@ from PyQt5.QtWidgets import (QTableWidgetItem, QFileDialog, QSplashScreen,
     QMessageBox, QGridLayout,QStyleFactory, QProgressDialog, QInputDialog, QLineEdit)
 from utils import ensure_directory, initProject, _rawimages, Ext
 from shutil import copyfile
-import pdf_writer 
+import pdf_writer
 import HeatMap_Grid
 from  MARCO_Results_Analysis import MARCO_Results
 import PlateOverview
 import StatisticsDialog
-import tools.Merge_Zstack as Merge_Zstack
+from tools import Merge_Zstack
 import ReadScreen
 import ExternalViewer
 import preferences as pref
@@ -163,28 +163,29 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         
         
         #Crystallization Screens
-        self.actionMD_PGA.triggered.connect(lambda: self.show_CrystScreen("MD-PGA"))
-        self.actionNextal_MbClassII_Suite.triggered.connect(lambda: self.show_CrystScreen("Nextal-MBClassII"))
-        self.actionNeXtal_Ammonium_Sulfate_Suite.triggered.connect(lambda: self.show_CrystScreen("NeXtal-Ammonium_Sulfate_Suite"))
-        self.actionNextal_Classics_Suite.triggered.connect(lambda: self.show_CrystScreen("Nextal-Classics-Suite"))
-        self.actionNextal_ClassicsII_Suite.triggered.connect(lambda: self.show_CrystScreen("Nextal-ClassicsII-Suite"))
-        self.actionNextal_PEGII_Suite.triggered.connect(lambda: self.show_CrystScreen("NeXtal-PEGs-II-Suite"))
-        self.actionNeXtal_Protein_Complex_Suite.triggered.connect(lambda: self.show_CrystScreen("NeXtal-Protein-Complex-Suite"))
-        self.actionNeXtal_Nucleix_Suite.triggered.connect(lambda: self.show_CrystScreen("NeXtal-Nucleix-Suite"))
-        self.actionJena_JCSG_Plus_Plus.triggered.connect(lambda: self.show_CrystScreen("Jena-JCSG-Plus-Plus"))
-        self.actionJBScreen_Classic_HTS_I.triggered.connect(lambda: self.show_CrystScreen("JBScreen_Classic_HTS_I"))
-        self.actionJBScreen_Classic_HTS_II.triggered.connect(lambda: self.show_CrystScreen("JBScreen_Classic_HTS_II"))
-        self.actionJBScreen_Classic_1_4.triggered.connect(lambda: self.show_CrystScreen("JBScreen_Classic_1-4"))
-        self.actionJBScreen_Classic_5_8.triggered.connect(lambda: self.show_CrystScreen("JBScreen_Classic_5-8"))
-        self.actionPi_PEG_HTS.triggered.connect(lambda: self.show_CrystScreen("Pi-PEG_HTS"))
-        self.action_Additive_screen_HT.triggered.connect(lambda: self.show_CrystScreen("HR-AdditiveScreen_HT"))
-        self.actionPeg_Rx1Rx2.triggered.connect(lambda: self.show_CrystScreen("HR-PEGRx_HT_screen"))
-        self.actionSaltRx.triggered.connect(lambda: self.show_CrystScreen("HR-SaltRx_HT_screen"))
-        self.action_Cryo_HT.triggered.connect(lambda: self.show_CrystScreen("HR-Cryo_HT_screen"))
-        self.actionMD_PACT_Premier.triggered.connect(lambda: self.show_CrystScreen("MD_PACT_Premier"))
-        self.actionNextal_JCSG_Plus.triggered.connect(lambda: self.show_CrystScreen("NeXtal-JCSG-Plus-Suite"))
-        self.actionMD_MIDAS.triggered.connect(lambda: self.show_CrystScreen("MD_MIDAS"))
-        self.actionMD_BCS_Screen.triggered.connect(lambda: self.show_CrystScreen("MD_BCS_Screen"))
+        self.actionMD_PGA.triggered.connect(lambda: self.show_csvScreen("MD-PGA"))
+        self.actionNextal_MbClassII_Suite.triggered.connect(lambda: self.show_csvScreen("Nextal-MBClassII"))
+        self.actionNeXtal_Ammonium_Sulfate_Suite.triggered.connect(lambda: self.show_csvScreen("NeXtal-Ammonium_Sulfate_Suite"))
+        self.actionNextal_Classics_Suite.triggered.connect(lambda: self.show_csvScreen("Nextal-Classics-Suite"))
+        self.actionNextal_ClassicsII_Suite.triggered.connect(lambda: self.show_csvScreen("Nextal-ClassicsII-Suite"))
+        self.actionNextal_PEGII_Suite.triggered.connect(lambda: self.show_csvScreen("NeXtal-PEGs-II-Suite"))
+        self.actionNeXtal_Protein_Complex_Suite.triggered.connect(lambda: self.show_csvScreen("NeXtal-Protein-Complex-Suite"))
+        self.actionNeXtal_Nucleix_Suite.triggered.connect(lambda: self.show_csvScreen("NeXtal-Nucleix-Suite"))
+        self.actionJena_JCSG_Plus_Plus.triggered.connect(lambda: self.show_csvScreen("Jena-JCSG-Plus-Plus"))
+        self.actionJBScreen_Classic_HTS_I.triggered.connect(lambda: self.show_csvScreen("JBScreen_Classic_HTS_I"))
+        self.actionJBScreen_Classic_HTS_II.triggered.connect(lambda: self.show_csvScreen("JBScreen_Classic_HTS_II"))
+        self.actionJBScreen_Classic_1_4.triggered.connect(lambda: self.show_csvScreen("JBScreen_Classic_1-4"))
+        self.actionJBScreen_Classic_5_8.triggered.connect(lambda: self.show_csvScreen("JBScreen_Classic_5-8"))
+        self.actionXP_Screen.triggered.connect(lambda: self.show_xmlScreen("Jena-XP-Screen"))
+        self.actionPi_PEG_HTS.triggered.connect(lambda: self.show_csvScreen("Pi-PEG_HTS"))
+        self.action_Additive_screen_HT.triggered.connect(lambda: self.show_csvScreen("HR-AdditiveScreen_HT"))
+        self.actionPeg_Rx1Rx2.triggered.connect(lambda: self.show_csvScreen("HR-PEGRx_HT_screen"))
+        self.actionSaltRx.triggered.connect(lambda: self.show_csvScreen("HR-SaltRx_HT_screen"))
+        self.action_Cryo_HT.triggered.connect(lambda: self.show_csvScreen("HR-Cryo_HT_screen"))
+        self.actionMD_PACT_Premier.triggered.connect(lambda: self.show_csvScreen("MD_PACT_Premier"))
+        self.actionNextal_JCSG_Plus.triggered.connect(lambda: self.show_csvScreen("NeXtal-JCSG-Plus-Suite"))
+        self.actionMD_MIDAS.triggered.connect(lambda: self.show_csvScreen("MD_MIDAS"))
+        self.actionMD_BCS_Screen.triggered.connect(lambda: self.show_csvScreen("MD_BCS_Screen"))
         self.actionimport_RockMaker_XML.triggered.connect(self.openXMLDialog)
         
         
@@ -268,7 +269,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.heatmap_window.show()
 
 
-    def show_CrystScreen(self, Screen):
+    def show_csvScreen(self, Screen):
         '''Screen is taken from key ScreenFile dictionnary in ReadScreen.py '''
         self.ScreenTable=ReadScreen.MyTable(10, 10)
         self.ScreenTable.setWindowTitle("%s"%Screen)
@@ -284,18 +285,22 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
             self.handle_error("WARNING: File %s not found in database"%ReadScreen.ScreenFile[Screen])
 
 
-    def show_XMLScreen(self, fileName):
+    def show_xmlScreen(self, fileName):
         path=Path(fileName)
-        if path.suffix not in ['.xml', '.XML']:
-                self.handle_error("WARNING: unexpected format for file %s"%fileName)
-                return
+        # if path.suffix not in ['.xml', '.XML']:
+        #         self.handle_error("WARNING: unexpected format for file %s"%fileName)
+        #         return
         self.ScreenTable=ReadScreen.MyTable(10, 10)
         self.ScreenTable.setWindowTitle(path.stem)
         data=self.ScreenTable.open_xml(fileName)
-        self.ScreenTable.resize(1000, 500)
-        header = self.ScreenTable.horizontalHeader()
-        header.setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
-        self.ScreenTable.show()
+        if data is False:
+            self.handle_error("WARNING: unexpected format for file %s"%fileName)
+            return
+        else:
+            self.ScreenTable.resize(1000, 500)
+            header = self.ScreenTable.horizontalHeader()
+            header.setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
+            self.ScreenTable.show()
 
 
     def show_autoMARCO(self, subwell):
@@ -406,8 +411,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.informationDialog(message)
 
 
-    def AutoCrop(self):
-        
+    def AutoCrop(self):        
         if len(self.files)==0:
             self.handle_error("Please choose a directory containing the images first!!!")
             return
@@ -470,7 +474,7 @@ and modify detection parameters.
 
 
     def AutoMerge(self):
-        from utils import _rawimages
+        # from utils import _rawimages
         self.informationDialog(f'''
                                
 Please open the directory {_rawimages} !!!
@@ -616,7 +620,8 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         options |= QFileDialog.DontUseNativeDialog
         fileName, _ = QFileDialog.getOpenFileName(self,"Open File", "","XML Files (*.xml *.XML)", options=options)
         if fileName:
-            self.show_XMLScreen(fileName)
+            self.show_xmlScreen(fileName)
+
 
     def openFileNameDialog(self):
         options = QFileDialog.Options()
@@ -845,12 +850,12 @@ https://github.com/LP-CDF/AMi_Image_Analysis
 
 
     def add_button(self, path, x, y):
-            button = QtWidgets.QPushButton()
-            button.setStyleSheet("""background-color: lightgray;""")
-            # text=self.extract_WellLabel
-            button.setText(self.extract_WellLabel(path))
-            button.clicked.connect(self.buttonClicked)
-            self._lay.addWidget(button, x, y, alignment=QtCore.Qt.AlignLeft)
+        button = QtWidgets.QPushButton()
+        button.setStyleSheet("""background-color: lightgray;""")
+        # text=self.extract_WellLabel
+        button.setText(self.extract_WellLabel(path))
+        button.clicked.connect(self.buttonClicked)
+        self._lay.addWidget(button, x, y, alignment=QtCore.Qt.AlignLeft)
 
 
     def extract_WellLabel(self, path):
@@ -860,17 +865,17 @@ https://github.com/LP-CDF/AMi_Image_Analysis
 
     
     def add_WellLabel(self, text, x, y):
-            label = QtWidgets.QLabel()
-            basename=os.path.basename(text)
-            well=os.path.splitext(basename)[0]
-            label.setText(well)
-            label.setFont(QtGui.QFont("Courier New", 8, QtGui.QFont.Black))
-            label.setStyleSheet("""
-            background-color: white;
-            color: blue;
-            padding: 0px 2px 0px 2px;
-        """)
-            self._lay.addWidget(label, x, y, alignment=QtCore.Qt.AlignBottom | QtCore.Qt.AlignCenter)
+        label = QtWidgets.QLabel()
+        basename=os.path.basename(text)
+        well=os.path.splitext(basename)[0]
+        label.setText(well)
+        label.setFont(QtGui.QFont("Courier New", 8, QtGui.QFont.Black))
+        label.setStyleSheet("""
+        background-color: white;
+        color: blue;
+        padding: 0px 2px 0px 2px;
+    """)
+        self._lay.addWidget(label, x, y, alignment=QtCore.Qt.AlignBottom | QtCore.Qt.AlignCenter)
 
 
     def add_Label_Timeline(self, layout, text, x, y):
@@ -1044,7 +1049,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
 
 
     def LoadNotes(self, path, date, well):
-        data_file=Path(self.rootDir).joinpath("Image_Data", self.date, "%s_data.txt"%well)
+        data_file=Path(path).joinpath("Image_Data", date, "%s_data.txt"%well)
         self.Notes_TextEdit.clear()
         if Path(data_file).exists():
             with open(data_file, "r") as f:
@@ -1083,7 +1088,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
     def CheckClassificationAndNotes(self, path, date, well):
         '''create a dir well:classif when calling func AddtoClassificationDict
         and create a dict WellHasNotes True or False'''
-        data_file=Path(self.rootDir).joinpath("Image_Data", self.date, "%s_data.txt"%well)
+        data_file=Path(path).joinpath("Image_Data", date, "%s_data.txt"%well)
         if Path(data_file).exists():
             with open(data_file, "r") as f:
                 content=f.readlines()

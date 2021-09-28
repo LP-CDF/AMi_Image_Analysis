@@ -1,3 +1,11 @@
+2021/09/28
+Added Docker build file and instructions
+
+2021/09/09
+Changed version to 1.2.4.1
+Added possibility to use autoMARCO on a single image within the GUI
+More efficient load of MARCO model.
+
 2021/06/24
 Changed version to 1.2.4
 Added possibility to have an overview of the plate and export image of the plate (per subwell)

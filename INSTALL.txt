@@ -142,3 +142,34 @@ Then autoMARCO should work though slowly at least on a Pi3B+.
 # Uninstallation:
     * Either use the uninstallation script "Uninstallation.py" if you used the Setup.py script during installation
     * or simply delete the folders containing the program and the python virtual environment.
+
+
+
+# DOCKER:
+A Dockerfile is included. To generate the container go to the directory containing the file Dockerfile then type:
+sudo docker build -t ami_image_analysis_XXXX . (replace XXXX to your needs)
+
+to start the container (linux):
+sudo docker container run \
+-v /tmp/.X11-unix:/tmp/.X11-unix \
+-e DISPLAY=$DISPLAY \
+-v /path/to/USB/:/mnt/usb \
+--rm \
+-it ami_image_analysis_XXXX
+
+
+to start the container (OSX):
+Install XQuartz. Restart OS.
+In XQuartz: Check the option: XQuartz -> Preferences -> Security -> "Allow connections from network clients"
+
+Run in terminal:
+IP=$(ifconfig en0 | grep inet | awk '$1=="inet" {print $2}')
+xhost +
+
+docker container run \
+-v /tmp/.X11-unix:/tmp/.X11-unix \
+-e DISPLAY=$IP:0 \
+-v -v /path/to/USB/:/mnt/usb \
+--rm \
+-it ami_image_analysis_XXXX
+
