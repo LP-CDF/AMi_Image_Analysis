@@ -153,7 +153,7 @@ to start the container (linux):
 sudo docker container run \
 -v /tmp/.X11-unix:/tmp/.X11-unix \
 -e DISPLAY=$DISPLAY \
--v /path/to/USB/:/mnt/usb \
+-v /path/to/USB/:/home/LCPB/USB \
 --rm \
 -it ami_image_analysis_XXXX
 
@@ -169,7 +169,7 @@ xhost +
 docker container run \
 -v /tmp/.X11-unix:/tmp/.X11-unix \
 -e DISPLAY=$IP:0 \
--v -v /path/to/USB/:/mnt/usb \
+-v -v /path/to/USB/:/home/LCPB/USB \
 --rm \
 -it ami_image_analysis_XXXX
 

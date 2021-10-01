@@ -78,15 +78,17 @@ def ChangeSheBang(app_path, filename, python_path):
 
 
 def ChangeRAW(app_path, filename, _string):
-    '''app_path and filename are strings'''
+    '''app_path and filename are strings, stops at first encounter'''
     file_path = Path(app_path).joinpath(filename)
+    INDEX = False
     with open(file_path, 'r') as f:
         lines = f.readlines()
     for i in lines:
         if "_RAWIMAGES=" in i:
             INDEX = lines.index(i)
             break
-    lines[INDEX] = '''_RAWIMAGES="%s"\n''' % _string
+    if INDEX is not False:
+        lines[INDEX] = '''_RAWIMAGES="%s"\n''' % _string
     with open(file_path, 'w') as f:
         for l in lines:
             f.write(l)
