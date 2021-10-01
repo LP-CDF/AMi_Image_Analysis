@@ -1,7 +1,7 @@
 from pathlib import Path
 
 #Define below the name of the folder containing unstacked Z images.
-_rawimages="rawimages"
+_RAWIMAGES="rawimages"
 
 #Define Compatible images
 Ext=[".tif",".tiff",".TIFF",".jpg", ".jpeg",".JPG",".JPEG",".png",".PNG"]
@@ -33,7 +33,7 @@ class initProject(object):
     def Directory(self, path):
         directory=Path.resolve(path)
         parents=directory.parents
-        self.rawimages=_rawimages
+        self.rawimages=_RAWIMAGES
         if directory.parts[-1]==self.rawimages or directory.parts[-1]=="cropped":
             self.rootDir = parents[1]
             self.project=directory.parts[-5] #-5 if projectID is set. or -4

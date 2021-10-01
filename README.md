@@ -79,6 +79,7 @@ It is recommended to create a virtual environment for python (see INSTALL.txt)
 
 Download the latest released version and decompress it or clone this repository with
 git clone https://github.com/LP-CDF/AMi_Image_Analysis AMi_Image_Analysis.
+A dockerfile is also included if you want to install as a Docker container.
 Then follow the instructions in INSTALL.txt
 
 Dependencies:

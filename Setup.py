@@ -18,6 +18,7 @@ from urllib.parse import urlparse
 from urllib.request import urlretrieve
 import venv
 
+
 class ExtendedEnvBuilder(venv.EnvBuilder):
     """
     This builder installs pip so that you can pip install other packages
@@ -47,7 +48,7 @@ class ExtendedEnvBuilder(venv.EnvBuilder):
         self.nopip = kwargs.pop('nopip', False)
         self.progress = kwargs.pop('progress', None)
         self.verbose = kwargs.pop('verbose', False)
-        self.noprojectID= kwargs.pop('noprojectID', False)
+        self.noprojectID = kwargs.pop('noprojectID', False)
         super().__init__(*args, **kwargs)
 
     def post_setup(self, context):
@@ -63,7 +64,7 @@ class ExtendedEnvBuilder(venv.EnvBuilder):
         #setuptools not required to install pip
         if not self.nopip:
             self.install_pip(context)
-        
+
         self.install_dep(context)
 
     def reader(self, stream, context):
@@ -120,7 +121,6 @@ class ExtendedEnvBuilder(venv.EnvBuilder):
         # Clean up - no longer needed
         os.unlink(distpath)
 
-
     def install_pip(self, context):
         """
         Install pip in the virtual environment.
@@ -130,61 +130,64 @@ class ExtendedEnvBuilder(venv.EnvBuilder):
         """
         url = 'https://bootstrap.pypa.io/get-pip.py'
         self.install_script(context, 'pip', url)
-        
+
     def install_dep(self, context):
         try:
             import subprocess
         except:
             print("subprocess not found exiting")
-            sys.exit()            
+            sys.exit()
         try:
             import platform
         except:
             print("platform not found exiting")
             sys.exit()
-            
-        _list={'linux':"requirements.txt",
-               'darwin':"requirements_OSX.txt",
-               'win32':"requirements.txt",
-               'armv7l':"requirements_Raspbian.txt"}
-        
-        filepath=os.path.abspath(os.path.dirname(sys.argv[0]))
+
+        _list = {'linux': "requirements.txt",
+                 'darwin': "requirements_OSX.txt",
+                 'win32': "requirements.txt",
+                 'armv7l': "requirements_Raspbian.txt"}
+
+        filepath = os.path.abspath(os.path.dirname(sys.argv[0]))
         # print('FILEPATH : ', filepath)
-        if sys.platform=='linux' and platform.machine() == "armv7l":
-            deppath=Path(filepath).joinpath(_list['armv7l'])
+        if sys.platform == 'linux' and platform.machine() == "armv7l":
+            deppath = Path(filepath).joinpath(_list['armv7l'])
         else:
-            deppath=Path(filepath).joinpath(_list[sys.platform])
+            deppath = Path(filepath).joinpath(_list[sys.platform])
         print('WILL INSTALL packages from : ', deppath)
         with open(deppath, 'r') as f:
-            lines=f.read().splitlines()
+            lines = f.read().splitlines()
         # print("LINES", lines)
-        
-        binpath=Path(context.bin_path).joinpath("python")
+
+        binpath = Path(context.bin_path).joinpath("python")
         print("PYTHONPATH: ", binpath)
         for dep in lines:
-            subprocess.call([binpath, '-m', 'pip', 'install', "--prefix", context.env_dir, dep])
-        
+            subprocess.call([binpath, '-m', 'pip', 'install',
+                             "--prefix", context.env_dir, dep])
+
         #Finishing setup
-        if sys.platform=='linux' or sys.platform=='darwin':
+        if sys.platform == 'linux' or sys.platform == 'darwin':
             print("\nUPDATING INTIALISATION SCRIPT bin/AMI_Image_Analysis.sh\n")
             print("TESTING OPTIONS")
-            Setup_bin_VENV=Path(filepath).joinpath("Setup_local.py")
+            Setup_bin_VENV = Path(filepath).joinpath("Setup_local.py")
             if self.noprojectID is True:
                 print("TESTING OPTIONS TRUE")
                 subprocess.run([binpath, Setup_bin_VENV, "--no-ProjectID"])
             else:
                 print("TESTING OPTIONS FALSE")
                 subprocess.run([binpath, Setup_bin_VENV])
-        
+
+
 def main(args=None):
-    script_path=os.path.abspath(os.path.dirname(sys.argv[0]))
+    script_path = os.path.abspath(os.path.dirname(sys.argv[0]))
     print(f"Setup.py path is {script_path}")
-    temp=Path(script_path).parent
-    
+    temp = Path(script_path).parent
+
     #Setup ENV_DIR if no destination given.
-    ENV_DIR=temp.joinpath("python", "venvs", "AMI_IMAGE_ANALYSIS_TENSORFLOW1")
-    root=ENV_DIR.parent
-    
+    ENV_DIR = temp.joinpath(
+        "python", "venvs", "AMI_IMAGE_ANALYSIS_TENSORFLOW1")
+    root = ENV_DIR.parent
+
     compatible = True
     if sys.version_info < (3, 6):
         compatible = False
@@ -203,7 +206,7 @@ def main(args=None):
                                                      'directories.')
         parser.add_argument('dirs', metavar='ENV_DIR', nargs='?',
                             help='A directory in which to create the'
-                                  'virtual environment.')
+                            'virtual environment.')
         parser.add_argument('--no-setuptools', default=False,
                             action='store_true', dest='nodist',
                             help="Don't install setuptools or pip in the "
@@ -240,36 +243,41 @@ def main(args=None):
                                                  'in-place.')
         parser.add_argument('--verbose', default=False, action='store_true',
                             dest='verbose', help='Display the output '
-                                               'from the scripts which '
-                                               'install pip.')
+                            'from the scripts which '
+                            'install pip.')
         parser.add_argument('--no-ProjectID', default=False,
-                    action='store_true', dest='noprojectID',
-                    help="Don't use ProjectID in tree")
-        
-        options = parser.parse_args(args)
-        
-        if options.upgrade and options.clear:
-            raise ValueError('you cannot supply --upgrade and --clear together.')
-        builder = ExtendedEnvBuilder(system_site_packages=options.system_site,
-                                       clear=options.clear,
-                                       symlinks=options.symlinks,
-                                       upgrade=options.upgrade,
-                                       nodist=options.nodist,
-                                       nopip=options.nopip,
-                                       verbose=options.verbose,
-                                       noprojectID=options.noprojectID)
-        
-        if options.dirs is None:
-            options.dirs=str(ENV_DIR)
-            if not root.parent.exists(): root.parent.mkdir()
-            if not root.exists(): root.mkdir()
-            if not ENV_DIR.exists(): ENV_DIR.mkdir()
+                            action='store_true', dest='noprojectID',
+                            help="Don't use ProjectID in tree")
 
-        print(f"Will install venv in {options.dirs}")            
+        options = parser.parse_args(args)
+
+        if options.upgrade and options.clear:
+            raise ValueError(
+                'you cannot supply --upgrade and --clear together.')
+        builder = ExtendedEnvBuilder(system_site_packages=options.system_site,
+                                     clear=options.clear,
+                                     symlinks=options.symlinks,
+                                     upgrade=options.upgrade,
+                                     nodist=options.nodist,
+                                     nopip=options.nopip,
+                                     verbose=options.verbose,
+                                     noprojectID=options.noprojectID)
+
+        if options.dirs is None:
+            options.dirs = str(ENV_DIR)
+            if not root.parent.exists():
+                root.parent.mkdir()
+            if not root.exists():
+                root.mkdir()
+            if not ENV_DIR.exists():
+                ENV_DIR.mkdir()
+
+        print(f"Will install venv in {options.dirs}")
         builder.create(options.dirs)
 
+
 if __name__ == '__main__':
-    rc = 1
+    RC = 1
     if sys.version >= '3.8':
         print(f'''
 #########################################################################################################   
@@ -283,7 +291,7 @@ if __name__ == '__main__':
               ''')
     try:
         main()
-        rc = 0
+        RC = 0
     except Exception as e:
         print('Error: %s' % e, file=sys.stderr)
-    sys.exit(rc)
+    sys.exit(RC)
