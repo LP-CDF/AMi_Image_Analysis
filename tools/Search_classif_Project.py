@@ -10,6 +10,7 @@ from pathlib import Path
 import argparse
 import re
 import csv
+import glob
 
 __version__ = "0.1"
 __date__ = "23-11-2021"
@@ -57,41 +58,80 @@ def main(args=None):
     
     print("Working folder is: ", dirName)
 
-    # Get the list of all directories _rawimges at given path
-    listOfDirs = list()
-    for (dirpath, dirnames, _filenames) in os.walk(dirName):
-        if _DATA in dirnames:
-            if os.path.isdir(os.path.join(dirpath,_DATA)):
-                             listOfDirs.append(os.path.join(dirpath, _DATA))
 
-    if len(listOfDirs) == 0:
-        print("No files *_data.txt found, nothing to do!!!")
-        return
+################################ OLD ################################
+    # # Get the list of all directories _rawimges at given path
+    # listOfDirs = list()
+    # for (dirpath, dirnames, _filenames) in os.walk(dirName):
+    #     if _DATA in dirnames:
+    #         if os.path.isdir(os.path.join(dirpath,_DATA)):
+    #                          listOfDirs.append(os.path.join(dirpath, _DATA))
+
+    # if len(listOfDirs) == 0:
+    #     print("No files *_data.txt found, nothing to do!!!")
+    #     return
     
-    all_files=list()
-    for path in listOfDirs:
-        # print("path", path)
-        files=list()
-        for (dirpath, dirnames, _filenames) in os.walk(path):
-            # print(_filenames)
-            files+= [os.path.join(dirpath, file) for file in _filenames if "_data.txt" in file]
-        files.sort(key=natural_sort_key)
-        all_files.append(files)
+    # all_files=list()
+    # for path in listOfDirs:
+    #     # print("path", path)
+    #     files=list()
+    #     for (dirpath, dirnames, _filenames) in os.walk(path):
+    #         # print(_filenames)
+    #         files+= [os.path.join(dirpath, file) for file in _filenames if "_data.txt" in file]
+    #     files.sort(key=natural_sort_key)
+    #     all_files.append(files)
+    
+    # results=list()
+    # for lst in all_files:
+    #     for elem in lst:
+    #         directory = Path(elem)
+    #         parents=directory.parents
+    #         plate=directory.parts[-4]
+    #         date=directory.parts[-2]
+    #         basename=os.path.basename(elem)
+    #         well=basename.split("_")[0]
+    #         pathtoImg=str(parents[2])+'/'+date+'*/'+well+'.jpg'
+    #         pathtoImg=glob.glob(pathtoImg)
+    #         if len(pathtoImg)!=0:
+    #             pathtoImg=pathtoImg[0]
+    #         else:#Should not append but...
+    #             pathtoImg=''
+    #         with open(elem,'r') as f:
+    #             lines=f.readlines()
+    #         if classif in lines[5]:
+    #             results.append((plate,date,well,pathtoImg))
+################################ END OLD ################################
+ 
+    files=list()
+    for (dirpath, dirnames, _filenames) in os.walk(dirName):
+        files+= [os.path.join(dirpath, file) for file in _filenames if "_data.txt" in file]
+    files.sort(key=natural_sort_key)
     
     results=list()
-    for lst in all_files:
-        for elem in lst:
-            directory = Path(elem)
-            plate=directory.parts[-4]
-            date=directory.parts[-2]
-            basename=os.path.basename(elem)
-            well=basename.split("_")[0]
-            with open(elem,'r') as f:
-                lines=f.readlines()
-            if classif in lines[5]:
-                results.append((plate,date,well))
-            
-    fields = ['Plate', 'Date', 'Well']
+    lines=list()
+    for elem in files:
+        lines.clear()
+        with open(elem,'r') as f:
+            lines=f.readlines()
+        if classif in lines[5]:
+            _directory = Path(elem)
+            _parents=_directory.parents
+            plate=_directory.parts[-4]
+            date=_directory.parts[-2]
+            _basename=os.path.basename(elem)
+            well=_basename.split("_")[0]
+            pathtoImg=str(_parents[2])+'/'+date+'*/'+well+'.jpg'
+            pathtoImg=glob.glob(pathtoImg)
+            if len(pathtoImg)!=0:
+                pathtoImg.sort(key=natural_sort_key)
+                pathtoImg=pathtoImg[-1]#if same date, keep most recent
+            else:#Should not append but...
+                pathtoImg=''
+            results.append((plate,date,well,pathtoImg))
+        else:
+            continue
+           
+    fields = ['Plate', 'Date', 'Well','Path to image']
     fname='All_'+classif+'.csv'
     with open(fname, 'w') as f:
         write = csv.writer(f)
@@ -99,7 +139,7 @@ def main(args=None):
         write.writerows(results)
     print(f"Results saved to {dirName+'/'+fname}")
     
-    del results, all_files        
+    del results #, all_files        
 
 if __name__ == '__main__':
     main()
