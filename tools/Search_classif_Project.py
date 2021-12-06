@@ -25,6 +25,7 @@ def natural_sort_key(s):
     return [int(text) if text.isdigit() else text.lower()
             for text in re.split(_nsre, s)]
 
+
 def main(args=None):
     ''' main func '''
     # dirName = os.getcwd()
@@ -43,6 +44,8 @@ def main(args=None):
                         'Other'
                         'Unknown'
                         'The exact class name must be used (case sensitive)''')
+    parser.add_argument('--unique', default=False,action='store_true',
+                        dest='UNIQUE', help='report unique condition')
 
     options = parser.parse_args(args)
     print("options ", options)
@@ -55,6 +58,10 @@ def main(args=None):
         classif="Crystal"
     else:
         classif=options.classif
+    if options.UNIQUE is None or options.UNIQUE is False:
+        UNIQUE=False
+    else:
+        UNIQUE=True
     
     print("Working folder is: ", dirName)
 
@@ -109,6 +116,7 @@ def main(args=None):
     
     results=list()
     lines=list()
+    unique_report=list()
     for elem in files:
         lines.clear()
         with open(elem,'r') as f:
@@ -122,12 +130,22 @@ def main(args=None):
             well=_basename.split("_")[0]
             pathtoImg=str(_parents[2])+'/'+date+'*/'+well+'.jpg'
             pathtoImg=glob.glob(pathtoImg)
-            if len(pathtoImg)!=0:
-                pathtoImg.sort(key=natural_sort_key)
-                pathtoImg=pathtoImg[-1]#if same date, keep most recent
-            else:#Should not append but...
-                pathtoImg=''
-            results.append((plate,date,well,pathtoImg))
+            if UNIQUE is True:
+                if str(plate+'_'+well) not in unique_report:
+                    unique_report.append(str(plate+'_'+well))
+                    if len(pathtoImg)!=0:
+                        pathtoImg.sort(key=natural_sort_key)
+                        pathtoImg=pathtoImg[-1]#if same date, keep most recent
+                    else:#Should not append but...
+                        pathtoImg=''
+                    results.append((plate,well,date,pathtoImg))
+            else:
+                if len(pathtoImg)!=0:
+                    pathtoImg.sort(key=natural_sort_key)
+                    pathtoImg=pathtoImg[-1]#if same date, keep most recent
+                else:#Should not append but...
+                    pathtoImg=''
+                results.append((plate,well,date,pathtoImg))
         else:
             continue
            
