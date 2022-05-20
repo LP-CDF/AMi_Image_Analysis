@@ -5,17 +5,17 @@ Created on Wed Jun 23 09:36:00 2021
 
 """
 
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "30-06-2021"
+__date__ = "20-05-2022"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
 from PyQt5 import QtCore, QtWidgets
 import os
 import re
-from PyQt5.QtGui import QFont, QPixmap
-from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem, QLabel, QFrame, QProgressDialog
+from PyQt5.QtGui import QFont, QPixmap, QIcon
+from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem, QProgressDialog
 from pathlib import Path
 from preferences import ClassificationColor
 from utils import ensure_directory, Ext
@@ -61,7 +61,8 @@ class Ui_Dialog(object):
 
 
 class Plate(QTableWidget):
-    def __init__(self, r, c, rootDir, date):
+    testSignal = QtCore.pyqtSignal()
+    def __init__(self, r, c, rootDir, date, files):
         super().__init__(r, c)
         self.dx = 120
         self.dy = 90
@@ -69,11 +70,15 @@ class Plate(QTableWidget):
         self.cols = ['1', '2', '3', '4', '5',
                      '6', '7', '8', '9', '10', '11', '12']
         self.wells = ['a', 'b', 'c']
+        self.files=files
         self.resizedpath = Path(rootDir).joinpath(
             "Image_Data", date, "Miniatures")
         ensure_directory(self.resizedpath)
         self.miniatures = [os.path.join(self.resizedpath, file) for file in os.listdir(
             self.resizedpath) if os.path.splitext(file)[1] in Ext]
+        self.CLICKED=None
+        self.RETURNPATH=None
+        self.testSignal.connect(self.returnpath)
 
     def well_to_coordinates(self, well):
         row = int(ord(well[0])) - 64
@@ -86,13 +91,17 @@ class Plate(QTableWidget):
             if self.subwell != "" and self.subwell in well[-1]:
                 (row, column) = self.well_to_coordinates(str(well))
                 item = self.cellWidget(row, column)
+                # item.setStyleSheet(
+                #     "color: %s;" % ClassificationColor[classifications[well]]["background"])
                 item.setStyleSheet(
-                    "color: %s;" % ClassificationColor[classifications[well]]["background"])
+                    "border :2px solid %s"% ClassificationColor[classifications[well]]["background"])
             elif self.subwell == "" and well[-1] not in self.wells:
                 (row, column) = self.well_to_coordinates(str(well))
                 item = self.cellWidget(row, column)
+                # item.setStyleSheet(
+                #     "color: %s;" % ClassificationColor[classifications[well]]["background"])
                 item.setStyleSheet(
-                    "color: %s;" % ClassificationColor[classifications[well]]["background"])
+                    "border :2px solid %s"% ClassificationColor[classifications[well]]["background"])
             else:
                 continue
 
@@ -149,28 +158,43 @@ class Plate(QTableWidget):
 
             if self.subwell != "" and self.subwell in well[-1]:
                 (row, column) = self.well_to_coordinates(str(well))
-                label = QLabel()
-                pixmap = QPixmap(str(filepath))
-                label.setPixmap(pixmap)
-                label.setFrameShape(QFrame.Panel)
-                label.setLineWidth(2)
-                label.setStyleSheet(
-                    "color: %s;" % ClassificationColor[classifications[well]]["background"])
-                label.setAlignment(QtCore.Qt.AlignHCenter |
-                                   QtCore.Qt.AlignVCenter)
-                self.setCellWidget(row, column, label)
+                # label = QLabel()
+                # pixmap = QPixmap(str(filepath))
+                # label.setPixmap(pixmap)
+                # label.setFrameShape(QFrame.Panel)
+                # label.setLineWidth(2)
+                # label.setStyleSheet(
+                #     "color: %s;" % ClassificationColor[classifications[well]]["background"])
+                # label.setAlignment(QtCore.Qt.AlignHCenter |
+                #                    QtCore.Qt.AlignVCenter)
+                # self.setCellWidget(row, column, label)
+                
+                button=QtWidgets.QPushButton()
+                button.clicked.connect(self.clickme)
+                button.setIcon(QIcon(str(filepath)))
+                button.setIconSize(QtCore.QSize(self.dx-6,self.dy-6))
+                button.setStyleSheet("border :2px solid %s"% 
+                                     ClassificationColor[classifications[well]]["background"])
+                self.setCellWidget(row, column, button)    
             elif self.subwell == "" and well[-1] not in self.wells:
                 (row, column) = self.well_to_coordinates(str(well))
-                label = QLabel()
-                pixmap = QPixmap(str(filepath))
-                label.setPixmap(pixmap)
-                label.setFrameShape(QFrame.Panel)
-                label.setLineWidth(2)
-                label.setStyleSheet(
-                    "color: %s;" % ClassificationColor[classifications[well]]["background"])
-                label.setAlignment(QtCore.Qt.AlignHCenter |
-                                   QtCore.Qt.AlignVCenter)
-                self.setCellWidget(row, column, label)
+                # label = QLabel()
+                # pixmap = QPixmap(str(filepath))
+                # label.setPixmap(pixmap)
+                # label.setFrameShape(QFrame.Panel)
+                # label.setLineWidth(2)
+                # label.setStyleSheet(
+                #     "color: %s;" % ClassificationColor[classifications[well]]["background"])
+                # label.setAlignment(QtCore.Qt.AlignHCenter |
+                #                     QtCore.Qt.AlignVCenter)
+                # self.setCellWidget(row, column, label)
+                button=QtWidgets.QPushButton()
+                button.clicked.connect(self.clickme)
+                button.setIcon(QIcon(str(filepath)))
+                button.setIconSize(QtCore.QSize(self.dx-6,self.dy-6))
+                button.setStyleSheet("border :2px solid %s"% 
+                                     ClassificationColor[classifications[well]]["background"])
+                self.setCellWidget(row, column, button)    
             else:
                 continue
             self.horizontalHeader().setDefaultSectionSize(self.dx)
@@ -178,7 +202,22 @@ class Plate(QTableWidget):
             self.horizontalHeader().resizeSection(0, 50)
             self.verticalHeader().resizeSection(0, 50)
 
+    def clickme(self):
+        '''test'''
+        self.CLICKED='%s%s%s'%(self.rows[self.currentRow()-1],
+                       self.cols[self.currentColumn()-1],
+                       self.subwell)
+        # print("row: ", self.currentRow(), "column: ", self.currentColumn(),
+        #       "well: %s" %self.CLICKED)
+        self.testSignal.emit()
+    
+    def returnpath(self):
+        '''returns the tuple (well,path) to clicked well as str'''
+        # print("Signal emitted %s"%self.CLICKED)
+        search = list(filter(lambda i: self.CLICKED in i, self.files))
+        self.RETURNPATH=str(search[0])
 
+        
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)

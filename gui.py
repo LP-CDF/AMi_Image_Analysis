@@ -687,7 +687,7 @@ class Ui_MainWindow(object):
         self.actionautoMARCO_subwell_c.setText(_translate("MainWindow", "autoMARCO subwell c"))
         self.actionautoMARCO_no_subwell.setText(_translate("MainWindow", "autoMARCO no subwell"))
         self.actionAutoCrop.setText(_translate("MainWindow", "AutoCrop"))
-        self.actionAutoCrop.setShortcut(_translate("MainWindow", "Shift+C"))
+        self.actionAutoCrop.setShortcut(_translate("MainWindow", "Shift+K"))
         self.actionAutoMerge.setText(_translate("MainWindow", "AutoMerge"))
         self.actionAutoMerge.setShortcut(_translate("MainWindow", "Shift+M"))
         self.actionMD_PGA.setText(_translate("MainWindow", "MD PGA"))

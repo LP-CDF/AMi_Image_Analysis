@@ -40,9 +40,9 @@ QtWidgets.QApplication.setAttribute(
 QtWidgets.QApplication.setAttribute(
     QtCore.Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
 
-__version__ = "1.2.4.1"
+__version__ = "1.2.4.2"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "09-09-2021"
+__date__ = "20-05-2022"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -430,7 +430,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
             self.PLATE_window[subwell].show()
         else:
             self.PLATE_window[subwell] = PlateOverview.Plate(
-                9, 13, self.rootDir, self.date)
+                9, 13, self.rootDir, self.date, self.files)
             self.PLATE_window[subwell].subwell = subwell
             self.PLATE_window[subwell].setWindowTitle(
                 f"Plate Overview: {self.plate} ({self.date}) | subwell {subwell}")
@@ -440,7 +440,48 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
                 """background-color: rgb(240,240,240)""")
             self.PLATE_window[subwell].resize(1520, 810)
             self.PLATE_window[subwell].show()
+            self.PLATE_window[subwell].testSignal.connect(lambda: self.ShowPlateSel(subwell))
         QtGui.QPixmapCache.clear()
+
+    def ShowPlateSel(self, subwell):
+        _well,_path=self.PLATE_window[subwell].CLICKED, self.PLATE_window[subwell].RETURNPATH
+        self.open_image(_path)
+        self.currentWell=_well
+        #Save Notes previous well before loading New notes
+        if self.previousWell is None:
+            self.previousWell = _well
+        else:
+            # print("\n\npreviousWell ", self.previousWell)
+            # print("currentWell ", self.currentWell)
+            if self.CheckForChanges(self.InitialClassif, self.classifications[self.previousWell],
+                                    self.InitialNotes, self.Notes_TextEdit.toPlainText(), self.previousWell) is True:
+                self.SaveDATA(self.previousWell)
+
+        #Load notes current wells
+        self.LoadNotes(self.rootDir, self.date, _well)
+        self.InitialNotes = self.Notes_TextEdit.toPlainText()
+        self.InitialClassif = self.classifications[_well]
+        #change Color previous well to "checked"
+        for widget_item in self.layout_widgets(self._lay):
+            widget = widget_item.widget()
+            previousButtonIndex = self._lay.getItemPosition(
+                self._lay.indexOf(widget))
+            if widget.text() == self.previousWell and self.previousWell != _well:
+                self.ChangeButtonColor(
+                    self._lay, previousButtonIndex, state="checked")
+        #Update self.previousWell
+        self.previousWell = _well
+
+        self.Set_ClassifButtonState(
+            self.Scoring_Layout, self.classifications[_well])
+        self.Load_Timeline(self.rootDir, self.imageDir, _well)
+        self.labelVisuClassif.setText(self.classifications[_well])
+        self.labelVisuClassif.setStyleSheet("""background-color:%s;
+                                            color:%s;"""
+                                            % (ClassificationColor[self.classifications[_well]]["background"],
+                                               ClassificationColor[self.classifications[_well]]["text"]))
+        self.ImageViewer.setStyleSheet("""border: 2px solid %s;""" % (
+            ClassificationColor[self.classifications[_well]]["background"]))        
 
     def show_Statistics(self):
         '''Calculate statistics on the plate'''
