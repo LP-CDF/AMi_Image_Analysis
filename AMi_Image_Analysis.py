@@ -444,6 +444,9 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         QtGui.QPixmapCache.clear()
 
     def ShowPlateSel(self, subwell):
+        '''Showing well selected in Plate Overview in the main window
+           A lot of the code below is duplicated from
+           function buttonClicked(self)'''
         _well,_path=self.PLATE_window[subwell].CLICKED, self.PLATE_window[subwell].RETURNPATH
         self.open_image(_path)
         self.currentWell=_well

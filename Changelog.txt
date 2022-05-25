@@ -1,3 +1,7 @@
+2022/05/20
+Clicking on a well in the Plate overview windows allows loading of the corresponding well in the mainframe (picture + notes + Timeline)
+modified a conflicting shortcut for autocrop (change from shift+C to shift+K)
+
 2021/09/28
 Added Docker build file and instructions
 
