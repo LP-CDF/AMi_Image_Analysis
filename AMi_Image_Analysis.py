@@ -467,11 +467,16 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         #change Color previous well to "checked"
         for widget_item in self.layout_widgets(self._lay):
             widget = widget_item.widget()
-            previousButtonIndex = self._lay.getItemPosition(
+            ButtonIndex = self._lay.getItemPosition(
                 self._lay.indexOf(widget))
             if widget.text() == self.previousWell and self.previousWell != _well:
                 self.ChangeButtonColor(
-                    self._lay, previousButtonIndex, state="checked")
+                    self._lay, ButtonIndex, state="checked")
+            #Change color of button after click
+            elif widget.text() == self.currentWell:
+                self.ChangeButtonColor(
+                    self._lay, ButtonIndex, state="active")
+                
         #Update self.previousWell
         self.previousWell = _well
 
