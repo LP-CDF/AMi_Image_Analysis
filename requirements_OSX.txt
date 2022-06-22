@@ -1,5 +1,5 @@
 fpdf==1.7.2
-numpy==1.17.4
+numpy==1.22.0
 tensorflow<2.0
 Pillow>=7.1.0
 PyQt5<5.15
