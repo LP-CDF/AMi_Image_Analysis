@@ -14,10 +14,15 @@ from pathlib import Path
 from subprocess import Popen, PIPE
 import sys
 from threading import Thread
-from urllib.parse import urlparse
-from urllib.request import urlretrieve
+import urllib.parse
+import urllib.request
 import venv
 
+#Minimal python version compatible with https://bootstrap.pypa.io/get-pip.py
+this_python = sys.version_info[:2]
+min_version = (3, 7)    #Need to be checked in file
+                        #https://bootstrap.pypa.io/get-pip.py
+                        #if error "python: No module named pip"
 
 class ExtendedEnvBuilder(venv.EnvBuilder):
     """
@@ -88,12 +93,29 @@ class ExtendedEnvBuilder(venv.EnvBuilder):
         stream.close()
 
     def install_script(self, context, name, url):
-        _, _, path, _, _, _ = urlparse(url)
+        _, _, path, _, _, _ = urllib.parse.urlparse(url)
         fn = os.path.split(path)[-1]
         binpath = context.bin_path
         distpath = os.path.join(binpath, fn)
+        
         # Download script into the virtual environment's binaries folder
-        urlretrieve(url, distpath)
+        urllib.request.urlretrieve(url, distpath)
+        with open(distpath) as f:
+            _lines=f.readlines()
+        # print(_lines)
+        for i in _lines:
+            if "min_version" in i:
+                min_version = i.split('=')[1]
+                min_version = tuple(int(ele) for ele in min_version.replace('(', '').replace(')', '').split(', '))
+                break
+        print(f"Python min_version= {min_version} for compatibility" )
+        if this_python < min_version:
+            print(f'''Python {this_python} too old
+                  you may need to edit
+                  min_version = (X, X) at the beginning of the Setup.py script.
+                  Install Aborted
+                  ''')
+            sys.exit()
         progress = self.progress
         if self.verbose:
             term = '\n'
@@ -122,13 +144,18 @@ class ExtendedEnvBuilder(venv.EnvBuilder):
         os.unlink(distpath)
 
     def install_pip(self, context):
+        global this_python,min_version
         """
         Install pip in the virtual environment.
 
         :param context: The information for the virtual environment
                         creation request being processed.
         """
-        url = 'https://bootstrap.pypa.io/get-pip.py'
+        if this_python < min_version:
+            url = 'https://bootstrap.pypa.io/pip/{}.{}/get-pip.py'.format(*this_python)
+        else:
+            url = 'https://bootstrap.pypa.io/get-pip.py'
+        # url = 'https://bootstrap.pypa.io/get-pip.py'
         self.install_script(context, 'pip', url)
 
     def install_dep(self, context):
@@ -171,10 +198,10 @@ class ExtendedEnvBuilder(venv.EnvBuilder):
             print("TESTING OPTIONS")
             Setup_bin_VENV = Path(filepath).joinpath("Setup_local.py")
             if self.noprojectID is True:
-                print("TESTING OPTIONS TRUE")
+                # print("TESTING OPTIONS TRUE")
                 subprocess.run([binpath, Setup_bin_VENV, "--no-ProjectID"])
             else:
-                print("TESTING OPTIONS FALSE")
+                # print("TESTING OPTIONS FALSE")
                 subprocess.run([binpath, Setup_bin_VENV])
 
 
@@ -284,7 +311,7 @@ if __name__ == '__main__':
            
               WARNING:
               Python version {sys.version} is more recent than the recommended version.
-              You will likely encounter setup issues.
+              You may encounter setup issues.
               If you don't want to use Tensorflow, this should be fine.
               
 #########################################################################################################            
