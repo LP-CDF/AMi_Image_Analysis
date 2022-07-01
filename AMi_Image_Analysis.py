@@ -21,7 +21,7 @@ from PyQt5.QtGui import QPixmap, QFont, QColor, QKeySequence
 from PyQt5.QtWidgets import (QTableWidgetItem, QFileDialog, QSplashScreen,
                              QMessageBox, QGridLayout, QStyleFactory,
                              QProgressDialog, QInputDialog, QLineEdit)
-from utils import ensure_directory, initProject, _RAWIMAGES, Ext
+from utils import ensure_directory, initProject, _RAWIMAGES, Ext,rows, cols, open_xml_2
 from shutil import copyfile
 import pdf_writer
 import HeatMap_Grid
@@ -32,6 +32,7 @@ from tools import Merge_Zstack
 import ReadScreen
 import ExternalViewer
 import preferences as pref
+import xml.etree.ElementTree as ET
 
 QtWidgets.QApplication.setAttribute(
     QtCore.Qt.AA_EnableHighDpiScaling, True)  # enable highdpi scaling
@@ -40,9 +41,9 @@ QtWidgets.QApplication.setAttribute(
 QtWidgets.QApplication.setAttribute(
     QtCore.Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
 
-__version__ = "1.2.4.2"
+__version__ = "1.2.4.3"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "20-05-2022"
+__date__ = "01-07-2022"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -89,6 +90,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.os = sys.platform  # Name of the OS
         self.files = []  # Full path of Z-stacked images
         self.well_images = []  # Only names of well images
+        self.reservoirs = []  # Only names of unique well
         self.directory = str
         self.rootDir = str  # Full path where folders at different times are
         self.imageDir = str  # Full path where images at a given time are
@@ -110,6 +112,8 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.TimelineInspector = None
         self.MARCO = None  # Automated_Marco Predictor object
         self.Predicter = None  # Automated_Marco predicter
+        self.DatabaseDict=dict()
+        self.currentScreen=None
 
         #If using the QGraphics view, use open_image
         #If not comment the next five lines and use
@@ -124,6 +128,13 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.MARCO_window = {}
         #To see all Plates windows create a dict subwell:object
         self.PLATE_window = {}
+        #Create a dict with all crystallization cocktails
+        self.CreateScreenDictDatabase()
+        
+        #Populate comboBoxScreen
+        self.comboBoxScreen.addItem(None)
+        for _key,_value in self.DatabaseDict.items():
+            self.comboBoxScreen.addItem(_key)
 
         self.initUI()
 
@@ -187,51 +198,53 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
 
         #Crystallization Screens
         self.actionMD_PGA.triggered.connect(
-            lambda: self.show_csvScreen("MD-PGA"))
+            lambda: self.show_xmlScreen("MD-PGA"))
         self.actionNextal_MbClassII_Suite.triggered.connect(
-            lambda: self.show_csvScreen("Nextal-MBClassII"))
+            lambda: self.show_xmlScreen("Nextal-MBClassII"))
         self.actionNeXtal_Ammonium_Sulfate_Suite.triggered.connect(
-            lambda: self.show_csvScreen("NeXtal-Ammonium_Sulfate_Suite"))
+            lambda: self.show_xmlScreen("NeXtal-Ammonium_Sulfate_Suite"))
         self.actionNextal_Classics_Suite.triggered.connect(
-            lambda: self.show_csvScreen("Nextal-Classics-Suite"))
+            lambda: self.show_xmlScreen("Nextal-Classics-Suite"))
         self.actionNextal_ClassicsII_Suite.triggered.connect(
-            lambda: self.show_csvScreen("Nextal-ClassicsII-Suite"))
+            lambda: self.show_xmlScreen("Nextal-ClassicsII-Suite"))
         self.actionNextal_PEGII_Suite.triggered.connect(
-            lambda: self.show_csvScreen("NeXtal-PEGs-II-Suite"))
+            lambda: self.show_xmlScreen("NeXtal-PEGs-II-Suite"))
         self.actionNeXtal_Protein_Complex_Suite.triggered.connect(
-            lambda: self.show_csvScreen("NeXtal-Protein-Complex-Suite"))
+            lambda: self.show_xmlScreen("NeXtal-Protein-Complex-Suite"))
         self.actionNeXtal_Nucleix_Suite.triggered.connect(
-            lambda: self.show_csvScreen("NeXtal-Nucleix-Suite"))
+            lambda: self.show_xmlScreen("NeXtal-Nucleix-Suite"))
         self.actionJena_JCSG_Plus_Plus.triggered.connect(
-            lambda: self.show_csvScreen("Jena-JCSG-Plus-Plus"))
+            lambda: self.show_xmlScreen("JBScreen-JCSG-Plus-Plus"))
         self.actionJBScreen_Classic_HTS_I.triggered.connect(
-            lambda: self.show_csvScreen("JBScreen_Classic_HTS_I"))
+            lambda: self.show_xmlScreen("JBScreen_Classic_HTS_I"))
         self.actionJBScreen_Classic_HTS_II.triggered.connect(
-            lambda: self.show_csvScreen("JBScreen_Classic_HTS_II"))
+            lambda: self.show_xmlScreen("JBScreen_Classic_HTS_II"))
         self.actionJBScreen_Classic_1_4.triggered.connect(
             lambda: self.show_csvScreen("JBScreen_Classic_1-4"))
         self.actionJBScreen_Classic_5_8.triggered.connect(
             lambda: self.show_csvScreen("JBScreen_Classic_5-8"))
         self.actionXP_Screen.triggered.connect(
-            lambda: self.show_xmlScreen("Jena-XP-Screen"))
+            lambda: self.show_xmlScreen("JBScreen-XP-Screen"))
         self.actionPi_PEG_HTS.triggered.connect(
-            lambda: self.show_csvScreen("Pi-PEG_HTS"))
+            lambda: self.show_xmlScreen("JBScreen_Pi-PEG_HTS"))
         self.action_Additive_screen_HT.triggered.connect(
-            lambda: self.show_csvScreen("HR-AdditiveScreen_HT"))
+            lambda: self.show_xmlScreen("HR-AdditiveScreen_HT"))
         self.actionPeg_Rx1Rx2.triggered.connect(
-            lambda: self.show_csvScreen("HR-PEGRx_HT_screen"))
+            lambda: self.show_xmlScreen("HR-PEGRx_HT_screen"))
         self.actionSaltRx.triggered.connect(
-            lambda: self.show_csvScreen("HR-SaltRx_HT_screen"))
+            lambda: self.show_xmlScreen("HR-SaltRx_HT_screen"))
         self.action_Cryo_HT.triggered.connect(
-            lambda: self.show_csvScreen("HR-Cryo_HT_screen"))
+            lambda: self.show_xmlScreen("HR-Cryo_HT_screen"))
         self.actionMD_PACT_Premier.triggered.connect(
-            lambda: self.show_csvScreen("MD_PACT_Premier"))
+            lambda: self.show_xmlScreen("MD_PACT_Premier"))
         self.actionNextal_JCSG_Plus.triggered.connect(
-            lambda: self.show_csvScreen("NeXtal-JCSG-Plus-Suite"))
+            lambda: self.show_xmlScreen("NeXtal-JCSG-Plus-Suite"))
         self.actionMD_MIDAS.triggered.connect(
-            lambda: self.show_csvScreen("MD_MIDAS"))
+            lambda: self.show_xmlScreen("MD_MIDAS"))
         self.actionMD_BCS_Screen.triggered.connect(
-            lambda: self.show_csvScreen("MD_BCS_Screen"))
+            lambda: self.show_xmlScreen("MD_BCS_Screen"))        
+        self.actionMD_MORPHEUS_Fusion.triggered.connect(
+            lambda: self.show_xmlScreen("MD_MORPHEUS_FUSION"))
         self.actionimport_RockMaker_XML.triggered.connect(self.openXMLDialog)
 
         self.actionQuit_2.triggered.connect(self.on_exit)
@@ -313,6 +326,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.pushButton_DisplayHeatMap.clicked.connect(self.show_HeatMap)
         self.pushButton_ExportToPDF.clicked.connect(self.export_pdf)
         self.pushButton_Evaluate.clicked.connect(self.annotateCurrent)
+        self.pushButton_CopyToNotes.clicked.connect(lambda: self.copytoNotes(self.currentScreen,self.currentWell))
 
         #Show shortcut in GUI for class selection
         self.label_ShortcutClear.setText(
@@ -325,9 +339,12 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
             "(%s)" % QKeySequence(pref.Shortcut.PhaseSep).toString())
         self.label_ShortcutOther.setText(
             "(%s)" % QKeySequence(pref.Shortcut.Other).toString())
+        
+        #Listen comboBoxScreen
+        self.comboBoxScreen.activated.connect(self.setScreen)
 
         self.show()
-
+                   
     def show_HeatMap(self):
         ''' Create window and map results on a grid'''
         self.heatmap_window = HeatMapGrid()
@@ -372,6 +389,27 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
             header = self.ScreenTable.horizontalHeader()
             header.setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
             self.ScreenTable.show()
+
+    def CreateScreenDictDatabase(self):
+        '''Create a dict of dict containing all screens and crystallization
+           conditions
+           only load .xml formatted screens'''
+        ScreenFile=ReadScreen.ScreenFile
+        
+        for _screen in ScreenFile.keys():
+            path=Path(self.app_path).joinpath("Screen_Database", ScreenFile[_screen])
+            if Path(path).suffix=='.xml':
+                self.DatabaseDict[_screen]=open_xml_2(str(path))
+        # for i,j in self.DatabaseDict.items(): print(i,j)
+
+    def FindCrystCocktail(self,screen,well):
+        '''find crystallization cocktail in database and return a list'''
+        if well[-1] in ['a', 'b', 'c']:
+            cocktail=self.DatabaseDict[screen][self.reservoirs.index(well[:-1])+1]
+        else:
+            cocktail=self.DatabaseDict[screen][self.reservoirs.index(well)+1]
+        # print("Crystallization condition: ", cocktail)   
+        return cocktail
 
     def show_autoMARCO(self, subwell):
         ''' Create window and map results on a grid'''
@@ -776,6 +814,8 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             self, "Open File", "", "XML Files (*.xml *.XML)", options=options)
         if fileName:
             self.show_xmlScreen(fileName)
+        #Import temporarily Screen into database
+        self.DatabaseDict[Path(fileName).stem]=open_xml_2(fileName)
 
     def openFileNameDialog(self):
         options = QFileDialog.Options()
@@ -829,10 +869,12 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         self.rootDir = None
         self.previousWell = None
         self.currentWell = None
+        self.currentScreen = None
         self.currentButtonIndex = None
         self.idx = None
         self.files.clear()
         self.well_images.clear()
+        self.reservoirs.clear()
         self.ClearLayout(self._lay)
         self.MARCO_window.clear()
         self.PLATE_window.clear()
@@ -840,6 +882,22 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         self.InitialClassif = None
         self.prepdate = "None"
         self.label_NDays.setText("Not available")
+
+    def createUniqueReservoirs(self, _list)->list:
+        '''Create list of unique reservoirs, input is list of well image names'''
+        if Path(_list[0]).stem[-1] in ['a', 'b', 'c']:
+            SUBWELL = True
+        else:
+            SUBWELL = False
+
+        if SUBWELL is True:
+            for _well in _list:
+                reservoir=Path(_well).stem[:-1]
+                if reservoir not in self.reservoirs:
+                    self.reservoirs.append(reservoir)
+        else:
+            self.reservoirs=[Path(_well).stem for _well in _list if Path(_well).stem not in self.reservoirs]
+        # print("self.reservoirs: ", self.reservoirs)
 
     def openDirDialog(self, dialog=True, directory=''):
         if dialog is True:
@@ -899,6 +957,9 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             well = os.path.splitext(i)[0]
             self.CheckClassificationAndNotes(self.rootDir, self.date, well)
 
+        #Create list of unique reservoirs
+        self.createUniqueReservoirs(self.well_images)
+        
         #line below to reset Filter to All
         self.radioButton_All.setChecked(True)
 
@@ -1107,7 +1168,9 @@ https://github.com/LP-CDF/AMi_Image_Analysis
                                                ClassificationColor[self.classifications[well]]["text"]))
         self.ImageViewer.setStyleSheet("""border: 2px solid %s;""" % (
             ClassificationColor[self.classifications[well]]["background"]))
-
+        if self.currentScreen is not None:
+            self.FindCrystCocktail(self.currentScreen,self.currentWell)
+            
     # def LoadWellImage(self,path):
     #     ''' '''
     #     QtGui.QPixmapCache.clear()
@@ -1116,6 +1179,21 @@ https://github.com/LP-CDF/AMi_Image_Analysis
     #     #resize pixmap to size of the QscrollArea Temporary?
     #     label.setPixmap(pixmap.scaled(860, 630, QtCore.Qt.KeepAspectRatio, QtCore.Qt.FastTransformation))
     #     self.ImageViewer.setWidget(label)
+
+    def setScreen(self):
+        self.currentScreen=self.comboBoxScreen.currentText()
+        if self.comboBoxScreen.currentText()=='':
+            self.currentScreen=None
+        # print("Current Screen: ", self.currentScreen)
+
+    def copytoNotes(self,screen,well):
+        if screen is None or well is None:
+            return
+        else:
+            cocktail=self.FindCrystCocktail(screen,well)
+        self.Notes_TextEdit.insertPlainText("\nCrystallization Mix:\n")
+        for _i in cocktail[1:]:
+            self.Notes_TextEdit.insertPlainText(_i+'\n')
 
     def open_image(self, path):
         '''based on https://vincent-vande-vyvre.developpez.com/tutoriels/pyqt/manipulation-images/'''

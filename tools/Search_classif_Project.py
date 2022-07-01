@@ -149,7 +149,7 @@ def main(args=None):
         else:
             continue
            
-    fields = ['Plate', 'Date', 'Well','Path to image']
+    fields = ['Plate', 'Well', 'Date', 'Path to image']
     fname='All_'+classif+'.csv'
     with open(fname, 'w') as f:
         write = csv.writer(f)

@@ -6,7 +6,7 @@ Created on Tue Jun 30 10:50:12 2020
 @author: ludovic
 """
 
-__date__ = "11-03-2021"
+__date__ = "24-06-2022"
 
 import os
 import os.path
@@ -102,7 +102,6 @@ class ExtendedEnvBuilder(venv.EnvBuilder):
         urllib.request.urlretrieve(url, distpath)
         with open(distpath) as f:
             _lines=f.readlines()
-        # print(_lines)
         for i in _lines:
             if "min_version" in i:
                 min_version = i.split('=')[1]

@@ -6,7 +6,7 @@ Created on Wed May 20 09:42:40 2020
 Adapted from https://gist.github.com/anonymous/1918b6fec0ab55ae681861e1e36ef754
 """
 
-__date__ = "21-06-2021"
+__date__ = "29-06-2022"
 
 import os, sys
 import csv
@@ -16,29 +16,30 @@ from utils import rows, cols
 
 from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
 
-ScreenFile={'MD_BCS_Screen':'Md1-105_BCS_Screen.csv',
-            'MD_MIDAS':'Md1-107_MIDASPlus.csv',
-            'MD_PACT_Premier':'Md1-36_PACT_Premier_HT.csv',
-            'MD-PGA':'Md1-51_pga_screen.csv',
-            'NeXtal-Ammonium_Sulfate_Suite':'NeXtal-AmSO4-Suite.csv',
-            'Nextal-MBClassII': 'NeXtal-MbClass-II-Suite.csv',
-            'Nextal-Classics-Suite': 'NeXtal-Classics-Suite.csv',
-            'Nextal-ClassicsII-Suite': 'NeXtal-ClassicsII-Suite.csv',
-            'NeXtal-PEGs-II-Suite':'NeXtal-PEGs-II-Suite.csv',
-            'NeXtal-Protein-Complex-Suite':'NeXtal-Protein-Complex-Suite.csv',
-            'NeXtal-Nucleix-Suite':'NeXtal-Nucleix-Suite.csv',
-            'NeXtal-JCSG-Plus-Suite':'NeXtal-JCSG-Plus-Suite.csv',
-            'Jena-JCSG-Plus-Plus':'Jena-JCSGPlusPlus.csv',
-            'Jena-XP-Screen':'CS-350.xml',
-            'JBScreen_Classic_HTS_I':'JBScreen_Classic_HTS_I.csv',
-            'JBScreen_Classic_HTS_II':'JBScreen_Classic_HTS_II.csv',
+ScreenFile={'MD_BCS_Screen':'Md1-105_BCS_Screen.xml',
+            'MD_MIDAS':'Md1-107_MIDASPlus.xml',
+            'MD_PACT_Premier':'Md1-36_PACT_Premier_HT.xml',
+            'MD-PGA':'Md1-51_pga_screen.xml',
+            'MD_MORPHEUS_FUSION':'Md1-129_Morpheus_Fusion.xml',
+            'NeXtal-Ammonium_Sulfate_Suite':'NeXtal-AmSO4-Suite.xml',
+            'Nextal-MBClassII': 'NeXtal-MbClass-II-Suite.xml',
+            'Nextal-Classics-Suite': 'NeXtal-Classics-Suite.xml',
+            'Nextal-ClassicsII-Suite': 'NeXtal-ClassicsII-Suite.xml',
+            'NeXtal-PEGs-II-Suite':'NeXtal-PEGs-II-Suite.xml',
+            'NeXtal-Protein-Complex-Suite':'NeXtal-Protein-Complex-Suite.xml',
+            'NeXtal-Nucleix-Suite':'NeXtal-Nucleix-Suite.xml',
+            'NeXtal-JCSG-Plus-Suite':'NeXtal-JCSG-Plus-Suite.xml',
+            'JBScreen-JCSG-Plus-Plus':'JBScreen-JCSGPlusPlus.xml',
+            'JBScreen-XP-Screen':'JBScreen_XP_screen.xml',
+            'JBScreen_Classic_HTS_I':'JBScreen_Classic_HTS_I.xml',
+            'JBScreen_Classic_HTS_II':'JBScreen_Classic_HTS_II.xml',
             'JBScreen_Classic_1-4':'JBScreen_Classic_1-4.csv',
             'JBScreen_Classic_5-8':'JBScreen_Classic_5-8.csv',
-            'Pi-PEG_HTS':'Jena-Pi-PEG_Screen_HTS.csv',
-            'HR-AdditiveScreen_HT':'HR-Additive_HT_screen.csv',
-            'HR-PEGRx_HT_screen':'HR-PEGRx_HT_screen.csv',
-            'HR-SaltRx_HT_screen':'HR-SaltRx_HT_screen.csv',
-            'HR-Cryo_HT_screen':'HR-Cryo_HT_screen.csv'}
+            'JBScreen_Pi-PEG_HTS':'JBScreen-Pi-PEG_Screen_HTS.xml',
+            'HR-AdditiveScreen_HT':'HR-Additive_HT_screen.xml',
+            'HR-PEGRx_HT_screen':'HR-PEGRx_HT_screen.xml',
+            'HR-SaltRx_HT_screen':'HR-SaltRx_HT_screen.xml',
+            'HR-Cryo_HT_screen':'HR-Cryo_HT_screen.xml'}
 
 class MyTable(QTableWidget):
     def __init__(self, r, c):
@@ -133,3 +134,4 @@ class MyTable(QTableWidget):
                     self.setItem(i-1, column, item)
         # else : return False
         del tree, root, my_screen, DictIng
+        
