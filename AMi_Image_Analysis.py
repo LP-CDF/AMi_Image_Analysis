@@ -21,7 +21,7 @@ from PyQt5.QtGui import QPixmap, QFont, QColor, QKeySequence
 from PyQt5.QtWidgets import (QTableWidgetItem, QFileDialog, QSplashScreen,
                              QMessageBox, QGridLayout, QStyleFactory,
                              QProgressDialog, QInputDialog, QLineEdit)
-from utils import ensure_directory, initProject, _RAWIMAGES, Ext,rows, cols, open_xml_2
+from utils import ensure_directory, initProject, _RAWIMAGES, Ext,rows, cols, open_XML
 from shutil import copyfile
 import pdf_writer
 import HeatMap_Grid
@@ -43,7 +43,7 @@ QtWidgets.QApplication.setAttribute(
 
 __version__ = "1.2.4.3"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "01-07-2022"
+__date__ = "04-07-2022"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -399,7 +399,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         for _screen in ScreenFile.keys():
             path=Path(self.app_path).joinpath("Screen_Database", ScreenFile[_screen])
             if Path(path).suffix=='.xml':
-                self.DatabaseDict[_screen]=open_xml_2(str(path))
+                self.DatabaseDict[_screen]=open_XML(str(path))
         # for i,j in self.DatabaseDict.items(): print(i,j)
 
     def FindCrystCocktail(self,screen,well):
@@ -485,49 +485,10 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         '''Showing well selected in Plate Overview in the main window
            A lot of the code below is duplicated from
            function buttonClicked(self)'''
-        _well,_path=self.PLATE_window[subwell].CLICKED, self.PLATE_window[subwell].RETURNPATH
-        self.open_image(_path)
-        self.currentWell=_well
-        #Save Notes previous well before loading New notes
-        if self.previousWell is None:
-            self.previousWell = _well
-        else:
-            # print("\n\npreviousWell ", self.previousWell)
-            # print("currentWell ", self.currentWell)
-            if self.CheckForChanges(self.InitialClassif, self.classifications[self.previousWell],
-                                    self.InitialNotes, self.Notes_TextEdit.toPlainText(), self.previousWell) is True:
-                self.SaveDATA(self.previousWell)
-
-        #Load notes current wells
-        self.LoadNotes(self.rootDir, self.date, _well)
-        self.InitialNotes = self.Notes_TextEdit.toPlainText()
-        self.InitialClassif = self.classifications[_well]
-        #change Color previous well to "checked"
-        for widget_item in self.layout_widgets(self._lay):
-            widget = widget_item.widget()
-            ButtonIndex = self._lay.getItemPosition(
-                self._lay.indexOf(widget))
-            if widget.text() == self.previousWell and self.previousWell != _well:
-                self.ChangeButtonColor(
-                    self._lay, ButtonIndex, state="checked")
-            #Change color of button after click
-            elif widget.text() == self.currentWell:
-                self.ChangeButtonColor(
-                    self._lay, ButtonIndex, state="active")
-                
-        #Update self.previousWell
-        self.previousWell = _well
-
-        self.Set_ClassifButtonState(
-            self.Scoring_Layout, self.classifications[_well])
-        self.Load_Timeline(self.rootDir, self.imageDir, _well)
-        self.labelVisuClassif.setText(self.classifications[_well])
-        self.labelVisuClassif.setStyleSheet("""background-color:%s;
-                                            color:%s;"""
-                                            % (ClassificationColor[self.classifications[_well]]["background"],
-                                               ClassificationColor[self.classifications[_well]]["text"]))
-        self.ImageViewer.setStyleSheet("""border: 2px solid %s;""" % (
-            ClassificationColor[self.classifications[_well]]["background"]))        
+        well,path=self.PLATE_window[subwell].CLICKED, self.PLATE_window[subwell].RETURNPATH
+        self.open_image(path)
+        self.currentWell=well
+        self.dothings(well)    
 
     def show_Statistics(self):
         '''Calculate statistics on the plate'''
@@ -815,7 +776,9 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         if fileName:
             self.show_xmlScreen(fileName)
         #Import temporarily Screen into database
-        self.DatabaseDict[Path(fileName).stem]=open_xml_2(fileName)
+        self.DatabaseDict[Path(fileName).stem]=open_XML(fileName)
+        #Update comboBoxScreen List
+        self.comboBoxScreen.addItem(Path(fileName).stem)
 
     def openFileNameDialog(self):
         options = QFileDialog.Options()
@@ -870,6 +833,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         self.previousWell = None
         self.currentWell = None
         self.currentScreen = None
+        self.comboBoxScreen.setCurrentIndex(0)
         self.currentButtonIndex = None
         self.idx = None
         self.files.clear()
@@ -1116,22 +1080,9 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         else:
             return False
 
-    def buttonClicked(self):
-        button = self.sender()
-        self.idx = self._lay.indexOf(button)
-        # getItemPosition(int index, int *row, int *column, int *rowSpan, int *columnSpan)
-        location = self._lay.getItemPosition(self.idx)
-        self.currentButtonIndex = location
-        # print("Button", button, "at row/col", location[:2])
-
-        well = button.text()
-        self.currentWell = well
-
-        path = self.buildWellImagePath(self.imageDir, well, self.well_images)
-        self.open_image(path)
-        #Change color of button after click
-        self.ChangeButtonColor(
-            self._lay, self.currentButtonIndex, state="active")
+    def dothings(self,well):
+        '''do many things when button is clicked
+           save previous notes, load notes, GUI update...'''
 
         #Save Notes previous well before loading New notes
         if self.previousWell is None:
@@ -1142,7 +1093,11 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             if self.CheckForChanges(self.InitialClassif, self.classifications[self.previousWell],
                                     self.InitialNotes, self.Notes_TextEdit.toPlainText(), self.previousWell) is True:
                 self.SaveDATA(self.previousWell)
-
+                
+        # #Change color of button after click
+        # self.ChangeButtonColor(
+        #     self._lay, self.currentButtonIndex, state="active")
+        
         #Load notes current wells
         self.LoadNotes(self.rootDir, self.date, well)
         self.InitialNotes = self.Notes_TextEdit.toPlainText()
@@ -1150,11 +1105,15 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         #change Color previous well to "checked"
         for widget_item in self.layout_widgets(self._lay):
             widget = widget_item.widget()
-            previousButtonIndex = self._lay.getItemPosition(
+            ButtonIndex = self._lay.getItemPosition(
                 self._lay.indexOf(widget))
             if widget.text() == self.previousWell and self.previousWell != well:
                 self.ChangeButtonColor(
-                    self._lay, previousButtonIndex, state="checked")
+                    self._lay, ButtonIndex, state="checked")
+            #Change color of button after click
+            elif widget.text() == self.currentWell:
+                self.ChangeButtonColor(
+                    self._lay, ButtonIndex, state="active")
         #Update self.previousWell
         self.previousWell = well
 
@@ -1170,6 +1129,22 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             ClassificationColor[self.classifications[well]]["background"]))
         if self.currentScreen is not None:
             self.FindCrystCocktail(self.currentScreen,self.currentWell)
+
+    def buttonClicked(self):
+        button = self.sender()
+        self.idx = self._lay.indexOf(button)
+        # getItemPosition(int index, int *row, int *column, int *rowSpan, int *columnSpan)
+        location = self._lay.getItemPosition(self.idx)
+        self.currentButtonIndex = location
+        # print("Button", button, "at row/col", location[:2])
+
+        well = button.text()
+        self.currentWell = well
+
+        path = self.buildWellImagePath(self.imageDir, well, self.well_images)
+        self.open_image(path)
+        #do many things
+        self.dothings(well)
             
     # def LoadWellImage(self,path):
     #     ''' '''
@@ -1456,7 +1431,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
                 button = QtWidgets.QPushButton()
                 icon = QtGui.QIcon(name)
                 button.setIcon(icon)
-                button.setIconSize(QtCore.QSize(300, 230))
+                button.setIconSize(QtCore.QSize(250, 188))
                 tag = os.path.basename(date)  # .split('_')[0]
                 # button.setText(tag)
                 button.clicked.connect(lambda: self.Open_Timeline(well))

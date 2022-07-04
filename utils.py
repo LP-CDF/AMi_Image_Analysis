@@ -21,8 +21,8 @@ def ensure_directory(file_path):
         try: file_path.mkdir()
         except Exception as err: return err
 
-def open_xml_2(_file)->str:
-    '''Read a RockMaker or Dragonfly XML, _file as str, checks if Screen is
+def open_XML(_file)->str:
+    '''Read a RockMaker or Dragonfly XML, _file is  a file path as str, checks if Screen is
     already in database
     _screen is either a file or a screen name in ScreenFile'''
   

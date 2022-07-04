@@ -6,13 +6,12 @@ Created on Wed May 20 09:42:40 2020
 Adapted from https://gist.github.com/anonymous/1918b6fec0ab55ae681861e1e36ef754
 """
 
-__date__ = "29-06-2022"
+__date__ = "04-07-2022"
 
 import os, sys
 import csv
-import xml.etree.ElementTree as ET
 from pathlib import Path
-from utils import rows, cols
+from utils import rows, cols, open_XML
 
 from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
 
@@ -53,9 +52,9 @@ class MyTable(QTableWidget):
         
         if Path(path).is_file():
             with open(path, newline='') as csv_file:
-                my_screen = csv.reader(csv_file, delimiter=',', quotechar='"')
+                screen = csv.reader(csv_file, delimiter=',', quotechar='"')
                 self.setRowCount(0); self.setColumnCount(10)
-                for row_data in my_screen:
+                for row_data in screen:
                     row = self.rowCount()
                     self.insertRow(row)
                     if len(row_data) > 10:
@@ -63,7 +62,7 @@ class MyTable(QTableWidget):
                     for column, stuff in enumerate(row_data):
                         item = QTableWidgetItem(stuff)
                         self.setItem(row, column, item)
-            del my_screen
+            del screen
         else : return False
 
 
@@ -78,60 +77,16 @@ class MyTable(QTableWidget):
         else:
             path=Path(_screen)
         
-        if Path(path).is_file():
-            tree = ET.parse(path)
-            root = tree.getroot()
-            #Create Dictionnary of localID: ingredient name    
-            DictIng={}
-            for chemical in root.iter('ingredients'):
-                for ingredient in chemical.iter('ingredient'):
-                    localID=[]
-                    for stock in ingredient.iter('stock'):
-                        DictIng[stock.find('localID').text]= {'name':str(ingredient.find('name').text),'units':str(stock.find('units').text)}
-        else:
-            return False
-
-        subsections=("concentration","pH") #subsections of interest
-        
-        #Check number of conditions
-        count=0
-        for conditions in root.iter('condition'):count+=1
-        if count==96: lastcol,lastrow="12","H"
-        elif count==48: lastcol,lastrow="6","H"
-        elif count==24: lastcol,lastrow="6","D"
-        else: count=False #Plate configuration not implemented
-        if count!=False:
-            total_wells = [row + str(col) for row in rows if rows.index(row)<=rows.index(lastrow) 
-                           for col in cols if cols.index(col)<=cols.index(lastcol)]
-
-        i=1; my_screen={}
-        for conditions in root.iter('conditions'):
-            for condition in conditions.iter('condition'):
-                temp=[]
-                if count!=False: temp.append(total_wells[i-1])
-                else:temp.append(i)
-                for ingredient in condition:
-                    content=DictIng[ingredient.find('stockLocalID').text]['name']
-                    for child in ingredient:
-                        # print(child.tag, child.attrib, child.text)
-                        if child.tag in subsections:
-                            if child.tag=='pH':
-                                content+=' '+child.tag+' '+child.text
-                            else:
-                                content+=' '+child.text+' '+DictIng[ingredient.find('stockLocalID').text]['units']
-                    temp.append(content)
-                my_screen[i]=temp; i+=1
-            # for i,j in my_screen.items(): print(i,j)
-                
-            self.setRowCount(0); self.setColumnCount(10)
-            for i,row_data in my_screen.items():
-                row = self.rowCount()
-                self.insertRow(row)
-                if len(row_data) > 10:
-                    self.setColumnCount(len(row_data))
-                for column, stuff in enumerate(row_data):
-                    item = QTableWidgetItem(str(stuff))
-                    self.setItem(i-1, column, item)
+        screen=open_XML(path)
+        self.setRowCount(0); self.setColumnCount(10)
+        for i,row_data in screen.items():
+            row = self.rowCount()
+            self.insertRow(row)
+            if len(row_data) > 10:
+                self.setColumnCount(len(row_data))
+            for column, stuff in enumerate(row_data):
+                item = QTableWidgetItem(str(stuff))
+                self.setItem(i-1, column, item)
         # else : return False
-        del tree, root, my_screen, DictIng
+        del screen
         
