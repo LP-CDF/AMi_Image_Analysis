@@ -70,7 +70,7 @@ The file "prep_date.txt" contains the preparation date as a single line with for
 The software was tested on:
 * linux CentOS 7 and python3 (v3.6.8 and v3.7.3))
 * Raspbian 10 (on a Pi 3B+, not recommended)
-* macOS HighSierra/Catalina/Big Sur
+* macOS HighSierra/Catalina/Big Sur/Monterey (up to python 3.7.13)
 
 Hopefully, it should work on other linux distributions, MacOS and Windows.
 You will need a screen with minimum resolution of **1920*1080**.

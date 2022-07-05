@@ -315,6 +315,12 @@ if __name__ == '__main__':
               
 #########################################################################################################            
               ''')
+    #Ask to STOP installation if python >= 3.8 (need <= 3.7.x for MARCO TF model)
+    val1=input("Do you want to proceed ? (Y(es) or N(o)) :")
+    if val1.lower() not in ['y', 'yes']:
+        print("Aborting \n")
+        sys.exit(RC)
+        
     try:
         main()
         RC = 0
