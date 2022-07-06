@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'DesignerFiles/mainwindow_01072022.ui'
+# Form implementation generated from reading ui file 'DesignerFiles/mainwindow_05072022.ui'
 #
 # Created by: PyQt5 UI code generator 5.12.1
 #
@@ -291,20 +291,20 @@ class Ui_MainWindow(object):
         self.groupBox.setTitle("")
         self.groupBox.setObjectName("groupBox")
         self.layoutWidget1 = QtWidgets.QWidget(self.groupBox)
-        self.layoutWidget1.setGeometry(QtCore.QRect(10, 10, 131, 178))
+        self.layoutWidget1.setGeometry(QtCore.QRect(10, 10, 133, 183))
         self.layoutWidget1.setObjectName("layoutWidget1")
         self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.layoutWidget1)
         self.verticalLayout_5.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_5.setObjectName("verticalLayout_5")
         self.comboBoxScreen = QtWidgets.QComboBox(self.layoutWidget1)
         font = QtGui.QFont()
-        font.setPointSize(8)
+        font.setPointSize(10)
         self.comboBoxScreen.setFont(font)
         self.comboBoxScreen.setObjectName("comboBoxScreen")
         self.verticalLayout_5.addWidget(self.comboBoxScreen)
         self.pushButton_CopyToNotes = QtWidgets.QPushButton(self.layoutWidget1)
         font = QtGui.QFont()
-        font.setPointSize(8)
+        font.setPointSize(11)
         self.pushButton_CopyToNotes.setFont(font)
         self.pushButton_CopyToNotes.setAcceptDrops(False)
         self.pushButton_CopyToNotes.setObjectName("pushButton_CopyToNotes")
@@ -656,7 +656,7 @@ class Ui_MainWindow(object):
         self.label_4.setText(_translate("MainWindow", "Drop Classification"))
         self.label_Timeline.setText(_translate("MainWindow", "Timeline for well :"))
         self.label_CurrentWell.setText(_translate("MainWindow", "------"))
-        self.pushButton_CopyToNotes.setText(_translate("MainWindow", "Copy cocktail to Notes"))
+        self.pushButton_CopyToNotes.setText(_translate("MainWindow", "Copy to Notes"))
         self.pushButton_DisplayHeatMap.setText(_translate("MainWindow", "Display Heat Map"))
         self.pushButton_ExportToPDF.setText(_translate("MainWindow", "Create Report\n"
 "for Well"))

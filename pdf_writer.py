@@ -11,7 +11,7 @@ and adapted for TIFF handling by L.P.
 2019
 '''
 
-__date__ = "04-02-2020"
+__date__ = "06-07-2022"
 
 class PDF(fpdf.FPDF):
 
@@ -23,16 +23,16 @@ class PDF(fpdf.FPDF):
         # position logo on the right
         #self.cell(80)
 
-        self.set_font("Arial", size=16)
+        self.set_font("Arial", size=14)
 
         date = datetime.date.today()
-        self.cell(0, 10, str(date), align="R", ln=1)
+        self.cell(0, 6, str(date), align="R", ln=1)
 
         # set the font for the header, B=Bold
-        self.set_font("Arial", style="B", size=24)
+        self.set_font("Arial", style="B", size=20)
 
         # page title
-        self.cell(0, 30, "Crystallography Report", border=0, ln=0, align="C")
+        self.cell(0, 30, "Crystallization Report", border=0, ln=0, align="C")
 
         # insert a line break of 20 pixels
         self.ln(20)
@@ -84,51 +84,51 @@ def create_pdf(_list):
         rgb_img.save(path + ".jpeg",'jpeg')
         well_image=path + ".jpeg"
         TIFFFILE=True
-    pdf = PDF()
+    pdf = PDF('P','mm','A4')
     pdf.alias_nb_pages()
     pdf.add_page()
     pdf.set_font("Arial", size=14)
 
     pdf.cell(0, 15, "Well: " + well, align="C", ln=1)
 
-    pdf.image(well_image, 30, 55, w=153, h=115)
+    pdf.image(well_image, 52, 50, w=105, h=80)
 
-    pdf.ln(130)
+    pdf.ln(90)
 
-    pdf.set_font("Arial", style="B", size=14)
+    pdf.set_font("Arial", style="B", size=12)
     pdf.cell(50, 0, "Project name: ", align="R", ln=0)
 
-    pdf.set_font("Arial", size=14)
+    pdf.set_font("Arial", size=12)
     pdf.cell(0, 0, project_name, align="L", ln=1)
 
-    pdf.set_font("Arial", style="B", size=14)
+    pdf.set_font("Arial", style="B", size=12)
     pdf.cell(50, 18, "Target name: ", align="R", ln=0)
 
-    pdf.set_font("Arial", size=14)
+    pdf.set_font("Arial", size=12)
     pdf.cell(0, 18, target_name, align="L", ln=1)
 
-    pdf.set_font("Arial", style="B", size=14)
+    pdf.set_font("Arial", style="B", size=12)
     pdf.cell(50, 0, "Plate name: ", align="R", ln=0)
 
-    pdf.set_font("Arial", size=14)
+    pdf.set_font("Arial", size=12)
     pdf.cell(0, 0, plate_name, align="L", ln=1)
 
-    pdf.set_font("Arial", style="B", size=14)
+    pdf.set_font("Arial", style="B", size=12)
     pdf.cell(50, 18, "Date of image: ", align="R", ln=0)
 
-    pdf.set_font("Arial", size=14)
+    pdf.set_font("Arial", size=12)
     if prepdate=="Not available":
         pdf.cell(0, 18, "%s-%s-%s (Preparation date: %s)"%(date[0:4], date[4:6], date[6:], prepdate), align="L", ln=1)
     else:
         pdf.cell(0, 18, "%s-%s-%s (Preparation date: %s, Number of days: %s)"%(date[0:4], date[4:6], date[6:], prepdate, delta.days), align="L", ln=1)
 
-    pdf.ln(10)
+    pdf.ln(2)
 
-    pdf.set_font("Arial", size=14, style="B")
+    pdf.set_font("Arial", size=12, style="B")
     pdf.cell(50, 0, "Notes: ", align="R", ln=0)
 
     pdf.set_font("Arial", size=10)
-    pdf.multi_cell(120, 8, notes, 'J')
+    pdf.multi_cell(120, 5, notes, 'J')
 
     pdf.output(outputpath)
     
