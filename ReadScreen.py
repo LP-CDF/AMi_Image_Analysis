@@ -11,7 +11,7 @@ __date__ = "04-07-2022"
 import os, sys
 import csv
 from pathlib import Path
-from utils import rows, cols, open_XML
+from utils import open_XML
 
 from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
 
@@ -49,7 +49,7 @@ class MyTable(QTableWidget):
     def open_sheet(self, Screen):
         # app_path=os.path.abspath(os.path.dirname(sys.argv[0]))
         path=Path(self.app_path).joinpath("Screen_Database", ScreenFile[Screen])
-        
+
         if Path(path).is_file():
             with open(path, newline='') as csv_file:
                 screen = csv.reader(csv_file, delimiter=',', quotechar='"')
@@ -72,11 +72,11 @@ class MyTable(QTableWidget):
         _screen is either a file or a screen name in ScreenFile'''
 
         #checking if _file is in database meaning XML is loaded from a self.action in GUI
-        if _screen in ScreenFile.keys(): 
+        if _screen in ScreenFile.keys():
             path=Path(self.app_path).joinpath("Screen_Database", ScreenFile[_screen])
         else:
             path=Path(_screen)
-        
+
         screen=open_XML(path)
         self.setRowCount(0); self.setColumnCount(10)
         for i,row_data in screen.items():
@@ -87,6 +87,6 @@ class MyTable(QTableWidget):
             for column, stuff in enumerate(row_data):
                 item = QTableWidgetItem(str(stuff))
                 self.setItem(i-1, column, item)
-        # else : return False
-        del screen
+        return screen
+        # del screen
         

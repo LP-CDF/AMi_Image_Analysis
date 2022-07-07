@@ -32,7 +32,6 @@ from tools import Merge_Zstack
 import ReadScreen
 import ExternalViewer
 import preferences as pref
-import xml.etree.ElementTree as ET
 
 QtWidgets.QApplication.setAttribute(
     QtCore.Qt.AA_EnableHighDpiScaling, True)  # enable highdpi scaling
@@ -43,7 +42,7 @@ QtWidgets.QApplication.setAttribute(
 
 __version__ = "1.2.4.3"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "04-07-2022"
+__date__ = "06-07-2022"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -69,7 +68,7 @@ licence: %s
 
 class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
-        super(ViewerModule, self).__init__(parent)
+        super().__init__(parent)
         self.app_path = os.path.abspath(os.path.dirname(sys.argv[0]))
         # print("self.app_path ", self.app_path)
         self.SplashScreen(2000)
@@ -114,6 +113,12 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.Predicter = None  # Automated_Marco predicter
         self.DatabaseDict=dict()
         self.currentScreen=None
+        self.pixmap=None
+        self.ScreenTable=None
+        self.StatisticsWindow=None
+        self.idx=None
+        self.prep_date_path=None
+        self.current_image=None
 
         #If using the QGraphics view, use open_image
         #If not comment the next five lines and use
@@ -636,8 +641,8 @@ You can check progress in the terminal window.
         if self.os == 'darwin' and multiprocessing.get_start_method() != 'forkserver':
             multiprocessing.set_start_method('forkserver', force=True)
 
-        rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
-        cols = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+        # rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+        # cols = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
         wells = ['a', 'b', 'c']
         total_wells = [row + str(col) + str(well)
                        for row in rows for col in cols for well in wells]
@@ -961,7 +966,8 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         print("Report for well %s saved to %s" % (well, pdfpath))
         self.label_LastSaved.setText(f"### Report for {well} saved ###")
 
-    def buildWellImagePath(self, directory, well, wellimage_list):
+    @staticmethod
+    def buildWellImagePath(directory, well, wellimage_list):
         '''search for a substring, returns a list, use first element
         directory is a string'''
         search = list(filter(lambda i: well in i, wellimage_list))
@@ -1014,8 +1020,9 @@ https://github.com/LP-CDF/AMi_Image_Analysis
                 self.progressBar.setValue(vmax)
         #Needed here for shortcuts to run at first data load, why?
         self.SetAllVisible()
-
-    def add_pixmap(self, layout, pixmap, x, y):
+        
+    @staticmethod
+    def add_pixmap(layout, pixmap, x, y):
         if not pixmap.isNull():
             label = QtWidgets.QLabel(pixmap=pixmap)
             layout.addWidget(label, x, y, alignment=QtCore.Qt.AlignCenter)
@@ -1024,7 +1031,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
     #     if not pixmap.isNull():
     #         label = QtWidgets.QLabel(pixmap=pixmap)
     #         layout.addWidget(label, x, y, alignment=QtCore.Qt.AlignBottom | QtCore.Qt.AlignCenter)
-
+    
     def add_button(self, path, x, y):
         button = QtWidgets.QPushButton()
         button.setStyleSheet("""background-color: lightgray;""")
@@ -1033,7 +1040,8 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         button.clicked.connect(self.buttonClicked)
         self._lay.addWidget(button, x, y, alignment=QtCore.Qt.AlignLeft)
 
-    def extract_WellLabel(self, path):
+    @staticmethod
+    def extract_WellLabel(path):
         basename = os.path.basename(path)
         well = os.path.splitext(basename)[0]
         return well
@@ -1052,7 +1060,8 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         self._lay.addWidget(
             label, x, y, alignment=QtCore.Qt.AlignBottom | QtCore.Qt.AlignCenter)
 
-    def add_Label_Timeline(self, layout, text, x, y):
+    @staticmethod
+    def add_Label_Timeline(layout, text, x, y):
         '''text must be a string containing the directory path'''
         label = QtWidgets.QLabel()
         tag = os.path.basename(text)  # .split('_')[0]
@@ -1066,7 +1075,8 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         layout.addWidget(
             label, x, y, alignment=QtCore.Qt.AlignBottom | QtCore.Qt.AlignCenter)
 
-    def CheckForChanges(self, InitialClassif, CurrentClass, InitialNotes, CurrentNotes, well):
+    @staticmethod
+    def checkForChanges(InitialClassif, CurrentClass, InitialNotes, CurrentNotes, well):
         '''Check for modifications '''
         # print(f'''
         #       InitialClassif: {InitialClassif}
@@ -1090,7 +1100,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             #            print("currentWell ", self.currentWell)
             self.previousWell = well
         else:
-            if self.CheckForChanges(self.InitialClassif, self.classifications[self.previousWell],
+            if self.checkForChanges(self.InitialClassif, self.classifications[self.previousWell],
                                     self.InitialNotes, self.Notes_TextEdit.toPlainText(), self.previousWell) is True:
                 self.SaveDATA(self.previousWell)
                 
@@ -1163,12 +1173,12 @@ https://github.com/LP-CDF/AMi_Image_Analysis
 
     def copytoNotes(self,screen,well):
         if screen is None or well is None:
-            return
-        else:
-            cocktail=self.FindCrystCocktail(screen,well)
+            return False
+        cocktail=self.FindCrystCocktail(screen,well)
         self.Notes_TextEdit.insertPlainText("\nCrystallization Mix:\n")
         for _i in cocktail[1:]:
             self.Notes_TextEdit.insertPlainText(_i+'\n')
+        return True
 
     def open_image(self, path):
         '''based on https://vincent-vande-vyvre.developpez.com/tutoriels/pyqt/manipulation-images/'''
@@ -1203,22 +1213,24 @@ https://github.com/LP-CDF/AMi_Image_Analysis
                                                                         QtCore.Qt.FastTransformation))
         self.view_current()
 
-    def compare_most_recent(self, most_recent, date):
+    @staticmethod
+    def compare_most_recent(most_recent, date):
+        _output=None
         if int(most_recent[0:4]) > int(date[0:4]):
-            return most_recent
+            _output = most_recent
         elif int(most_recent[0:4]) < int(date[0:4]):
-            return date
+            _output = date
         # Reaching here means years are equal
         if int(most_recent[4:6]) > int(date[4:6]):
-            return most_recent
+            _output = most_recent
         elif int(most_recent[4:6]) < int(date[4:6]):
-            return date
+            _output = date
         # Reaching here means months are equal
         if int(most_recent[6:8]) > int(date[6:8]):
-            return most_recent
+            _output = most_recent
         elif int(most_recent[6:8]) < int(date[6:8]):
-            return date
-        return most_recent
+            _output = date
+        return _output
 
     def check_previous_notes(self, path, current_date):
         path = path.joinpath("Image_Data")
@@ -1360,10 +1372,12 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             else:
                 widget.setVisible(False)
 
-    def layout_widgets(self, layout):
+    @staticmethod
+    def layout_widgets(layout):
         return (layout.itemAt(i) for i in range(layout.count()))
 
-    def ClearLayout(self, layout):
+    @staticmethod
+    def ClearLayout(layout):
         '''Code commented was crashing in specific cases
         solution found at https://www.thetopsites.net/article/51691104.shtml'''
         # for widget_item in self.layout_widgets(layout):
@@ -1479,7 +1493,8 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         #Don't know if it is useful in case of long term use
         del imagedir, widget, date, path, parts, row, col, item, idx, location
 
-    def ActivateButton(self, layout, idx):
+    @staticmethod
+    def ActivateButton(layout, idx):
         '''Activate a button in a QgridLayout,
         idx is a tuple of the current Button'''
         if idx is None:
@@ -1703,7 +1718,8 @@ Click "OK" to accept prediction, "Cancel" to ignore''')
 
         del result
 
-    def on_exit(self):
+    @staticmethod
+    def on_exit():
         '''things to do before exiting'''
 #        self.SaveDATA(self.currentWell)
         app.closeAllWindows()
@@ -1795,7 +1811,10 @@ class HeatMapGrid(QtWidgets.QDialog, HeatMap_Grid.Ui_Dialog):
     ''' '''
 
     def __init__(self, parent=None):
-        super(HeatMapGrid, self).__init__(parent)
+        super().__init__(parent)
+        self.well_images=None
+        self.classifications=None
+        self.notes=None
         self.setupUi(self)
 
     def paintEvent(self, e):
@@ -1807,8 +1826,8 @@ class HeatMapGrid(QtWidgets.QDialog, HeatMap_Grid.Ui_Dialog):
     def paint_heat_diagram(self, qp):
         ''' adapted from https://github.com/dakota0064/Fluorescent_Robotic_Imager '''
 
-        rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
-        cols = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+        # rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+        # cols = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
         wells = ['a', 'b', 'c']
 
         total_wells = [row + str(col) + str(well)
@@ -1854,7 +1873,7 @@ class HeatMapGrid(QtWidgets.QDialog, HeatMap_Grid.Ui_Dialog):
             try:
                 classification = self.classifications[well]
             except:
-                classification == "Unknown"
+                classification = "Unknown"
             color = QtGui.QColor()
             if classification == "Unknown":
                 color = QtGui.QColor(ClassificationColor["Unknown"]["Qcolor"])
