@@ -7,7 +7,7 @@ Created on Wed Jun 23 09:36:00 2021
 
 __version__ = "0.0.2"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "20-05-2022"
+__date__ = "07-07-2022"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -18,15 +18,11 @@ from PyQt5.QtGui import QFont, QPixmap, QIcon
 from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem, QProgressDialog
 from pathlib import Path
 from preferences import ClassificationColor
-from utils import ensure_directory, Ext
-# from multiprocessing import Pool
-# from multiprocessing import cpu_count
+from utils import ensure_directory, Ext, rows, cols, wells
 
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
-        # Dialog.setObjectName("Dialog")
-        # Dialog.resize(1100, 760)
         Dialog.resize(1600, 900)
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
@@ -66,10 +62,9 @@ class Plate(QTableWidget):
         super().__init__(r, c)
         self.dx = 120
         self.dy = 90
-        self.rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
-        self.cols = ['1', '2', '3', '4', '5',
-                     '6', '7', '8', '9', '10', '11', '12']
-        self.wells = ['a', 'b', 'c']
+        self.rows = rows
+        self.cols = cols
+        self.wells = wells
         self.files=files
         self.resizedpath = Path(rootDir).joinpath(
             "Image_Data", date, "Miniatures")
@@ -91,15 +86,11 @@ class Plate(QTableWidget):
             if self.subwell != "" and self.subwell in well[-1]:
                 (row, column) = self.well_to_coordinates(str(well))
                 item = self.cellWidget(row, column)
-                # item.setStyleSheet(
-                #     "color: %s;" % ClassificationColor[classifications[well]]["background"])
                 item.setStyleSheet(
                     "border :2px solid %s"% ClassificationColor[classifications[well]]["background"])
             elif self.subwell == "" and well[-1] not in self.wells:
                 (row, column) = self.well_to_coordinates(str(well))
                 item = self.cellWidget(row, column)
-                # item.setStyleSheet(
-                #     "color: %s;" % ClassificationColor[classifications[well]]["background"])
                 item.setStyleSheet(
                     "border :2px solid %s"% ClassificationColor[classifications[well]]["background"])
             else:
@@ -122,9 +113,6 @@ class Plate(QTableWidget):
         progress.setWindowTitle("Plate Overview")
         progress.setMinimumWidth(300)
         progress.setModal(True)
-        # pool = Pool(cpu_count())
-        # jobs=[pool.apply_async(self.ScaleAndSavePixmap(path)) for path in files]
-        # pool.close(); pool.join()
 
         for path in files:
             progress.setValue(count+1)

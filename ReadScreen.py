@@ -6,7 +6,7 @@ Created on Wed May 20 09:42:40 2020
 Adapted from https://gist.github.com/anonymous/1918b6fec0ab55ae681861e1e36ef754
 """
 
-__date__ = "04-07-2022"
+__date__ = "07-07-2022"
 
 import os, sys
 import csv
@@ -20,8 +20,8 @@ ScreenFile={'MD_BCS_Screen':'Md1-105_BCS_Screen.xml',
             'MD_PACT_Premier':'Md1-36_PACT_Premier_HT.xml',
             'MD-PGA':'Md1-51_pga_screen.xml',
             'MD_MORPHEUS_FUSION':'Md1-129_Morpheus_Fusion.xml',
-            'NeXtal-Ammonium_Sulfate_Suite':'NeXtal-AmSO4-Suite.xml',
-            'Nextal-MBClassII': 'NeXtal-MbClass-II-Suite.xml',
+            'NeXtal-Ammonium_Sulfate-Suite':'NeXtal-AmSO4-Suite.xml',
+            'Nextal-MBClassII-Suite': 'NeXtal-MbClass-II-Suite.xml',
             'Nextal-Classics-Suite': 'NeXtal-Classics-Suite.xml',
             'Nextal-ClassicsII-Suite': 'NeXtal-ClassicsII-Suite.xml',
             'NeXtal-PEGs-II-Suite':'NeXtal-PEGs-II-Suite.xml',
@@ -46,11 +46,13 @@ class MyTable(QTableWidget):
         self.app_path=os.path.abspath(os.path.dirname(sys.argv[0]))
 
 
-    def open_sheet(self, Screen):
+    def open_sheet(self, Screen)->str:
+        '''open a csv file, create a Table and returns True or False'''
         # app_path=os.path.abspath(os.path.dirname(sys.argv[0]))
         path=Path(self.app_path).joinpath("Screen_Database", ScreenFile[Screen])
 
-        if Path(path).is_file():
+        _check=Path(path).is_file()
+        if _check is True:
             with open(path, newline='') as csv_file:
                 screen = csv.reader(csv_file, delimiter=',', quotechar='"')
                 self.setRowCount(0); self.setColumnCount(10)
@@ -62,8 +64,7 @@ class MyTable(QTableWidget):
                     for column, stuff in enumerate(row_data):
                         item = QTableWidgetItem(stuff)
                         self.setItem(row, column, item)
-            del screen
-        else : return False
+        return _check
 
 
     def open_xml(self, _screen)->str:

@@ -10,6 +10,7 @@ Ext=[".tif",".tiff",".TIFF",".jpg", ".jpeg",".JPG",".JPEG",".png",".PNG"]
 #Define rows and columns
 rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
 cols = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+wells = ['a', 'b', 'c']
 
 def ensure_directory(file_path):
     """Checks the given file path for a directory, and creates one if not already present.
@@ -24,7 +25,8 @@ def ensure_directory(file_path):
 def open_XML(_file)->str:
     '''Read a RockMaker or Dragonfly XML, _file is  a file path as str, checks if Screen is
     already in database
-    _screen is either a file or a screen name in ScreenFile'''
+    _screen is either a file or a screen name in ScreenFile
+    returns a dict or None'''
   
     if Path(_file).is_file():
         tree = ET.parse(_file)
@@ -33,11 +35,12 @@ def open_XML(_file)->str:
         DictIng={}
         for chemical in root.iter('ingredients'):
             for ingredient in chemical.iter('ingredient'):
-                localID=[]
+                # localID=[]
                 for stock in ingredient.iter('stock'):
                     DictIng[stock.find('localID').text]= {'name':str(ingredient.find('name').text),'units':str(stock.find('units').text)}
     else:
-        return False
+        print(f"WARNING: file {_file} not found")
+        return None
 
     subsections=("concentration","pH") #subsections of interest
     

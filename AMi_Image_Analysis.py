@@ -17,11 +17,12 @@ from pathlib import Path
 import multiprocessing
 import time
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtGui import QPixmap, QFont, QColor, QKeySequence
+from PyQt5.QtGui import QPixmap, QKeySequence
 from PyQt5.QtWidgets import (QTableWidgetItem, QFileDialog, QSplashScreen,
                              QMessageBox, QGridLayout, QStyleFactory,
                              QProgressDialog, QInputDialog, QLineEdit)
-from utils import ensure_directory, initProject, _RAWIMAGES, Ext,rows, cols, open_XML
+from utils import (ensure_directory, initProject, _RAWIMAGES, Ext,rows,
+                   cols, open_XML)
 from shutil import copyfile
 import pdf_writer
 import HeatMap_Grid
@@ -205,9 +206,9 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.actionMD_PGA.triggered.connect(
             lambda: self.show_xmlScreen("MD-PGA"))
         self.actionNextal_MbClassII_Suite.triggered.connect(
-            lambda: self.show_xmlScreen("Nextal-MBClassII"))
+            lambda: self.show_xmlScreen("Nextal-MBClassII-Suite"))
         self.actionNeXtal_Ammonium_Sulfate_Suite.triggered.connect(
-            lambda: self.show_xmlScreen("NeXtal-Ammonium_Sulfate_Suite"))
+            lambda: self.show_xmlScreen("NeXtal-Ammonium_Sulfate-Suite"))
         self.actionNextal_Classics_Suite.triggered.connect(
             lambda: self.show_xmlScreen("Nextal-Classics-Suite"))
         self.actionNextal_ClassicsII_Suite.triggered.connect(
@@ -352,7 +353,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
                    
     def show_HeatMap(self):
         ''' Create window and map results on a grid'''
-        self.heatmap_window = HeatMapGrid()
+        self.heatmap_window = HeatMap_Grid.HeatMapGrid()
         self.heatmap_window.setWindowTitle(
             "Heat Map: %s (%s)" % (self.plate, self.date))
         self.heatmap_window.well_images = self.well_images
@@ -372,7 +373,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         # self.ScreenTable.setColumnWidth(0, 100)
         self.ScreenTable.resize(1000, 500)
 
-        if data is not False:
+        if data is True:
             header = self.ScreenTable.horizontalHeader()
             header.setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
             self.ScreenTable.show()
@@ -385,7 +386,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.ScreenTable = ReadScreen.MyTable(10, 10)
         self.ScreenTable.setWindowTitle(path.stem)
         data = self.ScreenTable.open_xml(fileName)
-        if data is False:
+        if data is None:
             self.handle_error(
                 "WARNING: unexpected format for file %s" % fileName)
             return
@@ -1215,22 +1216,21 @@ https://github.com/LP-CDF/AMi_Image_Analysis
 
     @staticmethod
     def compare_most_recent(most_recent, date):
-        _output=None
         if int(most_recent[0:4]) > int(date[0:4]):
-            _output = most_recent
+            return most_recent
         elif int(most_recent[0:4]) < int(date[0:4]):
-            _output = date
+            return date
         # Reaching here means years are equal
         if int(most_recent[4:6]) > int(date[4:6]):
-            _output = most_recent
+            return most_recent
         elif int(most_recent[4:6]) < int(date[4:6]):
-            _output = date
+            return date
         # Reaching here means months are equal
         if int(most_recent[6:8]) > int(date[6:8]):
-            _output = most_recent
+            return most_recent
         elif int(most_recent[6:8]) < int(date[6:8]):
-            _output = date
-        return _output
+            return date
+        return most_recent
 
     def check_previous_notes(self, path, current_date):
         path = path.joinpath("Image_Data")
@@ -1805,102 +1805,6 @@ Click "OK" to accept prediction, "Cancel" to ignore''')
         except:
             self.handle_error(f"WARNING: {path} not found")
             return
-
-
-class HeatMapGrid(QtWidgets.QDialog, HeatMap_Grid.Ui_Dialog):
-    ''' '''
-
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.well_images=None
-        self.classifications=None
-        self.notes=None
-        self.setupUi(self)
-
-    def paintEvent(self, e):
-        qp = QtGui.QPainter()
-        qp.begin(self)
-        self.paint_heat_diagram(qp)
-        qp.end()
-
-    def paint_heat_diagram(self, qp):
-        ''' adapted from https://github.com/dakota0064/Fluorescent_Robotic_Imager '''
-
-        # rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
-        # cols = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
-        wells = ['a', 'b', 'c']
-
-        total_wells = [row + str(col) + str(well)
-                       for row in rows for col in cols for well in wells]
-
-        def well_to_coordinates(well):
-            row = int(ord(well[0])) - 65
-            column = int(('').join(re.findall(r'\d+', well))) - 1
-            try:
-                well[-1] in wells
-                subrow = wells.index(well[-1])
-            except:
-                subrow = 0
-            x1 = 80 + (column * 80)
-            dx = 20
-            y1 = (80 + row * 80) + (subrow * 20)
-            dy = 20
-            return (x1, y1, dx, dy, subrow)
-
-        for row in rows:
-            row_int = int(ord(row)) - 65
-            y1 = 80 + row_int * 80
-            qp.setFont(QFont("Courier New", 20))
-            # qp.drawText(40, y1,row)
-            qp.drawText(20, y1, 60, 60, QtCore.Qt.AlignCenter, row)
-
-        for col in cols:
-            col_int = int(col) - 1
-            x1 = 70 + (col_int * 80)
-            qp.setFont(QFont("Courier New", 20))
-            # qp.drawText(x1, 40, col)
-            qp.drawText(x1, 30, 40, 40, QtCore.Qt.AlignCenter, col)
-
-        for well in total_wells:
-            (x1, y1, dx, dy, subrow) = well_to_coordinates(well)
-            qp.setBrush(QColor(0, 0, 0))
-            qp.drawRect(x1, y1, dx, dy)
-
-        classification = str
-        for i in range(len(self.well_images)):
-            well = self.well_images[i].split(".")[0]
-            (x1, y1, dx, dy, subrow) = well_to_coordinates(well)
-            try:
-                classification = self.classifications[well]
-            except:
-                classification = "Unknown"
-            color = QtGui.QColor()
-            if classification == "Unknown":
-                color = QtGui.QColor(ClassificationColor["Unknown"]["Qcolor"])
-            elif classification == "Clear":
-                color = QtGui.QColor(ClassificationColor["Clear"]["Qcolor"])
-            elif classification == "Precipitate":
-                color = QtGui.QColor(
-                    ClassificationColor["Precipitate"]["Qcolor"])
-            elif classification == "Crystal":
-                color = QtGui.QColor(ClassificationColor["Crystal"]["Qcolor"])
-            elif classification == "PhaseSep":
-                color = QtGui.QColor(ClassificationColor["PhaseSep"]["Qcolor"])
-            elif classification == "Other":
-                color = QtGui.QColor(ClassificationColor["Other"]["Qcolor"])
-            qp.setBrush(color)
-            qp.drawRect(x1, y1, dx, dy)
-            if self.notes[well] is True:
-                qp.setBrush(QColor(0, 0, 0))
-                # qp.setPen(QtGui.QPen(QtCore.Qt.black, 2, QtCore.Qt.SolidLine))
-                qp.drawEllipse(x1+25, y1+6, 8, 8)  # 6=(dy-8)/2
-                # qp.setPen(QtGui.QPen(QtCore.Qt.black, 1, QtCore.Qt.SolidLine))
-            if well[-1] not in wells:
-                qp.drawText(x1, y1, dx, dy, QtCore.Qt.AlignCenter, '')
-            else:
-                qp.setFont(QFont("Courier New", 10))
-                qp.drawText(x1, y1, dx, dy,
-                            QtCore.Qt.AlignCenter, wells[subrow])
 
 
 if __name__ == "__main__":

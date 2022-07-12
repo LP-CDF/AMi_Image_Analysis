@@ -31,29 +31,25 @@ class Predictor():
     def __init__(self, parent=None):
         self.tensorflowOK = self.loadtensorflow()
 
-    def loadtensorflow(self):
+    @staticmethod
+    def loadtensorflow():
         '''check if tensorflow is available, checks version, must be below TF2'''
         try:
             import tensorflow as tf
-            self.tfversion = tf.__version__
-            if tf.__version__ <= '2.0.0':
-                return True
-            else:
-                return False
-        except:
+            return bool(tf.__version__ <= '2.0.0')
+        except ModuleNotFoundError:
+            print('import of Tensorflow failed!!!')
             return False
 
     def createpredicter(self):
-        if self.tensorflowOK is True:
-            import tensorflow as tf
-        else:
-            return
+        import tensorflow as tf
         app_path = os.path.abspath(os.path.dirname(sys.argv[0]))
         model_path = Path(app_path).joinpath("saved_model")
         predicter = tf.contrib.predictor.from_saved_model(str(model_path))
         return predicter
 
-    def convertclassification(self, entry) -> list:
+    @staticmethod
+    def convertclassification(entry) -> list:
         if entry[1] == b"Crystals":
             classification = "Crystal"
         elif entry[1] == b"Other":
@@ -130,15 +126,12 @@ class Predictor():
         del dictionary, MostProbable, logresult
 
     def single_predict(self, filepath, predicter):
-        '''predict only one image
-        TODO: update auto_MARCO.log'''
+        '''predict only one image'''
 
-        # logresult=[]
-
-        well = os.path.splitext(os.path.basename(filepath))[0]
+        # well = os.path.splitext(os.path.basename(filepath))[0]
         print("Processing File ", filepath)
-        file = open(filepath, "rb")
-        results = predicter({"image_bytes": [file.read()]})
+        with open(filepath, "rb") as file:
+            results = predicter({"image_bytes": [file.read()]})
 
         vals = results['scores'][0]
         classes = results['classes'][0]
