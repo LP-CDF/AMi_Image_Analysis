@@ -17,28 +17,29 @@ from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
 
 ScreenFile={'MD_BCS_Screen':'Md1-105_BCS_Screen.xml',
             'MD_MIDAS':'Md1-107_MIDASPlus.xml',
+            'MD_MORPHEUS_FUSION':'Md1-129_Morpheus_Fusion.xml',
             'MD_PACT_Premier':'Md1-36_PACT_Premier_HT.xml',
             'MD-PGA':'Md1-51_pga_screen.xml',
-            'MD_MORPHEUS_FUSION':'Md1-129_Morpheus_Fusion.xml',
             'NeXtal-Ammonium_Sulfate-Suite':'NeXtal-AmSO4-Suite.xml',
-            'Nextal-MBClassII-Suite': 'NeXtal-MbClass-II-Suite.xml',
             'Nextal-Classics-Suite': 'NeXtal-Classics-Suite.xml',
             'Nextal-ClassicsII-Suite': 'NeXtal-ClassicsII-Suite.xml',
+            'NeXtal-JCSG-Plus-Suite':'NeXtal-JCSG-Plus-Suite.xml',
+            'Nextal-MbClassII-Suite': 'NeXtal-MbClass-II-Suite.xml',
+            'NeXtal-Nucleix-Suite':'NeXtal-Nucleix-Suite.xml',
             'NeXtal-PEGs-II-Suite':'NeXtal-PEGs-II-Suite.xml',
             'NeXtal-Protein-Complex-Suite':'NeXtal-Protein-Complex-Suite.xml',
-            'NeXtal-Nucleix-Suite':'NeXtal-Nucleix-Suite.xml',
-            'NeXtal-JCSG-Plus-Suite':'NeXtal-JCSG-Plus-Suite.xml',
-            'JBScreen-JCSG-Plus-Plus':'JBScreen-JCSGPlusPlus.xml',
-            'JBScreen-XP-Screen':'JBScreen_XP_screen.xml',
             'JBScreen_Classic_HTS_I':'JBScreen_Classic_HTS_I.xml',
             'JBScreen_Classic_HTS_II':'JBScreen_Classic_HTS_II.xml',
             'JBScreen_Classic_1-4':'JBScreen_Classic_1-4.csv',
             'JBScreen_Classic_5-8':'JBScreen_Classic_5-8.csv',
+            'JBScreen-JCSG-Plus-Plus':'JBScreen-JCSGPlusPlus.xml',
             'JBScreen_Pi-PEG_HTS':'JBScreen-Pi-PEG_Screen_HTS.xml',
+            'JBScreen-XP-Screen':'JBScreen_XP_screen.xml',
             'HR-AdditiveScreen_HT':'HR-Additive_HT_screen.xml',
+            'HR-Cryo_HT_screen':'HR-Cryo_HT_screen.xml',
             'HR-PEGRx_HT_screen':'HR-PEGRx_HT_screen.xml',
-            'HR-SaltRx_HT_screen':'HR-SaltRx_HT_screen.xml',
-            'HR-Cryo_HT_screen':'HR-Cryo_HT_screen.xml'}
+            'HR-SaltRx_HT_screen':'HR-SaltRx_HT_screen.xml'
+            }
 
 class MyTable(QTableWidget):
     def __init__(self, r, c):

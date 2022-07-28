@@ -45,6 +45,7 @@ class HeatMapGrid(QtWidgets.QDialog, Ui_Dialog):
         super().__init__(parent)
         self.well_images=None
         self.classifications=None
+        self.score=None
         self.notes=None
         self.setupUi(self)
 
@@ -130,8 +131,15 @@ class HeatMapGrid(QtWidgets.QDialog, Ui_Dialog):
                 qp.drawText(x1, y1, dx, dy, QtCore.Qt.AlignCenter, '')
             else:
                 qp.setFont(QFont("Courier New", 10))
-                qp.drawText(x1, y1, dx, dy,
+                qp.drawText(x1-17, y1, dx, dy,
                             QtCore.Qt.AlignCenter, wells[subrow])
+            #for futur Human scoring
+            if self.score[well] is None:
+                qp.drawText(x1, y1, dx, dy,
+                            QtCore.Qt.AlignCenter, '')
+            else:
+                qp.drawText(x1, y1, dx, dy,
+                            QtCore.Qt.AlignCenter, self.score[well])
 
 if __name__ == "__main__":
     import sys

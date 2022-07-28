@@ -41,9 +41,9 @@ QtWidgets.QApplication.setAttribute(
 QtWidgets.QApplication.setAttribute(
     QtCore.Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
 
-__version__ = "1.2.4.3"
+__version__ = "1.2.4.4"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "06-07-2022"
+__date__ = "28-07-2022"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -100,6 +100,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.date = str  # Date of images
         self.prepdate = str  # Date of plate preparation
         self.classifications = {}  # Dictionnary in memory containing well:classif
+        self.scores = {} # Dictionnary in memory containing well:score
         self.WellHasNotes = {}  # Dictionnary in memory containing well:True/False
         self.previousWell = None
         self.currentWell = None
@@ -107,6 +108,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.VisiblesIdx = []  # list in memory with index of visible well widgets
         self.InitialNotes = None
         self.InitialClassif = None
+        self.InitialScore = None
         # Name of the directory containing individual Z-focus images
         self.rawimages = _RAWIMAGES
         self.TimelineInspector = None
@@ -137,10 +139,13 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         #Create a dict with all crystallization cocktails
         self.CreateScreenDictDatabase()
         
-        #Populate comboBoxScreen
+        #Populate comboBoxes
         self.comboBoxScreen.addItem(None)
         for _key,_value in self.DatabaseDict.items():
             self.comboBoxScreen.addItem(_key)
+        self.comboBoxScore.addItem(None)
+        for _i in range(1,11):
+            self.comboBoxScore.addItem(str(_i))
 
         self.initUI()
 
@@ -206,7 +211,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.actionMD_PGA.triggered.connect(
             lambda: self.show_xmlScreen("MD-PGA"))
         self.actionNextal_MbClassII_Suite.triggered.connect(
-            lambda: self.show_xmlScreen("Nextal-MBClassII-Suite"))
+            lambda: self.show_xmlScreen("Nextal-MbClassII-Suite"))
         self.actionNeXtal_Ammonium_Sulfate_Suite.triggered.connect(
             lambda: self.show_xmlScreen("NeXtal-Ammonium_Sulfate-Suite"))
         self.actionNextal_Classics_Suite.triggered.connect(
@@ -346,18 +351,23 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.label_ShortcutOther.setText(
             "(%s)" % QKeySequence(pref.Shortcut.Other).toString())
         
-        #Listen comboBoxScreen
+        #Listen comboBoxes
         self.comboBoxScreen.activated.connect(self.setScreen)
-
+        self.comboBoxScore.activated.connect(lambda: self.setScore(self.currentWell))
+        
         self.show()
                    
     def show_HeatMap(self):
         ''' Create window and map results on a grid'''
+        if len(self.classifications) == 0:
+            self.handle_error("No data yet!!!")
+            return False
         self.heatmap_window = HeatMap_Grid.HeatMapGrid()
         self.heatmap_window.setWindowTitle(
             "Heat Map: %s (%s)" % (self.plate, self.date))
         self.heatmap_window.well_images = self.well_images
         self.heatmap_window.classifications = self.classifications
+        self.heatmap_window.score = self.scores
         self.heatmap_window.notes = self.WellHasNotes
         self.heatmap_window.pushButton_ExportImage.clicked.connect(lambda: self.take_screenshot(
             self.heatmap_window, "HeatMap_Grid_%s_%s" % (self.plate, self.date)))
@@ -488,9 +498,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         QtGui.QPixmapCache.clear()
 
     def ShowPlateSel(self, subwell):
-        '''Showing well selected in Plate Overview in the main window
-           A lot of the code below is duplicated from
-           function buttonClicked(self)'''
+        '''Show well selected in Plate Overview in the main window'''
         well,path=self.PLATE_window[subwell].CLICKED, self.PLATE_window[subwell].RETURNPATH
         self.open_image(path)
         self.currentWell=well
@@ -501,7 +509,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         #Check data before going further
         if len(self.classifications) == 0:
             self.handle_error("No data yet!!!")
-            return
+            return False
 
         self.StatisticsWindow = QtWidgets.QDialog()
         ui = StatisticsDialog.Ui_Dialog()
@@ -569,9 +577,9 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.handle_error(
                     "openCV version %s not supported" % cv2.__version__)
                 return
-        except:
+        except ModuleNotFoundError:
             self.handle_error("module cv2 not found")
-            return
+            return False
 
         path = Path(self.imageDir).joinpath("cropped")
         _f = ensure_directory(path)
@@ -834,12 +842,14 @@ https://github.com/LP-CDF/AMi_Image_Analysis
     def Reset(self):
         '''reset file list and more when changing folder and reset layout grid'''
         self.classifications.clear()
+        self.scores.clear()
         self.WellHasNotes.clear()
         self.rootDir = None
         self.previousWell = None
         self.currentWell = None
         self.currentScreen = None
         self.comboBoxScreen.setCurrentIndex(0)
+        self.comboBoxScore.setCurrentIndex(0)
         self.currentButtonIndex = None
         self.idx = None
         self.files.clear()
@@ -850,6 +860,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         self.PLATE_window.clear()
         self.InitialNotes = None
         self.InitialClassif = None
+        self.InitialScore = None
         self.prepdate = "None"
         self.label_NDays.setText("Not available")
 
@@ -1077,7 +1088,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             label, x, y, alignment=QtCore.Qt.AlignBottom | QtCore.Qt.AlignCenter)
 
     @staticmethod
-    def checkForChanges(InitialClassif, CurrentClass, InitialNotes, CurrentNotes, well):
+    def checkForChanges(InitialClassif, CurrentClass, InitialScore, CurrentScore, InitialNotes, CurrentNotes, well):
         '''Check for modifications '''
         # print(f'''
         #       InitialClassif: {InitialClassif}
@@ -1086,7 +1097,11 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         #       CurrentNotes: {CurrentNotes}
         #       well: {well}
         #       ''')
-        if InitialClassif != CurrentClass or InitialNotes != CurrentNotes:
+        if InitialClassif != CurrentClass:
+            return True
+        elif InitialNotes != CurrentNotes:
+            return True
+        elif InitialScore != CurrentScore:
             return True
         else:
             return False
@@ -1101,8 +1116,13 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             #            print("currentWell ", self.currentWell)
             self.previousWell = well
         else:
-            if self.checkForChanges(self.InitialClassif, self.classifications[self.previousWell],
-                                    self.InitialNotes, self.Notes_TextEdit.toPlainText(), self.previousWell) is True:
+            if self.checkForChanges(self.InitialClassif,
+                                    self.classifications[self.previousWell],
+                                    self.InitialScore,
+                                    self.scores[self.previousWell],
+                                    self.InitialNotes,
+                                    self.Notes_TextEdit.toPlainText(),
+                                    self.previousWell) is True:
                 self.SaveDATA(self.previousWell)
                 
         # #Change color of button after click
@@ -1113,6 +1133,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         self.LoadNotes(self.rootDir, self.date, well)
         self.InitialNotes = self.Notes_TextEdit.toPlainText()
         self.InitialClassif = self.classifications[well]
+        self.InitialScore = self.scores[well]
         #change Color previous well to "checked"
         for widget_item in self.layout_widgets(self._lay):
             widget = widget_item.widget()
@@ -1140,6 +1161,10 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             ClassificationColor[self.classifications[well]]["background"]))
         if self.currentScreen is not None:
             self.FindCrystCocktail(self.currentScreen,self.currentWell)
+        if self.scores[self.currentWell] != None:
+            self.comboBoxScore.setCurrentIndex(int(self.scores[self.currentWell]))
+        else:
+            self.comboBoxScore.setCurrentIndex(0)
 
     def buttonClicked(self):
         button = self.sender()
@@ -1171,6 +1196,12 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         if self.comboBoxScreen.currentText()=='':
             self.currentScreen=None
         # print("Current Screen: ", self.currentScreen)
+    
+    def setScore(self, well):
+        self.scores[well]=self.comboBoxScore.currentText()
+        if self.comboBoxScore.currentText()=='':
+            self.scores[well]=None
+        print("self.scores[well]: ", self.scores[well])
 
     def copytoNotes(self,screen,well):
         if screen is None or well is None:
@@ -1292,7 +1323,8 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         Notes.append("Date:%s:\n" % self.date)
         Notes.append("\n")
         Notes.append("Classification:%s:\n" % self.classifications[well])
-        Notes.append("\n\n")
+        Notes.append("Human Score:%s:\n" % self.scores[well])
+        Notes.append("\n")
         Notes.append("Notes:\n")
         Notes.append("\n")
         Notes.append(text)
@@ -1315,18 +1347,26 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             with open(data_file, "r") as f:
                 content = f.readlines()
                 classifications = content[5].split(":")
-                self.AddtoClassificationDict(well, classifications[1])
+                score=content[6].split(":")
+                if score==['\n']:
+                    human_score=None
+                elif score[1] =='None':
+                    human_score=None
+                else:
+                    human_score=score[1]
+                self.AddtoClassificationDict(well, classifications[1], human_score)
                 if len(content[10:]) != 0:
                     self.WellHasNotes[well] = True
                 else:
                     self.WellHasNotes[well] = False
         else:
-            self.AddtoClassificationDict(well, "Unknown")
+            self.AddtoClassificationDict(well, "Unknown", None)
             self.WellHasNotes[well] = False
 
-    def AddtoClassificationDict(self, well, classification):
+    def AddtoClassificationDict(self, well, classification, score):
         '''Create a dictionnary with well and classification'''
         self.classifications[well] = classification
+        self.scores[well] = score
 
     def SetAllVisible(self):
         '''Specific to OSX Catalina due to crash when opening new dir
@@ -1399,7 +1439,9 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         #Extract non Qlabel widgets
         for widget_item in self.layout_widgets(layout):
             widget = widget_item.widget()
-            if isinstance(widget, QtWidgets.QLabel) is False:
+            # if isinstance(widget, QtWidgets.QLabel) is False and isinstance(widget, QtWidgets.QComboBox) is False:
+            #     widgetlist.append(widget)
+            if isinstance(widget, QtWidgets.QRadioButton) is True:
                 widgetlist.append(widget)
         #Reset Activation State first
         for widget in widgetlist:
@@ -1646,7 +1688,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         #Reset self.classifications NEED TO INFORM USER
         info = QMessageBox(self)
         info.setWindowTitle("Warning!")
-        info.setText("This will erase any previous classification and notes")
+        info.setText("This will erase any previous classification, score and notes")
         info.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
         retval = info.exec_()
 
@@ -1663,6 +1705,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
                 return
 
         self.classifications.clear()
+        self.scores.clear()
         self.Notes_TextEdit.clear()  # if not emptied, note is given to all wells
 
         logdir = Path(self.rootDir).joinpath("Image_Data", self.date)
@@ -1670,6 +1713,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
                            logdir, self.Predicter)
 
         for well, _classif in self.classifications.items():
+            self.scores[well]= None #as scores were cleared need to put None
             self.SaveDATA(well)
 
     def annotateCurrent(self):
@@ -1770,7 +1814,7 @@ Click "OK" to accept prediction, "Cancel" to ignore''')
         #If no data prevent crashing
         if len(self.classifications) == 0:
             self.handle_error("No data yet!!!")
-            return
+            return False
 
         filename = Path(self.rootDir).joinpath("Image_Data", "%s.jpg" % title)
         screen = QtWidgets.QApplication.primaryScreen()
