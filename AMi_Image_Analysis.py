@@ -1201,7 +1201,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         self.scores[well]=self.comboBoxScore.currentText()
         if self.comboBoxScore.currentText()=='':
             self.scores[well]=None
-        print("self.scores[well]: ", self.scores[well])
+        # print(f"self.scores[{well}]: ", self.scores[well])
 
     def copytoNotes(self,screen,well):
         if screen is None or well is None:
