@@ -18,6 +18,7 @@ A timeline is available if the plate has already been imaged.
 Screen composition can be loaded from included screens or imported from files following the RockMaker XML format.
 
 Images are scored using the Drop Score section and more details can be written in notes and saved to file.
+In addition, a manual score can be assigned if needed.
 The results can be displayed on a grid for quick overall inspection and statistics are calculated.
 A report of the current well can be saved as a pdf.
 
@@ -52,9 +53,9 @@ or (default from 2021/03/05)
 		└── prep_date.txt
 ```
 The Tree format is defined during setup (see INSTALL notes).
-AMiGUI (the software controlling the AMi microscope) needs a folder named "images" but this is not important for AMi_Image_Analysis. 
+The folder "images" is used by the software controlling the AMi microscope (AMiGUI.py) but is not needed by AMi_Image_Analysis. 
 The date directory must have the format **YYYYMMDD_HHMMSS** (eg. 20191211_151023)
-The file "prep_date.txt" contains the preparation date as a single line with format **YYYYMMDD** and is created within the program. It is used for logging purpose only and is not mandatory.
+The file "prep_date.txt" is created within the program and contains the preparation date as a single line with format **YYYYMMDD**.
 
 
 ## Screenshots
@@ -84,7 +85,6 @@ Then follow the instructions in INSTALL.txt
 
 Dependencies:
 * Python 3 (python below 3.8 if you want to use TensorFlow 1.1x)
-* Qt5
 * PyQt5
 * Python Imaging Library (Pillow, v6.2.1 or higher)
 * PyFPDF (v1.7.2 or higher)
@@ -96,8 +96,6 @@ Optional dependencies:
 * MARCO tensorflow model (https://storage.googleapis.com/marco-168219-model/savedmodel.zip)
 A copy of this model is included in saved_model/
 Methodology details are published in [[2]](#2)
-
-Note: a pip requirement file is available for easy install of python dependencies.
 
 Known issues: 
 * On Raspbian AutoMARCO does not work with regular PyPi tensorflow package (see INSTALL.txt).

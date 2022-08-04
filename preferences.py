@@ -5,8 +5,8 @@ Created on Mon Jan  6 09:05:49 2020
 
 @author: ludovic
 
-You can edit this file if you want to modify the shortcuts
-or change the circle detection parameters.
+You can edit this file if you want to modify the shortcuts,
+change the circle detection parameters, change colors, scoreclass...
 
 Check_Circle_detection.py, autocrop.py and main program use
 the values stored in this file.
@@ -16,7 +16,9 @@ from PyQt5 import QtCore
 
 #Comment/uncomment the two lines below according to your need
 keyboard_layout="qwerty"
-#keyboard_layout="azerty"
+# keyboard_layout="azerty"
+
+USESCORECLASS = True # True or False
 
 MAX_CPU=None #set to desired integer if needed ie MAX_CPU="8" (keep the "")
 
@@ -32,6 +34,18 @@ ClassificationColor={
 
 #autoMARCO acceptance probability criterium
 autoMARCO_threshold=0.60
+
+#Define score classes. Edit to your need but Order is IMPORTANT !!!
+scoreclass=['heavy prec',
+            'clear',
+            'phase sep',
+            'granular prec',
+            'crystalline prec',
+            'spherulites',
+            'micro-crystals',
+            'multiple crystals',
+            'small crystals',
+            '3D crystal']
 
 class Shortcut():
     '''Shortcuts for the GUI'''

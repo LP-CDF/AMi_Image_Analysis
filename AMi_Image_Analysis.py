@@ -144,8 +144,13 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         for _key,_value in self.DatabaseDict.items():
             self.comboBoxScreen.addItem(_key)
         self.comboBoxScore.addItem(None)
-        for _i in range(1,11):
-            self.comboBoxScore.addItem(str(_i))
+
+        if pref.USESCORECLASS is True:
+            for _i in range(1,len(pref.scoreclass)+1):
+                self.comboBoxScore.addItem(str(_i) + str(f' ({pref.scoreclass[_i-1]})'))
+        else:
+            for _i in range(1,11):
+                self.comboBoxScore.addItem(str(_i))
 
         self.initUI()
 
@@ -1198,7 +1203,8 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         # print("Current Screen: ", self.currentScreen)
     
     def setScore(self, well):
-        self.scores[well]=self.comboBoxScore.currentText()
+        # self.scores[well]=self.comboBoxScore.currentText()
+        self.scores[well]=self.comboBoxScore.currentIndex()
         if self.comboBoxScore.currentText()=='':
             self.scores[well]=None
         # print(f"self.scores[{well}]: ", self.scores[well])

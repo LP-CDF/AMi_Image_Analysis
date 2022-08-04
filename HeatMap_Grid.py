@@ -139,7 +139,7 @@ class HeatMapGrid(QtWidgets.QDialog, Ui_Dialog):
                             QtCore.Qt.AlignCenter, '')
             else:
                 qp.drawText(x1, y1, dx, dy,
-                            QtCore.Qt.AlignCenter, self.score[well])
+                            QtCore.Qt.AlignCenter, str(self.score[well]))
 
 if __name__ == "__main__":
     import sys

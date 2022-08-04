@@ -6,7 +6,7 @@ Created on Tue Jun 30 10:50:12 2020
 @author: ludovic
 """
 
-__date__ = "24-06-2022"
+__date__ = "04-08-2022"
 
 import os
 import os.path
@@ -20,7 +20,7 @@ import venv
 
 #Minimal python version compatible with https://bootstrap.pypa.io/get-pip.py
 this_python = sys.version_info[:2]
-min_version = (3, 7)    #Need to be checked in file
+min_version = (3, 6)    #Need to be checked in file
                         #https://bootstrap.pypa.io/get-pip.py
                         #if error "python: No module named pip"
 
@@ -92,29 +92,7 @@ class ExtendedEnvBuilder(venv.EnvBuilder):
                 sys.stderr.flush()
         stream.close()
 
-    def install_script(self, context, name, url):
-        _, _, path, _, _, _ = urllib.parse.urlparse(url)
-        fn = os.path.split(path)[-1]
-        binpath = context.bin_path
-        distpath = os.path.join(binpath, fn)
-        
-        # Download script into the virtual environment's binaries folder
-        urllib.request.urlretrieve(url, distpath)
-        with open(distpath) as f:
-            _lines=f.readlines()
-        for i in _lines:
-            if "min_version" in i:
-                min_version = i.split('=')[1]
-                min_version = tuple(int(ele) for ele in min_version.replace('(', '').replace(')', '').split(', '))
-                break
-        print(f"Python min_version= {min_version} for compatibility" )
-        if this_python < min_version:
-            print(f'''Python {this_python} too old
-                  you may need to edit
-                  min_version = (X, X) at the beginning of the Setup.py script.
-                  Install Aborted
-                  ''')
-            sys.exit()
+    def install_script(self, context, name, fn, binpath, distpath):
         progress = self.progress
         if self.verbose:
             term = '\n'
@@ -142,6 +120,45 @@ class ExtendedEnvBuilder(venv.EnvBuilder):
         # Clean up - no longer needed
         os.unlink(distpath)
 
+    @staticmethod
+    def url_pip():
+        global this_python,min_version
+        ''' return location of downloaded file'''
+        if this_python < min_version:
+            url = 'https://bootstrap.pypa.io/pip/{}.{}/get-pip.py'.format(*this_python)
+        else:
+            url = 'https://bootstrap.pypa.io/get-pip.py'
+        return url
+    
+    def download_pip(self,context,url, path):
+        ''''Download script into the virtual environment's binaries folder'''
+        urllib.request.urlretrieve(url, path)
+
+    @staticmethod
+    def get_pip_compat(path):
+        '''read pip script and return a tuple of min_version'''
+        with open(path) as f:
+            _lines=f.readlines()
+        for i in _lines:
+            if "min_version" in i:
+                comp = i.split('=')[1]
+                comp = tuple(int(ele) for ele in comp.replace('(', '').replace(')', '').split(', '))
+                break
+        print(f"Python min_version= {comp} for compatibility in {path}" )
+        return comp
+
+    @staticmethod
+    def check_getpip_compat(compatibility):
+        global this_python
+        if this_python < compatibility:
+            print(f'''Python {this_python} too old for this version
+                  of get-pip.py
+                  min_version = {str(compatibility)}
+                  ''')
+        else:
+            print("Everything seems in order, continuing installation...")
+        return bool(this_python < compatibility)
+
     def install_pip(self, context):
         global this_python,min_version
         """
@@ -150,13 +167,31 @@ class ExtendedEnvBuilder(venv.EnvBuilder):
         :param context: The information for the virtual environment
                         creation request being processed.
         """
-        if this_python < min_version:
-            url = 'https://bootstrap.pypa.io/pip/{}.{}/get-pip.py'.format(*this_python)
+            
+        url=self.url_pip()
+        _, _, path, _, _, _ = urllib.parse.urlparse(url)
+        fn = os.path.split(path)[-1]
+        binpath = context.bin_path
+        distpath = os.path.join(binpath, fn)
+        
+        self.download_pip(context,url, distpath)
+        compat=self.get_pip_compat(distpath)
+        if self.check_getpip_compat(compat) is True:
+            os.unlink(distpath)
+            min_version=compat
+            print("Trying to update the installation script...")
+            url=self.url_pip()
+            _, _, path, _, _, _ = urllib.parse.urlparse(url)
+            fn = os.path.split(path)[-1]
+            binpath = context.bin_path
+            distpath = os.path.join(binpath, fn)            
+            self.download_pip(context,url, distpath)
+            compat=self.get_pip_compat(distpath)
+            self.check_getpip_compat(compat)
+            self.install_script(context, 'pip', fn, binpath, distpath)
         else:
-            url = 'https://bootstrap.pypa.io/get-pip.py'
-        # url = 'https://bootstrap.pypa.io/get-pip.py'
-        self.install_script(context, 'pip', url)
-
+            self.install_script(context, 'pip', fn, binpath, distpath)
+            
     def install_dep(self, context):
         try:
             import subprocess
@@ -315,12 +350,11 @@ if __name__ == '__main__':
               
 #########################################################################################################            
               ''')
-    #Ask to STOP installation if python >= 3.8 (need <= 3.7.x for MARCO TF model)
-    val1=input("Do you want to proceed ? (Y(es) or N(o)) :")
-    if val1.lower() not in ['y', 'yes']:
-        print("Aborting \n")
-        sys.exit(RC)
-        
+        #Ask to STOP installation if python >= 3.8 (need <= 3.7.x for MARCO TF model)
+        val1=input("Do you want to proceed ? (Y(es) or N(o)) :")
+        if val1.lower() not in ['y', 'yes']:
+            print("Aborting \n")
+            sys.exit(RC)        
     try:
         main()
         RC = 0

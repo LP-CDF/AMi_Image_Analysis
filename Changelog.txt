@@ -1,3 +1,28 @@
+2022/08/03
+Updated Setup.py script to hopefully deal with later get-pip.py min_version increase.
+
+Added possibility to score manually the drops (score 1 to 10)
+If the user do not want to use the proposed nomenclature for scoring, just edit the file "preferences.py" and change
+USESCORECLASS = True # True or False
+to
+USESCORECLASS = False # True or False
+
+The assigned score will be displayed in the HeatMap.
+However, you can modify the proposed nomenclature by editing in "preferences.py" the python list scoreclass.
+
+#Define score classes. Edit to your need but Order is IMPORTANT !!!
+scoreclass=['heavy prec',
+            'clear',
+            'phase sep',
+            'granular prec',
+            'crystalline prec',
+            'spherulites',
+            'micro-crystals',
+            'multiple crystals',
+            'small crystals',
+            '3D crystal']
+
+
 2022/05/20
 Clicking on a well in the Plate overview windows allows loading of the corresponding well in the mainframe (picture + notes + Timeline)
 modified a conflicting shortcut for autocrop (change from shift+C to shift+K)
