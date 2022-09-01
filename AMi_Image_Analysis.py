@@ -43,7 +43,7 @@ QtWidgets.QApplication.setAttribute(
 
 __version__ = "1.2.4.4"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "28-07-2022"
+__date__ = "01-09-2022"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -426,10 +426,13 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
     def FindCrystCocktail(self,screen,well):
         '''find crystallization cocktail in database and return a list'''
         if well[-1] in ['a', 'b', 'c']:
-            cocktail=self.DatabaseDict[screen][self.reservoirs.index(well[:-1])+1]
-        else:
-            cocktail=self.DatabaseDict[screen][self.reservoirs.index(well)+1]
-        # print("Crystallization condition: ", cocktail)   
+            well=well[:-1]
+        # cocktail=self.DatabaseDict[screen][self.reservoirs.index(well)+1]
+        # if cocktail[0] != well:
+        for i,j in self.DatabaseDict[screen].items():
+            if j[0]==well:
+                cocktail=j
+                break
         return cocktail
 
     def show_autoMARCO(self, subwell):
@@ -796,8 +799,9 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             self.show_xmlScreen(fileName)
         #Import temporarily Screen into database
         self.DatabaseDict[Path(fileName).stem]=open_XML(fileName)
-        #Update comboBoxScreen List
-        self.comboBoxScreen.addItem(Path(fileName).stem)
+        #Update comboBoxScreen List if item not present
+        if self.comboBoxScreen.findText(Path(fileName).stem) == -1:
+            self.comboBoxScreen.addItem(Path(fileName).stem)
 
     def openFileNameDialog(self):
         options = QFileDialog.Options()
