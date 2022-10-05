@@ -95,6 +95,7 @@ class initProject(object):
             self.target=directory.parts[-4]
             self.plate=directory.parts[-3]
             self.date=directory.parts[-2].split("_")[0]
+            # self.timed=directory.parts[-2].split("_")[1]
             self.prep_date_path = self.rootDir.joinpath("prep_date.txt")
         else:
             self.rootDir =parents[0]
@@ -102,4 +103,5 @@ class initProject(object):
             self.target=directory.parts[-3]
             self.plate=directory.parts[-2]
             self.date=directory.parts[-1].split("_")[0]
+            # self.timed=directory.parts[-1].split("_")[1]
             self.prep_date_path = self.rootDir.joinpath("prep_date.txt")

@@ -20,7 +20,7 @@ import venv
 
 #Minimal python version compatible with https://bootstrap.pypa.io/get-pip.py
 this_python = sys.version_info[:2]
-min_version = (3, 6)    #Need to be checked in file
+min_version = (3, 7)    #Need to be checked in file
                         #https://bootstrap.pypa.io/get-pip.py
                         #if error "python: No module named pip"
 

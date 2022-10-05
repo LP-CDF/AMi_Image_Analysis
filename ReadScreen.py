@@ -68,18 +68,16 @@ class MyTable(QTableWidget):
         return _check
 
 
-    def open_xml(self, _screen)->str:
-        '''Read a RockMaker or Dragonfly XML, _file as str, checks if Screen is
-        already in database
-        _screen is either a file or a screen name in ScreenFile'''
+    # def open_xml(self, _screen)->str:
+    #     '''Read a RockMaker or Dragonfly XML,
+    #     _screen a filename as str'''
+    #     path=Path(_screen)
+    #     screen=open_XML(path)
+    #     return screen
 
-        #checking if _file is in database meaning XML is loaded from a self.action in GUI
-        if _screen in ScreenFile.keys():
-            path=Path(self.app_path).joinpath("Screen_Database", ScreenFile[_screen])
-        else:
-            path=Path(_screen)
 
-        screen=open_XML(path)
+    def create_table(self, screen)->dict:
+        '''create and fill QTable using a dict as input'''
         self.setRowCount(0); self.setColumnCount(10)
         for i,row_data in screen.items():
             row = self.rowCount()
@@ -88,7 +86,5 @@ class MyTable(QTableWidget):
                 self.setColumnCount(len(row_data))
             for column, stuff in enumerate(row_data):
                 item = QTableWidgetItem(str(stuff))
-                self.setItem(i-1, column, item)
-        return screen
-        # del screen
+                self.setItem(i-1, column, item)        
         

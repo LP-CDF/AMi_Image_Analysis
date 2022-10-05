@@ -41,9 +41,9 @@ QtWidgets.QApplication.setAttribute(
 QtWidgets.QApplication.setAttribute(
     QtCore.Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
 
-__version__ = "1.2.4.4"
+__version__ = "1.2.4.5"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "01-09-2022"
+__date__ = "04-10-2022"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -98,6 +98,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.target = str  # Name of the protein within the project
         self.plate = str  # Name of the plate
         self.date = str  # Date of images
+        # self.timed = str  # Time of images
         self.prepdate = str  # Date of plate preparation
         self.classifications = {}  # Dictionnary in memory containing well:classif
         self.scores = {} # Dictionnary in memory containing well:score
@@ -400,16 +401,23 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         path = Path(fileName)
         self.ScreenTable = ReadScreen.MyTable(10, 10)
         self.ScreenTable.setWindowTitle(path.stem)
-        data = self.ScreenTable.open_xml(fileName)
+
+        if path.stem in self.DatabaseDict:
+            data = self.DatabaseDict[path.stem]
+        else:
+            data = open_XML(fileName)
+        
         if data is None:
             self.handle_error(
                 "WARNING: unexpected format for file %s" % fileName)
             return
         else:
-            self.ScreenTable.resize(1000, 500)
-            header = self.ScreenTable.horizontalHeader()
-            header.setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
-            self.ScreenTable.show()
+            self.ScreenTable.create_table(data)
+            
+        self.ScreenTable.resize(1000, 500)
+        header = self.ScreenTable.horizontalHeader()
+        header.setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
+        self.ScreenTable.show()
 
     def CreateScreenDictDatabase(self):
         '''Create a dict of dict containing all screens and crystallization
@@ -822,6 +830,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         self.rootDir = PATHS.rootDir
         self.project = PATHS.project
         self.date = PATHS.date
+        # self.timed = PATHS.timed
         self.target = PATHS.target
         self.plate = PATHS.plate
         self.prep_date_path = PATHS.prep_date_path
@@ -1056,6 +1065,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
     def add_button(self, path, x, y):
         button = QtWidgets.QPushButton()
         button.setStyleSheet("""background-color: lightgray;""")
+        # button.setFixedSize(90,30)
         # text=self.extract_WellLabel
         button.setText(self.extract_WellLabel(path))
         button.clicked.connect(self.buttonClicked)
@@ -1273,6 +1283,14 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             return date
         return most_recent
 
+    @staticmethod
+    def check_datetime(fullpath):
+        try:
+            datetime.datetime.strptime(fullpath.split("/")[-1], '%Y%m%d')
+            return True
+        except:
+            return False
+
     def check_previous_notes(self, path, current_date):
         path = path.joinpath("Image_Data")
         ensure_directory(path)
@@ -1283,6 +1301,9 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         most_recent = "18000101"  # YYYYMMDD
 
         folders = [str(i) for i in Path(path).iterdir() if i.is_dir()]
+
+        #clean list to avoid crash if unexpected directory names added by USERS
+        folders[:] = [folder for folder in folders if self.check_datetime(folder) is True]
 
         for folder in folders:
             date = folder.split("/")[-1]
@@ -1498,6 +1519,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
                 icon = QtGui.QIcon(name)
                 button.setIcon(icon)
                 button.setIconSize(QtCore.QSize(250, 188))
+                button.setFixedWidth(260)
                 tag = os.path.basename(date)  # .split('_')[0]
                 # button.setText(tag)
                 button.clicked.connect(lambda: self.Open_Timeline(well))
