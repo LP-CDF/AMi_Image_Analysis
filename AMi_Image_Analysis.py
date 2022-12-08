@@ -41,9 +41,9 @@ QtWidgets.QApplication.setAttribute(
 QtWidgets.QApplication.setAttribute(
     QtCore.Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
 
-__version__ = "1.2.4.5"
+__version__ = "1.2.4.6"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "04-10-2022"
+__date__ = "08-12-2022"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -152,6 +152,10 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         else:
             for _i in range(1,11):
                 self.comboBoxScore.addItem(str(_i))
+                
+        #Enable, disable GUI items
+        self.openFile.setEnabled(False)
+        self.EnableDisableGUI(False)
 
         self.initUI()
 
@@ -161,6 +165,18 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.splash = QSplashScreen(QPixmap(str(_image)))
         self.splash.show()
         QtCore.QTimer.singleShot(ms, self.splash.close)
+        
+    def EnableDisableGUI(self,_var)->bool:
+        '''Enable / Disable several GUI options'''
+        self.actionAutomated_Annotation_MARCO.setEnabled(_var)
+        self.actionAutoMARCO_current_image.setEnabled(_var)
+        self.actionCalculate_Statistics.setEnabled(_var)
+        self.actionDisplay_Heat_Map.setEnabled(_var)
+        self.pushButton_CopyToNotes.setEnabled(_var)
+        self.pushButton_DisplayHeatMap.setEnabled(_var)
+        self.pushButton_ExportToPDF.setEnabled(_var)
+        self.menuShow_autoMARCO_Grid.setEnabled(_var)
+        self.actionChange_Preparation_date.setEnabled(_var)
 
     def initUI(self):
 
@@ -195,6 +211,8 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
             lambda: self.show_autoMARCO("c"))
         self.actionautoMARCO_no_subwell.triggered.connect(
             lambda: self.show_autoMARCO(""))
+        self.actionChange_Preparation_date.triggered.connect(
+            self.editdate_updateGUI)
 
         self.actionPlateSubwell_a.triggered.connect(
             lambda: self.show_Plates("a"))
@@ -874,6 +892,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         self.well_images.clear()
         self.reservoirs.clear()
         self.ClearLayout(self._lay)
+        self.ClearLayout(self._timlay)
         self.MARCO_window.clear()
         self.PLATE_window.clear()
         self.InitialNotes = None
@@ -881,6 +900,37 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         self.InitialScore = None
         self.prepdate = "None"
         self.label_NDays.setText("Not available")
+        self.EnableDisableGUI(False)
+
+    def editdate_updateGUI(self):
+        '''edit date in prep_date.txt'''
+        if self.rootDir is not None:
+            if Path(self.prep_date_path).exists():
+                with open(self.prep_date_path) as file:
+                    self.prepdate = file.read().strip("\n")
+        text, okPressed = QInputDialog.getText(
+                    self, "Change date for current plate", "Preparation date (format: YYYYMMDD)     ", QLineEdit.Normal, self.prepdate)
+        if okPressed and text != '':
+            try:
+                datetime.datetime.strptime(text, '%Y%m%d')
+                with open(self.prep_date_path, 'w') as f:
+                    f.write(text)
+                self.prepdate = text
+            except:
+                self.handle_error(
+                    f"Input date \"{text}\" not with correct format, skipping calculation of number of days")
+                self.prepdate = "None"
+                
+        self.PrepDate.setText(str(self.prepdate))
+        if self.prepdate != "None":
+            d0 = datetime.date(int(self.prepdate[0:4]), int(
+                self.prepdate[4:6]), int(self.prepdate[6:]))
+            d1 = datetime.date(int(self.date[0:4]), int(
+                self.date[4:6]), int(self.date[6:]))
+
+            delta = d1 - d0
+            self.label_NDays.setText(str(delta.days))
+            del d0, d1, delta        
 
     def createUniqueReservoirs(self, _list)->list:
         '''Create list of unique reservoirs, input is list of well image names'''
@@ -899,6 +949,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         # print("self.reservoirs: ", self.reservoirs)
 
     def openDirDialog(self, dialog=True, directory=''):
+        self.Reset()
         if dialog is True:
             directory = str(QFileDialog.getExistingDirectory(
                 self, "Directory containing Images"))
@@ -906,7 +957,6 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             return
         else:
             directory = Path(directory)
-        self.Reset()
 
         #Initialise Project Details
         if directory:
@@ -947,6 +997,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             self._timer.timeout.connect(self.on_timeout)
             self._timer.start()
             self.check_previous_notes(self.rootDir, self.date)
+            self.EnableDisableGUI(True)
 #            QtGui.QPixmapCache.clear()
         else:
             self.handle_error("No Image File Found in directory")
@@ -1227,7 +1278,11 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         if screen is None or well is None:
             return False
         cocktail=self.FindCrystCocktail(screen,well)
-        self.Notes_TextEdit.insertPlainText("\nCrystallization Mix:\n")
+        if len(self.Notes_TextEdit.toPlainText().strip('\n'))==0:
+            spacer=''
+        else:
+            spacer='\n'       
+        self.Notes_TextEdit.insertPlainText(f"{spacer}Crystallization Mix:\n")
         for _i in cocktail[1:]:
             self.Notes_TextEdit.insertPlainText(_i+'\n')
         return True

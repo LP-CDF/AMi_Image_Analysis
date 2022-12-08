@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'DesignerFiles/mainwindow_28072022.ui'
+# Form implementation generated from reading ui file 'DesignerFiles/mainwindow_08122022.ui'
 #
 # Created by: PyQt5 UI code generator 5.12.1
 #
@@ -459,6 +459,7 @@ class Ui_MainWindow(object):
         self.menuExport_to_PNG.setObjectName("menuExport_to_PNG")
         MainWindow.setMenuBar(self.menuBar)
         self.openFile = QtWidgets.QAction(MainWindow)
+        self.openFile.setEnabled(True)
         self.openFile.setStatusTip("")
         self.openFile.setObjectName("openFile")
         self.actionQuit = QtWidgets.QAction(MainWindow)
@@ -567,6 +568,8 @@ class Ui_MainWindow(object):
         self.actionXP_Screen.setObjectName("actionXP_Screen")
         self.actionMD_MORPHEUS_Fusion = QtWidgets.QAction(MainWindow)
         self.actionMD_MORPHEUS_Fusion.setObjectName("actionMD_MORPHEUS_Fusion")
+        self.actionChange_Preparation_date = QtWidgets.QAction(MainWindow)
+        self.actionChange_Preparation_date.setObjectName("actionChange_Preparation_date")
         self.menuFile.addAction(self.openFile)
         self.menuFile.addAction(self.openDir)
         self.menuFile.addAction(self.actionExport_to_PDF)
@@ -584,6 +587,7 @@ class Ui_MainWindow(object):
         self.menuDisplay_Heat_Map.addAction(self.actionAutomated_Annotation_MARCO)
         self.menuDisplay_Heat_Map.addAction(self.actionAutoMARCO_current_image)
         self.menuDisplay_Heat_Map.addAction(self.actionCalculate_Statistics)
+        self.menuDisplay_Heat_Map.addAction(self.actionChange_Preparation_date)
         self.menuDisplay_Heat_Map.addAction(self.actionDisplay_Heat_Map)
         self.menuDisplay_Heat_Map.addAction(self.menuShow_autoMARCO_Grid.menuAction())
         self.menuHelp.addAction(self.actionShortcuts)
@@ -767,5 +771,6 @@ class Ui_MainWindow(object):
         self.actionAutoMARCO_current_image.setText(_translate("MainWindow", "AutoMARCO current image"))
         self.actionXP_Screen.setText(_translate("MainWindow", "XP Screen"))
         self.actionMD_MORPHEUS_Fusion.setText(_translate("MainWindow", "MD MORPHEUS Fusion"))
+        self.actionChange_Preparation_date.setText(_translate("MainWindow", "Change Preparation date"))
 
 
