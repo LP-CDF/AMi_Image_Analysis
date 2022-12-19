@@ -1,5 +1,6 @@
 from pathlib import Path
 import xml.etree.ElementTree as ET
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 #Define below the name of the folder containing unstacked Z images.
 _RAWIMAGES="rawimages"
@@ -105,3 +106,48 @@ class initProject(object):
             self.date=directory.parts[-1].split("_")[0]
             # self.timed=directory.parts[-1].split("_")[1]
             self.prep_date_path = self.rootDir.joinpath("prep_date.txt")
+
+class utilViewer(object):
+    '''Use a QScrollArea as input)'''
+    def __init__(self, scrollarea):  
+        self.ImageViewer=scrollarea
+        self.scene = QtWidgets.QGraphicsScene()
+        self.view = QtWidgets.QGraphicsView(self.scene)
+        self.view.setDragMode(QtWidgets.QGraphicsView.ScrollHandDrag)
+        self.view.wheelEvent = self.wheel_event
+        self.ImageViewer.setWidget(self.view)
+        
+    def open_image(self, path):
+        '''based on https://vincent-vande-vyvre.developpez.com/tutoriels/pyqt/manipulation-images/'''
+        w_view, h_view = self.view.width(), self.view.height() 
+        self.current_image = QtGui.QImage(path)
+        self.pixmap = QtGui.QPixmap.fromImage(self.current_image.scaled(w_view, h_view,
+                                    QtCore.Qt.KeepAspectRatio, 
+                                    QtCore.Qt.SmoothTransformation))
+        self.view_current()
+
+
+    def view_current(self):
+        '''based on https://vincent-vande-vyvre.developpez.com/tutoriels/pyqt/manipulation-images/'''
+        w_pix, h_pix = self.pixmap.width(), self.pixmap.height()
+        self.scene.clear()
+        self.scene.setSceneRect(0, 0, w_pix, h_pix)
+        self.scene.addPixmap(self.pixmap)
+        self.view.setScene(self.scene)
+
+
+    def wheel_event (self, event):
+        '''based on https://vincent-vande-vyvre.developpez.com/tutoriels/pyqt/manipulation-images/'''
+        steps = event.angleDelta().y() / 120.0
+        self.zoom(steps)
+        event.accept()
+    
+
+    def zoom(self, step):
+        '''based on https://vincent-vande-vyvre.developpez.com/tutoriels/pyqt/manipulation-images/'''
+        w_pix, h_pix = self.pixmap.width(), self.pixmap.height()
+        w, h = w_pix * (1 + 0.1*step), h_pix * (1 + 0.1*step)
+        self.pixmap = QtGui.QPixmap.fromImage(self.current_image.scaled(w, h, 
+                                            QtCore.Qt.KeepAspectRatio, 
+                                            QtCore.Qt.FastTransformation))
+        self.view_current()

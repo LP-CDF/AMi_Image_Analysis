@@ -4,7 +4,6 @@ Please read this carefully until the end before proceeding.
 
     The software was tested on:
     * linux CentOS 7 (PyQt5 and python3 (v3.6.8 and v3.7.3))
-    * Raspbian 10 (on a Pi 3B+, not recommended)
     * macOS HighSierra/Catalina/Big Sur/Monterey (up to python 3.7.13)
 
     Hopefully, it will run on other linux distributions, MacOS and Windows with minor installation tweaks.
@@ -95,42 +94,6 @@ Please read this carefully until the end before proceeding.
     If the folder containing the individual Z focused images is not named "rawimages" just edit the file "utils.py"
     and modify the field _rawimages at line 4 accordingly before running Setup.py. However the organization of the
     other folders must follow the previously described layout in FILE TREE.
-
-################################################################################################
-
-## Raspbian specific installation notes
-
-   You will need to install the following distribution packages
-   * libtiff5 libtiff5-dev python3-libtiff
-   * gem-plugin-tiff
-   * qt5-default qt5-image-formats-plugins qt5-style-plugins
-   * libatlas-base-dev
-   * libjasper-dev
-   * libqtgui4
-   * libqt4-test
-
-To this end you can use the commands:
-sudo apt-get install qt5-default qt5-style-plugins qt5-image-formats-plugins libtiff5 libtiff5-dev python3-libtiff gem-plugin-tiff -y
-sudo apt-get install libatlas-base-dev libjasper-dev libqtgui4 libqt4-test -y
-
-Then proceed with the installation procedure described previously.
-If you want to have a working tensorflow installation on Raspbian after issuing the command
-python3 -m pip install -r /whereveryouinstalled/requirements_Raspbian.txt (which does not install tensorflow)
-you will have to do the following steps:
-   * Download a tensorflow wheel for Raspbian at :
-     https://github.com/lhelontra/tensorflow-on-arm/releases/tag/v1.14.0-buster/tensorflow-1.1X.0-cpXX-none-linux_armv7l.whl
-     (example: tensorflow-1.14.0-cp37-none-linux_armv7l.whl for python 3.7)
-   * If you use a virtual environment, **ensure it is activated**. (source /wherever/you/want/venvs/AMI_IMAGE_ANALYSIS_TENSORFLOW1/bin/activate)
-   * python3 -m pip install /whereyoudownloaded/file/tensorflow-1.1X.0-cpXX-none-linux_armv7l.whl
-   * Disable cloud in contrib (otherwise tensorflow breaks) by editing the file 
-     /wherever/you/want/venvs/AMI_IMAGE_ANALYSIS_TENSORFLOW1/lib/python3.7/site-packages/tensorflow/contrib/__init__.py
-     and change line 30
-     **from**
-     if os.name != "nt" and platform.machine() != "s390x":
-     **to**
-     if os.name != "nt" and platform.machine() != "armv7l":
-
-Then autoMARCO should work though slowly at least on a Pi3B+.
 
 # Known issues: 
     * If your CPU does not support AVX instruction sets (CPU before SandyBridge), you will need to find a tensorflow with the correct building options

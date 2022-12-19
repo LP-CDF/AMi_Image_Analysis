@@ -10,7 +10,7 @@ class ViewerWindow(object):
         Dialog.setObjectName("Dialog")
         Dialog.resize(882, 652)
         self.ImageViewer = QtWidgets.QScrollArea(Dialog)
-        self.ImageViewer.setGeometry(QtCore.QRect(10, 10, 861, 631))
+        self.ImageViewer.setGeometry(QtCore.QRect(10, 10, 861, 601))
         font = QtGui.QFont()
         font.setFamily("Courier 10 Pitch")
         font.setPointSize(12)

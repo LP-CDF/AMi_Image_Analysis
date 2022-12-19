@@ -46,7 +46,6 @@ class MyTable(QTableWidget):
         super().__init__(r, c)
         self.app_path=os.path.abspath(os.path.dirname(sys.argv[0]))
 
-
     def open_sheet(self, Screen)->str:
         '''open a csv file, create a Table and returns True or False'''
         # app_path=os.path.abspath(os.path.dirname(sys.argv[0]))

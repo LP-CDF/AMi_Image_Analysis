@@ -53,7 +53,7 @@ def main(args=None):
     if options.dir == "." or options.dir is None:
         dirName = os.getcwd()
     else:
-        dirName = Path(options.dir)
+        dirName = str(Path(options.dir))
     if options.classif is None:
         classif="Crystal"
     else:
@@ -64,50 +64,6 @@ def main(args=None):
         UNIQUE=True
     
     print("Working folder is: ", dirName)
-
-
-################################ OLD ################################
-    # # Get the list of all directories _rawimges at given path
-    # listOfDirs = list()
-    # for (dirpath, dirnames, _filenames) in os.walk(dirName):
-    #     if _DATA in dirnames:
-    #         if os.path.isdir(os.path.join(dirpath,_DATA)):
-    #                          listOfDirs.append(os.path.join(dirpath, _DATA))
-
-    # if len(listOfDirs) == 0:
-    #     print("No files *_data.txt found, nothing to do!!!")
-    #     return
-    
-    # all_files=list()
-    # for path in listOfDirs:
-    #     # print("path", path)
-    #     files=list()
-    #     for (dirpath, dirnames, _filenames) in os.walk(path):
-    #         # print(_filenames)
-    #         files+= [os.path.join(dirpath, file) for file in _filenames if "_data.txt" in file]
-    #     files.sort(key=natural_sort_key)
-    #     all_files.append(files)
-    
-    # results=list()
-    # for lst in all_files:
-    #     for elem in lst:
-    #         directory = Path(elem)
-    #         parents=directory.parents
-    #         plate=directory.parts[-4]
-    #         date=directory.parts[-2]
-    #         basename=os.path.basename(elem)
-    #         well=basename.split("_")[0]
-    #         pathtoImg=str(parents[2])+'/'+date+'*/'+well+'.jpg'
-    #         pathtoImg=glob.glob(pathtoImg)
-    #         if len(pathtoImg)!=0:
-    #             pathtoImg=pathtoImg[0]
-    #         else:#Should not append but...
-    #             pathtoImg=''
-    #         with open(elem,'r') as f:
-    #             lines=f.readlines()
-    #         if classif in lines[5]:
-    #             results.append((plate,date,well,pathtoImg))
-################################ END OLD ################################
  
     files=list()
     for (dirpath, dirnames, _filenames) in os.walk(dirName):
@@ -124,6 +80,7 @@ def main(args=None):
         if classif in lines[5]:
             _directory = Path(elem)
             _parents=_directory.parents
+            target=_directory.parts[-5]
             plate=_directory.parts[-4]
             date=_directory.parts[-2]
             _basename=os.path.basename(elem)
@@ -138,19 +95,20 @@ def main(args=None):
                         pathtoImg=pathtoImg[-1]#if same date, keep most recent
                     else:#Should not append but...
                         pathtoImg=''
-                    results.append((plate,well,date,pathtoImg))
+                    results.append((target,plate,date,pathtoImg,well))
             else:
                 if len(pathtoImg)!=0:
                     pathtoImg.sort(key=natural_sort_key)
                     pathtoImg=pathtoImg[-1]#if same date, keep most recent
                 else:#Should not append but...
                     pathtoImg=''
-                results.append((plate,well,date,pathtoImg))
+                results.append((target,plate,date,pathtoImg,well))
         else:
             continue
            
-    fields = ['Plate', 'Well', 'Date', 'Path to image']
+    fields = ['Target', 'Plate', 'Date', 'Path to image', 'Well']
     fname='All_'+classif+'.csv'
+    fname=dirName+'/'+fname
     with open(fname, 'w') as f:
         write = csv.writer(f)
         write.writerow(fields)

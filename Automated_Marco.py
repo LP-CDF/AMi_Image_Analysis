@@ -30,13 +30,14 @@ import preferences as pref
 class Predictor():
     def __init__(self, parent=None):
         self.tensorflowOK = self.loadtensorflow()
+        self.tfversion=None
 
-    @staticmethod
-    def loadtensorflow():
+    def loadtensorflow(self):
         '''check if tensorflow is available, checks version, must be below TF2'''
         try:
             import tensorflow as tf
-            return bool(tf.__version__ <= '2.0.0')
+            self.tfversion=tf.__version__ 
+            return bool(self.tfversion <= '2.0.0')
         except ModuleNotFoundError:
             print('import of Tensorflow failed!!!')
             return False

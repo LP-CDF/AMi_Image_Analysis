@@ -22,7 +22,7 @@ from PyQt5.QtWidgets import (QTableWidgetItem, QFileDialog, QSplashScreen,
                              QMessageBox, QGridLayout, QStyleFactory,
                              QProgressDialog, QInputDialog, QLineEdit)
 from utils import (ensure_directory, initProject, _RAWIMAGES, Ext,rows,
-                   cols, open_XML)
+                   cols, open_XML, utilViewer)
 from shutil import copyfile
 import pdf_writer
 import HeatMap_Grid
@@ -33,6 +33,7 @@ from tools import Merge_Zstack
 import ReadScreen
 import ExternalViewer
 import preferences as pref
+import subprocess
 
 QtWidgets.QApplication.setAttribute(
     QtCore.Qt.AA_EnableHighDpiScaling, True)  # enable highdpi scaling
@@ -41,9 +42,9 @@ QtWidgets.QApplication.setAttribute(
 QtWidgets.QApplication.setAttribute(
     QtCore.Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
 
-__version__ = "1.2.4.6"
+__version__ = "1.2.5"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "08-12-2022"
+__date__ = "19-12-2022"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -123,15 +124,16 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.idx=None
         self.prep_date_path=None
         self.current_image=None
+        self.imageP=None    #Image in Project Viewer
+        self.pixmapP=None   #Image in Project Viewer
 
         #If using the QGraphics view, use open_image
         #If not comment the next five lines and use
         #function LoadWellImage
-        self.scene = QtWidgets.QGraphicsScene()
-        self.view = QtWidgets.QGraphicsView(self.scene)
-        self.view.setDragMode(QtWidgets.QGraphicsView.ScrollHandDrag)
-        self.view.wheelEvent = self.wheel_event
-        self.ImageViewer.setWidget(self.view)
+        self.ImageViewer=utilViewer(self.ImageViewer_1)
+                
+        #Project Tab
+        self.ProjectInspector = utilViewer(self.ImageViewer_2)
 
         #To see all autoMARCO results windows create a dict subwell:object
         self.MARCO_window = {}
@@ -177,6 +179,13 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.pushButton_ExportToPDF.setEnabled(_var)
         self.menuShow_autoMARCO_Grid.setEnabled(_var)
         self.actionChange_Preparation_date.setEnabled(_var)
+
+    def EnableDisableautoMARCO(self,_var)->bool:
+        '''Enable / Disable several GUI options'''
+        self.actionAutomated_Annotation_MARCO.setEnabled(_var)
+        self.actionAutoMARCO_current_image.setEnabled(_var)
+        self.menuShow_autoMARCO_Grid.setEnabled(_var)
+        self.pushButton_Evaluate.setEnabled(_var)
 
     def initUI(self):
 
@@ -292,7 +301,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.label_ProjectDetails.setFont(
             QtGui.QFont("Arial", 12, QtGui.QFont.Black))
 
-        self.ImageViewer.setStyleSheet(
+        self.ImageViewer_1.setStyleSheet(
             """background-color:transparent;border: 1px solid black;""")
         self.labelVisuClassif.setStyleSheet(
             """background-color:yellow;color:black;""")
@@ -378,6 +387,25 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         #Listen comboBoxes
         self.comboBoxScreen.activated.connect(self.setScreen)
         self.comboBoxScore.activated.connect(lambda: self.setScore(self.currentWell))
+        
+        #Project Tab
+        classes=['Clear',
+                 'Crystal',
+                 'Precipitate',
+                 'PhaseSep',
+                 'Other',
+                 'Unknown'
+                 ]
+        self.comboBoxProject.addItem(None)
+        for i in classes:
+            self.comboBoxProject.addItem(i)
+        self.comboBoxProject.setCurrentIndex(0)
+        
+        self.comboBoxProject.activated.connect(self.searchClassifProject)
+        self.pushButtonResetProject.clicked.connect(self.resetProject)
+        self.tableViewProject.cellClicked.connect(self.cellClickedTable)
+        self.comboBoxTargetFilter.activated.connect(lambda: self.filterTable(self.comboBoxTargetFilter.currentText(),
+                                                                             self.tableViewProject))
         
         self.show()
                    
@@ -927,7 +955,6 @@ https://github.com/LP-CDF/AMi_Image_Analysis
                 self.prepdate[4:6]), int(self.prepdate[6:]))
             d1 = datetime.date(int(self.date[0:4]), int(
                 self.date[4:6]), int(self.date[6:]))
-
             delta = d1 - d0
             self.label_NDays.setText(str(delta.days))
             del d0, d1, delta        
@@ -1012,6 +1039,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         
         #line below to reset Filter to All
         self.radioButton_All.setChecked(True)
+
 
     def export_pdf(self):
         '''export to PDF a report for current well'''
@@ -1227,7 +1255,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
                                             color:%s;"""
                                             % (ClassificationColor[self.classifications[well]]["background"],
                                                ClassificationColor[self.classifications[well]]["text"]))
-        self.ImageViewer.setStyleSheet("""border: 2px solid %s;""" % (
+        self.ImageViewer_1.setStyleSheet("""border: 2px solid %s;""" % (
             ClassificationColor[self.classifications[well]]["background"]))
         if self.currentScreen is not None:
             self.FindCrystCocktail(self.currentScreen,self.currentWell)
@@ -1288,37 +1316,8 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         return True
 
     def open_image(self, path):
-        '''based on https://vincent-vande-vyvre.developpez.com/tutoriels/pyqt/manipulation-images/'''
-        w_view, h_view = self.view.width(), self.view.height()
-        self.current_image = QtGui.QImage(path)
-        self.pixmap = QtGui.QPixmap.fromImage(self.current_image.scaled(w_view, h_view,
-                                                                        QtCore.Qt.KeepAspectRatio,
-                                                                        QtCore.Qt.SmoothTransformation))
-        self.view_current()
-
-    def view_current(self):
-        '''based on https://vincent-vande-vyvre.developpez.com/tutoriels/pyqt/manipulation-images/'''
-        w_pix, h_pix = self.pixmap.width(), self.pixmap.height()
-        self.scene.clear()
-        self.scene.setSceneRect(0, 0, w_pix, h_pix)
-        self.scene.addPixmap(self.pixmap)
-        self.view.setScene(self.scene)
-
-    def wheel_event(self, event):
-        '''based on https://vincent-vande-vyvre.developpez.com/tutoriels/pyqt/manipulation-images/'''
-        if self.previousWell is not None:  # To prevent crash at startup if using the wheel
-            steps = event.angleDelta().y() / 120.0
-            self.zoom(steps)
-            event.accept()
-
-    def zoom(self, step):
-        '''based on https://vincent-vande-vyvre.developpez.com/tutoriels/pyqt/manipulation-images/'''
-        w_pix, h_pix = self.pixmap.width(), self.pixmap.height()
-        w, h = w_pix * (1 + 0.1*step), h_pix * (1 + 0.1*step)
-        self.pixmap = QtGui.QPixmap.fromImage(self.current_image.scaled(w, h,
-                                                                        QtCore.Qt.KeepAspectRatio,
-                                                                        QtCore.Qt.FastTransformation))
-        self.view_current()
+        self.ImageViewer.open_image(path)
+        self.ImageViewer.view_current()
 
     @staticmethod
     def compare_most_recent(most_recent, date):
@@ -1789,6 +1788,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             else:
                 self.handle_error(
                     "TensorFlow version %s not supported" % self.MARCO.tfversion)
+                self.EnableDisableautoMARCO(False)
                 return
 
         self.classifications.clear()
@@ -1825,6 +1825,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             else:
                 self.handle_error(
                     "TensorFlow version %s not supported" % self.MARCO.tfversion)
+                self.EnableDisableautoMARCO(False)
                 return
 
         imgpath = self.buildWellImagePath(
@@ -1937,6 +1938,116 @@ Click "OK" to accept prediction, "Cancel" to ignore''')
             self.handle_error(f"WARNING: {path} not found")
             return
 
+#BELOW CODE RELATED TO PROJECT TAB
+
+    def resetProject(self):
+        '''Reset Table in Project Tab'''
+        # self.tableViewProject.clearContents()
+        self.tableViewProject.setRowCount(0)
+        self.comboBoxProject.setCurrentIndex(0)
+        self.imageP=None
+        self.ProjectInspector.scene.clear()
+
+    # def clearTableWidget(self, TableWidget, col=4):
+    #     '''clear all widget in a Table col'''
+    #     for i in range(TableWidget.rowCount()):
+    #         TableWidget.removeCellWidget(i,col)
+
+    def listTargetsTable(self, TableWidget, col=0):
+        '''clear all widget in a Table col'''
+        targets=[]
+        for i in range(TableWidget.rowCount()):
+            target=TableWidget.item(i,col).text()
+            if target not in targets:
+                targets.append(target)
+        return targets
+
+    def filterTable(self, key, TableWidget, col=0):
+        for i in range(TableWidget.rowCount()):
+            if key==TableWidget.item(i,col).text():
+                TableWidget.showRow(i)
+            elif key=="":
+                TableWidget.showRow(i)
+            else:
+                TableWidget.hideRow(i)
+        
+    def searchClassifProject(self):
+        searchC=self.comboBoxProject.currentText()
+        if self.comboBoxProject.currentText()=='':
+            searchC=None
+            return
+        _path=Path(*self.rootDir.parts[:self.rootDir.parts.index(self.project)+1])
+        fname='All_'+searchC+'.csv'
+        self.open_Summary(_path, fname)
+        self.show_project_overview()
+
+    def cellClickedTable(self):
+        row = self.tableViewProject.currentRow()
+        # col = self.tableViewProject.currentColumn()
+        path=self.tableViewProject.item(row,3).text()
+        # self.open_imageP(path)
+        self.ProjectInspector.open_image(path)
+        self.tableViewProject.item(row,4).setBackground(QtGui.QColor(153, 153, 255))
+
+    def loadcsvtoTable(self, path):
+            with open(path, newline='') as csv_file:
+                self.csvreader = csv.reader(csv_file, delimiter=',', quotechar='"')
+                next(self.csvreader) #skip header
+                self.tableViewProject.setRowCount(0); self.tableViewProject.setColumnCount(5)
+                for row_data in self.csvreader:
+                    row = self.tableViewProject.rowCount()
+                    self.tableViewProject.insertRow(row)
+                    if len(row_data) > 5:
+                        self.tableViewProject.setColumnCount(len(row_data))
+                    for column, stuff in enumerate(row_data):
+                        # print("STUFF: ", stuff)
+                        item = QTableWidgetItem(stuff)
+                        self.tableViewProject.setItem(row, column, item)
+            #Render Table not editable
+            self.tableViewProject.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
+            del self.csvreader
+            
+    def open_Summary(self, path, filename):
+        '''open a csv file, create a Table and returns True or False'''
+        _path=Path(path).joinpath(filename)
+        prog=Path(self.app_path).joinpath("tools", "Search_classif_Project.py")
+        _dir=Path(*self.rootDir.parts[:self.rootDir.parts.index(self.project)+1])
+        
+        _check=Path(_path).is_file()
+        if _check is True:
+            info = QMessageBox(self)
+            info.setWindowTitle("Warning File Found")
+            info.setText(f'''File:
+{_path}
+
+Do you want to re-run the analysis?''')
+            info.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+            retval = info.exec_()
+            if retval == QtWidgets.QMessageBox.Cancel:
+                self.loadcsvtoTable(_path)
+            else:
+                subprocess.run([sys.executable, prog,"--unique", 
+                                "--class", self.comboBoxProject.currentText(),
+                                _dir])
+                self.loadcsvtoTable(_path)
+        else:
+                subprocess.run([sys.executable, prog,"--unique", 
+                                "--class", self.comboBoxProject.currentText(),
+                                _dir])
+                self.loadcsvtoTable(_path)
+        self.targets=self.listTargetsTable(self.tableViewProject)
+        
+        #Populate combobox
+        self.comboBoxTargetFilter.clear()
+        self.comboBoxTargetFilter.addItem("")
+        for _i in self.targets:
+            self.comboBoxTargetFilter.addItem(_i)
+        return _check
+
+    def show_project_overview(self):
+        self.tableViewProject.setColumnHidden(3,True)
+        header = self.tableViewProject.horizontalHeader()
+        header.setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)

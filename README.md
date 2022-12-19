@@ -70,7 +70,6 @@ The file "prep_date.txt" is created within the program and contains the preparat
 
 The software was tested on:
 * linux CentOS 7 and python3 (v3.6.8 and v3.7.3))
-* Raspbian 10 (on a Pi 3B+, not recommended)
 * macOS HighSierra/Catalina/Big Sur/Monterey (up to python 3.7.13)
 
 Hopefully, it should work on other linux distributions, MacOS and Windows.

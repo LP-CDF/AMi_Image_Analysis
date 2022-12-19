@@ -1,3 +1,11 @@
+2022/12/19
+Changed GUI:
+Added tabs with new Project tab to look for all plates of a given project.
+Possibility to filter results for a given target name.
+Updated Manual
+Updated README and INSTALL (removing Raspbian)
+
+
 2022/08/03
 Updated Setup.py script to hopefully deal with later get-pip.py min_version increase.
 
