@@ -179,6 +179,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.pushButton_ExportToPDF.setEnabled(_var)
         self.menuShow_autoMARCO_Grid.setEnabled(_var)
         self.actionChange_Preparation_date.setEnabled(_var)
+        self.comboBoxProject.setEnabled(_var)
 
     def EnableDisableautoMARCO(self,_var)->bool:
         '''Enable / Disable several GUI options'''
@@ -401,7 +402,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
             self.comboBoxProject.addItem(i)
         self.comboBoxProject.setCurrentIndex(0)
         
-        self.comboBoxProject.activated.connect(self.searchClassifProject)
+        self.comboBoxProject.activated.connect(lambda: self.searchClassifProject())
         self.pushButtonResetProject.clicked.connect(self.resetProject)
         self.tableViewProject.cellClicked.connect(self.cellClickedTable)
         self.comboBoxTargetFilter.activated.connect(lambda: self.filterTable(self.comboBoxTargetFilter.currentText(),
