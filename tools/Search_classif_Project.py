@@ -70,42 +70,53 @@ def main(args=None):
         files+= [os.path.join(dirpath, file) for file in _filenames if "_data.txt" in file]
     files.sort(key=natural_sort_key)
     
+    filtered=list()
+    toreport=list()
     results=list()
     lines=list()
-    unique_report=list()
+    _temp=list()
+ 
+    #Filter all wells with given classification
     for elem in files:
         lines.clear()
         with open(elem,'r') as f:
             lines=f.readlines()
         if classif in lines[5]:
-            _directory = Path(elem)
-            _parents=_directory.parents
-            target=_directory.parts[-5]
-            plate=_directory.parts[-4]
-            date=_directory.parts[-2]
-            _basename=os.path.basename(elem)
-            well=_basename.split("_")[0]
-            pathtoImg=str(_parents[2])+'/'+date+'*/'+well+'.jpg'
-            pathtoImg=glob.glob(pathtoImg)
-            if UNIQUE is True:
-                if str(plate+'_'+well) not in unique_report:
-                    unique_report.append(str(plate+'_'+well))
-                    if len(pathtoImg)!=0:
-                        pathtoImg.sort(key=natural_sort_key)
-                        pathtoImg=pathtoImg[-1]#if same date, keep most recent
-                    else:#Should not append but...
-                        pathtoImg=''
-                    results.append((target,plate,date,pathtoImg,well))
-            else:
-                if len(pathtoImg)!=0:
-                    pathtoImg.sort(key=natural_sort_key)
-                    pathtoImg=pathtoImg[-1]#if same date, keep most recent
-                else:#Should not append but...
-                    pathtoImg=''
-                results.append((target,plate,date,pathtoImg,well))
-        else:
-            continue
-           
+            filtered.append(elem)
+
+    if UNIQUE is True:
+        for elem in filtered:
+            _path = Path(elem)
+            target=_path.parts[-5]
+            plate=_path.parts[-4]
+            date=_path.parts[-2]
+            well=_path.stem.split('_')[0]
+            _temp.append((str(plate+'_'+well),
+                          date,
+                          elem))   
+        #Filtering to keep most recent only
+        for elem in _temp:
+            res = list(filter(lambda x: elem[0] in x, _temp))
+            res.sort(key=lambda tup: tup[1])  # sorts in place
+            toreport.append(res[-1][2])    
+    else:
+        toreport=filtered
+     
+    for elem in toreport:
+        _path = Path(elem)
+        _parents=_path.parents
+        target=_path.parts[-5]
+        plate=_path.parts[-4]
+        date=_path.parts[-2]
+        well=_path.stem.split('_')[0]
+        pathtoImg=str(_parents[2])+'/'+date+'*/'+well+'.jpg'
+        pathtoImg=glob.glob(pathtoImg)        
+        if len(pathtoImg)!=0:
+            pathtoImg=pathtoImg[-1] #glob returns a list
+        else:#Should not append but...
+            pathtoImg=''
+        results.append((target,plate,date,pathtoImg,well))
+
     fields = ['Target', 'Plate', 'Date', 'Path to image', 'Well']
     fname='All_'+classif+'.csv'
     fname=dirName+'/'+fname
@@ -113,7 +124,7 @@ def main(args=None):
         write = csv.writer(f)
         write.writerow(fields)
         write.writerows(results)
-    print(f"Results saved to {dirName+'/'+fname}")
+    print(f"Results saved to {fname}")
     
     del results #, all_files        
 

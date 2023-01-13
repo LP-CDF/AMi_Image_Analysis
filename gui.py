@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'DesignerFiles/mainwindow_13122022_tabs.ui'
+# Form implementation generated from reading ui file 'DesignerFiles/mainwindow_11012023_tabs.ui'
 #
 # Created by: PyQt5 UI code generator 5.12.1
 #
@@ -458,7 +458,7 @@ class Ui_MainWindow(object):
         self.tab_2 = QtWidgets.QWidget()
         self.tab_2.setObjectName("tab_2")
         self.tableViewProject = QtWidgets.QTableWidget(self.tab_2)
-        self.tableViewProject.setGeometry(QtCore.QRect(20, 50, 661, 711))
+        self.tableViewProject.setGeometry(QtCore.QRect(20, 50, 661, 740))
         self.tableViewProject.setObjectName("tableViewProject")
         self.tableViewProject.setColumnCount(6)
         self.tableViewProject.setRowCount(0)
@@ -505,6 +505,21 @@ class Ui_MainWindow(object):
         self.pushButtonResetProject = QtWidgets.QPushButton(self.horizontalLayoutWidget)
         self.pushButtonResetProject.setObjectName("pushButtonResetProject")
         self.horizontalLayout_5.addWidget(self.pushButtonResetProject)
+        self.Notes_TextEdit_2 = QtWidgets.QPlainTextEdit(self.tab_2)
+        self.Notes_TextEdit_2.setEnabled(True)
+        self.Notes_TextEdit_2.setGeometry(QtCore.QRect(700, 690, 491, 100))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.Notes_TextEdit_2.sizePolicy().hasHeightForWidth())
+        self.Notes_TextEdit_2.setSizePolicy(sizePolicy)
+        self.Notes_TextEdit_2.setMinimumSize(QtCore.QSize(300, 100))
+        self.Notes_TextEdit_2.setMaximumSize(QtCore.QSize(16777215, 300))
+        self.Notes_TextEdit_2.setBaseSize(QtCore.QSize(100, 0))
+        self.Notes_TextEdit_2.setWhatsThis("")
+        self.Notes_TextEdit_2.setAccessibleDescription("")
+        self.Notes_TextEdit_2.setAutoFillBackground(False)
+        self.Notes_TextEdit_2.setObjectName("Notes_TextEdit_2")
         self.tabWidget.addTab(self.tab_2, "")
         self.horizontalLayout.addWidget(self.tabWidget)
         MainWindow.setCentralWidget(self.centralwidget)
@@ -779,11 +794,11 @@ class Ui_MainWindow(object):
         item = self.tableViewProject.horizontalHeaderItem(1)
         item.setText(_translate("MainWindow", "Plate"))
         item = self.tableViewProject.horizontalHeaderItem(2)
-        item.setText(_translate("MainWindow", "Well"))
-        item = self.tableViewProject.horizontalHeaderItem(3)
         item.setText(_translate("MainWindow", "Date"))
-        item = self.tableViewProject.horizontalHeaderItem(4)
+        item = self.tableViewProject.horizontalHeaderItem(3)
         item.setText(_translate("MainWindow", "Path"))
+        item = self.tableViewProject.horizontalHeaderItem(4)
+        item.setText(_translate("MainWindow", "Well"))
         self.label_3.setText(_translate("MainWindow", "Target Filter:"))
         self.pushButtonResetProject.setText(_translate("MainWindow", "Reset"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", "Project"))

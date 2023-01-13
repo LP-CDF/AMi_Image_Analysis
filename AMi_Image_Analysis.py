@@ -44,7 +44,7 @@ QtWidgets.QApplication.setAttribute(
 
 __version__ = "1.2.5"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "19-12-2022"
+__date__ = "11-01-2023"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -134,6 +134,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
                 
         #Project Tab
         self.ProjectInspector = utilViewer(self.ImageViewer_2)
+        self.Notes_TextEdit_2.setReadOnly(True)
 
         #To see all autoMARCO results windows create a dict subwell:object
         self.MARCO_window = {}
@@ -1229,7 +1230,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         #     self._lay, self.currentButtonIndex, state="active")
         
         #Load notes current wells
-        self.LoadNotes(self.rootDir, self.date, well)
+        self.LoadNotes(self.rootDir, self.date, well, self.Notes_TextEdit)
         self.InitialNotes = self.Notes_TextEdit.toPlainText()
         self.InitialClassif = self.classifications[well]
         self.InitialScore = self.scores[well]
@@ -1382,16 +1383,16 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             print("> ")
             del filesToCopy
 
-    def LoadNotes(self, path, date, well):
+    def LoadNotes(self, path, date, well, notewidget):
         data_file = Path(path).joinpath(
             "Image_Data", date, "%s_data.txt" % well)
-        self.Notes_TextEdit.clear()
+        notewidget.clear()
         if Path(data_file).exists():
             with open(data_file, "r") as f:
                 content = f.readlines()
                 notes = content[10:]
                 for i in notes:
-                    self.Notes_TextEdit.insertPlainText(i)
+                    notewidget.insertPlainText(i)
 
     def SaveDATA(self, well):
         '''Save Notes in QPlainTextEdit and more'''
@@ -1985,9 +1986,13 @@ Click "OK" to accept prediction, "Cancel" to ignore''')
     def cellClickedTable(self):
         row = self.tableViewProject.currentRow()
         # col = self.tableViewProject.currentColumn()
-        path=self.tableViewProject.item(row,3).text()
-        # self.open_imageP(path)
-        self.ProjectInspector.open_image(path)
+        _path=self.tableViewProject.item(row,3).text()
+        self.ProjectInspector.open_image(_path)
+        _parents=Path(_path).parents
+        self.LoadNotes(str(_parents[1]),
+                           self.tableViewProject.item(row,2).text(),
+                           self.tableViewProject.item(row,4).text(),
+                           self.Notes_TextEdit_2)
         self.tableViewProject.item(row,4).setBackground(QtGui.QColor(153, 153, 255))
 
     def loadcsvtoTable(self, path):
