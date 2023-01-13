@@ -95,10 +95,15 @@ def main(args=None):
                           date,
                           elem))   
         #Filtering to keep most recent only
+        _unique=[]
         for elem in _temp:
-            res = list(filter(lambda x: elem[0] in x, _temp))
-            res.sort(key=lambda tup: tup[1])  # sorts in place
-            toreport.append(res[-1][2])    
+            if elem[0] not in _unique:
+                _unique.append(elem[0])
+                res = list(filter(lambda x: elem[0] in x, _temp))
+                res.sort(key=lambda tup: tup[1])  # sorts in place
+                toreport.append(res[-1][2])
+            else:
+                continue #condition already dealt with
     else:
         toreport=filtered
      
