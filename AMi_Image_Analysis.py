@@ -44,7 +44,7 @@ QtWidgets.QApplication.setAttribute(
 
 __version__ = "1.2.5"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "11-01-2023"
+__date__ = "30-11-2023"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -243,8 +243,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
             lambda: self.take_plate_screenshot(""))
 
         #Crystallization Screens
-        self.actionMD_PGA.triggered.connect(
-            lambda: self.show_xmlScreen("MD-PGA"))
+        #Nextal
         self.actionNextal_MbClassII_Suite.triggered.connect(
             lambda: self.show_xmlScreen("Nextal-MbClassII-Suite"))
         self.actionNeXtal_Ammonium_Sulfate_Suite.triggered.connect(
@@ -259,6 +258,9 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
             lambda: self.show_xmlScreen("NeXtal-Protein-Complex-Suite"))
         self.actionNeXtal_Nucleix_Suite.triggered.connect(
             lambda: self.show_xmlScreen("NeXtal-Nucleix-Suite"))
+        self.actionNextal_Cryos.triggered.connect(
+            lambda: self.show_xmlScreen("NeXtal-Cryos-Suite"))    
+        #Jena
         self.actionJena_JCSG_Plus_Plus.triggered.connect(
             lambda: self.show_xmlScreen("JBScreen-JCSG-Plus-Plus"))
         self.actionJBScreen_Classic_HTS_I.triggered.connect(
@@ -273,6 +275,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
             lambda: self.show_xmlScreen("JBScreen-XP-Screen"))
         self.actionPi_PEG_HTS.triggered.connect(
             lambda: self.show_xmlScreen("JBScreen_Pi-PEG_HTS"))
+        #Hampton
         self.action_Additive_screen_HT.triggered.connect(
             lambda: self.show_xmlScreen("HR-AdditiveScreen_HT"))
         self.actionPeg_Rx1Rx2.triggered.connect(
@@ -281,6 +284,9 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
             lambda: self.show_xmlScreen("HR-SaltRx_HT_screen"))
         self.action_Cryo_HT.triggered.connect(
             lambda: self.show_xmlScreen("HR-Cryo_HT_screen"))
+        #MD
+        self.actionMD_PGA.triggered.connect(
+            lambda: self.show_xmlScreen("MD-PGA"))        
         self.actionMD_PACT_Premier.triggered.connect(
             lambda: self.show_xmlScreen("MD_PACT_Premier"))
         self.actionNextal_JCSG_Plus.triggered.connect(
@@ -1947,6 +1953,7 @@ Click "OK" to accept prediction, "Cancel" to ignore''')
         # self.tableViewProject.clearContents()
         self.tableViewProject.setRowCount(0)
         self.comboBoxProject.setCurrentIndex(0)
+        self.comboBoxTargetFilter.clear()
         self.imageP=None
         self.ProjectInspector.scene.clear()
 

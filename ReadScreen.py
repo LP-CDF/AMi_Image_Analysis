@@ -6,7 +6,7 @@ Created on Wed May 20 09:42:40 2020
 Adapted from https://gist.github.com/anonymous/1918b6fec0ab55ae681861e1e36ef754
 """
 
-__date__ = "07-07-2022"
+__date__ = "30-11-2023"
 
 import os, sys
 import csv
@@ -28,6 +28,7 @@ ScreenFile={'MD_BCS_Screen':'Md1-105_BCS_Screen.xml',
             'NeXtal-Nucleix-Suite':'NeXtal-Nucleix-Suite.xml',
             'NeXtal-PEGs-II-Suite':'NeXtal-PEGs-II-Suite.xml',
             'NeXtal-Protein-Complex-Suite':'NeXtal-Protein-Complex-Suite.xml',
+            'NeXtal-Cryos-Suite':'Nextal-Cryos.xml',
             'JBScreen_Classic_HTS_I':'JBScreen_Classic_HTS_I.xml',
             'JBScreen_Classic_HTS_II':'JBScreen_Classic_HTS_II.xml',
             'JBScreen_Classic_1-4':'JBScreen_Classic_1-4.csv',
