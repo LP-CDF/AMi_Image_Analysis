@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'DesignerFiles/mainwindow_11012023_tabs.ui'
+# Form implementation generated from reading ui file 'DesignerFiles/mainwindow_30112023_tabs.ui'
 #
 # Created by: PyQt5 UI code generator 5.12.1
 #
@@ -664,6 +664,8 @@ class Ui_MainWindow(object):
         self.actionMD_MORPHEUS_Fusion.setObjectName("actionMD_MORPHEUS_Fusion")
         self.actionChange_Preparation_date = QtWidgets.QAction(MainWindow)
         self.actionChange_Preparation_date.setObjectName("actionChange_Preparation_date")
+        self.actionNextal_Cryos = QtWidgets.QAction(MainWindow)
+        self.actionNextal_Cryos.setObjectName("actionNextal_Cryos")
         self.menuFile.addAction(self.openFile)
         self.menuFile.addAction(self.openDir)
         self.menuFile.addAction(self.actionExport_to_PDF)
@@ -696,6 +698,7 @@ class Ui_MainWindow(object):
         self.menuNextal.addAction(self.actionNeXtal_Ammonium_Sulfate_Suite)
         self.menuNextal.addAction(self.actionNextal_Classics_Suite)
         self.menuNextal.addAction(self.actionNextal_ClassicsII_Suite)
+        self.menuNextal.addAction(self.actionNextal_Cryos)
         self.menuNextal.addAction(self.actionNextal_JCSG_Plus)
         self.menuNextal.addAction(self.actionNextal_MbClassII_Suite)
         self.menuNextal.addAction(self.actionNeXtal_Nucleix_Suite)
@@ -878,8 +881,10 @@ class Ui_MainWindow(object):
         self.PlateScreenshot_subwell_c.setText(_translate("MainWindow", "subwell c"))
         self.PlateScreenshot_no_subwell.setText(_translate("MainWindow", "no subwell"))
         self.actionAutoMARCO_current_image.setText(_translate("MainWindow", "AutoMARCO current image"))
+        self.actionAutoMARCO_current_image.setShortcut(_translate("MainWindow", "Shift+E"))
         self.actionXP_Screen.setText(_translate("MainWindow", "XP Screen"))
         self.actionMD_MORPHEUS_Fusion.setText(_translate("MainWindow", "MD MORPHEUS Fusion"))
         self.actionChange_Preparation_date.setText(_translate("MainWindow", "Change Preparation date"))
+        self.actionNextal_Cryos.setText(_translate("MainWindow", "Nextal Cryos"))
 
 
