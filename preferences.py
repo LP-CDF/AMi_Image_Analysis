@@ -16,7 +16,7 @@ from PyQt5 import QtCore
 
 #Comment/uncomment the two lines below according to your need
 keyboard_layout="qwerty"
-# keyboard_layout="azerty"
+#keyboard_layout="azerty"
 
 USESCORECLASS = True # True or False
 
@@ -46,6 +46,11 @@ scoreclass=['heavy prec',
             'multiple crystals',
             'small crystals',
             '3D crystal']
+
+#Order in database_well_fields is IMPORTANT
+database_well_fields=['Target','Plate','date','well', 'subwell', 
+                      'reservoir', 'position','Classification', 
+                      'Human Score', 'Notes']
 
 class Shortcut():
     '''Shortcuts for the GUI'''

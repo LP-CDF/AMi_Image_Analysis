@@ -10,9 +10,11 @@ from gui import Ui_MainWindow
 import os
 import sys
 import datetime
+import json
 import re
 import csv
 import math
+import numpy as np
 from pathlib import Path
 import multiprocessing
 import time
@@ -20,7 +22,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import QPixmap, QKeySequence
 from PyQt5.QtWidgets import (QTableWidgetItem, QFileDialog, QSplashScreen,
                              QMessageBox, QGridLayout, QStyleFactory,
-                             QProgressDialog, QInputDialog, QLineEdit)
+                             QProgressDialog, QInputDialog, QLineEdit,
+                             QTableView)
 from utils import (ensure_directory, initProject, _RAWIMAGES, Ext,rows,
                    cols, open_XML, utilViewer)
 from shutil import copyfile
@@ -34,6 +37,9 @@ import ReadScreen
 import ExternalViewer
 import preferences as pref
 import subprocess
+import pandasModel
+import pandas as pd
+import glob
 
 QtWidgets.QApplication.setAttribute(
     QtCore.Qt.AA_EnableHighDpiScaling, True)  # enable highdpi scaling
@@ -42,9 +48,9 @@ QtWidgets.QApplication.setAttribute(
 QtWidgets.QApplication.setAttribute(
     QtCore.Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
 
-__version__ = "1.2.5"
+__version__ = "1.2.5.2"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "30-11-2023"
+__date__ = "05-02-2024"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -91,8 +97,10 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.os = sys.platform  # Name of the OS
         self.files = []  # Full path of Z-stacked images
         self.well_images = []  # Only names of well images
-        self.reservoirs = []  # Only names of unique well
+        self.wells=[] #Only names of well
+        self.reservoirs = []  # Only names of reservoir
         self.directory = str
+        self.data_json = None
         self.rootDir = str  # Full path where folders at different times are
         self.imageDir = str  # Full path where images at a given time are
         self.project = str  # Name of the project
@@ -116,7 +124,8 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.TimelineInspector = None
         self.MARCO = None  # Automated_Marco Predictor object
         self.Predicter = None  # Automated_Marco predicter
-        self.DatabaseDict=dict()
+        self.ScreenDatabase=dict() #Database of Screens
+        self.database=dict() # data
         self.currentScreen=None
         self.pixmap=None
         self.ScreenTable=None
@@ -145,7 +154,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         
         #Populate comboBoxes
         self.comboBoxScreen.addItem(None)
-        for _key,_value in self.DatabaseDict.items():
+        for _key,_value in self.ScreenDatabase.items():
             self.comboBoxScreen.addItem(_key)
         self.comboBoxScore.addItem(None)
 
@@ -181,6 +190,8 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.menuShow_autoMARCO_Grid.setEnabled(_var)
         self.actionChange_Preparation_date.setEnabled(_var)
         self.comboBoxProject.setEnabled(_var)
+        self.actionHistogram_Manual_Scores.setEnabled(_var)
+        self.action_SavePlateDatabase.setEnabled(_var)
 
     def EnableDisableautoMARCO(self,_var)->bool:
         '''Enable / Disable several GUI options'''
@@ -197,10 +208,17 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
 
         # self.exportPDFshortcut=QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+E"), self)
         # self.exportPDFshortcut.activated.connect(self.export_pdf)
+        
+        #Set Icons
+        icon_path= Path(self.app_path).joinpath("icons")
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(f'{Path(icon_path).joinpath("reset-update-icon.svg")}'), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pushButtonResetProject.setIcon(icon)
 
         #Setup Menu
         self.openFile.triggered.connect(self.openFileNameDialog)
         self.openDir.triggered.connect(lambda: self.openDirDialog(dialog=True))
+        self.action_SavePlateDatabase.triggered.connect(lambda: self.writetojson(self.database, f'data_{self.date}.json'))
 
         self.actionAutoCrop.triggered.connect(self.AutoCrop)
         self.actionAutoMerge.triggered.connect(self.AutoMerge)
@@ -305,6 +323,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.actionShortcuts.triggered.connect(self.ShowShortcuts)
         self.actionAbout.triggered.connect(self.ShowAbout)
         self.actionManual.triggered.connect(self.ShowManual)
+        self.actionHistogram_Manual_Scores.triggered.connect(lambda: self.showBinGraph(self.scores))
 
         self.label_ProjectDetails.setFont(
             QtGui.QFont("Arial", 12, QtGui.QFont.Black))
@@ -411,9 +430,9 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         
         self.comboBoxProject.activated.connect(lambda: self.searchClassifProject())
         self.pushButtonResetProject.clicked.connect(self.resetProject)
-        self.tableViewProject.cellClicked.connect(self.cellClickedTable)
-        self.comboBoxTargetFilter.activated.connect(lambda: self.filterTable(self.comboBoxTargetFilter.currentText(),
-                                                                             self.tableViewProject))
+        # self.comboBoxTargetFilter.activated.connect(lambda: self.filterTable(self.comboBoxTargetFilter.currentText(),
+        #                                                                      self.tableViewProject))
+        self.comboBoxTargetFilter.activated.connect(lambda: self.filterQTableView(self.comboBoxTargetFilter.currentText()))
         
         self.show()
                    
@@ -456,8 +475,8 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.ScreenTable = ReadScreen.MyTable(10, 10)
         self.ScreenTable.setWindowTitle(path.stem)
 
-        if path.stem in self.DatabaseDict:
-            data = self.DatabaseDict[path.stem]
+        if path.stem in self.ScreenDatabase:
+            data = self.ScreenDatabase[path.stem]
         else:
             data = open_XML(fileName)
         
@@ -482,16 +501,16 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         for _screen in ScreenFile.keys():
             path=Path(self.app_path).joinpath("Screen_Database", ScreenFile[_screen])
             if Path(path).suffix=='.xml':
-                self.DatabaseDict[_screen]=open_XML(str(path))
-        # for i,j in self.DatabaseDict.items(): print(i,j)
+                self.ScreenDatabase[_screen]=open_XML(str(path))
+        # for i,j in self.ScreenDatabase.items(): print(i,j)
 
     def FindCrystCocktail(self,screen,well):
         '''find crystallization cocktail in database and return a list'''
         if well[-1] in ['a', 'b', 'c']:
             well=well[:-1]
-        # cocktail=self.DatabaseDict[screen][self.reservoirs.index(well)+1]
+        # cocktail=self.ScreenDatabase[screen][self.reservoirs.index(well)+1]
         # if cocktail[0] != well:
-        for i,j in self.DatabaseDict[screen].items():
+        for i,j in self.ScreenDatabase[screen].items():
             if j[0]==well:
                 cocktail=j
                 break
@@ -860,7 +879,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         if fileName:
             self.show_xmlScreen(fileName)
         #Import temporarily Screen into database
-        self.DatabaseDict[Path(fileName).stem]=open_XML(fileName)
+        self.ScreenDatabase[Path(fileName).stem]=open_XML(fileName)
         #Update comboBoxScreen List if item not present
         if self.comboBoxScreen.findText(Path(fileName).stem) == -1:
             self.comboBoxScreen.addItem(Path(fileName).stem)
@@ -911,12 +930,25 @@ https://github.com/LP-CDF/AMi_Image_Analysis
                 else:
                     self.prepdate = "None"
 
+    def writetojson(self, data, filename):
+        path = Path(self.rootDir).joinpath(
+            "Image_Data", self.date, filename)
+        with open(path, "w") as f:
+            	json.dump(data, f, indent=4)
+    
+    def loadjson(self, filename):
+        with open(filename) as f:
+            _database = json.load(f)
+        return _database
+
     def Reset(self):
         '''reset file list and more when changing folder and reset layout grid'''
         self.classifications.clear()
         self.scores.clear()
         self.WellHasNotes.clear()
         self.rootDir = None
+        self.database.clear()
+        self.data_json = None
         self.previousWell = None
         self.currentWell = None
         self.currentScreen = None
@@ -926,6 +958,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         self.idx = None
         self.files.clear()
         self.well_images.clear()
+        self.wells.clear()
         self.reservoirs.clear()
         self.ClearLayout(self._lay)
         self.ClearLayout(self._timlay)
@@ -966,6 +999,55 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             delta = d1 - d0
             self.label_NDays.setText(str(delta.days))
             del d0, d1, delta        
+
+    def CreateDatabase(self):
+        '''create a dict to use internally and export to JSON later
+        if JSON FILE NOT ALREADY available 
+        Important: Check consistency with pref.database_well_fields
+        if changes are made in dictionnary content'''
+        #Function must be called after Initialise()
+        #Organize data
+        datadict=dict()
+        Plate=self.plate
+        datadict[Plate]=dict()
+        datadict[Plate]['Project']=self.project
+        datadict[Plate]['Target']=self.target
+        datadict[Plate]['Plate Name']=self.plate
+        datadict[Plate]['Prep_Date']=self.prepdate
+        datadict[Plate]['Imaging_Date']=self.date
+        datadict[Plate]['Wells']=dict()
+    
+        for well in self.wells:
+            datadict[Plate]['Wells'][well]=dict()
+            datadict[Plate]['Wells'][well]['well']=well
+            datadict[Plate]['Wells'][well]['subwell']=''.join(x for x in well[-1] if well[-1].islower())
+            datadict[Plate]['Wells'][well]['reservoir']=''.join(x for x in well if not x.islower())
+            datadict[Plate]['Wells'][well]['position']="None"#total_wells.index(datadict[Plate]['Wells'][well]['reservoir'])+1
+            datadict[Plate]['Wells'][well]['date']=self.date
+            datadict[Plate]['Wells'][well]['Classification']="Unknown"
+            datadict[Plate]['Wells'][well]['Human Score']="None"
+            datadict[Plate]['Wells'][well]['Notes']=[]
+        
+        return datadict
+
+    def UpdateDatabase(self, well):
+        '''Update self.database'''
+        text = list(self.Notes_TextEdit.toPlainText().split("\n"))
+        if len(self.listTostring(text))==0:
+            text=[]          
+        datadict={}
+        datadict[well]=dict()
+        datadict[well]['well']=well
+        datadict[well]['subwell']=''.join(x for x in well[-1] if well[-1].islower())
+        datadict[well]['reservoir']=''.join(x for x in well if not x.islower())
+        datadict[well]['position']="None"#total_wells.index(datadict[Plate]['Wells'][well]['reservoir'])+1
+        datadict[well]['date']=self.date
+        datadict[well]['Classification']=self.classifications[well]
+        datadict[well]['Human Score']=self.scores[well]
+        datadict[well]['Notes']=text
+       
+        self.database[self.plate]['Wells'].update(datadict)
+        self.label_LastSaved.setText(f"### Data for {well} updated ###")
 
     def createUniqueReservoirs(self, _list)->list:
         '''Create list of unique reservoirs, input is list of well image names'''
@@ -1024,6 +1106,8 @@ https://github.com/LP-CDF/AMi_Image_Analysis
                 if os.path.splitext(file)[1] in Ext:
                     self.files.append(os.path.join(directory, file))
                     self.well_images.append(os.path.basename(file))
+                    self.wells.append(Path(os.path.basename(file)).stem)
+            
         if len(self.files) != 0:
             #sorting the output of os.listdir after filtering
             self.files.sort(key=self.natural_sort_key)
@@ -1038,16 +1122,35 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             self.handle_error("No Image File Found in directory")
             return
 
-        for i in self.well_images:
-            well = os.path.splitext(i)[0]
-            self.CheckClassificationAndNotes(self.rootDir, self.date, well)
-
         #Create list of unique reservoirs
         self.createUniqueReservoirs(self.well_images)
         
         #line below to reset Filter to All
         self.radioButton_All.setChecked(True)
-
+        
+        
+        #Create empty database if no JSON present
+        #else load json data
+        json_path=Path(self.rootDir).joinpath(
+            "Image_Data", self.date, f'data_{self.date}.json')
+        if not json_path.exists():
+            self.database=self.CreateDatabase()
+            self.writetojson(self.database, f'data_{self.date}.json')
+        else:
+            self.database=self.loadjson(json_path)
+            #Update imaging date fields in database if necessary
+            jsondate=self.database.get(self.plate, {}).get("Imaging_Date")
+            if jsondate != self.date:
+                self.database[self.plate]["Imaging_Date"]=self.date
+                for well,date in self.database[self.plate]["Wells"].items():
+                    self.database[self.plate]["Wells"][well]["date"]=self.date
+                #then save
+                self.writetojson(self.database, f'data_{self.date}.json')
+        # print(self.database)
+        
+        for i in self.well_images:
+            well = os.path.splitext(i)[0]
+            self.CheckClassificationAndNotes(self.rootDir, self.date, well)
 
     def export_pdf(self):
         '''export to PDF a report for current well'''
@@ -1212,6 +1315,20 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         else:
             return False
 
+    def listTostring(self,_list):
+        '''join string and remove empty spaces'''
+        s = ''.join(str(x) for x in _list).replace(' ', '')
+        return s
+
+    def UpdateWellHasNotesDict(self, well):
+        '''update self.WellHasNotes dict'''
+        notes=self.database.get(self.plate, {}).get("Wells").get(well).get('Notes')
+        if len(self.listTostring(notes)) == 0:
+            self.WellHasNotes[well] = False
+        else :
+            self.WellHasNotes[well] = True
+        # print('DEBUG listTostring(notes): ', self.listTostring(notes), 'len(notes): ', len(self.listTostring(notes)))
+
     def dothings(self,well):
         '''do many things when button is clicked
            save previous notes, load notes, GUI update...'''
@@ -1229,14 +1346,12 @@ https://github.com/LP-CDF/AMi_Image_Analysis
                                     self.InitialNotes,
                                     self.Notes_TextEdit.toPlainText(),
                                     self.previousWell) is True:
-                self.SaveDATA(self.previousWell)
-                
-        # #Change color of button after click
-        # self.ChangeButtonColor(
-        #     self._lay, self.currentButtonIndex, state="active")
+                # self.SaveDATA(self.previousWell)
+                self.UpdateDatabase(self.previousWell)
+                self.UpdateWellHasNotesDict(self.previousWell)
         
         #Load notes current wells
-        self.LoadNotes(self.rootDir, self.date, well, self.Notes_TextEdit)
+        self.LoadNotes(well, self.Notes_TextEdit)
         self.InitialNotes = self.Notes_TextEdit.toPlainText()
         self.InitialClassif = self.classifications[well]
         self.InitialScore = self.scores[well]
@@ -1287,15 +1402,6 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         self.open_image(path)
         #do many things
         self.dothings(well)
-            
-    # def LoadWellImage(self,path):
-    #     ''' '''
-    #     QtGui.QPixmapCache.clear()
-    #     label=QLabel(self)
-    #     pixmap=QPixmap(path)
-    #     #resize pixmap to size of the QscrollArea Temporary?
-    #     label.setPixmap(pixmap.scaled(860, 630, QtCore.Qt.KeepAspectRatio, QtCore.Qt.FastTransformation))
-    #     self.ImageViewer.setWidget(label)
 
     def setScreen(self):
         self.currentScreen=self.comboBoxScreen.currentText()
@@ -1310,17 +1416,32 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             self.scores[well]=None
         # print(f"self.scores[{well}]: ", self.scores[well])
 
+    def showBinGraph(self,scores):
+        import plot as guiplt
+        '''Extract, bin and plot human scores for all wells
+        ie no subwell filtering'''
+        # import matplotlib.pyplot as plt
+        graphHist=guiplt.MplCanvas()
+        graphHist.showBinGraphA(scores)
+        return
+        graphHist.axes.plot([0,1,2,3,4], [10,1,20,3,40])
+
+        graphHist.show()
+        return
+
+
     def copytoNotes(self,screen,well):
         if screen is None or well is None:
             return False
         cocktail=self.FindCrystCocktail(screen,well)
-        if len(self.Notes_TextEdit.toPlainText().strip('\n'))==0:
-            spacer=''
-        else:
-            spacer='\n'       
-        self.Notes_TextEdit.insertPlainText(f"{spacer}Crystallization Mix:\n")
+        # if len(self.Notes_TextEdit.toPlainText().strip('\n'))==0:
+        #     spacer=''
+        # else:
+        #     spacer='\n'       
+        self.Notes_TextEdit.insertPlainText(f"Crystallization Mix:")
         for _i in cocktail[1:]:
-            self.Notes_TextEdit.insertPlainText(_i+'\n')
+            self.Notes_TextEdit.insertPlainText('\n'+_i)
+            # self.Notes_TextEdit.insertPlainText('\n')
         return True
 
     def open_image(self, path):
@@ -1384,77 +1505,64 @@ https://github.com/LP-CDF/AMi_Image_Analysis
             filesToCopy = [file for file in path.iterdir() if not Path(
                 file).is_dir()]  # skip folders like Miniatures
             for file in filesToCopy:
-                copyfile(str(file), str(newPath.joinpath(file.name)))
+                if ".json" in str(file): #only copy json files
+                    newfilename=f'data_{current_date}'+Path(file).suffix
+                    copyfile(str(file), str(newPath.joinpath(newfilename)))
             print(f"> Copied previous notes from: {most_recent}")
-            print("> ")
+            print("'> ")
             del filesToCopy
 
-    def LoadNotes(self, path, date, well, notewidget):
-        data_file = Path(path).joinpath(
-            "Image_Data", date, "%s_data.txt" % well)
+    def LoadNotes(self, well, notewidget):
         notewidget.clear()
-        if Path(data_file).exists():
-            with open(data_file, "r") as f:
-                content = f.readlines()
-                notes = content[10:]
-                for i in notes:
-                    notewidget.insertPlainText(i)
+        notes = self.database.get(self.plate, {}).get("Wells").get(well).get('Notes')
+        if len(self.listTostring(notes))!=0:
+            for i in notes:
+                notewidget.insertPlainText('\n'+i)
+                # notewidget.insertPlainText('\n')
 
-    def SaveDATA(self, well):
-        '''Save Notes in QPlainTextEdit and more'''
-        text = self.Notes_TextEdit.toPlainText()
-        if len(text) != 0:
-            self.WellHasNotes[well] = True
-        elif len(text) == 0 and self.WellHasNotes[well] == True:
-            self.WellHasNotes[well] = False
-        path = Path(self.rootDir).joinpath(
-            "Image_Data", self.date, "%s_data.txt" % well)
-        Notes = []
-        Notes.append("Project Code:%s:\n" % self.project)
-        Notes.append("Target Name:%s:\n" % self.target)
-        Notes.append("Plate Name:%s:\n" % self.plate)
-        Notes.append("Date:%s:\n" % self.date)
-        Notes.append("\n")
-        Notes.append("Classification:%s:\n" % self.classifications[well])
-        Notes.append("Human Score:%s:\n" % self.scores[well])
-        Notes.append("\n")
-        Notes.append("Notes:\n")
-        Notes.append("\n")
-        Notes.append(text)
+    # def SaveDATA(self, well):
+    #     '''Save Notes in QPlainTextEdit and more'''
+    #     text = self.Notes_TextEdit.toPlainText()
+    #     if len(text) != 0:
+    #         self.WellHasNotes[well] = True
+    #     elif len(text) == 0 and self.WellHasNotes[well] == True:
+    #         self.WellHasNotes[well] = False
+    #     path = Path(self.rootDir).joinpath(
+    #         "Image_Data", self.date, "%s_data.txt" % well)
+    #     Notes = []
+    #     Notes.append("Project Code:%s:\n" % self.project)
+    #     Notes.append("Target Name:%s:\n" % self.target)
+    #     Notes.append("Plate Name:%s:\n" % self.plate)
+    #     Notes.append("Date:%s:\n" % self.date)
+    #     Notes.append("\n")
+    #     Notes.append("Classification:%s:\n" % self.classifications[well])
+    #     Notes.append("Human Score:%s:\n" % self.scores[well])
+    #     Notes.append("\n")
+    #     Notes.append("Notes:\n")
+    #     Notes.append("\n")
+    #     Notes.append(text)
 
-        print("Saving data to %s" % path)
-        self.label_LastSaved.setText(f"### Data for {well} saved ###")
-        try:
-            with open(path, 'w') as f:
-                for i in Notes:
-                    f.write(i)
-        except Exception as e:
-            self.handle_error(str(e))
+    #     print("Saving data to %s" % path)
+    #     self.label_LastSaved.setText(f"### Data for {well} saved ###")
+    #     try:
+    #         with open(path, 'w') as f:
+    #             for i in Notes:
+    #                 f.write(i)
+    #     except Exception as e:
+    #         self.handle_error(str(e))
 
     def CheckClassificationAndNotes(self, path, date, well):
-        '''create a dir well:classif when calling func AddtoClassificationDict
+        '''create a dict well:classif when calling func AddtoClassificationDict
         and create a dict WellHasNotes True or False'''
-        data_file = Path(path).joinpath(
-            "Image_Data", date, "%s_data.txt" % well)
-        if Path(data_file).exists():
-            with open(data_file, "r") as f:
-                content = f.readlines()
-                classifications = content[5].split(":")
-                score=content[6].split(":")
-                if score==['\n']:
-                    human_score=None
-                elif score[1] =='None':
-                    human_score=None
-                else:
-                    human_score=score[1]
-                self.AddtoClassificationDict(well, classifications[1], human_score)
-                if len(content[10:]) != 0:
-                    self.WellHasNotes[well] = True
-                else:
-                    self.WellHasNotes[well] = False
-        else:
-            self.AddtoClassificationDict(well, "Unknown", None)
-            self.WellHasNotes[well] = False
+
+        classification = self.database.get(self.plate, {}).get("Wells").get(well).get('Classification')
+        if classification == 'None':
+            classification= 'Unknown'
+        score=self.database.get(self.plate, {}).get("Wells").get(well).get('Human Score')
+        if score == 'None':
+            score= None
+        self.AddtoClassificationDict(well, classification, score)
+        self.UpdateWellHasNotesDict(well)
 
     def AddtoClassificationDict(self, well, classification, score):
         '''Create a dictionnary with well and classification'''
@@ -1809,7 +1917,9 @@ https://github.com/LP-CDF/AMi_Image_Analysis
 
         for well, _classif in self.classifications.items():
             self.scores[well]= None #as scores were cleared need to put None
-            self.SaveDATA(well)
+            self.WellHasNotes[well]=False #as Notes were cleared
+            # self.SaveDATA(well)
+            self.UpdateDatabase(well)
 
     def annotateCurrent(self):
         '''Single image classification using MARCO'''
@@ -1851,6 +1961,7 @@ Click "OK" to accept prediction, "Cancel" to ignore''')
 
         if retval == QtWidgets.QMessageBox.Ok:
             self.classifications[self.currentWell] = result[0]
+            self.UpdateDatabase(self.currentWell)
             self.Set_ClassifButtonState(
                 self.Scoring_Layout, self.classifications[self.currentWell])
         else:
@@ -1858,11 +1969,18 @@ Click "OK" to accept prediction, "Cancel" to ignore''')
 
         del result
 
-    @staticmethod
-    def on_exit():
+    def closeEvent(self, event):
+        self.on_exit()
+        
+    def on_exit(self):
         '''things to do before exiting'''
-#        self.SaveDATA(self.currentWell)
-        app.closeAllWindows()
+        # self.SaveDATA(self.currentWell)
+        if self.currentWell != None:
+            self.UpdateDatabase(self.currentWell)
+            self.writetojson(self.database, f'data_{self.date}.json')     
+            print("\n\nDatabase saved to:\n%s" % Path(self.rootDir).joinpath(
+            "Image_Data", self.date, f'data_{self.date}.json'))
+            app.closeAllWindows()
         Citation()
 
     def take_plate_screenshot(self, subwell):
@@ -1951,7 +2069,8 @@ Click "OK" to accept prediction, "Cancel" to ignore''')
     def resetProject(self):
         '''Reset Table in Project Tab'''
         # self.tableViewProject.clearContents()
-        self.tableViewProject.setRowCount(0)
+        # self.tableViewProject.setRowCount(0)
+        self.tableViewProject.clearSpans()
         self.comboBoxProject.setCurrentIndex(0)
         self.comboBoxTargetFilter.clear()
         self.imageP=None
@@ -1971,59 +2090,90 @@ Click "OK" to accept prediction, "Cancel" to ignore''')
                 targets.append(target)
         return targets
 
-    def filterTable(self, key, TableWidget, col=0):
-        for i in range(TableWidget.rowCount()):
-            if key==TableWidget.item(i,col).text():
-                TableWidget.showRow(i)
-            elif key=="":
-                TableWidget.showRow(i)
-            else:
-                TableWidget.hideRow(i)
+    # def filterTable(self, key, TableWidget, col=0):
+    #     '''Not used sinc switching to QTableView'''
+    #     for i in range(TableWidget.rowCount()):
+    #         if key==TableWidget.item(i,col).text():
+    #             TableWidget.showRow(i)
+    #         elif key=="":
+    #             TableWidget.showRow(i)
+    #         else:
+    #             TableWidget.hideRow(i)
+     
+    def filterQTableView(self, filter_text):
+        self.proxyModel.setFilterFixedString(filter_text)
         
     def searchClassifProject(self):
-        searchC=self.comboBoxProject.currentText()
-        if self.comboBoxProject.currentText()=='':
-            searchC=None
-            return
         _path=Path(*self.rootDir.parts[:self.rootDir.parts.index(self.project)+1])
-        fname='All_'+searchC+'.csv'
+        fname='Project_database.json'
         self.open_Summary(_path, fname)
-        self.show_project_overview()
 
     def cellClickedTable(self):
-        row = self.tableViewProject.currentRow()
+        self.Notes_TextEdit_2.clear()
+        index = self.tableViewProject.currentIndex()
         # col = self.tableViewProject.currentColumn()
-        _path=self.tableViewProject.item(row,3).text()
-        self.ProjectInspector.open_image(_path)
-        _parents=Path(_path).parents
-        self.LoadNotes(str(_parents[1]),
-                           self.tableViewProject.item(row,2).text(),
-                           self.tableViewProject.item(row,4).text(),
-                           self.Notes_TextEdit_2)
-        self.tableViewProject.item(row,4).setBackground(QtGui.QColor(153, 153, 255))
+        _dir=str(Path(*self.rootDir.parts[:self.rootDir.parts.index(self.project)+1]))
+        date=index.siblingAtColumn(2).data()
+        target=index.siblingAtColumn(0).data()
+        plate=index.siblingAtColumn(1).data()
+        well=index.siblingAtColumn(3).data()
+        pathtoImg=_dir+'/'+target+'/'+plate+'/'+date+'*/'+well
+        files=glob.glob(pathtoImg+'.*')
+        _path=[file for file in files if Path(file).suffix in Ext]
+        if Path(_path[0]).exists():
+            self.ProjectInspector.open_image(_path[0])
+        else:
+            self.handle_error("Image not found, error in database?")
+            return
+        
+        #Load Notes to text widget
+        notes = index.siblingAtColumn(9).data()
+        notes = notes.strip('[]')
+        notes = notes.split(',')
+        for i in notes:
+                    self.Notes_TextEdit_2.insertPlainText(i.replace('\'', '')+'\n')
+        #TODO: Change row color using QTableView model
+        # row = index.row
+        # self.tableViewProject.item(row,4).setBackground(QtGui.QColor(153, 153, 255))
 
-    def loadcsvtoTable(self, path):
-            with open(path, newline='') as csv_file:
-                self.csvreader = csv.reader(csv_file, delimiter=',', quotechar='"')
-                next(self.csvreader) #skip header
-                self.tableViewProject.setRowCount(0); self.tableViewProject.setColumnCount(5)
-                for row_data in self.csvreader:
-                    row = self.tableViewProject.rowCount()
-                    self.tableViewProject.insertRow(row)
-                    if len(row_data) > 5:
-                        self.tableViewProject.setColumnCount(len(row_data))
-                    for column, stuff in enumerate(row_data):
-                        # print("STUFF: ", stuff)
-                        item = QTableWidgetItem(stuff)
-                        self.tableViewProject.setItem(row, column, item)
-            #Render Table not editable
-            self.tableViewProject.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
-            del self.csvreader
+    def create_DataFrame(self, data):
+        '''Load Project_database.json, create pandas.DataFrame
+        and reorder columns'''
+        # #Normalize
+        data_frames=[]
+        for i in data:
+         	data_frames.append(pd.json_normalize(i))    
+        combined_Norm = pd.concat(data_frames)
+        #reaarange data
+        
+        combined_Norm=combined_Norm[pref.database_well_fields]
+        return combined_Norm
+    
+    def filter_classification(self,data, classification):
+        '''filter pandas dataframe'''
+        return data.loc[data['Classification']==classification]
+
+    def df2QTable(self, data):
+        '''send dataframe to Qtable'''
+        model = pandasModel.pandasModel(data)
+        #Create proxyModel for latter filtering of QTableView
+        self.proxyModel = QtCore.QSortFilterProxyModel(model)
+        self.proxyModel.setFilterCaseSensitivity(QtCore.Qt.CaseInsensitive)
+        self.proxyModel.setSourceModel(model)
+        self.tableViewProject.setModel(self.proxyModel)
+        self.tableViewProject.resizeColumnsToContents()        
+        self.tableViewProject.setSelectionBehavior(QTableView.SelectRows)
+
+        hide=[4,5,6,8,9]
+        for i in hide:
+            self.tableViewProject.setColumnHidden(i,True)
+        
+        self.tableViewProject.clicked.connect(self.cellClickedTable)
             
     def open_Summary(self, path, filename):
         '''open a csv file, create a Table and returns True or False'''
         _path=Path(path).joinpath(filename)
-        prog=Path(self.app_path).joinpath("tools", "Search_classif_Project.py")
+        prog=Path(self.app_path).joinpath("tools", "Create_Project_json.py")
         _dir=Path(*self.rootDir.parts[:self.rootDir.parts.index(self.project)+1])
         
         _check=Path(_path).is_file()
@@ -2037,18 +2187,18 @@ Do you want to re-run the analysis?''')
             info.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
             retval = info.exec_()
             if retval == QtWidgets.QMessageBox.Cancel:
-                self.loadcsvtoTable(_path)
+                self.data_json=self.loadjson(_path)
             else:
-                subprocess.run([sys.executable, prog,"--unique", 
-                                "--class", self.comboBoxProject.currentText(),
-                                _dir])
-                self.loadcsvtoTable(_path)
+                subprocess.run([sys.executable, prog,_dir])
+                self.data_json=self.loadjson(_path)
         else:
-                subprocess.run([sys.executable, prog,"--unique", 
-                                "--class", self.comboBoxProject.currentText(),
-                                _dir])
-                self.loadcsvtoTable(_path)
-        self.targets=self.listTargetsTable(self.tableViewProject)
+                subprocess.run([sys.executable, prog,_dir])
+                self.data_json=self.loadjson(_path)
+        
+        df=self.create_DataFrame(self.data_json)
+        df_filtered=self.filter_classification(df, self.comboBoxProject.currentText())
+        self.df2QTable(df_filtered)        
+        self.targets=list(df['Target'].unique())
         
         #Populate combobox
         self.comboBoxTargetFilter.clear()
@@ -2057,10 +2207,10 @@ Do you want to re-run the analysis?''')
             self.comboBoxTargetFilter.addItem(_i)
         return _check
 
-    def show_project_overview(self):
-        self.tableViewProject.setColumnHidden(3,True)
-        header = self.tableViewProject.horizontalHeader()
-        header.setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
+    # def show_project_overview(self):
+    #     self.tableViewProject.setColumnHidden(3,True)
+    #     header = self.tableViewProject.horizontalHeader()
+    #     header.setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)

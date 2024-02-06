@@ -89,6 +89,8 @@ Dependencies:
 * PyFPDF (v1.7.2 or higher)
 * openCV for merging and cropping tools
 * NumPy
+* Pandas
+* Matplotlib
 
 Optional dependencies:
 * TensorFlow (v1.1x, not v2)

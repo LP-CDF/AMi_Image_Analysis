@@ -133,7 +133,8 @@ class HeatMapGrid(QtWidgets.QDialog, Ui_Dialog):
                 qp.setFont(QFont("Courier New", 10))
                 qp.drawText(x1-17, y1, dx, dy,
                             QtCore.Qt.AlignCenter, wells[subrow])
-            #for futur Human scoring
+            #for Human scoring
+            qp.setFont(QFont("Courier New", 10))
             if self.score[well] is None:
                 qp.drawText(x1, y1, dx, dy,
                             QtCore.Qt.AlignCenter, '')

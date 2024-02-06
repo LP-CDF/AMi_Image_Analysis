@@ -20,6 +20,8 @@ Please read this carefully until the end before proceeding.
     * PyQt5
     * Python Imaging Library (Pillow, v6.2.1 or higher)
     * PyFPDF (v1.7.2 or higher)
+    * Pandas
+    * Matplotlib
 
     Optional dependencies:
     * TensorFlow (v1.1x, not v2)

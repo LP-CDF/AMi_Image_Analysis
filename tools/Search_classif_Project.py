@@ -20,6 +20,8 @@ __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 _DATA = "Image_Data"
 _nsre = re.compile('([0-9]+)')
 
+Ext={".tif",".tiff",".TIFF",".jpg", ".jpeg",".JPG",".JPEG",".png",".PNG"}
+
 def natural_sort_key(s):
     global _nsre
     return [int(text) if text.isdigit() else text.lower()
@@ -114,13 +116,17 @@ def main(args=None):
         plate=_path.parts[-4]
         date=_path.parts[-2]
         well=_path.stem.split('_')[0]
-        pathtoImg=str(_parents[2])+'/'+date+'*/'+well+'.jpg'
-        pathtoImg=glob.glob(pathtoImg)        
+        pathtoImg=str(_parents[2])+'/'+date+'*/'+well
+        files=glob.glob(pathtoImg+'.*')
+        pathtoImg=[file for file in files if Path(file).suffix in Ext]
+
+        
         if len(pathtoImg)!=0:
             pathtoImg=pathtoImg[-1] #glob returns a list
-        else:#Should not append but...
-            pathtoImg=''
-        results.append((target,plate,date,pathtoImg,well))
+            results.append((target,plate,date,pathtoImg,well))
+        # else:#Should not append but...
+        #     pathtoImg=''
+        # results.append((target,plate,date,pathtoImg,well))
 
     fields = ['Target', 'Plate', 'Date', 'Path to image', 'Well']
     fname='All_'+classif+'.csv'
