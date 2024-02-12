@@ -1,3 +1,13 @@
+2024/02/11:
+Data are now stored as JSON files (Plate and Project). No more use of data_well.txt files.
+Using pandas dataframe for Project Overview.
+Viewing of selected drop classification over time in Project tab.
+Possibility to export to a single csv file all drops with a given classification for further analysis.
+Added tool to create JSON files for a Plate from data_well.txt files (./tools/Create_json.py)
+Possibility to visualize Human Scores as histogram.
+Updated GUI.
+
+
 2022/12/19
 Changed GUI:
 Added tabs with new Project tab to look for all plates of a given project.

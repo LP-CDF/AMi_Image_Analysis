@@ -48,9 +48,9 @@ QtWidgets.QApplication.setAttribute(
 QtWidgets.QApplication.setAttribute(
     QtCore.Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
 
-__version__ = "1.2.5.2"
+__version__ = "1.2.5.3"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "05-02-2024"
+__date__ = "11-02-2024"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -135,6 +135,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.current_image=None
         self.imageP=None    #Image in Project Viewer
         self.pixmapP=None   #Image in Project Viewer
+        self.df_filtered=None
 
         #If using the QGraphics view, use open_image
         #If not comment the next five lines and use
@@ -144,6 +145,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         #Project Tab
         self.ProjectInspector = utilViewer(self.ImageViewer_2)
         self.Notes_TextEdit_2.setReadOnly(True)
+        self.dfgrouped=None #grouped panda Dataframe
 
         #To see all autoMARCO results windows create a dict subwell:object
         self.MARCO_window = {}
@@ -183,6 +185,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.actionAutomated_Annotation_MARCO.setEnabled(_var)
         self.actionAutoMARCO_current_image.setEnabled(_var)
         self.actionCalculate_Statistics.setEnabled(_var)
+        self.comboBoxScreen.setEnabled(_var)
         self.actionDisplay_Heat_Map.setEnabled(_var)
         self.pushButton_CopyToNotes.setEnabled(_var)
         self.pushButton_DisplayHeatMap.setEnabled(_var)
@@ -192,6 +195,8 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.comboBoxProject.setEnabled(_var)
         self.actionHistogram_Manual_Scores.setEnabled(_var)
         self.action_SavePlateDatabase.setEnabled(_var)
+        self.pushExportCSV.setEnabled(_var)
+        self.pushButtonResetProject.setEnabled(_var)
 
     def EnableDisableautoMARCO(self,_var)->bool:
         '''Enable / Disable several GUI options'''
@@ -214,7 +219,11 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(f'{Path(icon_path).joinpath("reset-update-icon.svg")}'), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButtonResetProject.setIcon(icon)
-
+        
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(f'{Path(icon_path).joinpath("csv-icon-red.svg")}'), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pushExportCSV.setIcon(icon)
+        
         #Setup Menu
         self.openFile.triggered.connect(self.openFileNameDialog)
         self.openDir.triggered.connect(lambda: self.openDirDialog(dialog=True))
@@ -430,6 +439,12 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         
         self.comboBoxProject.activated.connect(lambda: self.searchClassifProject())
         self.pushButtonResetProject.clicked.connect(self.resetProject)
+        self.pushExportCSV.clicked.connect(lambda: self.ExportSummaryCSV(
+            self.df_filtered,
+            Path(*self.rootDir.parts[:self.rootDir.parts.index(self.project)+1]),
+            f'{self.project}_{self.comboBoxProject.currentText()}.csv',
+            header=['Target', 'Plate', 'well', 'Notes'])
+            )        
         # self.comboBoxTargetFilter.activated.connect(lambda: self.filterTable(self.comboBoxTargetFilter.currentText(),
         #                                                                      self.tableViewProject))
         self.comboBoxTargetFilter.activated.connect(lambda: self.filterQTableView(self.comboBoxTargetFilter.currentText()))
@@ -505,7 +520,11 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         # for i,j in self.ScreenDatabase.items(): print(i,j)
 
     def FindCrystCocktail(self,screen,well):
-        '''find crystallization cocktail in database and return a list'''
+        '''If screen in database find crystallization cocktail
+        and return a list else returns False''' 
+        if screen not in self.ScreenDatabase.keys():
+            return False
+        
         if well[-1] in ['a', 'b', 'c']:
             well=well[:-1]
         # cocktail=self.ScreenDatabase[screen][self.reservoirs.index(well)+1]
@@ -970,6 +989,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         self.prepdate = "None"
         self.label_NDays.setText("Not available")
         self.EnableDisableGUI(False)
+        self.df_filtered=None
 
     def editdate_updateGUI(self):
         '''edit date in prep_date.txt'''
@@ -1013,6 +1033,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         datadict[Plate]['Project']=self.project
         datadict[Plate]['Target']=self.target
         datadict[Plate]['Plate Name']=self.plate
+        datadict[Plate]['Screen']=self.currentScreen
         datadict[Plate]['Prep_Date']=self.prepdate
         datadict[Plate]['Imaging_Date']=self.date
         datadict[Plate]['Wells']=dict()
@@ -1139,7 +1160,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         else:
             self.database=self.loadjson(json_path)
             #Update imaging date fields in database if necessary
-            jsondate=self.database.get(self.plate, {}).get("Imaging_Date")
+            jsondate=self.database.get(self.plate).get("Imaging_Date")
             if jsondate != self.date:
                 self.database[self.plate]["Imaging_Date"]=self.date
                 for well,date in self.database[self.plate]["Wells"].items():
@@ -1147,6 +1168,19 @@ https://github.com/LP-CDF/AMi_Image_Analysis
                 #then save
                 self.writetojson(self.database, f'data_{self.date}.json')
         # print(self.database)
+        
+        #Set Screen in comboBoxScreen 
+        self.currentScreen=self.database.get(self.plate).get("Screen", None)
+        
+        if self.currentScreen not in self.ScreenDatabase.keys() and self.currentScreen is not None:
+            self.informationDialog(f'''
+WARNING: 
+Screen "{self.currentScreen}" not found in database
+You might want to import the screen using the import function.
+''')
+        else:
+            index = self.comboBoxScreen.findText(self.currentScreen, QtCore.Qt.MatchFixedString)
+            self.comboBoxScreen.setCurrentIndex(index)
         
         for i in self.well_images:
             well = os.path.splitext(i)[0]
@@ -1407,7 +1441,8 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         self.currentScreen=self.comboBoxScreen.currentText()
         if self.comboBoxScreen.currentText()=='':
             self.currentScreen=None
-        # print("Current Screen: ", self.currentScreen)
+        #Update JSON database field
+        self.database[self.plate]['Screen']=self.currentScreen
     
     def setScore(self, well):
         # self.scores[well]=self.comboBoxScore.currentText()
@@ -1434,10 +1469,8 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         if screen is None or well is None:
             return False
         cocktail=self.FindCrystCocktail(screen,well)
-        # if len(self.Notes_TextEdit.toPlainText().strip('\n'))==0:
-        #     spacer=''
-        # else:
-        #     spacer='\n'       
+        if cocktail is False:
+            return False
         self.Notes_TextEdit.insertPlainText(f"Crystallization Mix:")
         for _i in cocktail[1:]:
             self.Notes_TextEdit.insertPlainText('\n'+_i)
@@ -1517,8 +1550,7 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         notes = self.database.get(self.plate, {}).get("Wells").get(well).get('Notes')
         if len(self.listTostring(notes))!=0:
             for i in notes:
-                notewidget.insertPlainText('\n'+i)
-                # notewidget.insertPlainText('\n')
+                notewidget.insertPlainText(i+'\n')
 
     # def SaveDATA(self, well):
     #     '''Save Notes in QPlainTextEdit and more'''
@@ -1980,7 +2012,7 @@ Click "OK" to accept prediction, "Cancel" to ignore''')
             self.writetojson(self.database, f'data_{self.date}.json')     
             print("\n\nDatabase saved to:\n%s" % Path(self.rootDir).joinpath(
             "Image_Data", self.date, f'data_{self.date}.json'))
-            app.closeAllWindows()
+        app.closeAllWindows()
         Citation()
 
     def take_plate_screenshot(self, subwell):
@@ -2070,16 +2102,16 @@ Click "OK" to accept prediction, "Cancel" to ignore''')
         '''Reset Table in Project Tab'''
         # self.tableViewProject.clearContents()
         # self.tableViewProject.setRowCount(0)
-        self.tableViewProject.clearSpans()
+        #TODO: clear tables. Not working now with clearSpans()
+        # self.tableViewProject.clearSpans()
         self.comboBoxProject.setCurrentIndex(0)
         self.comboBoxTargetFilter.clear()
         self.imageP=None
         self.ProjectInspector.scene.clear()
-
-    # def clearTableWidget(self, TableWidget, col=4):
-    #     '''clear all widget in a Table col'''
-    #     for i in range(TableWidget.rowCount()):
-    #         TableWidget.removeCellWidget(i,col)
+        
+        #Clear QTableView
+        self.proxyModel=QtCore.QSortFilterProxyModel()
+        self.tableViewProject.setModel(self.proxyModel)
 
     def listTargetsTable(self, TableWidget, col=0):
         '''clear all widget in a Table col'''
@@ -2089,9 +2121,14 @@ Click "OK" to accept prediction, "Cancel" to ignore''')
             if target not in targets:
                 targets.append(target)
         return targets
+    
+    # def clearTableWidget(self, TableWidget, col=4):
+    #     '''clear all widget in a Table col'''
+    #     for i in range(TableWidget.rowCount()):
+    #         TableWidget.removeCellWidget(i,col)
 
     # def filterTable(self, key, TableWidget, col=0):
-    #     '''Not used sinc switching to QTableView'''
+    #     '''Not used since switching to QTableView instead of QTableWidget'''
     #     for i in range(TableWidget.rowCount()):
     #         if key==TableWidget.item(i,col).text():
     #             TableWidget.showRow(i)
@@ -2107,6 +2144,17 @@ Click "OK" to accept prediction, "Cancel" to ignore''')
         _path=Path(*self.rootDir.parts[:self.rootDir.parts.index(self.project)+1])
         fname='Project_database.json'
         self.open_Summary(_path, fname)
+
+    def GroupDataFrame(self, data):
+        '''sort data by date then group'''
+        return data.sort_values(by='date').groupby(['Target', 'Plate', 'well'])
+
+    def searchGroupedDataFrame(self, data, search):
+        '''input is pandas.DataFrame.groupby
+        search is a tuple'''
+        groups=data.groups.keys()
+        if search in groups:
+           return data.get_group(search)  
 
     def cellClickedTable(self):
         self.Notes_TextEdit_2.clear()
@@ -2135,6 +2183,12 @@ Click "OK" to accept prediction, "Cancel" to ignore''')
         #TODO: Change row color using QTableView model
         # row = index.row
         # self.tableViewProject.item(row,4).setBackground(QtGui.QColor(153, 153, 255))
+        
+        #Display to tableViewProject_2
+        search=(target, plate, well)
+        self.df2QTableNew(self.searchGroupedDataFrame(self.dfgrouped,search),
+                       self.tableViewProject_2,
+                       hide=[0,1,4,5,6,8,9])
 
     def create_DataFrame(self, data):
         '''Load Project_database.json, create pandas.DataFrame
@@ -2153,25 +2207,47 @@ Click "OK" to accept prediction, "Cancel" to ignore''')
         '''filter pandas dataframe'''
         return data.loc[data['Classification']==classification]
 
-    def df2QTable(self, data):
-        '''send dataframe to Qtable'''
+    def setproxymodel(self, data):
+        '''Create proxyModel for latter filtering of QTableView'''
         model = pandasModel.pandasModel(data)
-        #Create proxyModel for latter filtering of QTableView
-        self.proxyModel = QtCore.QSortFilterProxyModel(model)
-        self.proxyModel.setFilterCaseSensitivity(QtCore.Qt.CaseInsensitive)
-        self.proxyModel.setSourceModel(model)
-        self.tableViewProject.setModel(self.proxyModel)
-        self.tableViewProject.resizeColumnsToContents()        
-        self.tableViewProject.setSelectionBehavior(QTableView.SelectRows)
+        proxyModel = QtCore.QSortFilterProxyModel(model)
+        proxyModel.setFilterCaseSensitivity(QtCore.Qt.CaseInsensitive)
+        proxyModel.setSourceModel(model)
+        return proxyModel
 
-        hide=[4,5,6,8,9]
-        for i in hide:
-            self.tableViewProject.setColumnHidden(i,True)
+    def df2QTableNew(self, data,qtable, hide=[], connect=False):
+        '''more general version'''
+        proxy=self.setproxymodel(data)
+        qtable.setModel(proxy)
+        qtable.resizeColumnsToContents()
+        if connect is True:
+            qtable.setSelectionBehavior(QTableView.SelectRows)
+            qtable.clicked.connect(self.cellClickedTable)
         
-        self.tableViewProject.clicked.connect(self.cellClickedTable)
+        for i in hide:
+            qtable.setColumnHidden(i,True)
+        if connect is True:
+            return proxy
+        else:
+            return None
+
+    def ExportSummaryCSV(self, data, path, fname, header=pref.database_well_fields):
+        '''Export pandas dataframe to CSV'''
+        if data is None:
+            return
+        if self.comboBoxProject.currentText() =='':
+            return
+        path=Path(path).joinpath(fname)        
+        data.to_csv(path, index=False, columns=header)
+        # print(f'Summary data exported to {path}')
+        self.informationDialog(f'File saved to:\n {path}')
             
     def open_Summary(self, path, filename):
         '''open a csv file, create a Table and returns True or False'''
+        #Do not trigger if comboBoxProject activated without selection
+        if self.comboBoxProject.currentText()=='':
+            return
+        
         _path=Path(path).joinpath(filename)
         prog=Path(self.app_path).joinpath("tools", "Create_Project_json.py")
         _dir=Path(*self.rootDir.parts[:self.rootDir.parts.index(self.project)+1])
@@ -2196,8 +2272,15 @@ Do you want to re-run the analysis?''')
                 self.data_json=self.loadjson(_path)
         
         df=self.create_DataFrame(self.data_json)
-        df_filtered=self.filter_classification(df, self.comboBoxProject.currentText())
-        self.df2QTable(df_filtered)        
+        self.data_json.clear() #clear memory as it is not needed anymore
+        self.df_filtered=self.filter_classification(df,self.comboBoxProject.currentText())
+        
+        #Create QTable
+        #self.df2QTable(df_filtered) 
+        self.proxyModel=self.df2QTableNew(self.df_filtered,
+                                       self.tableViewProject,
+                                       hide=[4,5,6,8,9],
+                                       connect=True)
         self.targets=list(df['Target'].unique())
         
         #Populate combobox
@@ -2205,6 +2288,10 @@ Do you want to re-run the analysis?''')
         self.comboBoxTargetFilter.addItem("")
         for _i in self.targets:
             self.comboBoxTargetFilter.addItem(_i)
+    
+        #Create GroupDataFrame
+        self.dfgrouped=self.GroupDataFrame(df)
+        
         return _check
 
     # def show_project_overview(self):

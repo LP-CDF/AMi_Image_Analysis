@@ -107,6 +107,7 @@ def main(args=None):
     datadict[Plate]['Project']=PATHS.project
     datadict[Plate]['Target']=PATHS.target
     datadict[Plate]['Plate Name']=PATHS.plate
+    datadict[Plate]['Screen']=None
     with open(PATHS.prep_date_path) as f:
         _prep_date=f.readlines()
     datadict[Plate]['Prep_Date']=_prep_date[0].strip()

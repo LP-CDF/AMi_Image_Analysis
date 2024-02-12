@@ -21,23 +21,6 @@ def writetojson(data, fname):
     with open(fname, "w") as f:
      	json.dump(data, f)
 
-def create_DataFrame(data):
-    '''Load Project_database.json and create pandas.DataFrame'''
-    # #Normalize
-    data_frames=[]
-    for i in data:
-     	data_frames.append(pd.json_normalize(i))
-    
-    combined_Norm = pd.concat(data_frames)
-    # print("Normalized combined: \n", combined_Norm)
-    return combined_Norm
-
-def search_DataFrame(data, field, val): 
-    result=data.loc[data[field]==val]
-    # print("type(loc): ", type(test))
-    print(f"Search for {val}: \n", result)
-    return result
-
 def main(args=None):
     ''' main func '''
     # dirName = os.getcwd()

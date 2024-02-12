@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'DesignerFiles/mainwindow_02022024_tabs.ui'
+# Form implementation generated from reading ui file 'DesignerFiles/mainwindow_09022024_tabs.ui'
 #
 # Created by: PyQt5 UI code generator 5.12.1
 #
@@ -458,7 +458,7 @@ class Ui_MainWindow(object):
         self.tab_2 = QtWidgets.QWidget()
         self.tab_2.setObjectName("tab_2")
         self.tableViewProject = QtWidgets.QTableView(self.tab_2)
-        self.tableViewProject.setGeometry(QtCore.QRect(20, 50, 661, 740))
+        self.tableViewProject.setGeometry(QtCore.QRect(20, 50, 661, 521))
         self.tableViewProject.setObjectName("tableViewProject")
         self.ImageViewer_2 = QtWidgets.QScrollArea(self.tab_2)
         self.ImageViewer_2.setGeometry(QtCore.QRect(700, 50, 861, 631))
@@ -488,6 +488,11 @@ class Ui_MainWindow(object):
         self.comboBoxTargetFilter = QtWidgets.QComboBox(self.horizontalLayoutWidget)
         self.comboBoxTargetFilter.setObjectName("comboBoxTargetFilter")
         self.horizontalLayout_5.addWidget(self.comboBoxTargetFilter)
+        self.pushExportCSV = QtWidgets.QPushButton(self.horizontalLayoutWidget)
+        self.pushExportCSV.setMaximumSize(QtCore.QSize(40, 16777215))
+        self.pushExportCSV.setText("")
+        self.pushExportCSV.setObjectName("pushExportCSV")
+        self.horizontalLayout_5.addWidget(self.pushExportCSV)
         self.pushButtonResetProject = QtWidgets.QPushButton(self.horizontalLayoutWidget)
         self.pushButtonResetProject.setMaximumSize(QtCore.QSize(40, 16777215))
         self.pushButtonResetProject.setText("")
@@ -508,6 +513,13 @@ class Ui_MainWindow(object):
         self.Notes_TextEdit_2.setAccessibleDescription("")
         self.Notes_TextEdit_2.setAutoFillBackground(False)
         self.Notes_TextEdit_2.setObjectName("Notes_TextEdit_2")
+        self.tableViewProject_2 = QtWidgets.QTableView(self.tab_2)
+        self.tableViewProject_2.setGeometry(QtCore.QRect(20, 600, 661, 191))
+        self.tableViewProject_2.setObjectName("tableViewProject_2")
+        self.label_5 = QtWidgets.QLabel(self.tab_2)
+        self.label_5.setGeometry(QtCore.QRect(20, 570, 110, 31))
+        self.label_5.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
+        self.label_5.setObjectName("label_5")
         self.tabWidget.addTab(self.tab_2, "")
         self.horizontalLayout.addWidget(self.tabWidget)
         MainWindow.setCentralWidget(self.centralwidget)
@@ -768,8 +780,10 @@ class Ui_MainWindow(object):
         self.label_4.setText(_translate("MainWindow", "Drop Classification"))
         self.label_Timeline.setText(_translate("MainWindow", "Timeline for well :"))
         self.label_CurrentWell.setText(_translate("MainWindow", "------"))
+        self.comboBoxScreen.setToolTip(_translate("MainWindow", "Select screen"))
         self.pushButton_CopyToNotes.setText(_translate("MainWindow", "Copy to Notes"))
         self.pushButton_DisplayHeatMap.setText(_translate("MainWindow", "Display Heat Map"))
+        self.pushButton_ExportToPDF.setToolTip(_translate("MainWindow", "Export report to PDF"))
         self.pushButton_ExportToPDF.setText(_translate("MainWindow", "Create Report\n"
 "for Well"))
         self.radioButton_ScoreOther.setText(_translate("MainWindow", "Other"))
@@ -777,6 +791,7 @@ class Ui_MainWindow(object):
         self.label_ShortcutClear.setText(_translate("MainWindow", "(-)"))
         self.label_ShortcutPhaseSep.setText(_translate("MainWindow", "(-)"))
         self.radioButton_ScoreCrystal.setText(_translate("MainWindow", "Crystal"))
+        self.pushButton_Evaluate.setToolTip(_translate("MainWindow", "autoMARCO current well"))
         self.pushButton_Evaluate.setText(_translate("MainWindow", "Evaluate me"))
         self.radioButton_ScorePhaseSep.setText(_translate("MainWindow", "Phase Separation"))
         self.label_ShortcutCrystal.setText(_translate("MainWindow", "(-)"))
@@ -785,8 +800,13 @@ class Ui_MainWindow(object):
         self.label_ShortcutOther.setText(_translate("MainWindow", "(-)"))
         self.radioButton_ScoreClear.setText(_translate("MainWindow", "Clear"))
         self.label_Score.setText(_translate("MainWindow", "Score :"))
+        self.comboBoxScore.setToolTip(_translate("MainWindow", "Set manual score"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("MainWindow", "Plate"))
+        self.comboBoxProject.setToolTip(_translate("MainWindow", "Set classification filter"))
         self.label_3.setText(_translate("MainWindow", "Target Filter:"))
+        self.pushExportCSV.setToolTip(_translate("MainWindow", "Export to CSV"))
+        self.pushButtonResetProject.setToolTip(_translate("MainWindow", "Reset"))
+        self.label_5.setText(_translate("MainWindow", "Well Evolution:"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", "Project"))
         self.menuFile.setTitle(_translate("MainWindow", "File"))
         self.menuDisplay_Heat_Map.setTitle(_translate("MainWindow", "Tools"))
