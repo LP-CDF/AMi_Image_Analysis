@@ -2187,8 +2187,8 @@ Click "OK" to accept prediction, "Cancel" to ignore''')
         #Display to tableViewProject_2
         search=(target, plate, well)
         self.df2QTableNew(self.searchGroupedDataFrame(self.dfgrouped,search),
-                       self.tableViewProject_2,
-                       hide=[0,1,4,5,6,8,9])
+                          self.tableViewProject_2,
+                          hide=[0,1,4,5,6,9])
 
     def create_DataFrame(self, data):
         '''Load Project_database.json, create pandas.DataFrame
@@ -2229,16 +2229,24 @@ Click "OK" to accept prediction, "Cancel" to ignore''')
         if connect is True:
             return proxy
         else:
-            return None
+            del proxy
 
     def ExportSummaryCSV(self, data, path, fname, header=pref.database_well_fields):
         '''Export pandas dataframe to CSV'''
+        import ast
         if data is None:
             return
         if self.comboBoxProject.currentText() =='':
             return
-        path=Path(path).joinpath(fname)        
-        data.to_csv(path, index=False, columns=header)
+        path=Path(path).joinpath(fname)
+        _tmp=data.copy()
+        _tmp['Notes'] = _tmp['Notes'].apply(lambda x: str(x).replace('[','')
+                                            .replace(']','')
+                                            .replace('\'', '')
+                                            .replace('Crystallization Mix:',' ')
+                                            .replace(' ,',''))
+        _tmp.to_csv(path, index=False, columns=header)
+        del _tmp
         # print(f'Summary data exported to {path}')
         self.informationDialog(f'File saved to:\n {path}')
             
@@ -2278,9 +2286,9 @@ Do you want to re-run the analysis?''')
         #Create QTable
         #self.df2QTable(df_filtered) 
         self.proxyModel=self.df2QTableNew(self.df_filtered,
-                                       self.tableViewProject,
-                                       hide=[4,5,6,8,9],
-                                       connect=True)
+                                          self.tableViewProject,
+                                          hide=[4,5,6,8,9],
+                                          connect=True)
         self.targets=list(df['Target'].unique())
         
         #Populate combobox
