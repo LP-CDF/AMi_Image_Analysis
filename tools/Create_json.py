@@ -118,6 +118,11 @@ def main(args=None):
         # _id=data.index(ls)
         # print('_id: ', _id)
         well=ls[-1].split(':')[1]
+        #For compatibility with Projects before the addition of Human Score
+        if "Human Score:" in well:
+            human_score=ls[6].split(':')[1]
+        else:
+            human_score="None"
         datadict[Plate]['Wells'][well]=dict()
         datadict[Plate]['Wells'][well]['well']=well
         datadict[Plate]['Wells'][well]['subwell']=''.join(x for x in well[-1] if well[-1].islower())
@@ -125,7 +130,7 @@ def main(args=None):
         datadict[Plate]['Wells'][well]['position']=total_wells.index(datadict[Plate]['Wells'][well]['reservoir'])+1
         datadict[Plate]['Wells'][well]['date']=PATHS.date
         datadict[Plate]['Wells'][well]['Classification']=ls[5].split(':')[1]
-        datadict[Plate]['Wells'][well]['Human Score']=ls[6].split(':')[1]
+        datadict[Plate]['Wells'][well]['Human Score']=human_score
         datadict[Plate]['Wells'][well]['Notes']=ls[10:-1] #-1 to remove added well within script
 
         fname= Path(PATHS.rootDir).joinpath(
