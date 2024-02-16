@@ -1018,7 +1018,9 @@ https://github.com/LP-CDF/AMi_Image_Analysis
                 self.date[4:6]), int(self.date[6:]))
             delta = d1 - d0
             self.label_NDays.setText(str(delta.days))
-            del d0, d1, delta        
+            del d0, d1, delta
+        #Update database field
+        self.database[self.plate]['Prep_Date']=self.prepdate
 
     def CreateDatabase(self):
         '''create a dict to use internally and export to JSON later
