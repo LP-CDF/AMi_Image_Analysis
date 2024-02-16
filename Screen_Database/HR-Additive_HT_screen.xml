@@ -1877,7 +1877,7 @@ End of notice.
           <stockConcentration>10</stockConcentration>
           <defaultLowConcentration>0</defaultLowConcentration>
           <defaultHighConcentration>10</defaultHighConcentration>
-          <units>mM</units>
+          <units>M</units>
           <useAsBuffer>false</useAsBuffer>
           <vendorPartNumber>HR2-428-48</vendorPartNumber>
           <vendorName>Hampton Research</vendorName>
