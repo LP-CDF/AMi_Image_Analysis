@@ -68,7 +68,12 @@ class Plate(QTableWidget):
         self.files=files
         self.resizedpath = Path(rootDir).joinpath(
             "Image_Data", date, "Miniatures")
-        ensure_directory(self.resizedpath)
+        
+        _f=ensure_directory(self.resizedpath)
+        if _f is not None:  # if Permission issue
+            print(_f)
+            return
+        
         self.miniatures = [os.path.join(self.resizedpath, file) for file in os.listdir(
             self.resizedpath) if os.path.splitext(file)[1] in Ext]
         self.CLICKED=None

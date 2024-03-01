@@ -50,7 +50,7 @@ QtWidgets.QApplication.setAttribute(
 
 __version__ = "1.2.5.3"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "11-02-2024"
+__date__ = "01-03-2024"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -443,7 +443,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
             self.df_filtered,
             Path(*self.rootDir.parts[:self.rootDir.parts.index(self.project)+1]),
             f'{self.project}_{self.comboBoxProject.currentText()}.csv',
-            header=['Target', 'Plate', 'well', 'Notes'])
+            header=['Target', 'Plate', 'well', 'Human Score', 'Notes'])
             )        
         # self.comboBoxTargetFilter.activated.connect(lambda: self.filterTable(self.comboBoxTargetFilter.currentText(),
         #                                                                      self.tableViewProject))
@@ -581,11 +581,20 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def show_Plates(self, subwell):
         ''' Create window and map results on a grid'''
+        #TODO: deal with permissions issues when creating Miniatures
 
         if len(self.classifications) == 0:
             self.handle_error(
                 "Please choose a directory containing the images first")
             return
+
+        #check Miniatures is present or can be created             
+        _f=ensure_directory(Path(self.rootDir).joinpath(
+                            "Image_Data", self.date, "Miniatures"))
+        if _f is not None:  # if issue stops
+            self.handle_error(_f)
+            return
+        
         if subwell in self.PLATE_window:
             self.PLATE_window[subwell].UpdateBorder(
                 self.files, self.classifications)
@@ -1144,16 +1153,20 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         else:
             self.handle_error("No Image File Found in directory")
             return
-
-        #Create list of unique reservoirs
-        self.createUniqueReservoirs(self.well_images)
         
         #line below to reset Filter to All
         self.radioButton_All.setChecked(True)
         
         
-        #Create empty database if no JSON present
-        #else load json data
+        #if automerging within GUI stop
+        #else execute post()
+        if Path(directory).name==self.rawimages:
+            return
+        else:
+            self.post()
+                
+    def post(self):
+        '''do many things after loading'''
         json_path=Path(self.rootDir).joinpath(
             "Image_Data", self.date, f'data_{self.date}.json')
         if not json_path.exists():
@@ -1170,6 +1183,9 @@ https://github.com/LP-CDF/AMi_Image_Analysis
                 #then save
                 self.writetojson(self.database, f'data_{self.date}.json')
         # print(self.database)
+
+        #Create list of unique reservoirs
+        self.createUniqueReservoirs(self.well_images)
         
         #Set Screen in comboBoxScreen 
         self.currentScreen=self.database.get(self.plate).get("Screen", None)
@@ -1187,7 +1203,7 @@ You might want to import the screen using the import function.
         for i in self.well_images:
             well = os.path.splitext(i)[0]
             self.CheckClassificationAndNotes(self.rootDir, self.date, well)
-
+            
     def export_pdf(self):
         '''export to PDF a report for current well'''
         if self.previousWell is None:
@@ -2234,7 +2250,7 @@ Click "OK" to accept prediction, "Cancel" to ignore''')
             del proxy
 
     def ExportSummaryCSV(self, data, path, fname, header=pref.database_well_fields):
-        '''Export pandas dataframe to CSV'''
+        '''Export pandas dataframe to CSV, remove duplicates'''
         import ast
         if data is None:
             return
@@ -2247,6 +2263,10 @@ Click "OK" to accept prediction, "Cancel" to ignore''')
                                             .replace('\'', '')
                                             .replace('Crystallization Mix:',' ')
                                             .replace(' ,',''))
+        _tmp.drop_duplicates(subset=['Target','Plate','well'],
+                             keep='last',
+                             ignore_index=True,
+                             inplace=True)
         _tmp.to_csv(path, index=False, columns=header)
         del _tmp
         # print(f'Summary data exported to {path}')

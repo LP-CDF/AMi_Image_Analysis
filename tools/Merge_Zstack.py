@@ -1,4 +1,4 @@
-#!/usr/local/PROGRAMS/XTAL/GIT-AMi_Image_Analysis/python/venvs/AMI_IMAGE_ANALYSIS_TENSORFLOW1/bin/python
+#!/usr/local/PROGRAMS/XTAL/GIT-AMi_Image_Analysis/python/venvs/AMI_IMAGE_ANALYSIS_TENSORFLOW1/bin/python 
 # -*- coding: utf-8 -*-
 
 """This file was adpated from the following source:
@@ -10,7 +10,7 @@
    and modified for AMi_Image_Analysis
 """
 
-__date__ = "04-03-2021"
+__date__ = "01-03-2024"
 
 import numpy as np
 from scipy import ndimage
@@ -29,7 +29,7 @@ _RAWIMAGES = "rawimages"
 def usage():
     print(f'''
 Wrong starting location
-Use the program inside the directory {_RAWIMAGES}
+Use the program inside the directory "{_RAWIMAGES}" or "snaps"
 ''')
 
 
@@ -368,7 +368,9 @@ if __name__ == '__main__':
 
     directory = os.getcwd()
     TEMP = directory.split("/")
-    if TEMP[-1] != _RAWIMAGES:
+    if TEMP[-1] == "snaps":
+        print('Started from directory: snaps')
+    elif TEMP[-1] != _RAWIMAGES:
         usage()
         sys.exit()
 

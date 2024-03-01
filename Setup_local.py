@@ -5,7 +5,7 @@ Created on Mon Jan 20 09:57:50 2020
 
 """
 
-__date__ = "11-03-2021"
+__date__ = "01-03-2024"
 
 import os
 import sys
@@ -136,11 +136,14 @@ def main(args=None):
     
     deactivate''' % (python_path, activate_venv))
 
-    # _list is [(path,filename,True/false for ChangeRaw, True/false for ChangeSheBang)]
+    # _list is [(path,filename,True/false for ChangeRAW, True/false for ChangeSheBang)]
     _list = [(app_path, "utils.py", True, False),
              (app_path+'/tools/', "Merge_AllNewPlates.py", True, True),
              (app_path+'/tools/', "Merge_Zstack.py", True, True),
              (app_path+'/tools/', "SaveDiskSpace.py", True, True),
+             (app_path+'/tools/', "Create_json.py", False, True),
+             (app_path+'/tools/', "Create_Project_json.py", False, True),
+             (app_path+'/tools/', "Search_classif_Project.py", False, True),
              (app_path, "autocrop.py", False, True),
              (app_path, "Check_Circle_detection.py", False, True)]
 
