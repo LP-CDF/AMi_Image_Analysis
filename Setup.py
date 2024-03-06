@@ -54,6 +54,7 @@ class ExtendedEnvBuilder(venv.EnvBuilder):
         self.progress = kwargs.pop('progress', None)
         self.verbose = kwargs.pop('verbose', False)
         self.noprojectID = kwargs.pop('noprojectID', False)
+        self.layoutFR=kwargs.pop('layoutFR', False)
         super().__init__(*args, **kwargs)
 
     def post_setup(self, context):
@@ -229,13 +230,16 @@ class ExtendedEnvBuilder(venv.EnvBuilder):
         #Finishing setup
         if sys.platform == 'linux' or sys.platform == 'darwin':
             print("\nUPDATING INTIALISATION SCRIPT bin/AMI_Image_Analysis.sh\n")
-            print("TESTING OPTIONS")
             Setup_bin_VENV = Path(filepath).joinpath("Setup_local.py")
-            if self.noprojectID is True:
-                # print("TESTING OPTIONS TRUE")
+            if self.noprojectID is True and self.layoutFR is False:
                 subprocess.run([binpath, Setup_bin_VENV, "--no-ProjectID"])
+            elif self.noprojectID is False and self.layoutFR is True:
+                subprocess.run([binpath, Setup_bin_VENV, "--FR"])
+            elif self.noprojectID is True and self.layoutFR is True:
+                subprocess.run([binpath, Setup_bin_VENV,
+                                "--no-ProjectID",
+                                "--FR"])    
             else:
-                # print("TESTING OPTIONS FALSE")
                 subprocess.run([binpath, Setup_bin_VENV])
 
 
@@ -309,6 +313,9 @@ def main(args=None):
         parser.add_argument('--no-ProjectID', default=False,
                             action='store_true', dest='noprojectID',
                             help="Don't use ProjectID in tree")
+        parser.add_argument('--FR', default=False,
+                            action='store_true', dest='layoutFR',
+                            help="set keyboard to AZERTY") 
 
         options = parser.parse_args(args)
 
@@ -322,7 +329,8 @@ def main(args=None):
                                      nodist=options.nodist,
                                      nopip=options.nopip,
                                      verbose=options.verbose,
-                                     noprojectID=options.noprojectID)
+                                     noprojectID=options.noprojectID,
+                                     layoutFR=options.layoutFR)
 
         if options.dirs is None:
             options.dirs = str(ENV_DIR)

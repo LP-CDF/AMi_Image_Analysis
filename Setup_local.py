@@ -5,7 +5,7 @@ Created on Mon Jan 20 09:57:50 2020
 
 """
 
-__date__ = "01-03-2024"
+__date__ = "03-03-2024"
 
 import os
 import sys
@@ -77,22 +77,37 @@ def ChangeSheBang(app_path, filename, python_path):
              stat.S_IXGRP | stat.S_IXOTH)
 
 
-def ChangeRAW(app_path, filename, _string):
+# def ChangeRAW(app_path, filename, _string):
+#     '''app_path and filename are strings, stops at first encounter'''
+#     file_path = Path(app_path).joinpath(filename)
+#     INDEX = False
+#     with open(file_path, 'r') as f:
+#         lines = f.readlines()
+#     for i in lines:
+#         if "_RAWIMAGES=" in i:
+#             INDEX = lines.index(i)
+#             break
+#     if INDEX is not False:
+#         lines[INDEX] = '''_RAWIMAGES="%s"\n''' % _string
+#     with open(file_path, 'w') as f:
+#         for l in lines:
+#             f.write(l)
+
+def ChangeField(app_path, filename, field, _string):
     '''app_path and filename are strings, stops at first encounter'''
     file_path = Path(app_path).joinpath(filename)
     INDEX = False
     with open(file_path, 'r') as f:
         lines = f.readlines()
     for i in lines:
-        if "_RAWIMAGES=" in i:
+        if field in i:
             INDEX = lines.index(i)
             break
     if INDEX is not False:
-        lines[INDEX] = '''_RAWIMAGES="%s"\n''' % _string
+        lines[INDEX] = f'''{field}="%s"\n''' % _string
     with open(file_path, 'w') as f:
         for l in lines:
             f.write(l)
-
 
 def SetNoPRojectID(_string, _list):
     indexes = [_list.index(i) for i in _list if _string in i]
@@ -111,6 +126,10 @@ def main(args=None):
     parser.add_argument('--no-ProjectID', default=False,
                         action='store_true', dest='noprojectID',
                         help="Don't use ProjectID in tree")
+    parser.add_argument('--FR', default=False,
+                        action='store_true', dest='layoutFR',
+                        help="set keyboard to FR")
+    
     options = parser.parse_args(args)
 
     print("within Setup_local.py OPTIONS noprojectID is", options.noprojectID)
@@ -150,7 +169,8 @@ def main(args=None):
     # Change _RAWIMAGES to adapt to maybe different but compatible microscope softwares
     for i in _list:
         if i[2] is True:
-            ChangeRAW(i[0], i[1], _RAWIMAGES)
+            # ChangeRAW(i[0], i[1], _RAWIMAGES)
+            ChangeField(i[0], i[1], '_RAWIMAGES', _RAWIMAGES)
 
     # do not use Set ProjectID if --no-ProjectID
     with open('utils.py', 'r') as f:
@@ -164,6 +184,12 @@ def main(args=None):
     st = os.stat(file_path)
     os.chmod(file_path, st.st_mode | stat.S_IXUSR |
              stat.S_IXGRP | stat.S_IXOTH)
+    
+    # set layout to FR
+    if options.layoutFR is True:
+        ChangeField(app_path, 'preferences.py', 'keyboard_layout', "azerty")
+    else:
+        ChangeField(app_path, 'preferences.py', 'keyboard_layout', "qwerty")
 
     # Change shebang for some files that can be used in terminal and use openCV
     for i in _list:

@@ -14,9 +14,8 @@ the values stored in this file.
 
 from PyQt5 import QtCore
 
-#Comment/uncomment the two lines below according to your need
-keyboard_layout="qwerty"
-#keyboard_layout="azerty"
+#Keyboard Layout
+keyboard_layout="azerty"
 
 USESCORECLASS = True # True or False
 

@@ -40,6 +40,7 @@ Please read this carefully until the end before proceeding.
       Please note that only python dependencies are installed with the Setup.py script.
       Type "python3 Setup.py --no-ProjectID" if your folder tree is without a ProjectID (see section "The following details MUST BE checked" case 1)
       If necessary, you will have to manually install distribution specific packages.
+      If you have an "AZERTY" keyboard, use the option --FR.
     * It is recommended to create an alias (e.g. for bash you can add in your .bashrc alias  AMI_Image_Analysis='/whereveryouinstalled/bin/AMI_Image_Analysis.sh')
     
 
@@ -63,7 +64,7 @@ Please read this carefully until the end before proceeding.
 
 ################################################################################################
     The following details MUST BE checked:
-    If you have an AZERTY keyboard, comment/uncomment lines 18 or 19 in the file preferences.py.
+    If you have an AZERTY keyboard, use the '--FR' option with Setup.py or Setup_local.py (post-install).
     If you use a QWERTY keyboard, you should not have to do anything.
 
     FILE TREE:
