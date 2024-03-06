@@ -50,7 +50,7 @@ QtWidgets.QApplication.setAttribute(
 
 __version__ = "1.2.5.3"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "01-03-2024"
+__date__ = "06-03-2024"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -2267,6 +2267,8 @@ Click "OK" to accept prediction, "Cancel" to ignore''')
                              keep='last',
                              ignore_index=True,
                              inplace=True)
+        # _tmp.sort_values(by=['Target','Plate','well'], inplace=True,
+        #        ascending = [True, True, True])
         _tmp.to_csv(path, index=False, columns=header)
         del _tmp
         # print(f'Summary data exported to {path}')
@@ -2304,6 +2306,9 @@ Do you want to re-run the analysis?''')
         df=self.create_DataFrame(self.data_json)
         self.data_json.clear() #clear memory as it is not needed anymore
         self.df_filtered=self.filter_classification(df,self.comboBoxProject.currentText())
+        self.df_filtered.sort_values(by=['Target','Plate','well'],
+                                     inplace=True,
+                                     ascending = [True, True, True])
         
         #Create QTable
         #self.df2QTable(df_filtered) 
