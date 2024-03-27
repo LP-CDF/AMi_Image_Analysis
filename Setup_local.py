@@ -144,16 +144,16 @@ def main(args=None):
     with open(file_path, 'w') as f:
         f.write('''#!/usr/bin/env bash
     
-    #File generated with Setup_local.py
-    virtenv="%s"
-    . ${virtenv}/%s
-    
-    #DO NOT EDIT the next THREE LINES
-    DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-    parentdir="$(dirname "$DIR")"
-    python3 $parentdir/AMi_Image_Analysis.py
-    
-    deactivate''' % (python_path, activate_venv))
+#File generated with Setup_local.py
+virtenv="%s"
+. ${virtenv}/%s
+
+#DO NOT EDIT the next THREE LINES
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+parentdir="$(dirname "$DIR")"
+python3 $parentdir/AMi_Image_Analysis.py
+
+deactivate''' % (python_path, activate_venv))
 
     # _list is [(path,filename,True/false for ChangeRAW, True/false for ChangeSheBang)]
     _list = [(app_path, "utils.py", True, False),

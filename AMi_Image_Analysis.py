@@ -50,7 +50,7 @@ QtWidgets.QApplication.setAttribute(
 
 __version__ = "1.2.5.3"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "06-03-2024"
+__date__ = "26-03-2024"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -82,7 +82,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.SplashScreen(2000)
         self.ui = Ui_MainWindow()
         self.setupUi(self)
-        self.setWindowTitle(f"LCPB AMi Image Analysis version {__version__}")
+        self.setWindowTitle(f"AMi Image Analysis version {__version__}")
 
         self._nsre = re.compile('([0-9]+)')  # used to sort alphanumerics
 
@@ -961,8 +961,11 @@ https://github.com/LP-CDF/AMi_Image_Analysis
     def writetojson(self, data, filename):
         path = Path(self.rootDir).joinpath(
             "Image_Data", self.date, filename)
-        with open(path, "w") as f:
-            	json.dump(data, f, indent=4)
+        try:
+            with open(path, "w") as f:
+                	json.dump(data, f, indent=4)
+        except Exception as e:
+            self.handle_error(str(e))
     
     def loadjson(self, filename):
         with open(filename) as f:
@@ -2021,6 +2024,7 @@ Click "OK" to accept prediction, "Cancel" to ignore''')
 
     def closeEvent(self, event):
         self.on_exit()
+        Citation()
         
     def on_exit(self):
         '''things to do before exiting'''
@@ -2031,7 +2035,6 @@ Click "OK" to accept prediction, "Cancel" to ignore''')
             print("\n\nDatabase saved to:\n%s" % Path(self.rootDir).joinpath(
             "Image_Data", self.date, f'data_{self.date}.json'))
         app.closeAllWindows()
-        Citation()
 
     def take_plate_screenshot(self, subwell):
         if len(self.classifications) == 0:
@@ -2269,10 +2272,13 @@ Click "OK" to accept prediction, "Cancel" to ignore''')
                              inplace=True)
         # _tmp.sort_values(by=['Target','Plate','well'], inplace=True,
         #        ascending = [True, True, True])
-        _tmp.to_csv(path, index=False, columns=header)
+        try:
+            _tmp.to_csv(path, index=False, columns=header)
+            self.informationDialog(f'File saved to:\n {path}')
+        except Exception as e:
+            self.handle_error(str(e))
         del _tmp
         # print(f'Summary data exported to {path}')
-        self.informationDialog(f'File saved to:\n {path}')
             
     def open_Summary(self, path, filename):
         '''open a csv file, create a Table and returns True or False'''
