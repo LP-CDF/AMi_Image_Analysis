@@ -50,7 +50,7 @@ QtWidgets.QApplication.setAttribute(
 
 __version__ = "1.2.5.3"
 __author__ = "Ludovic Pecqueur (ludovic.pecqueur \at college-de-france.fr)"
-__date__ = "26-03-2024"
+__date__ = "08-04-2024"
 __license__ = "New BSD http://www.opensource.org/licenses/bsd-license.php"
 
 
@@ -197,6 +197,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.action_SavePlateDatabase.setEnabled(_var)
         self.pushExportCSV.setEnabled(_var)
         self.pushButtonResetProject.setEnabled(_var)
+        self.actionPropagate_Screen_Reservoirs.setEnabled(_var)
 
     def EnableDisableautoMARCO(self,_var)->bool:
         '''Enable / Disable several GUI options'''
@@ -333,6 +334,7 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         self.actionAbout.triggered.connect(self.ShowAbout)
         self.actionManual.triggered.connect(self.ShowManual)
         self.actionHistogram_Manual_Scores.triggered.connect(lambda: self.showBinGraph(self.scores))
+        self.actionPropagate_Screen_Reservoirs.triggered.connect(lambda:self.PropagateCrystCocktail(self.currentScreen))
 
         self.label_ProjectDetails.setFont(
             QtGui.QFont("Arial", 12, QtGui.QFont.Black))
@@ -527,13 +529,22 @@ class ViewerModule(QtWidgets.QMainWindow, Ui_MainWindow):
         
         if well[-1] in ['a', 'b', 'c']:
             well=well[:-1]
-        # cocktail=self.ScreenDatabase[screen][self.reservoirs.index(well)+1]
-        # if cocktail[0] != well:
+
         for i,j in self.ScreenDatabase[screen].items():
             if j[0]==well:
                 cocktail=j
                 break
         return cocktail
+
+    def PropagateCrystCocktail(self, screen):
+        if screen not in self.ScreenDatabase.keys():
+            error=''' Screen not set or not in database!!! \n Set the screen via the list or import RockMaker XML file'''
+            self.handle_error(error)
+            return False
+        for well in self.database[self.plate]["Wells"].keys():
+            txt=list(self.FindCrystCocktail(screen, well))
+            txt[0]="Crystallization Mix:"
+            self.UpdateDatabase(well, text=txt)
 
     def show_autoMARCO(self, subwell):
         ''' Create window and map results on a grid'''
@@ -1065,9 +1076,10 @@ https://github.com/LP-CDF/AMi_Image_Analysis
         
         return datadict
 
-    def UpdateDatabase(self, well):
+    def UpdateDatabase(self, well, text=None):
         '''Update self.database'''
-        text = list(self.Notes_TextEdit.toPlainText().split("\n"))
+        if text is None:
+            text = list(self.Notes_TextEdit.toPlainText().split("\n"))
         if len(self.listTostring(text))==0:
             text=[]          
         datadict={}

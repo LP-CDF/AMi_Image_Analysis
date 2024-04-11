@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'DesignerFiles/mainwindow_09022024_tabs.ui'
+# Form implementation generated from reading ui file 'DesignerFiles/mainwindow_03042024_tabs.ui'
 #
 # Created by: PyQt5 UI code generator 5.12.1
 #
@@ -670,6 +670,8 @@ class Ui_MainWindow(object):
         self.actionHistogram_Manual_Scores.setObjectName("actionHistogram_Manual_Scores")
         self.action_SavePlateDatabase = QtWidgets.QAction(MainWindow)
         self.action_SavePlateDatabase.setObjectName("action_SavePlateDatabase")
+        self.actionPropagate_Screen_Reservoirs = QtWidgets.QAction(MainWindow)
+        self.actionPropagate_Screen_Reservoirs.setObjectName("actionPropagate_Screen_Reservoirs")
         self.menuFile.addAction(self.openFile)
         self.menuFile.addAction(self.openDir)
         self.menuFile.addAction(self.actionExport_to_PDF)
@@ -689,6 +691,7 @@ class Ui_MainWindow(object):
         self.menuDisplay_Heat_Map.addAction(self.actionAutoMARCO_current_image)
         self.menuDisplay_Heat_Map.addAction(self.actionCalculate_Statistics)
         self.menuDisplay_Heat_Map.addAction(self.actionChange_Preparation_date)
+        self.menuDisplay_Heat_Map.addAction(self.actionPropagate_Screen_Reservoirs)
         self.menuDisplay_Heat_Map.addAction(self.actionDisplay_Heat_Map)
         self.menuDisplay_Heat_Map.addAction(self.actionHistogram_Manual_Scores)
         self.menuDisplay_Heat_Map.addAction(self.menuShow_autoMARCO_Grid.menuAction())
@@ -891,5 +894,7 @@ class Ui_MainWindow(object):
         self.actionNextal_Cryos.setText(_translate("MainWindow", "Nextal Cryos"))
         self.actionHistogram_Manual_Scores.setText(_translate("MainWindow", "Histogram Manual Scores"))
         self.action_SavePlateDatabase.setText(_translate("MainWindow", "Save Plate Database (.json)"))
+        self.actionPropagate_Screen_Reservoirs.setText(_translate("MainWindow", "Copy all screen reservoirs to plate"))
+        self.actionPropagate_Screen_Reservoirs.setToolTip(_translate("MainWindow", "Transfer reservoirs solutions to the whole plate"))
 
 
